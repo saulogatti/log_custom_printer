@@ -1,16 +1,18 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_printers/log_simple_print.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('A group of tests', () {
-    final awesome = Awesome();
+    late LogCustomPrinterBase awesome;
 
     setUp(() {
-      // Additional setup goes here.
+      awesome = LogCustomPrinterBase(logPrinterBase: LogWithColorPrint());
     });
 
     test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+      awesome.logDebug('logDebug');
+      expect(awesome, isA<LogCustomPrinterBase>());
     });
   });
 }

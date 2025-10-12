@@ -4,5 +4,4 @@
 library;
 
 export 'src/log_custom_printer_base.dart';
-
-// TODO: Export any libraries intended for clients of this package.
+export 'src/log_printers/log_simple_print.dart';
