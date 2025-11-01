@@ -7,7 +7,7 @@ class LogCustomPrinterBase {
   late LogPrinterBase _logPrinterBase;
 
   /// Construtor de fábrica para criar uma instância singleton.
-  /// permite fornecer uma impressora de logs customizada via [logPrinterCustom].
+  /// Permite fornecer uma impressora de logs customizada via [logPrinterCustom].
   factory LogCustomPrinterBase({LogPrinterBase? logPrinterCustom}) {
     _instance ??= LogCustomPrinterBase._internal(
       logPrinterCustom ??= LogSimplePrint(),
@@ -35,7 +35,7 @@ class LogCustomPrinterBase {
 }
 
 /// Mixin que define o contrato para impressoras de logs.
-//// Implementações devem fornecer o método [printLog] que recebe um
+/// Implementações devem fornecer o método [printLog] que recebe um
 /// [LoggerObjectBase] e o imprime/serializa conforme a lógica desejada.
 mixin LogPrinterBase {
   void printLog(LoggerObjectBase log);
