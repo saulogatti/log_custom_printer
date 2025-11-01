@@ -6,7 +6,7 @@ part 'info_log.g.dart';
 
 @JsonSerializable()
 class InfoLog extends LoggerObjectBase {
-  InfoLog(super.message) : super();
+  InfoLog(super.message, {super.typeClass}) : super();
   factory InfoLog.fromJson(Map<String, dynamic> json) =>
       _$InfoLogFromJson(json);
   @override

@@ -6,14 +6,14 @@ part 'warning_log.g.dart';
 
 @JsonSerializable()
 class WarningLog extends LoggerObjectBase {
-  WarningLog(super.message) : super();
+  WarningLog(super.message, {super.typeClass}) : super();
 
   factory WarningLog.fromJson(Map<String, dynamic> json) =>
       _$WarningLogFromJson(json);
 
   @override
   LoggerAnsiColor getColor() {
-    return LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.yellow);
+    return LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.green);
   }
 
   @override

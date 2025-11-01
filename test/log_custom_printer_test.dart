@@ -7,7 +7,7 @@ void main() {
     late LogCustomPrinterBase awesome;
 
     setUp(() {
-      awesome = LogCustomPrinterBase(logPrinterBase: LogWithColorPrint());
+      awesome = LogCustomPrinterBase.colorPrint();
     });
 
     test('First Test', () {
