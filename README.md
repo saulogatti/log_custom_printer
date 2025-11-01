@@ -1,23 +1,106 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# log_custom_printer
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages). 
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages). 
--->
-
-
+Biblioteca de utilitários para registro de log com formatos personalizados,
+serialização JSON e suporte a impressão com e sem cor (ANSI). Feita para
+ser usada em apps Flutter/Dart que precisam de logs legíveis e fáceis de
+filtrar por origem.
 
 ## Funcionalidades
 
-- Registro de logs em diferentes níveis (erro, aviso, informação).
-- Serialização e deserialização de logs usando `json_annotation`.
-- Suporte a múltiplas plataformas.
-- Configurações específicas para cada plataforma.
+- Suporte a diferentes níveis de log: debug, info, warning, error.
+- Objetos de log serializáveis com `json_annotation`.
+- Impressão simples (`LogSimplePrint`) e com cor/estilo ANSI
+	(`LogWithColorPrint`).
+- Permite identificar a origem do log (`className`) automaticamente via
+	`runtimeType`.
+
+## Instalação
+
+Adicione no `pubspec.yaml` do seu projeto (substitua pela versão desejada):
+
+```yaml
+dependencies:
+	log_custom_printer:
+		path: ../ # ou use a versão publicada no pub.dev
+```
+
+Depois rode:
+
+```bash
+dart pub get
+```
+
+ou, para projetos Flutter:
+
+```bash
+flutter pub get
+```
+
+## Uso rápido
+
+Exemplo mínimo de uso (em uma classe qualquer):
+
+```dart
+final printer = LogCustomPrinterBase(logPrinterCustom: LogWithColorPrint());
+final logger = LogCustomPrinterBase(logPrinterCustom: LogWithColorPrint());
+
+// Exemplo usando o mixin LogClassMixin em uma classe
+// this.logDebug('Mensagem de teste');
+```
+
+Para uso direto com os objetos de log:
+
+```dart
+final log = DebugLog('Mensagem de debug', typeClass: runtimeType);
+log.sendLog();
+```
+
+## Arquitetura / API principal
+
+- `LoggerObjectBase` — classe base abstrata para objetos de log. Define
+	campos como `message`, `logCreationDate` e `className` e fornece
+	`getMessage()` e `sendLog()`.
+- `LogCustomPrinterBase` — ponto de configuração para escolher a
+	implementação de impressão de logs.
+- `LogSimplePrint` — imprime logs sem códigos ANSI (usa `debugPrint`).
+- `LogWithColorPrint` — imprime blocos de texto coloridos usando
+	`LoggerObjectBase.getColor()` e envia via `dart:developer.log`.
+
+## Exemplos e pasta `example`
+
+Abra a pasta `example/` e execute:
+
+```bash
+cd example
+flutter run
+```
+
+Isso executará o aplicativo de exemplo que demonstra o uso do pacote.
+
+## Desenvolvimento
+
+- Rodar análise estática:
+
+```bash
+dart analyze
+```
+
+- Rodar testes (se houver):
+
+```bash
+dart test
+# ou para projetos Flutter com testes:
+flutter test
+```
+
+## Contribuições
+
+Pull requests são bem-vindos. Por favor, mantenha a API pública estável
+ou documente mudanças importantes no CHANGELOG.
+
+## Licença
+
+Licença conforme definida no repositório (ver arquivo `LICENSE` se
+presente).
 
 
