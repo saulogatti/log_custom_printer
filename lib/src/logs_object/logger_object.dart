@@ -41,9 +41,9 @@ abstract class LoggerObjectBase extends LoggerObject {
   ///
   /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
   /// em modo de desenvolvimento. [createdAt] permite controlar a data do
-  /// log (útil em testes); quando omitido, o construtor chama
-  /// `sendLog()` automaticamente após inicializar o objeto.
-  /// [typeClass] é usado para popular [className] e identificar a origem.
+  /// log (útil em testes); quando omitido, o objeto NÃO enviará o log
+  /// automaticamente. Use o construtor nomeado `LoggerObjectBase.send`
+  /// para criar e enviar em uma única chamada.
   LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass}) {
     assert(
       message.isNotEmpty && message.trim().isNotEmpty,
@@ -52,10 +52,16 @@ abstract class LoggerObjectBase extends LoggerObject {
 
     logCreationDate = createdAt ?? DateTime.now();
     className = typeClass?.toString() ?? runtimeType.toString();
-    if (createdAt == null) {
-      sendLog();
-    }
+    // Removida a chamada automática a sendLog() para evitar efeitos colaterais
+    // durante inicialização/serialização/testes.
   }
+bool _sendLogAuto = false;
+  /// Construtor nomeado que cria o objeto e imediatamente envia (imprime) o log.
+  ///
+  /// Útil quando o comportamento de auto-envio é desejado:
+  ///   var log = MyLog.send('mensagem');
+  LoggerObjectBase.send(String message, {DateTime? createdAt, Type? typeClass})
+    : this(message, createdAt: createdAt, typeClass: typeClass) { _sendLogAuto = true;}
 
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
@@ -80,7 +86,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// Implementação padrão obtém o `LogPrinterBase` a partir de
   /// `LogCustomPrinterBase().getLogPrinterBase()` e delega a impressão.
   void sendLog() {
-    LogPrinterBase logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
+    final logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
     logPrinterBase.printLog(this);
   }
 
