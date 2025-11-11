@@ -9,9 +9,8 @@ class LogCustomPrinterBase {
   /// Construtor de fábrica para criar uma instância singleton.
   /// Permite fornecer uma impressora de logs customizada via [logPrinterCustom].
   factory LogCustomPrinterBase({LogPrinterBase? logPrinterCustom}) {
-    _instance ??= LogCustomPrinterBase._internal(
-      logPrinterCustom ??= LogSimplePrint(),
-    );
+    final printer = logPrinterCustom ?? const LogSimplePrint();
+    _instance ??= LogCustomPrinterBase._internal(printer);
 
     return _instance!;
   }
