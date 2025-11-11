@@ -42,7 +42,6 @@ Exemplo mínimo de uso (em uma classe qualquer):
 
 ```dart
 final printer = LogCustomPrinterBase(logPrinterCustom: LogWithColorPrint());
-final logger = LogCustomPrinterBase(logPrinterCustom: LogWithColorPrint());
 
 // Exemplo usando o mixin LogClassMixin em uma classe
 // this.logDebug('Mensagem de teste');
