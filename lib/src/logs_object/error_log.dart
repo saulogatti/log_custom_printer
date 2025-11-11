@@ -1,6 +1,6 @@
+import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 
 part 'error_log.g.dart';
@@ -9,7 +9,7 @@ part 'error_log.g.dart';
 class ErrorLog extends LoggerObjectBase {
   @StackTraceConverter()
   final StackTrace stackTrace;
-  ErrorLog(super.message, this.stackTrace) : super();
+  ErrorLog(super.message, this.stackTrace, {super.typeClass}) : super();
   factory ErrorLog.fromJson(Map<String, dynamic> json) =>
       _$ErrorLogFromJson(json);
   @override

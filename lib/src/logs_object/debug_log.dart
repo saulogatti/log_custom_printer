@@ -6,14 +6,14 @@ part 'debug_log.g.dart';
 
 @JsonSerializable()
 class DebugLog extends LoggerObjectBase {
-  DebugLog(super.message, {super.creationDateTime, super.className});
+  DebugLog(super.message, {super.typeClass});
 
   factory DebugLog.fromJson(Map<String, dynamic> json) =>
       _$DebugLogFromJson(json);
 
   @override
   LoggerAnsiColor getColor() {
-    return LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.cyan);
+    return LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.yellow);
   }
 
   @override
