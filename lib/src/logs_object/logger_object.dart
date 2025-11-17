@@ -75,13 +75,15 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getStartLog([bool withColor = true]) {
     if (withColor) {
-      return getColor().call(
-        runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : ""),
-      );
+      return getColor().call(_logHeader);
     }
-    return runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
+    return _logHeader;
   }
 
+  /// Cabeçalho formatado do log (nome da classe/origem).
+  String get _logHeader =>
+      runtimeType.toString().toUpperCase() +
+      (className.isNotEmpty ? " - $className".toUpperCase() : "");
   /// Envia (imprime) o log usando o `LogPrinterBase` configurado no
   /// pacote.
   /// Checa se o log está habilitado via configuração antes de imprimir.
