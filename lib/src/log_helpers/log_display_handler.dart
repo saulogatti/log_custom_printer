@@ -35,7 +35,7 @@ enum EnumLoggerType {
 /// and notifying listeners about log events of different types (error, debug,
 /// warning, info). It also sets up global error handling for Flutter and platform
 /// errors, and interacts with the log cache and notifier.
-final class LogDisplayHandler {
+final class LogDisplayHandler extends LogPrinterBase {
   static LogDisplayHandler? _logger;
 
   final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
@@ -92,18 +92,19 @@ final class LogDisplayHandler {
     return [];
   }
 
-  void logObject(LoggerObjectBase logger) {
-    if (debugEnable || logger is ErrorLog) {
-      final separator = logger.getColor().call("=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-      final time = logger.getColor().call(logger.logCreationDate.onlyTime());
-      final start = logger.getStartLog();
+  @override
+  void printLog(LoggerObjectBase log) {
+    if (debugEnable || log is ErrorLog) {
+      final separator = log.getColor().call("=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+      final time = log.getColor().call(log.logCreationDate.onlyTime());
+      final start = log.getStartLog();
       final List<String> messageLog = [" ", separator];
-      if (logger is ErrorLog) {
+      if (log is ErrorLog) {
         // _printMessage("$start ${logger.message} ", stack: logger.stackTrace);
-        messageLog.add(logger.getMessage());
+        messageLog.add(log.getMessage());
         // _toFileLog(logger);
       } else {
-        messageLog.add(logger.getColor().call(logger.message));
+        messageLog.add(log.getColor().call(log.message));
       }
       // if (logger.showStackTrace) {
       //   final ss = logger.getStackTrace();
@@ -114,9 +115,9 @@ final class LogDisplayHandler {
 
       messageLog.add(separator);
 
-      final String log = "$time ${messageLog.join("\n")}";
-      _toFileLog(logger);
-      dev.log(log, name: start);
+      final String logStr = "$time ${messageLog.join("\n")}";
+      _toFileLog(log);
+      dev.log(logStr, name: start);
     }
 
     // final bool saveLog = debugEnable || logger is LoggerError;

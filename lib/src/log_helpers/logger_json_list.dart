@@ -18,6 +18,13 @@ part 'logger_json_list.g.dart';
 /// - [loggerJson]: A lista de objetos de entrada de log.
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
+  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _typeConstructors = {
+    "ErrorLog": ErrorLog.fromJson,
+    "DebugLog": DebugLog.fromJson,
+    "WarningLog": WarningLog.fromJson,
+    "InfoLog": InfoLog.fromJson,
+  };
+
   /// O tipo de entradas de log armazenadas nesta lista.
   ///
   /// Este campo identifica qual subclasse de [LoggerObjectBase] está
@@ -78,15 +85,7 @@ class LoggerJsonList {
     for (final element in list) {
       if (element is Map<String, dynamic>) {
         LoggerObjectBase? ob;
-        if (type == "ErrorLog") {
-          ob = ErrorLog.fromJson(element);
-        } else if (type == "DebugLog") {
-          ob = DebugLog.fromJson(element);
-        } else if (type == "WarningLog") {
-          ob = WarningLog.fromJson(element);
-        } else if (type == "InfoLog") {
-          ob = InfoLog.fromJson(element);
-        }
+        ob = _typeConstructors[type]?.call(element);
         assert(ob != null, "Tipo de logger desconhecido: $type");
         loggerJsonList.addLogger(ob!);
       }

@@ -1,0 +1,15 @@
+{
+  "type": "InfoLog",
+  "loggerJson": [
+    {
+      "className": "_ExemploErrosState",
+      "message": "Enviando log de info via ActionChip",
+      "logCreationDate": "2025-11-17T20:52:45.542980"
+    },
+    {
+      "className": "_ExemploErrosState",
+      "message": "Enviando log de info via ActionChip",
+      "logCreationDate": "2025-11-17T20:52:23.459017"
+    }
+  ]
+}

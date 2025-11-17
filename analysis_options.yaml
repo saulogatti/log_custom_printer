@@ -26,7 +26,11 @@ analyzer:
     strict-raw-types: true
   errors:
     unused_local_variable: error
-    dead_code: error
+    dead_code: warning
+    unused_import: warning
+    prefer_final_locals: warning
+    prefer_const_constructors: warning
+    prefer_const_literals_to_create_immutables: warning
     unnecessary_null_in_if_null_operators: error
     unnecessary_nullable_for_final_variable_declarations: error
     must_call_super: error
