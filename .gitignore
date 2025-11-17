@@ -7,3 +7,4 @@
 pubspec.lock
 
 /example/
+.flutter-plugins-dependencies
