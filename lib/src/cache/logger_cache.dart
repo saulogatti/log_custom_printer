@@ -42,7 +42,7 @@ class LoggerCache {
 
   String getNameFile(String fileName) {
     final fileJson = path.setExtension(fileName, '.json');
-    final pathLog = LoggerCache().getPathLogs(fileJson);
+    final pathLog = getPathLogs(fileJson);
 
     return pathLog;
   }
