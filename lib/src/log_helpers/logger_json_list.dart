@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 
@@ -19,19 +18,14 @@ part 'logger_json_list.g.dart';
 /// - [loggerJson]: The list of log entry objects.
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
-  /// Maximum number of log entries to keep in the list.
-  static const int maxLogEntries = 100;
+  String type;
+
+  List<LoggerObjectBase> loggerJson = [];
+
+  /// Limite máximo de logs armazenados na lista.
+  final int maxLogEntries = 100;
 
   LoggerJsonList({required this.type});
-
-  /// Maps log type strings to their corresponding fromJson factory functions.
-  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _logTypeFactories = {
-    'ErrorLog': ErrorLog.fromJson,
-    'DebugLog': DebugLog.fromJson,
-    'WarningLog': WarningLog.fromJson,
-    'InfoLog': InfoLog.fromJson,
-  };
-
   factory LoggerJsonList.fromJson(Map<String, dynamic> json) {
     final String type = json['type'] as String;
     final LoggerJsonList loggerJsonList = LoggerJsonList(type: type);
@@ -46,16 +40,11 @@ class LoggerJsonList {
     }
     return loggerJsonList;
   }
-  String type;
-
-  List<LoggerObjectBase>? loggerJson;
-
   void addLogger(LoggerObjectBase logger) {
-    loggerJson ??= [];
-    if (loggerJson!.length > maxLogEntries) {
-      loggerJson!.removeLast();
+    if (loggerJson.length > maxLogEntries) {
+      loggerJson.removeLast();
     }
-    loggerJson!.insert(0, logger);
+    loggerJson.insert(0, logger);
   }
 
   Map<String, dynamic> toJson() => _$LoggerJsonListToJson(this);

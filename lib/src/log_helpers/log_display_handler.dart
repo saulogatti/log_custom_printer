@@ -69,9 +69,9 @@ final class LogDisplayHandler {
     if (_loggerJsonList.containsKey(type)) {
       final loggerList = _loggerJsonList[type]!;
       if (index != -1) {
-        loggerList.loggerJson?.removeAt(index);
+        loggerList.loggerJson.removeAt(index);
       } else {
-        loggerList.loggerJson?.clear();
+        loggerList.loggerJson.clear();
       }
       _toFileTemp(type.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
@@ -80,13 +80,13 @@ final class LogDisplayHandler {
 
   List<LoggerObjectBase> getLogsType(EnumLoggerType enumLoggerType) {
     if (_loggerJsonList.containsKey(enumLoggerType)) {
-      return _loggerJsonList[enumLoggerType]!.loggerJson ?? [];
+      return _loggerJsonList[enumLoggerType]!.loggerJson;
     } else {
       final json = LoggerCache().getLogResp(enumLoggerType.name);
       if (json != null) {
         final LoggerJsonList loggerList = LoggerJsonList.fromJson(json);
         _loggerJsonList[enumLoggerType] = loggerList;
-        return loggerList.loggerJson ?? [];
+        return loggerList.loggerJson;
       }
     }
     return [];

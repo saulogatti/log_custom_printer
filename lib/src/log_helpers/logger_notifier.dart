@@ -18,14 +18,14 @@ class LoggerNotifier with ChangeNotifier {
   }
 
   List<LoggerObjectBase> getLogsType(EnumLoggerType enumLoggerType) {
-    if (_loggerJsonList.containsKey(enumLoggerType) && _loggerJsonList[enumLoggerType] != null) {
-      return _loggerJsonList[enumLoggerType]!.loggerJson ?? [];
+    if (_loggerJsonList.containsKey(enumLoggerType)) {
+      return _loggerJsonList[enumLoggerType]!.loggerJson;
     } else {
       final json = LoggerCache().getLogResp(enumLoggerType.name);
       if (json != null) {
         final LoggerJsonList loggerList = LoggerJsonList.fromJson(json);
         _loggerJsonList[enumLoggerType] = loggerList;
-        return loggerList.loggerJson ?? [];
+        return loggerList.loggerJson;
       }
     }
     return [];
