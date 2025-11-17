@@ -54,6 +54,10 @@ abstract class LoggerObjectBase extends LoggerObject {
     className = typeClass?.toString() ?? runtimeType.toString();
   }
 
+  /// Cabeçalho formatado do log (nome da classe/origem).
+  String get _logHeader =>
+      runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
+
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
   LoggerAnsiColor getColor();
@@ -80,25 +84,25 @@ abstract class LoggerObjectBase extends LoggerObject {
     return _logHeader;
   }
 
-  /// Cabeçalho formatado do log (nome da classe/origem).
-  String get _logHeader =>
-      runtimeType.toString().toUpperCase() +
-      (className.isNotEmpty ? " - $className".toUpperCase() : "");
   /// Envia (imprime) o log usando o `LogPrinterBase` configurado no
   /// pacote.
   /// Checa se o log está habilitado via configuração antes de imprimir.
+  /// Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.
   ///
   /// Implementação padrão obtém o `LogPrinterBase` a partir de
   /// `LogCustomPrinterBase().getLogPrinterBase()` e delega a impressão.
   @mustCallSuper
   void sendLog() {
     final logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
-    if (logPrinterBase.configLog.enableLog == false) {
+    final bool canPrintLog =
+        logPrinterBase.configLog.enableLog &&
+        (logPrinterBase.configLog.onlyClasses.isEmpty ||
+            logPrinterBase.configLog.onlyClasses.contains(runtimeType));
+    // Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada
+    if (!canPrintLog && this is! ErrorLog) {
       return;
     }
-    if (!logPrinterBase.configLog.onlyClasses.contains(runtimeType)) {
-      return;
-    }
+
     logPrinterBase.printLog(this);
   }
 

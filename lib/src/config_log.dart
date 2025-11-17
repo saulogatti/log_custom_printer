@@ -37,13 +37,13 @@ class ConfigLog {
   /// (por exemplo, desabilitar apenas [DebugLog] em certas situações).
   ///
   /// Por padrão inclui todos os tipos: [DebugLog], [WarningLog],
-  /// [InfoLog], [ErrorLog].
+  /// [InfoLog].
+  /// Por padrão sempre vai permitir [ErrorLog] para garantir que erros críticos
   final Set<Type> onlyClasses;
 
   /// Cria uma configuração de log.
   ///
   /// [enableLog]: controla se logs são processados (padrão: [kDebugMode])
   /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
-  const ConfigLog({this.enableLog = kDebugMode, Set<Type>? onlyClasses})
-    : onlyClasses = onlyClasses ?? const <Type>{DebugLog, WarningLog, InfoLog, ErrorLog};
+  const ConfigLog({this.enableLog = kDebugMode, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});
 }
