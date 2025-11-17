@@ -1,4 +1,3 @@
-
 import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 
@@ -6,6 +5,9 @@ part 'logger_json_list.g.dart';
 
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
+  String type;
+
+  List<LoggerObjectBase> loggerJson = [];
   LoggerJsonList({required this.type});
 
   factory LoggerJsonList.fromJson(Map<String, dynamic> json) {
@@ -30,16 +32,12 @@ class LoggerJsonList {
     }
     return loggerJsonList;
   }
-  String type;
-
-  List<LoggerObjectBase>? loggerJson;
 
   void addLogger(LoggerObjectBase logger) {
-    loggerJson ??= [];
-    if (loggerJson!.length > 100) {
-      loggerJson!.removeLast();
+    if (loggerJson.length > 100) {
+      loggerJson.removeLast();
     }
-    loggerJson!.insert(0, logger);
+    loggerJson.insert(0, logger);
   }
 
   Map<String, dynamic> toJson() => _$LoggerJsonListToJson(this);
