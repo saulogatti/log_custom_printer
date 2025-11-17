@@ -8,8 +8,9 @@ class LoggerJsonList {
   String type;
 
   List<LoggerObjectBase> loggerJson = [];
+
   /// Limite máximo de logs armazenados na lista.
-  final int limitListLog = 100;
+  final int maxLogEntries = 100;
 
   LoggerJsonList({required this.type});
   factory LoggerJsonList.fromJson(Map<String, dynamic> json) {
@@ -35,7 +36,7 @@ class LoggerJsonList {
     return loggerJsonList;
   }
   void addLogger(LoggerObjectBase logger) {
-    if (loggerJson.length > limitListLog) {
+    if (loggerJson.length > maxLogEntries) {
       loggerJson.removeLast();
     }
     loggerJson.insert(0, logger);
