@@ -74,6 +74,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// [withColor]: quando `true` aplica a transformação de cor retornada
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getStartLog([bool withColor = true]) {
+    final header = _logHeader;
     if (withColor) {
       return getColor().call(_logHeader);
     }

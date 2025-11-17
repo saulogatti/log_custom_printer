@@ -6,6 +6,18 @@ import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
+/// A singleton cache manager for log files.
+///
+/// `LoggerCache` provides a centralized, in-memory cache for log data,
+/// and manages persistent storage of logs in the application support directory.
+/// This class implements the singleton pattern; use [LoggerCache()] to access
+/// the single instance.
+///
+/// Example:
+/// ```dart
+/// final cache = LoggerCache();
+/// cache.clearLogs('error');
+/// ```
 class LoggerCache {
   static final LoggerCache _instance = LoggerCache._internal();
   String _directoryPath = 'logger';
@@ -62,7 +74,7 @@ class LoggerCache {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-    } on Exception catch (e, stack) {
+    } catch (e, stack) {
       final error = ErrorLog(e.toString(), stack);
       error.sendLog();
     }
