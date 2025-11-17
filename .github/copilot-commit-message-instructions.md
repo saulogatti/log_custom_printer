@@ -13,3 +13,12 @@
 - Exemplo: `fix: Corrigir bug na navegação do menu`
 - Não faça mensagens genericas
 
+## Pull request padrão
+- Título: `<tipo>: <descrição concisa>` (mesmo formato do commit)
+- Descrição:
+  - Resumo das mudanças.
+  - Motivação para as mudanças.
+  - Instruções para testar as mudanças.
+- Link para issues relacionadas, se aplicável.
+- Use checklist para itens importantes (ex: testes, documentação).
+- Responda sempre a comentários de revisão e em português.
