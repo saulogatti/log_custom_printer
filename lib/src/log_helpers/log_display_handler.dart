@@ -11,8 +11,30 @@ export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
 
 bool debugEnable = true;
 
-enum EnumLoggerType { error, debug, warning, info }
+/// Defines the types of log messages that can be handled by the logger.
+///
+/// Each value represents a different severity or category of log entry.
+enum EnumLoggerType {
+  /// Represents an error log message.
+  error,
 
+  /// Represents a debug log message.
+  debug,
+
+  /// Represents a warning log message.
+  warning,
+
+  /// Represents an informational log message.
+  info,
+}
+
+/// Handles the display and management of logs throughout the application.
+///
+/// This class implements the singleton pattern to ensure a single, centralized
+/// logging handler instance. It is responsible for collecting, storing, clearing,
+/// and notifying listeners about log events of different types (error, debug,
+/// warning, info). It also sets up global error handling for Flutter and platform
+/// errors, and interacts with the log cache and notifier.
 final class LogDisplayHandler {
   static LogDisplayHandler? _logger;
 
@@ -58,13 +80,13 @@ final class LogDisplayHandler {
 
   List<LoggerObjectBase> getLogsType(EnumLoggerType enumLoggerType) {
     if (_loggerJsonList.containsKey(enumLoggerType)) {
-      return _loggerJsonList[enumLoggerType]!.loggerJson!;
+      return _loggerJsonList[enumLoggerType]!.loggerJson ?? [];
     } else {
       final json = LoggerCache().getLogResp(enumLoggerType.name);
       if (json != null) {
         final LoggerJsonList loggerList = LoggerJsonList.fromJson(json);
         _loggerJsonList[enumLoggerType] = loggerList;
-        return loggerList.loggerJson!;
+        return loggerList.loggerJson ?? [];
       }
     }
     return [];
@@ -118,7 +140,7 @@ final class LogDisplayHandler {
   //   final path = _getNameFile(type.name);
   //   if (path != null) {
   //     shareFile(path);
-  //   }/Users/saulo.gatti/Documents/Desenvolvimento/projetos/pessoal/LogRocket/sem_t_tulo_workspace/dart_tool
+  //   }
   // }
 
   void _loadAll() {
