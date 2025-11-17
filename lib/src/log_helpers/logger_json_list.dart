@@ -32,10 +32,18 @@ class LoggerJsonList {
     final list = json['loggerJson'] as List;
     for (final element in list) {
       if (element is Map<String, dynamic>) {
-        final factory = _logTypeFactories[type];
-        assert(factory != null, "Unknown logger type: $type");
-        final LoggerObjectBase ob = factory!(element);
-        loggerJsonList.addLogger(ob);
+        LoggerObjectBase? ob;
+        if (type == "ErrorLog") {
+          ob = ErrorLog.fromJson(element);
+        } else if (type == "DebugLog") {
+          ob = DebugLog.fromJson(element);
+        } else if (type == "WarningLog") {
+          ob = WarningLog.fromJson(element);
+        } else if (type == "InfoLog") {
+          ob = InfoLog.fromJson(element);
+        }
+        assert(ob != null, "Unknown logger type: $type");
+        loggerJsonList.addLogger(ob!);
       }
     }
     return loggerJsonList;
