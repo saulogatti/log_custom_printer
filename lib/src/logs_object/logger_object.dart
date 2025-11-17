@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 
 /// Marca base para objetos de log.
@@ -52,16 +52,7 @@ abstract class LoggerObjectBase extends LoggerObject {
 
     logCreationDate = createdAt ?? DateTime.now();
     className = typeClass?.toString() ?? runtimeType.toString();
-    // Removida a chamada automática a sendLog() para evitar efeitos colaterais
-    // durante inicialização/serialização/testes.
   }
-bool _sendLogAuto = false;
-  /// Construtor nomeado que cria o objeto e imediatamente envia (imprime) o log.
-  ///
-  /// Útil quando o comportamento de auto-envio é desejado:
-  ///   var log = MyLog.send('mensagem');
-  LoggerObjectBase.send(String message, {DateTime? createdAt, Type? typeClass})
-    : this(message, createdAt: createdAt, typeClass: typeClass) { _sendLogAuto = true;}
 
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
@@ -73,20 +64,39 @@ bool _sendLogAuto = false;
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getMessage([bool withColor = true]) {
     final messageFormated = "${logCreationDate.logFullDateTime} $message";
-    final String messa = withColor
-        ? getColor().call(messageFormated)
-        : messageFormated;
+    final String messa = withColor ? getColor().call(messageFormated) : messageFormated;
 
     return messa;
   }
 
+  /// Retorna o cabeçalho do log (nome da classe/origem) formatado.
+  ///
+  /// [withColor]: quando `true` aplica a transformação de cor retornada
+  /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
+  String getStartLog([bool withColor = true]) {
+    if (withColor) {
+      return getColor().call(
+        runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : ""),
+      );
+    }
+    return runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
+  }
+
   /// Envia (imprime) o log usando o `LogPrinterBase` configurado no
   /// pacote.
+  /// Checa se o log está habilitado via configuração antes de imprimir.
   ///
   /// Implementação padrão obtém o `LogPrinterBase` a partir de
   /// `LogCustomPrinterBase().getLogPrinterBase()` e delega a impressão.
+  @mustCallSuper
   void sendLog() {
     final logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
+    if (logPrinterBase.configLog.enableLog == false) {
+      return;
+    }
+    if (!logPrinterBase.configLog.onlyClasses.contains(runtimeType)) {
+      return;
+    }
     logPrinterBase.printLog(this);
   }
 

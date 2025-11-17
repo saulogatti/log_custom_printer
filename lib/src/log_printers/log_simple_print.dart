@@ -2,7 +2,6 @@ import 'dart:developer' as dev show log;
 
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
 export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 
@@ -12,9 +11,9 @@ export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 /// códigos ANSI (sem cor) usando `debugPrint`. É útil para ambientes onde
 /// a saída colorida não é desejada (por exemplo logs em consoles que não
 /// suportam ANSI).
-class LogSimplePrint with LogPrinterBase {
+class LogSimplePrint extends LogPrinterBase {
   /// Construtor const para permitir uso como constante quando configurado.
-  const LogSimplePrint();
+  const LogSimplePrint({super.config});
 
   /// Imprime o log em formato simples.
   ///
@@ -36,9 +35,9 @@ class LogSimplePrint with LogPrinterBase {
 /// separador, o corpo da mensagem e outro separador. O nome do logger
 /// (`name`) enviado ao `dev.log` é a `className` do log em caixa alta e
 /// com estilos aplicados pela cor retornada por [LoggerObjectBase.getColor].
-class LogWithColorPrint with LogPrinterBase {
+class LogWithColorPrint extends LogPrinterBase {
   /// Construtor const para uso imutável/compilado.
-  const LogWithColorPrint();
+  const LogWithColorPrint({super.config});
 
   /// Imprime o log usando códigos ANSI e `dart:developer.log`.
   ///
@@ -54,11 +53,9 @@ class LogWithColorPrint with LogPrinterBase {
   /// de logs que suportam esse campo.
   @override
   void printLog(LoggerObjectBase log) {
-    final separator = log.getColor().call(
-      "=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
-    );
+    final separator = log.getColor().call("=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-");
 
-    final start = log.getColor().call(log.className.toString().toUpperCase());
+    final start = log.getStartLog();
     final List<String> messageLog = [" ", separator];
     messageLog.add(log.getMessage());
     messageLog.add(separator);
