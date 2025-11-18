@@ -1,0 +1,13 @@
+dartdoc:
+  categories:
+    log_custom_printer:
+      displayName: Log Custom Printer
+
+  categoryOrder: [log_custom_printer]
+  showUndocumentedCategories: true
+  ignore:
+    - ambiguous-doc-reference
+  errors:
+    - unresolved-doc-reference
+  warnings:
+    - tool-error

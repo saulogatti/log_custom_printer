@@ -1,3 +1,6 @@
+/// Main library for log_custom_printer package.
+///
+/// @{category log_custom_printer}
 library;
 
 export 'src/config_log.dart';
