@@ -1,105 +1,220 @@
 # log_custom_printer
 
-Biblioteca de utilitários para registro de log com formatos personalizados,
-serialização JSON e suporte a impressão com e sem cor (ANSI). Feita para
-ser usada em apps Flutter/Dart que precisam de logs legíveis e fáceis de
-filtrar por origem.
+Biblioteca Dart/Flutter para logging customizado com serialização JSON, formatação colorida ANSI e padrão singleton. Ideal para aplicações que necessitam de logs estruturados, rastreáveis e visualmente organizados.
 
-## Funcionalidades
+## ✨ Funcionalidades
 
-- Suporte a diferentes níveis de log: debug, info, warning, error.
-- Objetos de log serializáveis com `json_annotation`.
-- Impressão simples (`LogSimplePrint`) e com cor/estilo ANSI
-	(`LogWithColorPrint`).
-- Permite identificar a origem do log (`className`) automaticamente via
-	`runtimeType`.
+- 🎯 **Hierarquia de logs tipada**: `DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog`
+- 🎨 **Formatação colorida**: Códigos ANSI para logs visuais no terminal
+- 📦 **Serialização JSON**: Auto-geração com `json_serializable`
+- 🔧 **Configuração flexível**: Filtragem por tipos e controle de habilitação
+- 🏗️ **Padrão Singleton**: Configuração centralizada via `LogCustomPrinterBase`
+- 🎭 **Mixin utilities**: `LoggerClassMixin` para integração fácil em classes
+- 🔍 **Rastreabilidade**: Identificação automática da classe de origem
 
-## Instalação
+## 🚀 Instalação
 
-Adicione no `pubspec.yaml` do seu projeto (substitua pela versão desejada):
+Adicione no `pubspec.yaml`:
 
 ```yaml
 dependencies:
-	log_custom_printer:
-		path: ../ # ou use a versão publicada no pub.dev
+  log_custom_printer:
+    git:
+      url: https://github.com/saulogatti/log_custom_printer.git
+    # ou use path local para desenvolvimento:
+    # path: ../log_custom_printer
 ```
 
-Depois rode:
+Execute:
 
 ```bash
-dart pub get
+flutter pub get  # Para projetos Flutter
+# ou
+dart pub get     # Para projetos Dart puro
 ```
 
-ou, para projetos Flutter:
+## 📖 Uso Básico
+
+### Configuração Inicial
+
+```dart
+import 'package:log_custom_printer/log_custom_printer.dart';
+
+// Configuração com cores (recomendado para desenvolvimento)
+final printer = LogCustomPrinterBase.colorPrint();
+
+// Ou configuração simples sem cores
+final simplePrinter = LogCustomPrinterBase();
+```
+
+### Usando o Mixin (Recomendado)
+
+```dart
+class MinhaClasse with LoggerClassMixin {
+  void minhaFuncao() {
+    logDebug('Iniciando função');
+    logInfo('Processando dados...');
+
+    try {
+      // código da função
+      logInfo('Função executada com sucesso');
+    } catch (error, stackTrace) {
+      logError('Erro na função: $error', stackTrace);
+    }
+  }
+}
+```
+
+### Uso Direto dos Objetos de Log
+
+```dart
+// Criando logs específicos
+final debugLog = DebugLog('Mensagem de debug', typeClass: runtimeType);
+debugLog.sendLog();
+
+final errorLog = ErrorLog('Algo deu errado', StackTrace.current, typeClass: runtimeType);
+errorLog.sendLog();
+
+// Serialização JSON
+final json = debugLog.toJson();
+final logRecriado = DebugLog.fromJson(json);
+```
+
+### Configuração Avançada
+
+```dart
+// Configuração customizada - apenas logs de erro e debug
+final printer = LogCustomPrinterBase(
+  logPrinterCustom: LogWithColorPrint(
+    config: ConfigLog(
+      enableLog: true,
+      onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
+    ),
+  ),
+);
+
+// Configuração para produção - logs desabilitados
+final prodPrinter = LogCustomPrinterBase(
+  logPrinterCustom: LogSimplePrint(
+    config: ConfigLog(enableLog: false),
+  ),
+);
+```
+
+## 🏗️ Arquitetura
+
+### Componentes Principais
+
+- **`LoggerObject`** (sealed class) — Hierarquia base para tipos de log
+- **`LoggerObjectBase`** — Classe abstrata com funcionalidades comuns
+- **`LogCustomPrinterBase`** — Singleton para configuração global
+- **`ConfigLog`** — Configuração de habilitação e filtragem
+- **`LoggerClassMixin`** — Mixin para integração fácil em classes
+
+### Tipos de Log Disponíveis
+
+| Tipo | Cor ANSI | Uso |
+|------|----------|-----|
+| `DebugLog` | 🟡 Amarelo | Informações de debug/desenvolvimento |
+| `InfoLog` | 🔵 Azul | Informações gerais |
+| `WarningLog` | 🟠 Laranja | Avisos e alertas |
+| `ErrorLog` | 🔴 Vermelho | Erros e exceções |
+
+### Impressoras de Log
+
+- **`LogSimplePrint`** — Saída simples via `debugPrint()` (sem cores)
+- **`LogWithColorPrint`** — Saída colorida via `dart:developer.log()`
+
+## 🛠️ Desenvolvimento
+
+### Dependências de Desenvolvimento
 
 ```bash
+# Instalar dependências
 flutter pub get
+
+# Code generation (OBRIGATÓRIO após mudanças em classes @JsonSerializable)
+dart run build_runner build --delete-conflicting-outputs
+
+# Ou use o script de automação
+./ci.sh -build
 ```
 
-## Uso rápido
-
-Exemplo mínimo de uso (em uma classe qualquer):
-
-```dart
-final printer = LogCustomPrinterBase(logPrinterCustom: LogWithColorPrint());
-
-// Exemplo usando o mixin LogClassMixin em uma classe
-// this.logDebug('Mensagem de teste');
-```
-
-Para uso direto com os objetos de log:
-
-```dart
-final log = DebugLog('Mensagem de debug', typeClass: runtimeType);
-log.sendLog();
-```
-
-## Arquitetura / API principal
-
-- `LoggerObjectBase` — classe base abstrata para objetos de log. Define
-	campos como `message`, `logCreationDate` e `className` e fornece
-	`getMessage()` e `sendLog()`.
-- `LogCustomPrinterBase` — ponto de configuração para escolher a
-	implementação de impressão de logs.
-- `LogSimplePrint` — imprime logs sem códigos ANSI (usa `debugPrint`).
-- `LogWithColorPrint` — imprime blocos de texto coloridos usando
-	`LoggerObjectBase.getColor()` e envia via `dart:developer.log`.
-
-## Exemplos e pasta `example`
-
-Abra a pasta `example/` e execute:
+### Comandos Úteis
 
 ```bash
-cd example
-flutter run
-```
-
-Isso executará o aplicativo de exemplo que demonstra o uso do pacote.
-
-## Desenvolvimento
-
-- Rodar análise estática:
-
-```bash
+# Análise estática
 dart analyze
+
+# Testes
+dart test              # Dart puro
+flutter test          # Flutter
+
+# Documentação
+dart doc               # Gera documentação em doc/api
+
+# Atualização de dependências
+./ci.sh -upgrade
 ```
 
-- Rodar testes (se houver):
+### Geração de Documentação
+
+O projeto está configurado para gerar documentação usando `dartdoc`. A configuração está definida em `dartdoc_options.yaml` com:
+
+- Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities)
+- Links para o código fonte no GitHub
+- Exclusão automática de arquivos gerados (*.g.dart, *.freezed.dart)
+- Saída em `doc/api`
+
+Para gerar a documentação:
 
 ```bash
-dart test
-# ou para projetos Flutter com testes:
-flutter test
+dart doc
 ```
 
-## Contribuições
+A documentação gerada incluirá:
+- Documentação completa de todas as classes públicas
+- Exemplos de uso para cada componente
+- Referências cruzadas entre tipos relacionados
+- Categorias organizadas para fácil navegação
 
-Pull requests são bem-vindos. Por favor, mantenha a API pública estável
-ou documente mudanças importantes no CHANGELOG.
+### Adicionando Novos Tipos de Log
 
-## Licença
+1. Estenda `LoggerObjectBase`
+2. Adicione `@JsonSerializable()` e importe `.g.dart`
+3. Implemente `getColor()` com cor específica
+4. Adicione factory `fromJson()` e override `toJson()`
+5. Execute `dart run build_runner build`
 
-Licença conforme definida no repositório (ver arquivo `LICENSE` se
-presente).
+Exemplo:
+```dart
+import 'package:json_annotation/json_annotation.dart';
+part 'custom_log.g.dart';
 
+@JsonSerializable()
+class CustomLog extends LoggerObjectBase {
+  CustomLog(super.message, {super.typeClass});
 
+  factory CustomLog.fromJson(Map<String, dynamic> json) =>
+      _$CustomLogFromJson(json);
+
+  @override
+  LoggerAnsiColor getColor() => LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.purple);
+
+  @override
+  Map<String, dynamic> toJson() => _$CustomLogToJson(this);
+}
+```
+
+## 🤝 Contribuições
+
+Contribuições são bem-vindas! Por favor:
+
+1. Mantenha a API pública estável
+2. Documente mudanças importantes no `CHANGELOG.md`
+3. Execute testes antes de enviar PRs
+4. Siga as convenções do [Effective Dart](https://dart.dev/guides/language/effective-dart)
+
+## 📄 Licença
+
+Este projeto está licenciado sob os termos definidos no arquivo LICENSE do repositório.

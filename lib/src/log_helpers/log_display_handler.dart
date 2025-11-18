@@ -11,30 +11,51 @@ export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
 
 bool debugEnable = true;
 
-/// Defines the types of log messages that can be handled by the logger.
+/// Define os tipos de mensagens de log que podem ser manipulados.
 ///
-/// Each value represents a different severity or category of log entry.
+/// Cada valor representa uma severidade ou categoria diferente de entrada de log.
+///
+/// {@category Utilities}
 enum EnumLoggerType {
-  /// Represents an error log message.
+  /// Representa uma mensagem de log de erro.
   error,
 
-  /// Represents a debug log message.
+  /// Representa uma mensagem de log de depuração.
   debug,
 
-  /// Represents a warning log message.
+  /// Representa uma mensagem de log de aviso.
   warning,
 
-  /// Represents an informational log message.
+  /// Representa uma mensagem de log informativa.
   info,
 }
 
-/// Handles the display and management of logs throughout the application.
+/// Gerencia a exibição e armazenamento de logs em toda a aplicação.
 ///
-/// This class implements the singleton pattern to ensure a single, centralized
-/// logging handler instance. It is responsible for collecting, storing, clearing,
-/// and notifying listeners about log events of different types (error, debug,
-/// warning, info). It also sets up global error handling for Flutter and platform
-/// errors, and interacts with the log cache and notifier.
+/// Esta classe implementa o padrão Singleton para garantir uma instância única
+/// e centralizada de manipulação de logs. É responsável por coletar, armazenar,
+/// limpar e notificar ouvintes sobre eventos de log de diferentes tipos (error,
+/// debug, warning, info). Também configura o tratamento global de erros do Flutter
+/// e da plataforma, interagindo com cache e notificadores de log.
+///
+/// {@category Utilities}
+///
+/// Exemplo de uso:
+/// ```dart
+/// final handler = LogDisplayHandler();
+///
+/// // Obter logs de um tipo específico
+/// final errorLogs = handler.getLogsType(EnumLoggerType.error);
+///
+/// // Limpar logs de um tipo
+/// handler.clearList(type: EnumLoggerType.debug);
+///
+/// // Limpar todos os logs
+/// handler.clearAll();
+/// ```
+///
+/// **Nota:** Esta classe configura automaticamente handlers globais de erro
+/// para capturar exceções não tratadas no Flutter e na plataforma.
 final class LogDisplayHandler extends LogPrinterBase {
   static LogDisplayHandler? _logger;
 

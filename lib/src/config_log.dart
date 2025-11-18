@@ -10,6 +10,8 @@ import 'package:log_custom_printer/src/logs_object/warning_log.dart';
 /// Por padrão, os logs são habilitados apenas em modo debug ([kDebugMode])
 /// e todos os tipos de log são permitidos.
 ///
+/// {@category Configuration}
+///
 /// Exemplo de uso básico:
 /// ```dart
 /// final config = ConfigLog(); // Padrões: debug mode, todos os tipos
@@ -20,6 +22,18 @@ import 'package:log_custom_printer/src/logs_object/warning_log.dart';
 /// final config = ConfigLog(
 ///   enableLog: true,
 ///   onlyClasses: {DebugLog, ErrorLog}, // Apenas debug e error
+/// );
+/// ```
+///
+/// Filtrando logs em produção:
+/// ```dart
+/// // Desabilitar todos os logs (exceto ErrorLog que sempre é processado)
+/// final configProd = ConfigLog(enableLog: false);
+///
+/// // Ou permitir apenas erros e warnings
+/// final configProd = ConfigLog(
+///   enableLog: true,
+///   onlyClasses: {ErrorLog, WarningLog},
 /// );
 /// ```
 class ConfigLog {

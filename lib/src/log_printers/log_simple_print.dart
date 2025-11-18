@@ -11,6 +11,15 @@ export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 /// códigos ANSI (sem cor) usando `debugPrint`. É útil para ambientes onde
 /// a saída colorida não é desejada (por exemplo logs em consoles que não
 /// suportam ANSI).
+///
+/// {@category Printers}
+///
+/// Exemplo de uso:
+/// ```dart
+/// final printer = LogCustomPrinterBase(
+///   logPrinterCustom: LogSimplePrint(),
+/// );
+/// ```
 class LogSimplePrint extends LogPrinterBase {
   /// Construtor const para permitir uso como constante quando configurado.
   const LogSimplePrint({super.config});
@@ -35,6 +44,22 @@ class LogSimplePrint extends LogPrinterBase {
 /// separador, o corpo da mensagem e outro separador. O nome do logger
 /// (`name`) enviado ao `dev.log` é a `className` do log em caixa alta e
 /// com estilos aplicados pela cor retornada por [LoggerObjectBase.getColor].
+///
+/// {@category Printers}
+///
+/// Exemplo de uso:
+/// ```dart
+/// final printer = LogCustomPrinterBase(
+///   logPrinterCustom: LogWithColorPrint(
+///     config: ConfigLog(onlyClasses: {DebugLog, InfoLog}),
+///   ),
+/// );
+/// ```
+///
+/// Ou use o construtor de fábrica:
+/// ```dart
+/// final printer = LogCustomPrinterBase.colorPrint();
+/// ```
 class LogWithColorPrint extends LogPrinterBase {
   /// Construtor const para uso imutável/compilado.
   const LogWithColorPrint({super.config});
