@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="log_custom_printer library API docs, for the Dart programming language.">
+  <title>log_custom_printer library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">log_custom_printer</a></li>
+    <li class="self-crumb">log_custom_printer.dart</li>
+  </ol>
+  <div class="self-name">log_custom_printer</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar=""
+    data-below-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html">
+  
+    <div>
+      
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/log_custom_printer.dart#L1"><span class="material-symbols-outlined">description</span></a></div>
+
+      <h1>
+        <span class="kind-library">log_custom_printer</span>
+        library 
+ 
+    <span class="category core---sistema-de-logging cp-0" title="This is part of the Core - Sistema de Logging topic.">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</span>
+
+      </h1>
+    </div>
+
+    
+<section class="desc markdown">
+  <p>Biblioteca de logging customizada para Dart/Flutter.</p>
+<p>Fornece um sistema completo de logging com:</p>
+<ul>
+<li>Hierarquia tipada de logs (Debug, Info, Warning, Error)</li>
+<li>Formatação colorida com códigos ANSI</li>
+<li>Serialização JSON automática</li>
+<li>Padrão Singleton para configuração centralizada</li>
+<li>Mixins utilitários para integração fácil</li>
+</ul>
+<h2 id="uso-rpido">Uso Rápido</h2>
+<pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/log_custom_printer.dart';
+
+// Configuração inicial
+final printer = LogCustomPrinterBase.colorPrint();
+
+// Usando o mixin (recomendado)
+class MinhaClasse with LoggerClassMixin {
+  void executar() {
+    logDebug('Iniciando processo');
+    logInfo('Processo em andamento');
+    
+    try {
+      // código da aplicação
+    } catch (error, stackTrace) {
+      logError('Erro: $error', stackTrace);
+    }
+  }
+}
+</code></pre>
+<h2 id="tipos-de-log">Tipos de Log</h2>
+<ul>
+<li><a href="../log_custom_printer/DebugLog-class.html">DebugLog</a>: Mensagens de depuração (amarelo)</li>
+<li><a href="../log_custom_printer/InfoLog-class.html">InfoLog</a>: Informações gerais (branco)</li>
+<li><a href="../log_custom_printer/WarningLog-class.html">WarningLog</a>: Avisos e alertas (verde)</li>
+<li><a href="../log_custom_printer/ErrorLog-class.html">ErrorLog</a>: Erros e exceções (vermelho)</li>
+</ul>
+<h2 id="configurao">Configuração</h2>
+<p>Configure o comportamento dos logs através de <a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>:</p>
+<pre class="language-dart"><code class="language-dart">final config = ConfigLog(
+  enableLog: true,
+  onlyClasses: {DebugLog, ErrorLog},
+);
+</code></pre>
+<h2 id="impressoras">Impressoras</h2>
+<p>Escolha entre diferentes estratégias de impressão:</p>
+<ul>
+<li><a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a>: Saída simples sem cores</li>
+<li><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a>: Saída com formatação colorida ANSI</li>
+</ul>
+</section>
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+      <dl>
+          <dt id="ConfigLog">
+  <span class="name "><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> 
+    <span class="category configuração cp-3" title="This is part of the Configuração topic.">Configuração</span>
+
+</dt>
+<dd>
+  Configuração para controle de logs na biblioteca.
+</dd>
+
+          <dt id="DebugLog">
+  <span class="name "><a href="../log_custom_printer/DebugLog-class.html">DebugLog</a></span> 
+    <span class="category tipos-de-log cp-1" title="This is part of the Tipos de Log topic.">Tipos&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Log de depuração (debug) com formatação amarela.
+</dd>
+
+          <dt id="ErrorLog">
+  <span class="name "><a href="../log_custom_printer/ErrorLog-class.html">ErrorLog</a></span> 
+    <span class="category tipos-de-log cp-1" title="This is part of the Tipos de Log topic.">Tipos&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Log de erro com formatação vermelha e stack trace.
+</dd>
+
+          <dt id="InfoLog">
+  <span class="name "><a href="../log_custom_printer/InfoLog-class.html">InfoLog</a></span> 
+    <span class="category tipos-de-log cp-1" title="This is part of the Tipos de Log topic.">Tipos&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Log de informação geral com formatação branca.
+</dd>
+
+          <dt id="LogCustomPrinterBase">
+  <span class="name "><a href="../log_custom_printer/LogCustomPrinterBase-class.html">LogCustomPrinterBase</a></span> 
+    <span class="category core---sistema-de-logging cp-0" title="This is part of the Core - Sistema de Logging topic.">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</span>
+
+</dt>
+<dd>
+  Classe principal do sistema de logging.
+</dd>
+
+          <dt id="LogDisplayHandler">
+  <span class="name "><a href="../log_custom_printer/LogDisplayHandler-class.html">LogDisplayHandler</a></span> 
+    <span class="category utilitários cp-4" title="This is part of the Utilitários topic.">Utilitários</span>
+
+</dt>
+<dd>
+  Gerencia a exibição e armazenamento de logs em toda a aplicação.
+</dd>
+
+          <dt id="LoggerNotifier">
+  <span class="name "><a href="../log_custom_printer/LoggerNotifier-class.html">LoggerNotifier</a></span> 
+    <span class="category utilitários cp-4" title="This is part of the Utilitários topic.">Utilitários</span>
+
+</dt>
+<dd>
+  Notifica ouvintes sobre mudanças nos dados de log para diferentes <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>s.
+</dd>
+
+          <dt id="LoggerObject">
+  <span class="name "><a href="../log_custom_printer/LoggerObject-class.html">LoggerObject</a></span> 
+    <span class="category core---sistema-de-logging cp-0" title="This is part of the Core - Sistema de Logging topic.">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</span>
+
+</dt>
+<dd>
+  Marca base para objetos de log.
+</dd>
+
+          <dt id="LoggerObjectBase">
+  <span class="name "><a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span> 
+    <span class="category core---sistema-de-logging cp-0" title="This is part of the Core - Sistema de Logging topic.">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</span>
+
+</dt>
+<dd>
+  Contrato base para objetos de log que podem ser impressos/serializados.
+</dd>
+
+          <dt id="LogPrinterBase">
+  <span class="name "><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> 
+    <span class="category impressoras-de-log cp-2" title="This is part of the Impressoras de Log topic.">Impressoras&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Classe base abstrata para impressoras de logs.
+</dd>
+
+          <dt id="LogSimplePrint">
+  <span class="name "><a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a></span> 
+    <span class="category impressoras-de-log cp-2" title="This is part of the Impressoras de Log topic.">Impressoras&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Impressora simples de logs.
+</dd>
+
+          <dt id="LogWithColorPrint">
+  <span class="name "><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a></span> 
+    <span class="category impressoras-de-log cp-2" title="This is part of the Impressoras de Log topic.">Impressoras&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Impressora de logs que preserva cor/estilo ANSI.
+</dd>
+
+          <dt id="StackTraceConverter">
+  <span class="name "><a href="../log_custom_printer/StackTraceConverter-class.html">StackTraceConverter</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+          <dt id="WarningLog">
+  <span class="name "><a href="../log_custom_printer/WarningLog-class.html">WarningLog</a></span> 
+    <span class="category tipos-de-log cp-1" title="This is part of the Tipos de Log topic.">Tipos&nbsp;de&nbsp;Log</span>
+
+</dt>
+<dd>
+  Log de aviso (warning) com formatação verde.
+</dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="enums">
+      <h2>Enums</h2>
+      <dl>
+          <dt id="EnumLoggerType">
+  <span class="name "><a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span> 
+    <span class="category utilitários cp-4" title="This is part of the Utilitários topic.">Utilitários</span>
+
+</dt>
+<dd>
+  Define os tipos de mensagens de log que podem ser manipulados.
+</dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="mixins">
+      <h2>Mixins</h2>
+      <dl>
+          <dt id="LoggerClassMixin">
+  <span class="name "><a href="../log_custom_printer/LoggerClassMixin-mixin.html">LoggerClassMixin</a></span> 
+    <span class="category utilitários cp-4" title="This is part of the Utilitários topic.">Utilitários</span>
+
+</dt>
+<dd>
+  Mixin que fornece métodos utilitários de log para uma classe.
+</dd>
+
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="extensions">
+      <h2>Extensions</h2>
+      <dl>
+          <dt id="DateTimeLogHelper">
+  <span class="name "><a href="../log_custom_printer/DateTimeLogHelper.html">DateTimeLogHelper</a></span>
+  on <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>
+  
+    <span class="category utilitários cp-4" title="This is part of the Utilitários topic.">Utilitários</span>
+
+</dt>
+<dd>
+  Extension para formatação de data/hora em logs.
+</dd>
+
+          <dt id="LoggerDispose">
+  <span class="name "><a href="../log_custom_printer/LoggerDispose.html">LoggerDispose</a></span>
+  on <a href="https://api.flutter.dev/flutter/widgets/State-class.html">State</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/widgets/StatefulWidget-class.html">StatefulWidget</a></span>&gt;</span>
+  
+    <span class="category utilitários cp-4" title="This is part of the Utilitários topic.">Utilitários</span>
+
+</dt>
+<dd>
+  Extension para facilitar logging de dispose em widgets Flutter.
+</dd>
+
+          <dt id="LoggerEnum">
+  <span class="name "><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></span>
+  on <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>
+  
+
+</dt>
+<dd>
+  
+</dd>
+
+      </dl>
+    </section>
+
+
+    <section class="summary offset-anchor" id="properties">
+      <h2>Properties</h2>
+      <dl class="properties">
+          <dt id="debugEnable" class="property">
+  <span class="name"><a href="../log_custom_printer/debugEnable.html">debugEnable</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">getter/setter pair</span></div>
+
+</dd>
+
+      </dl>
+    </section>
+
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">log_custom_printer</a></li>
+    <li class="self-crumb">log_custom_printer.dart</li>
+</ol>
+
+    <h5><span class="package-name">log_custom_printer</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li class="section-subtitle">Core - Sistema de Logging</li>
+        <li class="section-subitem"><a href="../log_custom_printer/">log_custom_printer</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>log_custom_printer library</h5>
+  </div><!--/sidebar-offcanvas-right-->
+</main>
+<footer>
+  <span class="no-break">
+    log_custom_printer
+      1.1.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

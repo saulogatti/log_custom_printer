@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the DebugLog class from the log_custom_printer library, for the Dart programming language.">
+  <title>DebugLog class - log_custom_printer library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">log_custom_printer</a></li>
+    <li><a href="../log_custom_printer/">log_custom_printer.dart</a></li>
+    <li class="self-crumb">DebugLog class</li>
+  </ol>
+  <div class="self-name">DebugLog</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
+    data-below-sidebar="log_custom_printer&#47;DebugLog-class-sidebar.html">
+    <div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/logs_object/debug_log.dart#L37"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-class">DebugLog</span> class 
+ 
+    <span class="category tipos-de-log cp-1" title="This is part of the Tipos de Log topic.">Tipos&nbsp;de&nbsp;Log</span>
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Log de depuração (debug) com formatação amarela.</p>
+<p>Usado para mensagens de desenvolvimento e depuração. Quando habilitado,
+este tipo de log é exibido com cor amarela nos terminais que suportam
+códigos ANSI.</p>
+<p>Exemplo de uso:</p>
+<pre class="language-dart"><code class="language-dart">final log = DebugLog('Iniciando processo de autenticação');
+log.sendLog();
+</code></pre>
+<p>Com mixin:</p>
+<pre class="language-dart"><code class="language-dart">class MinhaClasse with LoggerClassMixin {
+  void meuMetodo() {
+    logDebug('Método executado com sucesso');
+  }
+}
+</code></pre>
+<p>Serialização JSON:</p>
+<pre class="language-dart"><code class="language-dart">final log = DebugLog('Mensagem de debug');
+final json = log.toJson();
+final logRecuperado = DebugLog.fromJson(json);
+</code></pre>
+</section>
+
+
+    <section>
+      <dl class="dl-horizontal">
+        
+  <dt>Inheritance</dt>
+  <dd>
+    <ul class="gt-separated dark clazz-relationships">
+      <li><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></li>
+        <li><a href="../log_custom_printer/LoggerObject-class.html">LoggerObject</a></li>
+        <li><a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></li>
+      <li>DebugLog</li>
+    </ul>
+  </dd>
+
+        
+        
+
+
+        
+  <dt>Available extensions</dt>
+  <dd><ul class="comma-separated clazz-relationships">
+      <li><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></li>
+  </ul></dd>
+        
+  <dt>Annotations</dt>
+  <dd>
+    <ul class="annotation-list clazz-relationships">
+        <li>@<a href="https://pub.dev/documentation/json_annotation/4.9.0/json_annotation/JsonSerializable-class.html">JsonSerializable</a>()</li>
+    </ul>
+  </dd>
+
+
+      </dl>
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="DebugLog.new" class="callable">
+          <span class="name"><a href="../log_custom_printer/DebugLog/DebugLog.html">DebugLog.new</a></span><span class="signature">(<span class="parameter" id="-param-message"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">message</span>, {</span><span class="parameter" id="-param-typeClass"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a>?</span> <span class="parameter-name">typeClass</span></span>})</span>
+        </dt>
+        <dd>
+          Cria um log de depuração.
+        </dd>
+        <dt id="DebugLog.fromJson" class="callable">
+          <span class="name"><a href="../log_custom_printer/DebugLog/DebugLog.fromJson.html">DebugLog.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
+        </dt>
+        <dd>
+          Cria uma instância a partir de JSON.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="className" class="property inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/className.html">className</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Nome da classe/origem que emitiu o log.
+  <div class="features"><span class="feature">getter/setter pair</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="enumLoggerType" class="property">
+  <span class="name"><a href="../log_custom_printer/LoggerEnum/enumLoggerType.html">enumLoggerType</a></span>
+  <span class="signature">&#8594; <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>,
+        provided by the <a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a> extension</span>
+      </p>
+  
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="logCreationDate" class="property inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/logCreationDate.html">logCreationDate</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Data/hora em que o log foi criado.
+  <div class="features"><span class="feature">getter/setter pair</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="message" class="property inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/message.html">message</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  Mensagem principal do log.
+  <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="getColor" class="callable">
+  <span class="name"><a href="../log_custom_printer/DebugLog/getColor.html">getColor</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; LoggerAnsiColor</span>
+  </span>
+  
+
+</dt>
+<dd>
+  Retorna a cor/estilo ANSI que será aplicada à mensagem quando
+<a href="../log_custom_printer/LoggerObjectBase/getMessage.html">getMessage</a> for chamada com <code>withColor = true</code>.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="getMessage" class="callable inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/getMessage.html">getMessage</a></span><span class="signature">(<wbr>[<span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span></span>])
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Formata a mensagem incluindo timestamp e aplicando cor opcional.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="getStartLog" class="callable inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/getStartLog.html">getStartLog</a></span><span class="signature">(<wbr>[<span class="parameter" id="getStartLog-param-withColor"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span></span>])
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Retorna o cabeçalho do log (nome da classe/origem) formatado.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="sendLog" class="callable inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/sendLog.html">sendLog</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Envia (imprime) o log usando o <code>LogPrinterBase</code> configurado no
+pacote.
+Checa se o log está habilitado via configuração antes de imprimir.
+Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toJson" class="callable">
+  <span class="name"><a href="../log_custom_printer/DebugLog/toJson.html">toJson</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Serializa o objeto de log para JSON.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="../log_custom_printer/LoggerObjectBase/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">log_custom_printer</a></li>
+    <li><a href="../log_custom_printer/">log_custom_printer</a></li>
+    <li class="self-crumb">DebugLog class</li>
+</ol>
+
+    <h5>log_custom_printer library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    log_custom_printer
+      1.1.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

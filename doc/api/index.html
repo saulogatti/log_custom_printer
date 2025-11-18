@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="log_custom_printer API docs, for the Dart programming language.">
+  <title>log_custom_printer - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li class="self-crumb">log_custom_printer package</li>
+  </ol>
+  <div class="self-name">log_custom_printer</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="log_custom_printer">log_custom_printer</h1>
+<p>Biblioteca Dart/Flutter para logging customizado com serialização JSON, formatação colorida ANSI e padrão singleton. Ideal para aplicações que necessitam de logs estruturados, rastreáveis e visualmente organizados.</p>
+<h2 id="-funcionalidades">✨ Funcionalidades</h2>
+<ul>
+<li>🎯 <strong>Hierarquia de logs tipada</strong>: <code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code></li>
+<li>🎨 <strong>Formatação colorida</strong>: Códigos ANSI para logs visuais no terminal</li>
+<li>📦 <strong>Serialização JSON</strong>: Auto-geração com <code>json_serializable</code></li>
+<li>🔧 <strong>Configuração flexível</strong>: Filtragem por tipos e controle de habilitação</li>
+<li>🏗️ <strong>Padrão Singleton</strong>: Configuração centralizada via <code>LogCustomPrinterBase</code></li>
+<li>🎭 <strong>Mixin utilities</strong>: <code>LoggerClassMixin</code> para integração fácil em classes</li>
+<li>🔍 <strong>Rastreabilidade</strong>: Identificação automática da classe de origem</li>
+</ul>
+<h2 id="-instalao">🚀 Instalação</h2>
+<p>Adicione no <code>pubspec.yaml</code>:</p>
+<pre class="language-yaml"><code class="language-yaml">dependencies:
+  log_custom_printer:
+    git:
+      url: https://github.com/saulogatti/log_custom_printer.git
+    # ou use path local para desenvolvimento:
+    # path: ../log_custom_printer
+</code></pre>
+<p>Execute:</p>
+<pre class="language-bash"><code class="language-bash">flutter pub get  # Para projetos Flutter
+# ou
+dart pub get     # Para projetos Dart puro
+</code></pre>
+<h2 id="-uso-bsico">📖 Uso Básico</h2>
+<h3 id="configurao-inicial">Configuração Inicial</h3>
+<pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/log_custom_printer.dart';
+
+// Configuração com cores (recomendado para desenvolvimento)
+final printer = LogCustomPrinterBase.colorPrint();
+
+// Ou configuração simples sem cores
+final simplePrinter = LogCustomPrinterBase();
+</code></pre>
+<h3 id="usando-o-mixin-recomendado">Usando o Mixin (Recomendado)</h3>
+<pre class="language-dart"><code class="language-dart">class MinhaClasse with LoggerClassMixin {
+  void minhaFuncao() {
+    logDebug('Iniciando função');
+    logInfo('Processando dados...');
+
+    try {
+      // código da função
+      logInfo('Função executada com sucesso');
+    } catch (error, stackTrace) {
+      logError('Erro na função: $error', stackTrace);
+    }
+  }
+}
+</code></pre>
+<h3 id="uso-direto-dos-objetos-de-log">Uso Direto dos Objetos de Log</h3>
+<pre class="language-dart"><code class="language-dart">// Criando logs específicos
+final debugLog = DebugLog('Mensagem de debug', typeClass: runtimeType);
+debugLog.sendLog();
+
+final errorLog = ErrorLog('Algo deu errado', StackTrace.current, typeClass: runtimeType);
+errorLog.sendLog();
+
+// Serialização JSON
+final json = debugLog.toJson();
+final logRecriado = DebugLog.fromJson(json);
+</code></pre>
+<h3 id="configurao-avanada">Configuração Avançada</h3>
+<pre class="language-dart"><code class="language-dart">// Configuração customizada - apenas logs de erro e debug
+final printer = LogCustomPrinterBase(
+  logPrinterCustom: LogWithColorPrint(
+    config: ConfigLog(
+      enableLog: true,
+      onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
+    ),
+  ),
+);
+
+// Configuração para produção - logs desabilitados
+final prodPrinter = LogCustomPrinterBase(
+  logPrinterCustom: LogSimplePrint(
+    config: ConfigLog(enableLog: false),
+  ),
+);
+</code></pre>
+<h2 id="-arquitetura">🏗️ Arquitetura</h2>
+<h3 id="componentes-principais">Componentes Principais</h3>
+<ul>
+<li><strong><code>LoggerObject</code></strong> (sealed class) — Hierarquia base para tipos de log</li>
+<li><strong><code>LoggerObjectBase</code></strong> — Classe abstrata com funcionalidades comuns</li>
+<li><strong><code>LogCustomPrinterBase</code></strong> — Singleton para configuração global</li>
+<li><strong><code>ConfigLog</code></strong> — Configuração de habilitação e filtragem</li>
+<li><strong><code>LoggerClassMixin</code></strong> — Mixin para integração fácil em classes</li>
+</ul>
+<h3 id="tipos-de-log-disponveis">Tipos de Log Disponíveis</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cor ANSI</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DebugLog</code></td>
+<td>🟡 Amarelo</td>
+<td>Informações de debug/desenvolvimento</td>
+</tr>
+<tr>
+<td><code>InfoLog</code></td>
+<td>🔵 Azul</td>
+<td>Informações gerais</td>
+</tr>
+<tr>
+<td><code>WarningLog</code></td>
+<td>🟠 Laranja</td>
+<td>Avisos e alertas</td>
+</tr>
+<tr>
+<td><code>ErrorLog</code></td>
+<td>🔴 Vermelho</td>
+<td>Erros e exceções</td>
+</tr>
+</tbody>
+</table>
+<h3 id="impressoras-de-log">Impressoras de Log</h3>
+<ul>
+<li><strong><code>LogSimplePrint</code></strong> — Saída simples via <code>debugPrint()</code> (sem cores)</li>
+<li><strong><code>LogWithColorPrint</code></strong> — Saída colorida via <code>dart:developer.log()</code></li>
+</ul>
+<h2 id="-desenvolvimento">🛠️ Desenvolvimento</h2>
+<h3 id="dependncias-de-desenvolvimento">Dependências de Desenvolvimento</h3>
+<pre class="language-bash"><code class="language-bash"># Instalar dependências
+flutter pub get
+
+# Code generation (OBRIGATÓRIO após mudanças em classes @JsonSerializable)
+dart run build_runner build --delete-conflicting-outputs
+
+# Ou use o script de automação
+./ci.sh -build
+</code></pre>
+<h3 id="comandos-teis">Comandos Úteis</h3>
+<pre class="language-bash"><code class="language-bash"># Análise estática
+dart analyze
+
+# Testes
+dart test              # Dart puro
+flutter test          # Flutter
+
+# Documentação
+dart doc               # Gera documentação em doc/api
+
+# Atualização de dependências
+./ci.sh -upgrade
+</code></pre>
+<h3 id="gerao-de-documentao">Geração de Documentação</h3>
+<p>O projeto está configurado para gerar documentação usando <code>dartdoc</code>. A configuração está definida em <code>dartdoc_options.yaml</code> com:</p>
+<ul>
+<li>Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities)</li>
+<li>Links para o código fonte no GitHub</li>
+<li>Exclusão automática de arquivos gerados (*.g.dart, *.freezed.dart)</li>
+<li>Saída em <code>doc/api</code></li>
+</ul>
+<p>Para gerar a documentação:</p>
+<pre class="language-bash"><code class="language-bash">dart doc
+</code></pre>
+<p>A documentação gerada incluirá:</p>
+<ul>
+<li>Documentação completa de todas as classes públicas</li>
+<li>Exemplos de uso para cada componente</li>
+<li>Referências cruzadas entre tipos relacionados</li>
+<li>Categorias organizadas para fácil navegação</li>
+</ul>
+<h3 id="adicionando-novos-tipos-de-log">Adicionando Novos Tipos de Log</h3>
+<ol>
+<li>Estenda <code>LoggerObjectBase</code></li>
+<li>Adicione <code>@JsonSerializable()</code> e importe <code>.g.dart</code></li>
+<li>Implemente <code>getColor()</code> com cor específica</li>
+<li>Adicione factory <code>fromJson()</code> e override <code>toJson()</code></li>
+<li>Execute <code>dart run build_runner build</code></li>
+</ol>
+<p>Exemplo:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:json_annotation/json_annotation.dart';
+part 'custom_log.g.dart';
+
+@JsonSerializable()
+class CustomLog extends LoggerObjectBase {
+  CustomLog(super.message, {super.typeClass});
+
+  factory CustomLog.fromJson(Map&lt;String, dynamic&gt; json) =&gt;
+      _$CustomLogFromJson(json);
+
+  @override
+  LoggerAnsiColor getColor() =&gt; LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.purple);
+
+  @override
+  Map&lt;String, dynamic&gt; toJson() =&gt; _$CustomLogToJson(this);
+}
+</code></pre>
+<h2 id="-contribuies">🤝 Contribuições</h2>
+<p>Contribuições são bem-vindas! Por favor:</p>
+<ol>
+<li>Mantenha a API pública estável</li>
+<li>Documente mudanças importantes no <code>CHANGELOG.md</code></li>
+<li>Execute testes antes de enviar PRs</li>
+<li>Siga as convenções do <a href="https://dart.dev/guides/language/effective-dart">Effective Dart</a></li>
+</ol>
+<h2 id="-licena">📄 Licença</h2>
+<p>Este projeto está licenciado sob os termos definidos no arquivo LICENSE do repositório.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <h3>Core - Sistema de Logging</h3>
+            <dt id="log_custom_printer">
+  <span class="name"><a href="log_custom_printer/">log_custom_printer</a></span> 
+    <span class="category core---sistema-de-logging cp-0" title="This is part of the Core - Sistema de Logging topic.">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</span>
+
+</dt>
+<dd>Biblioteca de logging customizada para Dart/Flutter.
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li class="self-crumb">log_custom_printer package</li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">log_custom_printer</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li class="section-subtitle">Core - Sistema de Logging</li>
+        <li class="section-subitem"><a href="log_custom_printer/">log_custom_printer</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    log_custom_printer
+      1.1.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
