@@ -151,11 +151,32 @@ dart test              # Dart puro
 flutter test          # Flutter
 
 # Documentação
-dart doc
+dart doc               # Gera documentação em doc/api
 
 # Atualização de dependências
 ./ci.sh -upgrade
 ```
+
+### Geração de Documentação
+
+O projeto está configurado para gerar documentação usando `dartdoc`. A configuração está definida em `dartdoc_options.yaml` com:
+
+- Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities)
+- Links para o código fonte no GitHub
+- Exclusão automática de arquivos gerados (*.g.dart, *.freezed.dart)
+- Saída em `doc/api`
+
+Para gerar a documentação:
+
+```bash
+dart doc
+```
+
+A documentação gerada incluirá:
+- Documentação completa de todas as classes públicas
+- Exemplos de uso para cada componente
+- Referências cruzadas entre tipos relacionados
+- Categorias organizadas para fácil navegação
 
 ### Adicionando Novos Tipos de Log
 

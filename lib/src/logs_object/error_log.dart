@@ -5,16 +5,61 @@ import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 
 part 'error_log.g.dart';
 
+/// Log de erro com formatação vermelha e stack trace.
+///
+/// Usado para registrar erros e exceções da aplicação. Este tipo de log
+/// inclui informações de stack trace para facilitar a depuração. Sempre
+/// é processado independentemente da configuração [ConfigLog.enableLog],
+/// garantindo que erros críticos sejam sempre registrados. Exibido com
+/// cor vermelha em terminais que suportam códigos ANSI.
+///
+/// {@category Log Types}
+///
+/// Exemplo de uso:
+/// ```dart
+/// try {
+///   // código que pode lançar exceção
+/// } catch (error, stackTrace) {
+///   final log = ErrorLog('Falha ao processar dados: $error', stackTrace);
+///   log.sendLog();
+/// }
+/// ```
+///
+/// Com mixin:
+/// ```dart
+/// class MinhaClasse with LoggerClassMixin {
+///   void metodoComTratamento() {
+///     try {
+///       // operação arriscada
+///     } catch (error, stackTrace) {
+///       logError('Erro na operação: $error', stackTrace);
+///     }
+///   }
+/// }
+/// ```
 @JsonSerializable()
 class ErrorLog extends LoggerObjectBase {
+  /// Stack trace associado ao erro.
+  ///
+  /// Captura a pilha de execução no momento do erro para facilitar
+  /// a depuração e identificação da origem do problema.
   @StackTraceConverter()
   final StackTrace stackTrace;
+
+  /// Cria um log de erro.
+  ///
+  /// [message] é a descrição do erro.
+  /// [stackTrace] é a pilha de execução capturada.
+  /// [typeClass] identifica a classe de origem (opcional).
   ErrorLog(super.message, this.stackTrace, {super.typeClass}) : super();
+
+  /// Cria uma instância a partir de JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) =>
       _$ErrorLogFromJson(json);
+
   @override
   LoggerAnsiColor getColor() {
-    return LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
+    return const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
   }
 
   @override

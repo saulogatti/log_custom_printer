@@ -9,6 +9,8 @@ import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 /// dentro do pacote. Atualmente não tem membros — existe para permitir
 /// uma hierarquia de tipos clara para os diferentes logs (debug, info,
 /// warning, error).
+///
+/// {@category Core}
 sealed class LoggerObject {}
 
 /// Contrato base para objetos de log que podem ser impressos/serializados.
@@ -16,6 +18,8 @@ sealed class LoggerObject {}
 /// Implementações concretas devem fornecer a cor do log via [getColor]
 /// e a representação JSON via [toJson]. O construtor já valida a mensagem
 /// e inicializa campos auxiliares como [logCreationDate] e [className].
+///
+/// {@category Core}
 abstract class LoggerObjectBase extends LoggerObject {
   /// Nome da classe/origem que emitiu o log.
   ///
