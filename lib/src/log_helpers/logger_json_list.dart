@@ -13,6 +13,8 @@ part 'logger_json_list.g.dart';
 /// Use [fromJson] para criar uma instância a partir de um mapa JSON, e [toJson] para
 /// converter a instância de volta para JSON.
 ///
+/// {@category Utilities}
+///
 /// Campos:
 /// - [type]: O tipo de entradas de log na lista (ex: "ErrorLog").
 /// - [loggerJson]: A lista de objetos de entrada de log.

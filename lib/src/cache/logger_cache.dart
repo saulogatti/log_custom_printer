@@ -17,6 +17,8 @@ import 'package:path_provider/path_provider.dart';
 /// diretório de suporte da aplicação sob `loggerApp/logs/` quando acessado pela primeira vez.
 /// Todos os arquivos de log são armazenados como JSON com a extensão `.json`.
 ///
+/// {@category Utilities}
+///
 /// ## Uso
 ///
 /// ```dart
