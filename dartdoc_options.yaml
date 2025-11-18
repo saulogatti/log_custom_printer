@@ -1,13 +1,54 @@
 dartdoc:
+  # Define categorias para melhor organização da documentação
   categories:
-    log_custom_printer:
-      displayName: Log Custom Printer
+    "Core":
+      markdown: Componentes principais do sistema de logging
+      displayName: "Core - Sistema de Logging"
+    "Log Types":
+      markdown: Tipos de log disponíveis (Debug, Info, Warning, Error)
+      displayName: "Tipos de Log"
+    "Printers":
+      markdown: Impressoras de log (simples e colorida)
+      displayName: "Impressoras de Log"
+    "Utilities":
+      markdown: Utilitários e helpers para logging
+      displayName: "Utilitários"
+    "Configuration":
+      markdown: Configuração e personalização do sistema
+      displayName: "Configuração"
 
-  categoryOrder: [log_custom_printer]
+  # Ordem de exibição das categorias na documentação
+  categoryOrder: ["Core", "Log Types", "Printers", "Configuration", "Utilities"]
+  
+  # Mostra categorias não documentadas explicitamente
   showUndocumentedCategories: true
+  
+  # Avisos e erros a serem ignorados
   ignore:
     - ambiguous-doc-reference
+  
+  # Erros a serem reportados
   errors:
     - unresolved-doc-reference
+  
+  # Avisos a serem reportados
   warnings:
     - tool-error
+    - unresolved-export
+  
+  # Configurações de saída
+  output: doc/api
+  
+  # Incluir código fonte nos links
+  linkToSource:
+    root: "."
+    uriTemplate: "https://github.com/saulogatti/log_custom_printer/blob/main/%f%#L%l%"
+  
+  # Excluir arquivos gerados automaticamente da documentação
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+  
+  # Metadados do projeto
+  nodoc:
+    - "package:log_custom_printer/src/cache/**"

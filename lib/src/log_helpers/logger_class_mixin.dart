@@ -15,6 +15,24 @@ import 'package:log_custom_printer/src/logs_object/warning_log.dart';
 ///
 /// Use este mixin em classes que queiram facilitar o registro de mensagens
 /// sem se preocupar com a criação manual dos objetos de log.
+///
+/// {@category Utilities}
+///
+/// Exemplo de uso:
+/// ```dart
+/// class MinhaClasse with LoggerClassMixin {
+///   void processarDados() {
+///     logDebug('Iniciando processamento');
+///
+///     try {
+///       // lógica de processamento
+///       logInfo('Processamento concluído com sucesso');
+///     } catch (error, stackTrace) {
+///       logError('Falha no processamento: $error', stackTrace);
+///     }
+///   }
+/// }
+/// ```
 mixin LoggerClassMixin {
   /// Tipo (classe) que está emitindo o log.
   ///
@@ -65,7 +83,25 @@ mixin LoggerClassMixin {
   }
 }
 
+/// Extension para facilitar logging de dispose em widgets Flutter.
+///
+/// Adiciona o método [debugDispose] em classes [State] para registrar
+/// automaticamente quando um widget está sendo descartado.
+///
+/// {@category Utilities}
+///
+/// Exemplo de uso:
+/// ```dart
+/// class _MeuWidgetState extends State<MeuWidget> {
+///   @override
+///   void dispose() {
+///     debugDispose(); // Registra o dispose automaticamente
+///     super.dispose();
+///   }
+/// }
+/// ```
 extension LoggerDispose on State {
+  /// Registra um log de debug indicando que o State está sendo descartado.
   void debugDispose() {
     final logDebug = DebugLog("Disposing ${runtimeType.toString()}", typeClass: runtimeType);
     logDebug.sendLog();
