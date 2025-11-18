@@ -1,0 +1,15 @@
+{
+  "type": "DebugLog",
+  "loggerJson": [
+    {
+      "className": "_ExemploErrosState",
+      "message": "Enviando log de debug via ActionChip",
+      "logCreationDate": "2025-11-17T20:52:46.833165"
+    },
+    {
+      "className": "_ExemploErrosState",
+      "message": "Enviando log de debug via ActionChip",
+      "logCreationDate": "2025-11-17T20:52:24.586277"
+    }
+  ]
+}

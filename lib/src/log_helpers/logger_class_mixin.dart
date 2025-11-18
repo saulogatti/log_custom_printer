@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:log_custom_printer/src/logs_object/info_log.dart';
@@ -14,7 +15,7 @@ import 'package:log_custom_printer/src/logs_object/warning_log.dart';
 ///
 /// Use este mixin em classes que queiram facilitar o registro de mensagens
 /// sem se preocupar com a criação manual dos objetos de log.
-mixin LogClassMixin {
+mixin LoggerClassMixin {
   /// Tipo (classe) que está emitindo o log.
   ///
   /// Retorna `runtimeType` da instância que usa este mixin. É usado como
@@ -61,5 +62,12 @@ mixin LogClassMixin {
   /// função de encaminhamento interno do mixin.
   void _sendLog(LoggerObjectBase log) {
     log.sendLog();
+  }
+}
+
+extension LoggerDispose on State {
+  void debugDispose() {
+    final logDebug = DebugLog("Disposing ${runtimeType.toString()}", typeClass: runtimeType);
+    logDebug.sendLog();
   }
 }

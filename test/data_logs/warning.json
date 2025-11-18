@@ -1,0 +1,15 @@
+{
+  "type": "WarningLog",
+  "loggerJson": [
+    {
+      "className": "_ExemploErrosState",
+      "message": "Enviando log de warning via ActionChip",
+      "logCreationDate": "2025-11-17T20:52:46.301225"
+    },
+    {
+      "className": "_ExemploErrosState",
+      "message": "Enviando log de warning via ActionChip",
+      "logCreationDate": "2025-11-17T20:52:24.052535"
+    }
+  ]
+}
