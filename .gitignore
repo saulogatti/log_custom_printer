@@ -9,5 +9,6 @@ pubspec.lock
 # Flutter plugins
 .flutter-plugins
 .flutter-plugins-dependencies
-
+/build/
 /example/
+build/unit_test_assets/NOTICES.Z
