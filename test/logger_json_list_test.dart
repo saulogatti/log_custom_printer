@@ -46,10 +46,16 @@ void main() {
       expect(loggerJsonList.loggerJson.first, isA<ErrorLog>());
     });
 
-    // test('placeholder for LoggerJsonList specific behaviour', () {
-    //   // TODO: add tests that exercise LoggerJsonList from the library once
-    //   // the helper implementation is available/importable here.
-    //   expect(true, isTrue);
-    // });
+    test('keeps the newest entries first and trims when capacity is exceeded', () {
+      final loggerJsonList = LoggerJsonList(type: 'DebugLog');
+
+      for (int i = 0; i < 105; i++) {
+        loggerJsonList.addLogger(DebugLog('log-$i'));
+      }
+
+      expect(loggerJsonList.loggerJson.length, equals(100));
+      expect((loggerJsonList.loggerJson.first as DebugLog).message, equals('log-104'));
+      expect((loggerJsonList.loggerJson.last as DebugLog).message, equals('log-5'));
+    });
   });
 }

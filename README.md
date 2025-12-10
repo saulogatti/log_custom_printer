@@ -101,6 +101,13 @@ final prodPrinter = LogCustomPrinterBase(
 );
 ```
 
+### Regras de Entrega de Logs
+
+- `ConfigLog.enableLog`: quando `false`, todos os logs são ignorados **exceto** `ErrorLog`, que sempre passa.
+- `ConfigLog.onlyClasses`: filtra quais tipos são aceitos; se não estiver presente no conjunto, o log é descartado.
+- `LoggerClassMixin`: preenche automaticamente `className` com o `runtimeType` da classe que está emitindo o log.
+- `LoggerJsonList`: mantém no máximo 100 entradas, inserindo o log mais novo no topo e descartando o mais antigo ao atingir o limite.
+
 ## 🏗️ Arquitetura
 
 ### Componentes Principais
@@ -156,6 +163,12 @@ dart doc               # Gera documentação em doc/api
 # Atualização de dependências
 ./ci.sh -upgrade
 ```
+
+Cobertura atual de testes automatizados:
+- Serialização e truncamento de `LoggerJsonList` mantendo ordem mais recente → mais antiga
+- Filtragem de logs via `ConfigLog.onlyClasses` e priorização de `ErrorLog` mesmo com `enableLog = false`
+- `LoggerClassMixin` preenchendo `className` com o `runtimeType` da classe hospedeira
+- Utilitários: formatação de data/hora, aplicação de códigos ANSI e limpeza de stack trace
 
 ### Geração de Documentação
 

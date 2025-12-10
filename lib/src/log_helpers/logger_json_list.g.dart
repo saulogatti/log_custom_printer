@@ -10,5 +10,4 @@ Map<String, dynamic> _$LoggerJsonListToJson(LoggerJsonList instance) =>
     <String, dynamic>{
       'type': instance.type,
       'loggerJson': instance.loggerJson.map((e) => e.toJson()).toList(),
-      'maxLogEntries': instance.maxLogEntries,
     };
