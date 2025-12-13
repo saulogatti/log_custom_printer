@@ -20,7 +20,8 @@ part 'logger_json_list.g.dart';
 /// - [loggerJson]: A lista de objetos de entrada de log.
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
-  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _typeConstructors = {
+  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)>
+  _typeConstructors = {
     "ErrorLog": ErrorLog.fromJson,
     "DebugLog": DebugLog.fromJson,
     "WarningLog": WarningLog.fromJson,
@@ -43,7 +44,8 @@ class LoggerJsonList {
   ///
   /// Quando este limite é excedido, o log mais antigo é removido
   /// para manter o tamanho da lista controlado.
-  final int maxLogEntries = 100;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  final int _maxLogEntries = 100;
 
   /// Cria uma nova instância de [LoggerJsonList] para o [type] especificado.
   ///
@@ -98,7 +100,7 @@ class LoggerJsonList {
   /// Adiciona um novo objeto de log à lista.
   ///
   /// Insere o [logger] no início da lista, mantendo os logs mais recentes primeiro.
-  /// Se o número de logs exceder [maxLogEntries], remove o log mais antigo
+  /// Se o número de logs exceder [_maxLogEntries], remove o log mais antigo
   /// (último da lista) para manter o limite de tamanho.
   ///
   /// Parâmetros:
@@ -111,7 +113,7 @@ class LoggerJsonList {
   /// loggerList.addLogger(errorLog);
   /// ```
   void addLogger(LoggerObjectBase logger) {
-    if (loggerJson.length > maxLogEntries) {
+    if (loggerJson.length >= _maxLogEntries) {
       loggerJson.removeLast();
     }
     loggerJson.insert(0, logger);

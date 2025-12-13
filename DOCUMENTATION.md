@@ -181,7 +181,7 @@ Cache persistente:
 #### LoggerJsonList
 Container serializável:
 - Armazena logs de um tipo específico
-- Limite de 100 entradas (configurável)
+- Limite de 100 entradas (configurável) com descarte do log mais antigo ao atingir a capacidade
 - Serialização/deserialização automática
 - Logs mais recentes primeiro
 
@@ -402,10 +402,12 @@ Configurado em `analysis_options.yaml`:
 ### Estrutura de Testes
 ```
 test/
-├── log_custom_printer_test.dart
+├── data_logs/
+│   └── jsons_test.dart
 ├── logger_json_list_test.dart
-└── data_logs/
-    └── jsons_test.dart
+├── logger_object_test.dart
+├── log_custom_printer_test.dart
+└── utils_test.dart
 ```
 
 ### Executar Testes

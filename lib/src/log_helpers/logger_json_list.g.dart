@@ -6,7 +6,8 @@ part of 'logger_json_list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Map<String, dynamic> _$LoggerJsonListToJson(LoggerJsonList instance) => <String, dynamic>{
-  'type': instance.type,
-  'loggerJson': instance.loggerJson.map((e) => e.toJson()).toList(),
-};
+Map<String, dynamic> _$LoggerJsonListToJson(LoggerJsonList instance) =>
+    <String, dynamic>{
+      'type': instance.type,
+      'loggerJson': instance.loggerJson.map((e) => e.toJson()).toList(),
+    };
