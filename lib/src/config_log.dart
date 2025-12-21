@@ -55,9 +55,15 @@ class ConfigLog {
   /// Por padrão sempre vai permitir [ErrorLog] para garantir que erros críticos
   final Set<Type> onlyClasses;
 
+  final bool isSaveLogFile;
+
   /// Cria uma configuração de log.
   ///
   /// [enableLog]: controla se logs são processados (padrão: [kDebugMode])
   /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
-  const ConfigLog({this.enableLog = kDebugMode, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});
+  const ConfigLog({
+    this.enableLog = kDebugMode,
+    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
+    this.isSaveLogFile = false,
+  });
 }

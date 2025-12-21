@@ -9,8 +9,6 @@ import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 
 export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
 
-bool debugEnable = true;
-
 /// Define os tipos de mensagens de log que podem ser manipulados.
 ///
 /// Cada valor representa uma severidade ou categoria diferente de entrada de log.
@@ -70,7 +68,10 @@ final class LogDisplayHandler extends LogPrinterBase {
     LoggerCache().futureInit.then((_) => _loadAll());
 
     FlutterError.onError = (FlutterErrorDetails details) {
-      final error = ErrorLog(details.exceptionAsString(), details.stack ?? StackTrace.current);
+      final error = ErrorLog(
+        details.exceptionAsString(),
+        details.stack ?? StackTrace.current,
+      );
       error.sendLog();
     };
     PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
@@ -115,8 +116,10 @@ final class LogDisplayHandler extends LogPrinterBase {
 
   @override
   void printLog(LoggerObjectBase log) {
-    if (debugEnable || log is ErrorLog) {
-      final separator = log.getColor().call("=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+    if (configLog.enableLog || log is ErrorLog) {
+      final separator = log.getColor().call(
+        "=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
+      );
       final time = log.getColor().call(log.logCreationDate.onlyTime());
       final start = log.getStartLog();
       final List<String> messageLog = [" ", separator];
@@ -188,7 +191,7 @@ final class LogDisplayHandler extends LogPrinterBase {
   }
 
   void _printMessage(Object message, {StackTrace? stack}) {
-    if (debugEnable || stack != null) {
+    if (configLog.enableLog || stack != null) {
       String log = message.toString();
       if (stack != null) {
         log = log + stack.toString();
@@ -198,7 +201,6 @@ final class LogDisplayHandler extends LogPrinterBase {
     }
   }
 
-  // ignore: unused_element
   void _toFileLog(LoggerObjectBase logJ) {
     try {
       LoggerJsonList? loggerList = _loggerJsonList[logJ.enumLoggerType];
@@ -221,6 +223,9 @@ final class LogDisplayHandler extends LogPrinterBase {
 
   void _toFileTemp(String fileName, Object respData) {
     try {
+      if (!configLog.isSaveLogFile) {
+        return;
+      }
       final path = LoggerCache().getNameFile(fileName);
       final File file = File(path);
       final spaces = ' ' * 2;

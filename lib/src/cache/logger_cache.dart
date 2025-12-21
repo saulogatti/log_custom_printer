@@ -143,6 +143,7 @@ class LoggerCache {
   /// }
   /// ```
   Map<String, dynamic>? getLogResp(String fileName) {
+
     final path = getNameFile(fileName);
     final File file = File(path);
     if (file.existsSync()) {

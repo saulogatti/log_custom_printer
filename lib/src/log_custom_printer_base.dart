@@ -34,15 +34,8 @@ class LogCustomPrinterBase {
   static LogCustomPrinterBase? _instance;
   late LogPrinterBase _logPrinterBase;
 
-  /// Construtor de fábrica para criar uma instância singleton.
-  /// Permite fornecer uma impressora de logs customizada via [logPrinterCustom].
-  /// Quando não fornecida, usa [LogSimplePrint] como padrão.
-  factory LogCustomPrinterBase({LogPrinterBase? logPrinterCustom}) {
-    _instance ??= LogCustomPrinterBase._internal();
-    if (logPrinterCustom != null) {
-      _instance!._logPrinterBase = logPrinterCustom;
-    }
-    return _instance!;
+  factory LogCustomPrinterBase() {
+    return LogCustomPrinterBase.customPrint();
   }
 
   /// Construtor de fábrica para criar uma instância com impressora que
@@ -55,9 +48,29 @@ class LogCustomPrinterBase {
   /// ```dart
   /// final printer = LogCustomPrinterBase.colorPrint();
   /// ```
-  factory LogCustomPrinterBase.colorPrint() {
-    return LogCustomPrinterBase(
-      logPrinterCustom: LogWithColorPrint(config: ConfigLog(onlyClasses: <Type>{DebugLog, InfoLog})),
+  factory LogCustomPrinterBase.colorPrint({
+    ConfigLog config = const ConfigLog(onlyClasses: <Type>{DebugLog, InfoLog}),
+  }) {
+    return LogCustomPrinterBase.customPrint(
+      logPrinterCustom: LogWithColorPrint(config: config),
+    );
+  }
+
+  /// Construtor de fábrica para criar uma instância singleton.
+  /// Permite fornecer uma impressora de logs customizada via [logPrinterCustom].
+  /// Quando não fornecida, usa [LogSimplePrint] como padrão.
+  factory LogCustomPrinterBase.customPrint({LogPrinterBase? logPrinterCustom}) {
+    _instance ??= LogCustomPrinterBase._internal();
+    if (logPrinterCustom != null) {
+      _instance!._logPrinterBase = logPrinterCustom;
+    }
+    return _instance!;
+  }
+  factory LogCustomPrinterBase.simplePrint({
+    ConfigLog config = const ConfigLog(),
+  }) {
+    return LogCustomPrinterBase.customPrint(
+      logPrinterCustom: LogSimplePrint(config: config),
     );
   }
   LogCustomPrinterBase._internal() {
@@ -120,7 +133,8 @@ abstract class LogPrinterBase {
   ///
   /// [config] define as regras de filtragem. Se não fornecida,
   /// usa a configuração padrão.
-  const LogPrinterBase({ConfigLog? config}) : configLog = config ?? const ConfigLog();
+  const LogPrinterBase({ConfigLog? config})
+    : configLog = config ?? const ConfigLog();
 
   /// Imprime/processa o log fornecido.
   ///
