@@ -72,11 +72,11 @@ class ErrorLog extends LoggerObjectBase {
         .map((e) => withColor ? color.call(e) : e)
         .toList();
 
-    for (final element in str.keys) {
+    for (final entry in str.entries) {
       if (withColor) {
-        strMessage.add(color.call("$element = ${str[element]}"));
+        strMessage.add(color.call("${entry.key} = ${entry.value}"));
       } else {
-        strMessage.add("$element = ${str[element]}");
+        strMessage.add("${entry.key} = ${entry.value}");
       }
     }
 
