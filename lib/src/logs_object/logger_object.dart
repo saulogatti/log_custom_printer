@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
+import 'package:meta/meta.dart';
 
 /// Marca base para objetos de log.
 ///
@@ -27,6 +27,12 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// ou do `runtimeType` da instância.
   late String className;
 
+  /// Tags associadas ao log.
+  ///
+  /// Permite categorizar e filtrar logs com base em tags.
+  @JsonKey(name: "tagLog")
+  final String tag;
+
   /// Mensagem principal do log.
   ///
   /// É anotado com `@JsonKey(name: 'message')` para manter o campo com
@@ -48,7 +54,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// log (útil em testes); quando omitido, o objeto NÃO enviará o log
   /// automaticamente. Use o construtor nomeado `LoggerObjectBase.send`
   /// para criar e enviar em uma única chamada.
-  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass}) {
+  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag}) : tag = tag ?? "" {
     assert(
       message.isNotEmpty && message.trim().isNotEmpty,
       "Mensagem não pode ser vazia ou apenas espaços em branco",
@@ -60,8 +66,7 @@ abstract class LoggerObjectBase extends LoggerObject {
 
   /// Cabeçalho formatado do log (nome da classe/origem).
   String get _logHeader =>
-      runtimeType.toString().toUpperCase() +
-      (className.isNotEmpty ? " - $className".toUpperCase() : "");
+      runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
 
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
@@ -73,9 +78,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getMessage([bool withColor = true]) {
     final messageFormated = "${logCreationDate.logFullDateTime} $message";
-    final String messa = withColor
-        ? getColor().call(messageFormated)
-        : messageFormated;
+    final String messa = withColor ? getColor().call(messageFormated) : messageFormated;
 
     return messa;
   }

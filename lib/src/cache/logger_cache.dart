@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:log_custom_printer/src/utils/string_extension.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 
 /// Um gerenciador singleton de cache para arquivos de log.
 ///
@@ -42,9 +42,6 @@ import 'package:path_provider/path_provider.dart';
 /// é protegido por um [Completer] que garante que a configuração do diretório seja concluída
 /// antes que qualquer operação de arquivo seja tentada.
 class LoggerCache {
-  /// A instância singleton de [LoggerCache].
-  static final LoggerCache _instance = LoggerCache._internal();
-
   /// O caminho para o diretório de logs.
   ///
   /// Inicializado como 'logger' e atualizado para o caminho real do diretório
@@ -61,7 +58,7 @@ class LoggerCache {
   ///
   /// Isso garante que a criação do diretório e configuração do caminho sejam concluídas
   /// antes que qualquer operação de arquivo seja tentada.
-  late Completer<void> _future;
+  late Future<void> _future;
 
   /// Callback opcional para lidar com erros durante a inicialização.
   /// Se fornecido, este callback será chamado com o erro e a stack trace se ocorrer um erro durante a configuração do diretório.
@@ -79,17 +76,8 @@ class LoggerCache {
   /// final cache2 = LoggerCache();
   /// assert(identical(cache1, cache2)); // true
   /// ```
-  factory LoggerCache() {
-    return _instance;
-  }
-
-  /// Constructor privado para implementação singleton.
-  ///
-  /// Inicializa o completer e inicia o processo de inicialização
-  /// assíncrono para configurar a estrutura de diretórios.
-  LoggerCache._internal() {
-    _future = Completer<void>();
-    _init();
+  LoggerCache(String directory) {
+    _future = _init(directory);
   }
 
   /// Um [Future] que completa quando a inicialização do cache termina.
@@ -99,11 +87,11 @@ class LoggerCache {
   ///
   /// Exemplo:
   /// ```dart
-  /// final cache = LoggerCache();
+  /// final cache = LoggerCache('loggerApp/logs');
   /// await cache.futureInit; // Aguardar configuração do diretório
   /// final path = cache.getPathLogs('debug.json'); // Seguro para usar
   /// ```
-  Future<void> get futureInit => _future.future;
+  Future<void> get futureInit => _future;
 
   /// Remove todas as entradas de log em cache para a [key] especificada.
   ///
@@ -150,8 +138,10 @@ class LoggerCache {
     final File file = File(path);
     if (file.existsSync()) {
       final data = file.readAsStringSync();
-      final jj = jsonDecode(data);
-      return jj as Map<String, dynamic>;
+      final mapJ = jsonDecode(data);
+      if (mapJ is Map) {
+        return Map<String, dynamic>.from(mapJ);
+      }
     }
     return null;
   }
@@ -203,40 +193,49 @@ class LoggerCache {
   /// // Retorna: '/caminho/para/app/support/loggerApp/logs/error_log.json'
   /// ```
   String getNameFile(String fileName) {
-    final fileJson = path.setExtension(fileName, '.json');
-    final pathLog = _getPathLogs(fileJson);
+    assert(fileName.isNotEmpty, 'O nome do arquivo não pode ser vazio');
+    assert(
+      fileName.contains(path.separator) == false,
+      'O nome do arquivo não deve conter separadores de caminho',
+    );
+    assert(
+      fileName.endsWith('.json') == false,
+      'O nome do arquivo não deve conter a extensão .json, ela será adicionada automaticamente',
+    );
+
+    final sanitizedFileName = fileName.sanitizedFileName.formattedName;
+
+    final fileJson = path.setExtension(sanitizedFileName, '.json');
+
+    final pathLog = path.join(_directoryPath, fileJson);
 
     return pathLog;
   }
 
-  /// Combina o caminho do diretório de logs com o [fileName] fornecido.
+  /// Writes the [loggerList] to a file named by [fileName].
   ///
-  /// Cria um caminho completo de arquivo juntando o diretório de logs inicializado
-  /// com o nome do arquivo fornecido. Este método garante que a inicialização tenha
-  /// sido concluída antes de retornar um caminho.
-  ///
-  /// Parâmetros:
-  /// * [fileName]: Nome do arquivo para criar um caminho
-  ///
-  /// Retorna:
-  /// * [String]: Caminho completo para o arquivo no diretório de logs
-  ///
-  /// Lança:
-  /// * [Exception]: Se chamado antes da inicialização estar completa
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// final cache = LoggerCache();
-  /// await cache.futureInit;
-  ///
-  /// final path = cache._getPathLogs('debug.json');
-  /// // Retorna: '/caminho/para/app/support/loggerApp/logs/debug.json'
-  /// ```
-  String _getPathLogs(String fileName) {
-    if (_future.isCompleted) {
-      return path.join(_directoryPath, fileName);
+  /// This operation is asynchronous to avoid blocking the UI thread.
+  Future<void> writeLogToFile(String fileName, Object loggerList) async {
+    try {
+      final path = getNameFile(fileName);
+      final File file = File(path);
+      final spaces = ' ' * 2;
+
+      // Ensure file exists
+      if (!file.existsSync()) {
+        await file.create(recursive: true);
+      }
+
+      final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
+      await file.writeAsString(jj);
+    } catch (e, stack) {
+      // In case of error, we can't do much inside the printer itself without causing loops.
+      // But we can print to console if debugging.
+      // For now, silently fail or use print as fallback.
+      // Ideally, error handling should be robust.
+      // Replicating _printMessage logic from original handler locally if needed.
+      onError?.call(e.toString(), stack);
     }
-    throw Exception("LoggerCache não foi inicializado ainda. Aguarde a inicialização.");
   }
 
   /// Inicializa a estrutura de diretórios do cache.
@@ -251,10 +250,9 @@ class LoggerCache {
   ///
   /// O completer [_future] é completado independentemente de sucesso ou falha
   /// para garantir que o código em espera não trave indefinidamente.
-  Future<void> _init() async {
+  Future<void> _init(String directory) async {
     try {
-      final directory = (await getApplicationSupportDirectory()).path;
-      final Directory directoryPath = Directory('$directory/loggerApp/logs');
+      final directoryPath = Directory('$directory/loggerApp/logs');
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
@@ -266,6 +264,5 @@ class LoggerCache {
         print('Erro ao inicializar LoggerCache: $e');
       }
     }
-    _future.complete();
   }
 }

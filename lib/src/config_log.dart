@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:log_custom_printer/src/logs_object/info_log.dart';
@@ -69,7 +68,7 @@ class ConfigLog {
   /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
   /// [isSaveLogFile]: se os logs também devem ser salvos em arquivo (padrão: false)
   const ConfigLog({
-    this.enableLog = kDebugMode,
+    this.enableLog = false,
     this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
     this.isSaveLogFile = false,
   });

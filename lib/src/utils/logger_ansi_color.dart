@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'logger_ansi_color.g.dart';
@@ -77,27 +76,27 @@ enum EnumAnsiColors {
     }
   }
 
-  /// Retorna a cor equivalente no Flutter.
-  Color getWidgetColor() {
-    switch (this) {
-      case EnumAnsiColors.black:
-        return Colors.black;
-      case EnumAnsiColors.red:
-        return Colors.red;
-      case EnumAnsiColors.green:
-        return Colors.green;
-      case EnumAnsiColors.yellow:
-        return Colors.yellow;
-      case EnumAnsiColors.blue:
-        return Colors.blue;
-      case EnumAnsiColors.magenta:
-        return Colors.orange; // Magenta mapeado para laranja
-      case EnumAnsiColors.cyan:
-        return Colors.cyan;
-      case EnumAnsiColors.white:
-        return Colors.white;
-    }
-  }
+  // /// Retorna a cor equivalente no Flutter.
+  // Color getWidgetColor() {
+  //   switch (this) {
+  //     case EnumAnsiColors.black:
+  //       return Colors.black;
+  //     case EnumAnsiColors.red:
+  //       return Colors.red;
+  //     case EnumAnsiColors.green:
+  //       return Colors.green;
+  //     case EnumAnsiColors.yellow:
+  //       return Colors.yellow;
+  //     case EnumAnsiColors.blue:
+  //       return Colors.blue;
+  //     case EnumAnsiColors.magenta:
+  //       return Colors.orange; // Magenta mapeado para laranja
+  //     case EnumAnsiColors.cyan:
+  //       return Colors.cyan;
+  //     case EnumAnsiColors.white:
+  //       return Colors.white;
+  //   }
+  // }
 }
 
 /// Classe para manipulação de cores ANSI em logs.
@@ -126,8 +125,7 @@ class LoggerAnsiColor {
   const LoggerAnsiColor({required this.enumAnsiColors});
 
   /// Cria uma instância a partir de um JSON.
-  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) =>
-      _$LoggerAnsiColorFromJson(json);
+  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) => _$LoggerAnsiColorFromJson(json);
 
   /// Aplica a cor ANSI à mensagem fornecida.
   ///

@@ -1,9 +1,25 @@
-sealed class LogBaseModel {
-  final String message;
-  final int createdAtinMillis;
-  final String tag;
-  const LogBaseModel({required this.message, required this.createdAtinMillis, required this.tag});
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+class TagLog {
+  List<String> tags = [];
+  final List<String> restrictedTags;
+  TagLog({required this.restrictedTags});
+  void addTag(String tag) {
+    tag = tag.formattedName;
+    if (restrictedTags.contains(tag)) {
+      throw Exception("Tag '$tag' is restricted and cannot be added.");
+    }
+    tags.add(tag);
+  }
 
-  /// Retorna a representação JSON do log.
-  Map<String, dynamic> toJson();
+  bool hasTag(String tag) {
+    return tags.contains(tag.formattedName);
+  }
+
+  void removeTag(String tag) {
+    tags.remove(tag.formattedName);
+  }
+}
+
+extension on String {
+  String get formattedName => trim().toLowerCase();
 }
