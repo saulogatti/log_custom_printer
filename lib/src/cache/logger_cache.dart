@@ -143,13 +143,18 @@ class LoggerCache {
   /// }
   /// ```
   Map<String, dynamic>? getLogResp(String fileName) {
-
-    final path = getNameFile(fileName);
-    final File file = File(path);
-    if (file.existsSync()) {
-      final data = file.readAsStringSync();
-      final jj = jsonDecode(data);
-      return jj as Map<String, dynamic>;
+    try {
+      final path = getNameFile(fileName);
+      final File file = File(path);
+      if (file.existsSync()) {
+        final data = file.readAsStringSync();
+        final jj = jsonDecode(data);
+        if (jj is Map<String, dynamic>) {
+          return jj;
+        }
+      }
+    } catch (_) {
+      // Return null on any error (file read, JSON decode, or type cast)
     }
     return null;
   }
