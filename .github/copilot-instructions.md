@@ -13,7 +13,7 @@ Biblioteca Dart/Flutter para logging estruturado com serialização JSON, format
 
 ### Sistema de Configuração (Singleton)
 - **`LogCustomPrinterBase`** (singleton): Gerencia configuração global de logging
-- **`ConfigLog`**: Controla `enableLog` (padrão `kDebugMode`) e `onlyClasses` (filtragem de tipos)
+- **`ConfigLog`**: Controla `enableLog` (padrão `kDebugMode`), `onlyClasses` (filtragem de tipos) e `isSaveLogFile` (se os logs devem ser salvos em disco via `LogDisplayHandler`)
 - **ErrorLog sempre processado**: Mesmo com `enableLog: false`, erros são registrados
 - Factory construtores: `colorPrint()`, `simplePrint()`, `customPrint()`
 
@@ -122,8 +122,8 @@ LogCustomPrinterBase().logDebug('Mensagem direta');
 ## Integrações e Dependências
 
 ### JSON Serialization Pipeline
-- `json_annotation` ^4.9.0 + `json_serializable` ^6.7.0 (dev)
-- `build_runner` ^2.4.6 gerencia code generation
+- `json_annotation` ^4.11.0 + `json_serializable` ^6.13.0 (dev)
+- `build_runner` ^2.11.1 gerencia code generation
 - Configuração: `build.yaml` força `explicit_to_json: true` para nested objects
 
 ### Flutter Framework

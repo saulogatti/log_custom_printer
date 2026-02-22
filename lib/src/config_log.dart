@@ -55,12 +55,19 @@ class ConfigLog {
   /// Por padrão sempre vai permitir [ErrorLog] para garantir que erros críticos
   final Set<Type> onlyClasses;
 
+  /// Se os logs devem ser persistidos em arquivo.
+  ///
+  /// Quando `true`, além de enviados para a saída configurada, os logs
+  /// também podem ser salvos em arquivo conforme a implementação do
+  /// [LogPrinterBase] utilizada. Por padrão é `false`, ou seja, os logs
+  /// não são gravados em arquivo.
   final bool isSaveLogFile;
 
   /// Cria uma configuração de log.
   ///
   /// [enableLog]: controla se logs são processados (padrão: [kDebugMode])
   /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
+  /// [isSaveLogFile]: se os logs também devem ser salvos em arquivo (padrão: false)
   const ConfigLog({
     this.enableLog = kDebugMode,
     this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
