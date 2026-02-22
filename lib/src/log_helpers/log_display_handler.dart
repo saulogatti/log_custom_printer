@@ -1,6 +1,4 @@
-import 'dart:convert';
 import 'dart:developer' as dev;
-import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
@@ -71,16 +69,20 @@ final class LogDisplayHandler extends LogPrinterBase {
     LoggerCache().futureInit.then((_) => _loadAll());
   }
 
+  /// Limpa todos os logs de todas as categorias.
   void clearAll() {
     for (final type in EnumLoggerType.values) {
       clearList(type: type);
     }
   }
 
+  /// Limpa os logs de um tipo específico ou todos os logs se o índice for -1.
+  /// Se um índice específico for fornecido, apenas o log nesse índice será removido.
   void clearList({required EnumLoggerType type, int index = -1}) {
     if (_loggerJsonList.containsKey(type)) {
       final loggerList = _loggerJsonList[type]!;
       if (index != -1) {
+        assert(index >= 0 && index < loggerList.loggerJson.length, "Índice fora do intervalo");
         loggerList.loggerJson.removeAt(index);
       } else {
         loggerList.loggerJson.clear();
@@ -136,10 +138,6 @@ final class LogDisplayHandler extends LogPrinterBase {
   void _loadAll() {
     for (final enumLoggerType in EnumLoggerType.values) {
       try {
-        if (enumLoggerType == EnumLoggerType.error) {
-          continue;
-        }
-
         LoggerJsonList? loggerList = _loggerJsonList[enumLoggerType];
         if (loggerList == null) {
           final json = LoggerCache().getLogResp(enumLoggerType.name);

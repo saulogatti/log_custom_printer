@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/config_log.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
 /// Printer focused exclusively on writing logs to a file asynchronously.
 class FileLogPrinter {
@@ -31,7 +30,7 @@ class FileLogPrinter {
         await file.create(recursive: true);
       }
 
-      final jj = const JsonEncoder.withIndent('  ').convert(loggerList);
+      final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
       await file.writeAsString(jj);
     } catch (e, stack) {
       // In case of error, we can't do much inside the printer itself without causing loops.

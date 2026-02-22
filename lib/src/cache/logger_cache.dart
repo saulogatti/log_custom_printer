@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -63,6 +62,10 @@ class LoggerCache {
   /// Isso garante que a criação do diretório e configuração do caminho sejam concluídas
   /// antes que qualquer operação de arquivo seja tentada.
   late Completer<void> _future;
+
+  /// Callback opcional para lidar com erros durante a inicialização.
+  /// Se fornecido, este callback será chamado com o erro e a stack trace se ocorrer um erro durante a configuração do diretório.
+  void Function(Object error, StackTrace stackTrace)? onError;
 
   /// Factory constructor que retorna a instância singleton.
   ///
@@ -143,7 +146,6 @@ class LoggerCache {
   /// }
   /// ```
   Map<String, dynamic>? getLogResp(String fileName) {
-
     final path = getNameFile(fileName);
     final File file = File(path);
     if (file.existsSync()) {
@@ -202,7 +204,7 @@ class LoggerCache {
   /// ```
   String getNameFile(String fileName) {
     final fileJson = path.setExtension(fileName, '.json');
-    final pathLog = getPathLogs(fileJson);
+    final pathLog = _getPathLogs(fileJson);
 
     return pathLog;
   }
@@ -227,10 +229,10 @@ class LoggerCache {
   /// final cache = LoggerCache();
   /// await cache.futureInit;
   ///
-  /// final path = cache.getPathLogs('debug.json');
+  /// final path = cache._getPathLogs('debug.json');
   /// // Retorna: '/caminho/para/app/support/loggerApp/logs/debug.json'
   /// ```
-  String getPathLogs(String fileName) {
+  String _getPathLogs(String fileName) {
     if (_future.isCompleted) {
       return path.join(_directoryPath, fileName);
     }
@@ -253,13 +255,16 @@ class LoggerCache {
     try {
       final directory = (await getApplicationSupportDirectory()).path;
       final Directory directoryPath = Directory('$directory/loggerApp/logs');
-      if (!directoryPath.existsSync()) {
+      if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-    } catch (e, stack) {
-      final error = ErrorLog(e.toString(), stack);
-      error.sendLog();
+    } catch (e) {
+      if (onError != null) {
+        onError!(e, StackTrace.current);
+      } else {
+        print('Erro ao inicializar LoggerCache: $e');
+      }
     }
     _future.complete();
   }
