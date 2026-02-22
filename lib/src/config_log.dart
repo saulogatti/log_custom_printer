@@ -62,6 +62,10 @@ class ConfigLog {
   /// não são gravados em arquivo.
   final bool isSaveLogFile;
 
+  final int maxLogEntriesInFile;
+
+  final String saveLogFilePath;
+
   /// Cria uma configuração de log.
   ///
   /// [enableLog]: controla se logs são processados (padrão: [kDebugMode])
@@ -71,5 +75,7 @@ class ConfigLog {
     this.enableLog = false,
     this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
     this.isSaveLogFile = false,
+    this.maxLogEntriesInFile = 1000,
+    this.saveLogFilePath = "",
   });
 }
