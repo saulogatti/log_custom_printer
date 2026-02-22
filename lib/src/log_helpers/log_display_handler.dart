@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
+import 'package:log_custom_printer/src/log_printers/file_log_printer.dart';
 
 export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
 
@@ -60,25 +60,15 @@ final class LogDisplayHandler extends LogPrinterBase {
   final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
 
   LoggerNotifier notifier = LoggerNotifier();
+  late final FileLogPrinter _filePrinter;
+
   factory LogDisplayHandler() {
     _logger ??= LogDisplayHandler._private();
     return _logger!;
   }
   LogDisplayHandler._private() {
+    _filePrinter = const FileLogPrinter();
     LoggerCache().futureInit.then((_) => _loadAll());
-
-    FlutterError.onError = (FlutterErrorDetails details) {
-      final error = ErrorLog(
-        details.exceptionAsString(),
-        details.stack ?? StackTrace.current,
-      );
-      error.sendLog();
-    };
-    PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-      final err = ErrorLog(error.toString(), stack);
-      err.sendLog();
-      return true; // Prevents the default error handling.
-    };
   }
 
   void clearAll() {
@@ -95,7 +85,7 @@ final class LogDisplayHandler extends LogPrinterBase {
       } else {
         loggerList.loggerJson.clear();
       }
-      _toFileTemp(type.name, loggerList);
+      _filePrinter.writeLogToFile(type.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
     }
   }
@@ -117,9 +107,7 @@ final class LogDisplayHandler extends LogPrinterBase {
   @override
   void printLog(LoggerObjectBase log) {
     if (configLog.enableLog || log is ErrorLog) {
-      final separator = log.getColor().call(
-        "=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-",
-      );
+      final separator = log.getColor().call("=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-");
       final time = log.getColor().call(log.logCreationDate.onlyTime());
       final start = log.getStartLog();
       final List<String> messageLog = [" ", separator];
@@ -143,30 +131,7 @@ final class LogDisplayHandler extends LogPrinterBase {
       _toFileLog(log);
       dev.log(logStr, name: start);
     }
-
-    // final bool saveLog = debugEnable || logger is LoggerError;
-    // if (saveLog) {
-    //   _toFileLog(logger);
-    // }
   }
-
-  // Future<void> shareFile(String path) async {
-  //   try {
-  //     final ShareResult result = await SharePlus.instance.share(
-  //       ShareParams(files: [XFile(path)]),
-  //     );
-  //     _printMessage(result);
-  //   } catch (error, stack) {
-  //     _printMessage(error, stack: stack);
-  //   }
-  // }
-
-  // void shareLogs({required EnumLoggerType type}) {
-  //   final path = _getNameFile(type.name);
-  //   if (path != null) {
-  //     shareFile(path);
-  //   }
-  // }
 
   void _loadAll() {
     for (final enumLoggerType in EnumLoggerType.values) {
@@ -214,26 +179,10 @@ final class LogDisplayHandler extends LogPrinterBase {
 
       loggerList.addLogger(logJ);
       _loggerJsonList[logJ.enumLoggerType] = loggerList;
-      _toFileTemp(logJ.enumLoggerType.name, loggerList);
+      _filePrinter.writeLogToFile(logJ.enumLoggerType.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
     } catch (err, stack) {
       _printMessage(err.toString(), stack: stack);
-    }
-  }
-
-  void _toFileTemp(String fileName, Object respData) {
-    try {
-      if (!configLog.isSaveLogFile) {
-        return;
-      }
-      final path = LoggerCache().getNameFile(fileName);
-      final File file = File(path);
-      final spaces = ' ' * 2;
-      file.createSync();
-      final jj = JsonEncoder.withIndent(spaces).convert(respData);
-      file.writeAsStringSync(jj);
-    } catch (e, stack) {
-      _printMessage(e.toString(), stack: stack);
     }
   }
 }
