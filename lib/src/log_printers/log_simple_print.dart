@@ -1,7 +1,8 @@
 import 'dart:developer' as dev show log;
 
 import 'package:flutter/material.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_custom_printer_base.dart';
+import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
 export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 

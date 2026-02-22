@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_custom_printer_base.dart';
+import 'package:log_custom_printer/src/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 
 /// Marca base para objetos de log.

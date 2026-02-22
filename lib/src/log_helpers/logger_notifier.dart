@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/log_helpers/log_display_handler.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
+import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
 /// Notifica ouvintes sobre mudanças nos dados de log para diferentes [EnumLoggerType]s.
 ///
