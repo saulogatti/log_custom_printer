@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/src/log_custom_printer_base.dart';
-import 'package:log_custom_printer/src/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/log_printer_locator.dart';
 import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
+import 'package:meta/meta.dart';
 
 /// Marca base para objetos de log.
 ///
@@ -29,6 +28,12 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// ou do `runtimeType` da instância.
   late String className;
 
+  /// Tags associadas ao log.
+  ///
+  /// Permite categorizar e filtrar logs com base em tags.
+  @JsonKey(name: "tagLog")
+  final String tag;
+
   /// Mensagem principal do log.
   ///
   /// É anotado com `@JsonKey(name: 'message')` para manter o campo com
@@ -50,7 +55,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// log (útil em testes); quando omitido, o objeto NÃO enviará o log
   /// automaticamente. Use o construtor nomeado `LoggerObjectBase.send`
   /// para criar e enviar em uma única chamada.
-  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass}) {
+  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag}) : tag = tag ?? "" {
     assert(
       message.isNotEmpty && message.trim().isNotEmpty,
       "Mensagem não pode ser vazia ou apenas espaços em branco",
@@ -62,12 +67,16 @@ abstract class LoggerObjectBase extends LoggerObject {
 
   /// Cabeçalho formatado do log (nome da classe/origem).
   String get _logHeader =>
-      runtimeType.toString().toUpperCase() +
-      (className.isNotEmpty ? " - $className".toUpperCase() : "");
+      runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
 
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
   LoggerAnsiColor getColor();
+
+  /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
+  ///
+  /// Útil para [ErrorLog], que deve sempre ser exibido. Padrão: `false`.
+  bool get alwaysPrint => false;
 
   /// Formata a mensagem incluindo timestamp e aplicando cor opcional.
   ///
@@ -75,9 +84,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getMessage([bool withColor = true]) {
     final messageFormated = "${logCreationDate.logFullDateTime} $message";
-    final String messa = withColor
-        ? getColor().call(messageFormated)
-        : messageFormated;
+    final String messa = withColor ? getColor().call(messageFormated) : messageFormated;
 
     return messa;
   }
@@ -98,17 +105,18 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// Checa se o log está habilitado via configuração antes de imprimir.
   /// Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.
   ///
-  /// Implementação padrão obtém o `LogPrinterBase` a partir de
-  /// `LogCustomPrinterBase().getLogPrinterBase()` e delega a impressão.
+  /// Implementação padrão obtém o `LogPrinterBase` via [resolveLogPrinter]
+  /// (get_it) e delega a impressão. Requer que [registerLogPrinter] tenha
+  /// sido chamado no startup.
   @mustCallSuper
   void sendLog() {
-    final logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
+    final logPrinterBase = resolveLogPrinter();
     final bool canPrintLog =
         logPrinterBase.configLog.enableLog &&
         (logPrinterBase.configLog.onlyClasses.isEmpty ||
             logPrinterBase.configLog.onlyClasses.contains(runtimeType));
-    // Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada
-    if (!canPrintLog && this is! ErrorLog) {
+    // Se o log não pode ser impresso e não tem alwaysPrint, retorna sem fazer nada
+    if (!canPrintLog && !alwaysPrint) {
       return;
     }
 

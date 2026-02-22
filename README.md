@@ -1,6 +1,6 @@
 # log_custom_printer
 
-Biblioteca Dart/Flutter para logging customizado com serialização JSON, formatação colorida ANSI e padrão singleton. Ideal para aplicações que necessitam de logs estruturados, rastreáveis e visualmente organizados.
+Biblioteca Dart/Flutter para logging customizado com serialização JSON, formatação colorida ANSI e injeção de dependência (get_it). Ideal para aplicações que necessitam de logs estruturados, rastreáveis e visualmente organizados.
 
 ## ✨ Funcionalidades
 
@@ -8,7 +8,7 @@ Biblioteca Dart/Flutter para logging customizado com serialização JSON, format
 - 🎨 **Formatação colorida**: Códigos ANSI para logs visuais no terminal
 - 📦 **Serialização JSON**: Auto-geração com `json_serializable`
 - 🔧 **Configuração flexível**: Filtragem por tipos e controle de habilitação
-- 🏗️ **Padrão Singleton**: Configuração centralizada via `LogCustomPrinterBase`
+- 🏗️ **Injeção de Dependência**: Configuração via `registerLogPrinter` (get_it)
 - 🎭 **Mixin utilities**: `LoggerClassMixin` para integração fácil em classes
 - 🔍 **Rastreabilidade**: Identificação automática da classe de origem
 
@@ -35,16 +35,20 @@ dart pub get     # Para projetos Dart puro
 
 ## 📖 Uso Básico
 
-### Configuração Inicial
+### Configuração Inicial (obrigatório no startup)
 
 ```dart
 import 'package:log_custom_printer/log_custom_printer.dart';
 
-// Configuração com cores (recomendado para desenvolvimento)
-final printer = LogCustomPrinterBase.colorPrint();
+void main() {
+  // Configuração com cores (recomendado para desenvolvimento)
+  registerLogPrinter(LogWithColorPrint(config: ConfigLog(enableLog: true)));
 
-// Ou configuração simples sem cores
-final simplePrinter = LogCustomPrinterBase();
+  // Ou configuração simples sem cores
+  // registerLogPrinterSimple(config: ConfigLog(enableLog: true));
+
+  runApp(MyApp());
+}
 ```
 
 ### Usando o Mixin (Recomendado)
@@ -83,22 +87,22 @@ final logRecriado = DebugLog.fromJson(json);
 ### Configuração Avançada
 
 ```dart
-// Configuração customizada - apenas logs de erro e debug
-final printer = LogCustomPrinterBase(
-  logPrinterCustom: LogWithColorPrint(
-    config: ConfigLog(
-      enableLog: true,
-      onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
+void main() {
+  // Configuração customizada - apenas logs de erro e debug
+  registerLogPrinter(
+    LogWithColorPrint(
+      config: ConfigLog(
+        enableLog: true,
+        onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
+      ),
     ),
-  ),
-);
+  );
 
-// Configuração para produção - logs desabilitados
-final prodPrinter = LogCustomPrinterBase(
-  logPrinterCustom: LogSimplePrint(
-    config: ConfigLog(enableLog: false),
-  ),
-);
+  // Ou para produção - logs desabilitados
+  // registerLogPrinterSimple(config: ConfigLog(enableLog: false));
+
+  runApp(MyApp());
+}
 ```
 
 ### Regras de Entrega de Logs
@@ -114,7 +118,7 @@ final prodPrinter = LogCustomPrinterBase(
 
 - **`LoggerObject`** (sealed class) — Hierarquia base para tipos de log
 - **`LoggerObjectBase`** — Classe abstrata com funcionalidades comuns
-- **`LogCustomPrinterBase`** — Singleton para configuração global
+- **`registerLogPrinter`** / **`registerLogPrinterColor`** / **`registerLogPrinterSimple`** — Injeção de dependência via get_it
 - **`ConfigLog`** — Configuração de habilitação e filtragem
 - **`LoggerClassMixin`** — Mixin para integração fácil em classes
 
