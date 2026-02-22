@@ -58,13 +58,16 @@ final class LogDisplayHandler extends LogPrinterBase {
 
   LoggerNotifier notifier = LoggerNotifier();
 
-  final LoggerCache _loggerCache = LoggerCache("loggerApp/logs");
-  factory LogDisplayHandler() {
-    _logger ??= LogDisplayHandler._private();
+  LoggerCache? _loggerCache;
+  factory LogDisplayHandler(ConfigLog configLog) {
+    _logger ??= LogDisplayHandler._private(configLog);
     return _logger!;
   }
-  LogDisplayHandler._private() {
-    _loggerCache.futureInit.then((_) => _loadAll());
+  LogDisplayHandler._private(ConfigLog configLog) : super(config: configLog) {
+    if (configLog.saveLogFilePath.isNotEmpty) {
+      _loggerCache = LoggerCache(configLog.saveLogFilePath);
+      _loggerCache!.futureInit.then((_) => _loadAll());
+    }
   }
 
   /// Limpa todos os logs de todas as categorias.
@@ -85,7 +88,7 @@ final class LogDisplayHandler extends LogPrinterBase {
       } else {
         loggerList.loggerJson.clear();
       }
-      _loggerCache.writeLogToFile(type.name, loggerList);
+      _loggerCache?.writeLogToFile(type.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
     }
   }
@@ -94,7 +97,7 @@ final class LogDisplayHandler extends LogPrinterBase {
     if (_loggerJsonList.containsKey(enumLoggerType)) {
       return _loggerJsonList[enumLoggerType]!.loggerJson;
     } else {
-      final json = _loggerCache.getLogResp(enumLoggerType.name);
+      final json = _loggerCache?.getLogResp(enumLoggerType.name);
       if (json != null) {
         final LoggerJsonList loggerList = LoggerJsonList.fromJson(json);
         _loggerJsonList[enumLoggerType] = loggerList;
@@ -138,7 +141,7 @@ final class LogDisplayHandler extends LogPrinterBase {
       try {
         LoggerJsonList? loggerList = _loggerJsonList[enumLoggerType];
         if (loggerList == null) {
-          final json = _loggerCache.getLogResp(enumLoggerType.name);
+          final json = _loggerCache?.getLogResp(enumLoggerType.name);
           if (json != null) {
             loggerList = LoggerJsonList.fromJson(json);
             _loggerJsonList[enumLoggerType] = loggerList;
@@ -166,16 +169,16 @@ final class LogDisplayHandler extends LogPrinterBase {
     try {
       LoggerJsonList? loggerList = _loggerJsonList[logJ.enumLoggerType];
       if (loggerList == null) {
-        final json = _loggerCache.getLogResp(logJ.enumLoggerType.name);
+        final json = _loggerCache?.getLogResp(logJ.enumLoggerType.name);
         if (json != null) {
           loggerList = LoggerJsonList.fromJson(json);
         }
         loggerList ??= LoggerJsonList(type: logJ.runtimeType.toString());
       }
-
+      loggerList.maxLogEntries = configLog.maxLogEntriesInFile;
       loggerList.addLogger(logJ);
       _loggerJsonList[logJ.enumLoggerType] = loggerList;
-      _loggerCache.writeLogToFile(logJ.enumLoggerType.name, loggerList);
+      _loggerCache?.writeLogToFile(logJ.enumLoggerType.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
     } catch (err, stack) {
       _printMessage(err.toString(), stack: stack);

@@ -61,7 +61,6 @@ class ConfigLog {
   /// também podem ser salvos em arquivo conforme a implementação do
   /// [LogPrinterBase] utilizada. Por padrão é `false`, ou seja, os logs
   /// não são gravados em arquivo.
-  final bool isSaveLogFile;
 
   final int maxLogEntriesInFile;
 
@@ -75,7 +74,7 @@ class ConfigLog {
   const ConfigLog({
     this.enableLog = false,
     this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
-    this.isSaveLogFile = false,
+
     this.maxLogEntriesInFile = 1000,
     this.saveLogFilePath = "",
   });
