@@ -13,8 +13,8 @@ O `log_custom_printer` é uma biblioteca Dart/Flutter completa para logging cust
 - Garante type-safety em tempo de compilação
 - Permite pattern matching exhaustivo
 
-#### 2. Singleton Pattern
-- `LogCustomPrinterBase` implementa singleton para configuração global
+#### 2. Service Locator / Dependency Injection
+- `registerLogPrinter` e `resolveLogPrinter` usam get_it para injeção de dependência
 - `LoggerCache` usa singleton para gerenciamento centralizado de cache
 - `LogDisplayHandler` usa singleton para manipulação unificada de logs
 
@@ -28,7 +28,7 @@ O `log_custom_printer` é uma biblioteca Dart/Flutter completa para logging cust
 - Facilita integração sem herança
 
 #### 5. Builder/Factory Pattern
-- Construtores de fábrica em `LogCustomPrinterBase`
+- Funções `registerLogPrinterColor`, `registerLogPrinterSimple` para setup rápido
 - Métodos `fromJson` em todas as classes de log
 
 ## Estrutura de Componentes
@@ -60,14 +60,15 @@ Campos principais:
 - `logCreationDate`: Timestamp de criação
 - `className`: Identificador da origem
 
-#### LogCustomPrinterBase (singleton)
+#### Log Printer Locator (DI)
 ```dart
-class LogCustomPrinterBase
+void registerLogPrinter(LogPrinterBase printer, {GetIt? getIt});
+LogPrinterBase resolveLogPrinter();
 ```
 Responsabilidades:
-- Gerenciamento de instância singleton
-- Configuração global de impressora
-- Factory methods para configurações comuns
+- Registro da impressora no get_it (startup)
+- Resolução da impressora para `sendLog()` e mixin
+- Funções de conveniência: `registerLogPrinterColor`, `registerLogPrinterSimple`
 
 ### Log Types (Tipos de Log)
 
@@ -210,7 +211,7 @@ log.sendLog()
 ```
 sendLog()
   ↓
-LogCustomPrinterBase.getLogPrinterBase()
+resolveLogPrinter() (get_it)
   ↓
 Verifica ConfigLog
   ↓
@@ -284,22 +285,25 @@ Formato ANSI: `\x1B[CODIGOm TEXTO \x1B[0m`
 
 ### Desenvolvimento
 ```dart
-final printer = LogCustomPrinterBase.colorPrint();
+void main() {
+  registerLogPrinterColor(config: ConfigLog(enableLog: true));
+  runApp(MyApp());
+}
 ```
 - Logs coloridos
-- Apenas Debug e Info habilitados
 - Saída visual no console
 
 ### Produção
 ```dart
-final printer = LogCustomPrinterBase(
-  logPrinterCustom: LogSimplePrint(
+void main() {
+  registerLogPrinterSimple(
     config: ConfigLog(
       enableLog: false,
       onlyClasses: {ErrorLog}, // Apenas erros
     ),
-  ),
-);
+  );
+  runApp(MyApp());
+}
 ```
 - Logs desabilitados (exceto erros)
 - Sem sobrecarga de performance
@@ -307,14 +311,17 @@ final printer = LogCustomPrinterBase(
 
 ### Testing
 ```dart
-final printer = LogCustomPrinterBase(
-  logPrinterCustom: LogSimplePrint(
-    config: ConfigLog(
-      enableLog: true,
-      onlyClasses: {DebugLog, ErrorLog},
+setUp(() {
+  registerLogPrinter(
+    LogSimplePrint(
+      config: ConfigLog(
+        enableLog: true,
+        onlyClasses: {DebugLog, ErrorLog},
+      ),
     ),
-  ),
-);
+  );
+});
+tearDown(() async => await GetIt.instance.reset());
 ```
 - Logs simples sem cores
 - Debug e Erro habilitados
@@ -483,7 +490,7 @@ class MyLog extends LoggerObjectBase {
 ### Logs não aparecem
 - Verificar `ConfigLog.enableLog`
 - Verificar se tipo está em `onlyClasses`
-- Confirmar que `LogCustomPrinterBase` foi inicializado
+- Confirmar que `registerLogPrinter()` foi chamado no startup
 
 ### Erro de build
 ```bash

@@ -53,6 +53,9 @@ class ErrorLog extends LoggerObjectBase {
   /// [typeClass] identifica a classe de origem (opcional).
   ErrorLog(super.message, this.stackTrace, {super.typeClass}) : super();
 
+  @override
+  bool get alwaysPrint => true;
+
   /// Cria uma instância a partir de JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) =>
       _$ErrorLogFromJson(json);

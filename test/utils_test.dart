@@ -1,5 +1,4 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 import 'package:test/test.dart';
 
@@ -36,13 +35,19 @@ void main() {
       final stackTrace = StackTrace.fromString(stackTraceString);
 
       final map = stackTrace.stackInMap(3);
-      expect(map, equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}));
+      expect(
+        map,
+        equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}),
+      );
 
       final formatted = stackTrace.formatStackTrace(
         const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
         3,
       );
-      expect(formatted, contains('MyClass.method (package:my_app/src/file.dart:10:3)'));
+      expect(
+        formatted,
+        contains('MyClass.method (package:my_app/src/file.dart:10:3)'),
+      );
       expect(formatted, isNot(contains('flutter/src/widgets/framework.dart')));
       expect(formatted, contains(LoggerAnsiColor.ansiEsc));
     });
