@@ -1,88 +1,169 @@
 # Copilot Instructions for `log_custom_printer`
 
 ## Visão Geral
-Biblioteca Dart/Flutter de logging customizada com foco em serialização JSON, formatação colorida via ANSI e padrão singleton. O core da arquitetura é baseado em hierarquia de classes selada (`LoggerObject`), com diferentes tipos de log (debug, info, warning, error) e impressoras configuráveis.
+Biblioteca Dart/Flutter para logging estruturado com serialização JSON, formatação colorida ANSI e arquitetura baseada em padrões Singleton e Strategy. O sistema usa sealed classes para hierarquia de logs tipada, garantindo type-safety em compile-time.
 
-## Arquitetura e Componentes Principais
+## Arquitetura Core
 
-### Hierarquia de Logs (sealed class)
-- `LoggerObject` é a classe base selada em `lib/src/logs_object/logger_object.dart`
-- `LoggerObjectBase` define o contrato abstrato com `getColor()`, `getMessage()`, `sendLog()` e `toJson()`
-- Implementações concretas: `DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog` cada uma com sua cor ANSI específica
+### Hierarquia de Logs (Sealed Class Pattern)
+- **Base selada**: `LoggerObject` (marker class) → `LoggerObjectBase` (abstract contract)
+- **Implementações**: `DebugLog` (yellow), `InfoLog` (white), `WarningLog` (green), `ErrorLog` (red)
+- Cada tipo implementa: `getColor()`, `getMessage([withColor])`, `toJson()`, `fromJson()`
+- **Localização**: `lib/src/logs_object/` - um arquivo por tipo + gerados `.g.dart`
 
-### Padrão Singleton e Configuração
-- `LogCustomPrinterBase` usa singleton para centralizar a configuração da biblioteca
-- `ConfigLog` controla habilitação de logs e filtragem por tipos (`onlyClasses`)
-- Use `LogCustomPrinterBase.colorPrint()` para logs com cores ou `LogCustomPrinterBase()` para logs simples
+### Sistema de Configuração (Singleton)
+- **`LogCustomPrinterBase`** (singleton): Gerencia configuração global de logging
+- **`ConfigLog`**: Controla `enableLog` (padrão `kDebugMode`), `onlyClasses` (filtragem de tipos) e `isSaveLogFile` (se os logs devem ser salvos em disco via `LogDisplayHandler`)
+- **ErrorLog sempre processado**: Mesmo com `enableLog: false`, erros são registrados
+- Factory construtores: `colorPrint()`, `simplePrint()`, `customPrint()`
 
-### Sistema de Impressão Strategy Pattern
-- `LogPrinterBase` define o contrato para impressoras de log
-- `LogSimplePrint` usa `debugPrint()` sem cores
-- `LogWithColorPrint` usa `dart:developer.log()` com códigos ANSI coloridos
+### Printers (Strategy Pattern)
+- **Interface**: `LogPrinterBase` com `printLog(LoggerObjectBase)` e `canPrintLog(LoggerObjectBase)`
+- **`LogSimplePrint`**: Usa `debugPrint()` sem ANSI, formato `[ClassName] <timestamp> <message>`
+- **`LogWithColorPrint`**: Usa `dart:developer.log()` com blocos separadores coloridos
+- Filtragem via `ConfigLog.onlyClasses` aplicada em `canPrintLog()`
+
+### Sistema de Cache (Feature)
+- **`LoggerCache`** (singleton): Persiste logs em JSON no diretório de suporte da app (`loggerApp/logs/`)
+- Operações: `addLogs()`, `getLogs()`, `clearLogs()`, `getLogResp()` (leitura de arquivo)
+- Cache in-memory: `Map<String, List<String>>` por categoria
+- Async init via `futureInit` - aguardar antes de operações de arquivo
 
 ## Workflows Críticos
 
-### Code Generation
+### Code Generation (OBRIGATÓRIO)
 ```bash
 dart run build_runner build --delete-conflicting-outputs
+# Ou use task configurada no VS Code: "Dart Build Runner"
+# Ou script: ./ci.sh -build
 ```
-**SEMPRE** rode após modificar classes com `@JsonSerializable()`. O build.yaml está configurado com `explicit_to_json: true`.
+**Quando rodar**: Após criar/modificar qualquer classe com `@JsonSerializable()`. O `build.yaml` força `explicit_to_json: true`.
 
-### Scripts de Automação
-Use `./ci.sh -build` para code generation ou `./ci.sh -upgrade` para atualização de dependências.
+### Estrutura de Teste
+- Testes em `test/`: Unit tests por componente + `data_logs/` com JSONs de exemplo
+- Rodar: `dart test` (Dart puro) ou `flutter test` (com dependências Flutter)
+- Padrão: Setup singleton no `setUp()` → testar comportamento → verificar output
 
-### Testes
-```bash
-dart test
-# ou para Flutter
-flutter test
-```
+### Scripts de Automação (`ci.sh`)
+- `./ci.sh -upgrade`: Atualiza dependências com `flutter pub upgrade --major-versions`
+- `./ci.sh -build`: Executa build_runner em todos os `pubspec.yaml` (busca 2 níveis profundidade)
+- Varredura automática: Encontra todos os projetos Dart/Flutter no workspace
 
-## Convenções Específicas do Projeto
+## Convenções e Padrões Específicos
 
-### Criação de Novos Tipos de Log
-1. Estenda `LoggerObjectBase`
-2. Adicione `@JsonSerializable()` e importe o `.g.dart`
-3. Implemente `getColor()` retornando `LoggerAnsiColor` específico
-4. Adicione factory `fromJson()` e override `toJson()`
-5. Exemplo em `lib/src/logs_object/debug_log.dart`
+### Criação de Novo Tipo de Log
+1. Crie arquivo em `lib/src/logs_object/<tipo>_log.dart`
+2. Anote classe com `@JsonSerializable()`
+3. Adicione `part '<tipo>_log.g.dart';`
+4. Estenda `LoggerObjectBase` com construtor delegando para `super`
+5. Implemente `getColor()` retornando `LoggerAnsiColor.<cor>`
+6. Adicione factories: `fromJson(Map<String, dynamic>)` e override `toJson()`
+7. **RODAR**: `dart run build_runner build --delete-conflicting-outputs`
+8. Adicione ao export público em `lib/log_custom_printer.dart`
 
-### Uso do Mixin `LoggerClassMixin`
+Exemplo:
 ```dart
-class MyClass with LoggerClassMixin {
-  void someMethod() {
-    logDebug('Debug message');  // Automaticamente inclui runtimeType
-    logError('Error', stackTrace);
-  }
+@JsonSerializable()
+class CustomLog extends LoggerObjectBase {
+  const CustomLog(super.message, {super.typeClass, super.createdAt});
+  
+  @override
+  LoggerAnsiColor getColor() => LoggerAnsiColor.blue;
+  
+  factory CustomLog.fromJson(Map<String, dynamic> json) => _$CustomLogFromJson(json);
+  
+  @override
+  Map<String, dynamic> toJson() => _$CustomLogToJson(this);
 }
 ```
 
-### Configuração Avançada
+### Uso do Mixin `LoggerClassMixin`
 ```dart
-final printer = LogCustomPrinterBase(
-  logPrinterCustom: LogWithColorPrint(
-    config: ConfigLog(onlyClasses: <Type>{DebugLog, InfoLog})
+class MinhaFeature with LoggerClassMixin {
+  void processar() {
+    logDebug('Iniciando');  // Injeta runtimeType automaticamente
+    try {
+      // lógica
+      logInfo('Sucesso');
+    } catch (e, st) {
+      logError('Erro: $e', st);  // Stack trace opcional
+    }
+  }
+}
+```
+**Métodos disponíveis**: `logDebug()`, `logInfo()`, `logWarning()`, `logError()` - todos capturam `runtimeType` via `logClassType`.
+
+### Configuração de Filtragem
+```dart
+// Apenas debug e info com cores
+final printer = LogCustomPrinterBase.colorPrint(
+  config: ConfigLog(onlyClasses: {DebugLog, InfoLog})
+);
+
+// Produção: apenas errors, sem cores
+final prodPrinter = LogCustomPrinterBase.simplePrint(
+  config: ConfigLog(
+    enableLog: false,  // ErrorLog ainda será processado
+    onlyClasses: {ErrorLog}
   )
 );
 ```
 
+### Envio Manual de Logs
+```dart
+// Logs NÃO são enviados no construtor
+final log = DebugLog('Minha mensagem', typeClass: runtimeType);
+log.sendLog();  // Envio explícito necessário
+
+// Ou use métodos diretos do singleton
+LogCustomPrinterBase().logDebug('Mensagem direta');
+```
+
 ## Integrações e Dependências
 
-### JSON Serialization
-- `json_annotation` + `json_serializable` para auto-geração de `toJson()/fromJson()`
-- `build_runner` para code generation (veja build.yaml)
+### JSON Serialization Pipeline
+- `json_annotation` ^4.11.0 + `json_serializable` ^6.13.0 (dev)
+- `build_runner` ^2.11.1 gerencia code generation
+- Configuração: `build.yaml` força `explicit_to_json: true` para nested objects
 
-### Flutter Dependencies
-- `flutter/material.dart` para `debugPrint` e `@mustCallSuper`
-- `dart:developer` para logging colorido via `log()`
+### Flutter Framework
+- `flutter/material.dart`: `debugPrint()`, `@mustCallSuper`, `kDebugMode`
+- `dart:developer`: `log()` para output com ANSI preservado
+- `path_provider` ^2.1.5: Diretório de suporte para cache de logs
 
-### Validação e Controle
-- Usa `assert()` para validar mensagens não vazias em desenvolvimento
-- `ConfigLog.enableLog` padrão é `kDebugMode` (só ativo em debug)
-- `onlyClasses` filtra tipos de log permitidos
+### Utils Internos
+- `LoggerAnsiColor`: Enum com transformadores de cor ANSI (via `call()` operator)
+- `DateTimeLogHelper`: Extension em `DateTime` para `logFullDateTime` formatado
+- `StackTraceExtensions`: Parsing e formatação de stack traces
 
-## Padrões de Desenvolvimento
-- Sempre use `super.` nos construtores das classes de log
-- `runtimeType` é automaticamente capturado como `className` via `typeClass`
-- Logs não são enviados automaticamente no construtor - use `.sendLog()` explicitamente
-- Extension `LoggerDispose` para logs automáticos de dispose em `State` widgets
+## Validações e Restrições
+- `assert()` valida mensagens não vazias/whitespace em desenvolvimento
+- `ConfigLog.enableLog` desabilita logs **exceto ErrorLog** (sempre processado)
+- Construtores são `const` quando possível (imutabilidade)
+- `typeClass` opcional: fallback para `runtimeType` se omitido
+- Singleton thread-safe: Inicialização lazy protegida por factory
+
+## Estrutura de Arquivos Chave
+```
+lib/
+  log_custom_printer.dart           # Export público da biblioteca
+  src/
+    config_log.dart                  # Configuração singleton
+    log_custom_printer_base.dart    # Singleton principal
+    logs_object/                     # Hierarquia sealed + gerados
+      logger_object.dart             # Base abstrata
+      debug_log.dart, *.g.dart       # Implementações
+    log_printers/                    # Strategy pattern
+      log_simple_print.dart          # Com/sem cores
+    log_helpers/
+      logger_class_mixin.dart        # Mixin utilitário
+    cache/
+      logger_cache.dart              # Persistência JSON
+    utils/                           # Extensions e helpers
+```
+
+## Notas de Manutenção
+- **Nunca edite arquivos `.g.dart`**: São gerados automaticamente
+- **Tasks VS Code**: Use "Dart Build Runner" ao invés de comandos manuais
+- **Testes de JSON**: `test/data_logs/` tem exemplos para validação de serialização
+- **Padrão de Export**: Sempre re-exporte novos tipos no arquivo público principal

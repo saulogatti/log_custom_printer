@@ -7,7 +7,7 @@ void main() {
       final fakePrinter = _FakeLogPrinter(
         config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
       );
-      LogCustomPrinterBase(logPrinterCustom: fakePrinter);
+      LogCustomPrinterBase.customPrint(logPrinterCustom: fakePrinter);
 
       DebugLog('debug skipped').sendLog();
       InfoLog('info allowed').sendLog();
@@ -20,8 +20,7 @@ void main() {
       final fakePrinter = _FakeLogPrinter(
         config: const ConfigLog(enableLog: false, onlyClasses: <Type>{}),
       );
-      LogCustomPrinterBase(logPrinterCustom: fakePrinter);
-
+      LogCustomPrinterBase.customPrint(logPrinterCustom: fakePrinter);
       DebugLog('debug skipped').sendLog();
       ErrorLog('boom', StackTrace.fromString('#0 example')).sendLog();
 
@@ -33,7 +32,7 @@ void main() {
   group('LoggerClassMixin', () {
     test('uses host runtimeType as className', () {
       final fakePrinter = _FakeLogPrinter();
-      LogCustomPrinterBase(logPrinterCustom: fakePrinter);
+      LogCustomPrinterBase.customPrint(logPrinterCustom: fakePrinter);
       final service = _FakeService();
 
       service.logWarning('check');

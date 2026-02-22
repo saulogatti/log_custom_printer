@@ -31,18 +31,17 @@ import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 /// );
 /// ```
 class LogCustomPrinterBase {
+  /// Instância única do singleton.
   static LogCustomPrinterBase? _instance;
+
+  /// Impressora de logs atualmente configurada.
   late LogPrinterBase _logPrinterBase;
 
-  /// Construtor de fábrica para criar uma instância singleton.
-  /// Permite fornecer uma impressora de logs customizada via [logPrinterCustom].
-  /// Quando não fornecida, usa [LogSimplePrint] como padrão.
-  factory LogCustomPrinterBase({LogPrinterBase? logPrinterCustom}) {
-    _instance ??= LogCustomPrinterBase._internal();
-    if (logPrinterCustom != null) {
-      _instance!._logPrinterBase = logPrinterCustom;
-    }
-    return _instance!;
+  /// Cria uma instância padrão do [LogCustomPrinterBase].
+  ///
+  /// Utiliza a configuração padrão com [LogSimplePrint].
+  factory LogCustomPrinterBase() {
+    return LogCustomPrinterBase.customPrint();
   }
 
   /// Construtor de fábrica para criar uma instância com impressora que
@@ -55,11 +54,41 @@ class LogCustomPrinterBase {
   /// ```dart
   /// final printer = LogCustomPrinterBase.colorPrint();
   /// ```
-  factory LogCustomPrinterBase.colorPrint() {
-    return LogCustomPrinterBase(
-      logPrinterCustom: LogWithColorPrint(config: ConfigLog(onlyClasses: <Type>{DebugLog, InfoLog})),
-    );
+  factory LogCustomPrinterBase.colorPrint({
+    ConfigLog config = const ConfigLog(onlyClasses: <Type>{DebugLog, InfoLog}),
+  }) {
+    return LogCustomPrinterBase.customPrint(logPrinterCustom: LogWithColorPrint(config: config));
   }
+
+  /// Construtor de fábrica para criar uma instância singleton.
+  /// Permite fornecer uma impressora de logs customizada via [logPrinterCustom].
+  /// Quando não fornecida, usa [LogSimplePrint] como padrão.
+  factory LogCustomPrinterBase.customPrint({LogPrinterBase? logPrinterCustom}) {
+    _instance ??= LogCustomPrinterBase._internal();
+    if (logPrinterCustom != null) {
+      _instance!._logPrinterBase = logPrinterCustom;
+    }
+    return _instance!;
+  }
+
+  /// Cria uma instância com impressora simples sem formatação de cores.
+  ///
+  /// Utiliza [LogSimplePrint] para a saída dos logs. É possível fornecer
+  /// uma [config] customizada para filtrar os logs.
+  ///
+  /// Exemplo:
+  /// ```dart
+  /// final printer = LogCustomPrinterBase.simplePrint(
+  ///   config: ConfigLog(enableLog: false),
+  /// );
+  /// ```
+  factory LogCustomPrinterBase.simplePrint({ConfigLog config = const ConfigLog()}) {
+    return LogCustomPrinterBase.customPrint(logPrinterCustom: LogSimplePrint(config: config));
+  }
+
+  /// Construtor interno para inicialização do singleton.
+  ///
+  /// Configura a impressora padrão como [LogSimplePrint].
   LogCustomPrinterBase._internal() {
     _logPrinterBase = LogSimplePrint();
   }

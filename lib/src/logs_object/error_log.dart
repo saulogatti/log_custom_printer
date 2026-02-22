@@ -92,13 +92,11 @@ class StackTraceConverter implements JsonConverter<StackTrace, String> {
 
   @override
   StackTrace fromJson(String json) {
-    // Implement your deserialization logic here
     return StackTrace.fromString(json);
   }
 
   @override
   String toJson(StackTrace object) {
-    // Implemente sua lógica de serialização aqui
     return object.toString();
   }
 }

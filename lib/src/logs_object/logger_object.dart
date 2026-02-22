@@ -60,7 +60,8 @@ abstract class LoggerObjectBase extends LoggerObject {
 
   /// Cabeçalho formatado do log (nome da classe/origem).
   String get _logHeader =>
-      runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
+      runtimeType.toString().toUpperCase() +
+      (className.isNotEmpty ? " - $className".toUpperCase() : "");
 
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
@@ -72,7 +73,9 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getMessage([bool withColor = true]) {
     final messageFormated = "${logCreationDate.logFullDateTime} $message";
-    final String messa = withColor ? getColor().call(messageFormated) : messageFormated;
+    final String messa = withColor
+        ? getColor().call(messageFormated)
+        : messageFormated;
 
     return messa;
   }
