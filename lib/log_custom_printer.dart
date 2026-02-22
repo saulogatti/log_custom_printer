@@ -4,7 +4,7 @@
 /// - Hierarquia tipada de logs (Debug, Info, Warning, Error)
 /// - Formatação colorida com códigos ANSI
 /// - Serialização JSON automática
-/// - Padrão Singleton para configuração centralizada
+/// - Injeção de dependência via get_it
 /// - Mixins utilitários para integração fácil
 ///
 /// ## Uso Rápido
@@ -12,8 +12,13 @@
 /// ```dart
 /// import 'package:log_custom_printer/log_custom_printer.dart';
 ///
-/// // Configuração inicial
-/// final printer = LogCustomPrinterBase.colorPrint();
+/// // Configuração inicial (obrigatório no startup)
+/// void main() {
+///   registerLogPrinter(
+///     LogWithColorPrint(config: ConfigLog(enableLog: true)),
+///   );
+///   runApp(MyApp());
+/// }
 ///
 /// // Usando o mixin (recomendado)
 /// class MinhaClasse with LoggerClassMixin {
@@ -60,6 +65,7 @@ library;
 export 'src/config_log.dart';
 export 'src/log_custom_printer_base.dart';
 export 'src/log_helpers/log_display_handler.dart';
+export 'src/log_printer_locator.dart';
 export 'src/log_helpers/logger_class_mixin.dart';
 export 'src/log_printers/log_simple_print.dart';
 export 'src/logs_object/debug_log.dart';

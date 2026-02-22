@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_printer_locator.dart';
+import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:meta/meta.dart';
 
@@ -72,6 +73,11 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// [getMessage] for chamada com `withColor = true`.
   LoggerAnsiColor getColor();
 
+  /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
+  ///
+  /// Útil para [ErrorLog], que deve sempre ser exibido. Padrão: `false`.
+  bool get alwaysPrint => false;
+
   /// Formata a mensagem incluindo timestamp e aplicando cor opcional.
   ///
   /// [withColor]: quando `true` aplica a transformação de cor retornada
@@ -99,17 +105,18 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// Checa se o log está habilitado via configuração antes de imprimir.
   /// Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.
   ///
-  /// Implementação padrão obtém o `LogPrinterBase` a partir de
-  /// `LogCustomPrinterBase().getLogPrinterBase()` e delega a impressão.
+  /// Implementação padrão obtém o `LogPrinterBase` via [resolveLogPrinter]
+  /// (get_it) e delega a impressão. Requer que [registerLogPrinter] tenha
+  /// sido chamado no startup.
   @mustCallSuper
   void sendLog() {
-    final logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
+    final logPrinterBase = resolveLogPrinter();
     final bool canPrintLog =
         logPrinterBase.configLog.enableLog &&
         (logPrinterBase.configLog.onlyClasses.isEmpty ||
             logPrinterBase.configLog.onlyClasses.contains(runtimeType));
-    // Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada
-    if (!canPrintLog && this is! ErrorLog) {
+    // Se o log não pode ser impresso e não tem alwaysPrint, retorna sem fazer nada
+    if (!canPrintLog && !alwaysPrint) {
       return;
     }
 

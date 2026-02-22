@@ -1,5 +1,6 @@
 import 'dart:developer' as dev show log;
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_custom_printer_base.dart';
+import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
 /// Impressora de logs que preserva cor/estilo ANSI.
 ///
@@ -12,16 +13,7 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// final printer = LogCustomPrinterBase(
-///   logPrinterCustom: LogWithColorPrint(
-///     config: ConfigLog(onlyClasses: {DebugLog, InfoLog}),
-///   ),
-/// );
-/// ```
-///
-/// Ou use o construtor de fábrica:
-/// ```dart
-/// final printer = LogCustomPrinterBase.colorPrint();
+/// registerLogPrinter(LogWithColorPrint(config: ConfigLog(enableLog: true)));
 /// ```
 class LogWithColorPrint extends LogPrinterBase {
   /// Construtor const para uso imutável/compilado.
