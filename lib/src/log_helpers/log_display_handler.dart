@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
+import 'package:log_custom_printer/src/log_printers/file_log_printer.dart';
 
 export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
 
@@ -59,11 +60,14 @@ final class LogDisplayHandler extends LogPrinterBase {
   final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
 
   LoggerNotifier notifier = LoggerNotifier();
+  late final FileLogPrinter _filePrinter;
+
   factory LogDisplayHandler() {
     _logger ??= LogDisplayHandler._private();
     return _logger!;
   }
   LogDisplayHandler._private() {
+    _filePrinter = const FileLogPrinter();
     LoggerCache().futureInit.then((_) => _loadAll());
   }
 
@@ -81,7 +85,7 @@ final class LogDisplayHandler extends LogPrinterBase {
       } else {
         loggerList.loggerJson.clear();
       }
-      _toFileTemp(type.name, loggerList);
+      _filePrinter.writeLogToFile(type.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
     }
   }
@@ -175,26 +179,10 @@ final class LogDisplayHandler extends LogPrinterBase {
 
       loggerList.addLogger(logJ);
       _loggerJsonList[logJ.enumLoggerType] = loggerList;
-      _toFileTemp(logJ.enumLoggerType.name, loggerList);
+      _filePrinter.writeLogToFile(logJ.enumLoggerType.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
     } catch (err, stack) {
       _printMessage(err.toString(), stack: stack);
-    }
-  }
-
-  void _toFileTemp(String fileName, Object respData) {
-    try {
-      if (!configLog.isSaveLogFile) {
-        return;
-      }
-      final path = LoggerCache().getNameFile(fileName);
-      final File file = File(path);
-      final spaces = ' ' * 2;
-      file.createSync();
-      final jj = JsonEncoder.withIndent(spaces).convert(respData);
-      file.writeAsStringSync(jj);
-    } catch (e, stack) {
-      _printMessage(e.toString(), stack: stack);
     }
   }
 }
