@@ -1,3 +1,4 @@
+import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:log_custom_printer/src/logs_object/info_log.dart';
@@ -68,7 +69,7 @@ class ConfigLog {
 
   /// Cria uma configuração de log.
   ///
-  /// [enableLog]: controla se logs são processados (padrão: [kDebugMode])
+  /// [enableLog]: controla se logs são processados (padrão: [false], ou seja, desabilitado por padrão)
   /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
   /// [isSaveLogFile]: se os logs também devem ser salvos em arquivo (padrão: false)
   const ConfigLog({
