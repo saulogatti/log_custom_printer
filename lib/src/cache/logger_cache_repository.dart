@@ -1,5 +1,6 @@
-import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/log_printer_service.dart';
+import '../log_helpers/enum_logger_type.dart';
+import '../log_printer_service.dart';
+import '../logs_object/logger_object.dart';
 
 /// Interface para repositório de cache de logs.
 ///
