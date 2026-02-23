@@ -1,4 +1,8 @@
-import 'package:log_custom_printer/log_custom_printer.dart';
+import '../logs_object/error_log.dart';
+import '../logs_object/info_log.dart';
+import '../logs_object/logger_object.dart';
+import '../logs_object/warning_log.dart';
+import 'enum_logger_type.dart';
 
 /// Extensão para mapear objetos de log para o enum [EnumLoggerType].
 ///
