@@ -1,5 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/logs_object/debug_log.dart';
+import 'package:log_custom_printer/src/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/logs_object/info_log.dart';
+import 'package:log_custom_printer/src/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/logs_object/warning_log.dart';
 
 part 'logger_json_list.g.dart';
 

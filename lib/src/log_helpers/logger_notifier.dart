@@ -1,4 +1,4 @@
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 
 /// Notifica ouvintes sobre mudanças nos dados de log para diferentes [EnumLoggerType]s.
