@@ -53,6 +53,9 @@ class ErrorLog extends LoggerObjectBase {
   /// [typeClass] identifica a classe de origem (opcional).
   ErrorLog(super.message, this.stackTrace, {super.typeClass}) : super();
 
+  @override
+  bool get alwaysPrint => true;
+
   /// Cria uma instância a partir de JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) =>
       _$ErrorLogFromJson(json);
@@ -72,11 +75,11 @@ class ErrorLog extends LoggerObjectBase {
         .map((e) => withColor ? color.call(e) : e)
         .toList();
 
-    for (final element in str.keys) {
+    for (final entry in str.entries) {
       if (withColor) {
-        strMessage.add(color.call("$element = ${str[element]}"));
+        strMessage.add(color.call("${entry.key} = ${entry.value}"));
       } else {
-        strMessage.add("$element = ${str[element]}");
+        strMessage.add("${entry.key} = ${entry.value}");
       }
     }
 

@@ -1,7 +1,7 @@
 # Copilot Instructions for `log_custom_printer`
 
 ## Visão Geral
-Biblioteca Dart/Flutter para logging estruturado com serialização JSON, formatação colorida ANSI e arquitetura baseada em padrões Singleton e Strategy. O sistema usa sealed classes para hierarquia de logs tipada, garantindo type-safety em compile-time.
+Biblioteca Dart/Flutter para logging estruturado com serialização JSON, formatação colorida ANSI e arquitetura baseada em injeção de dependência (get_it) e Strategy. O sistema usa sealed classes para hierarquia de logs tipada, garantindo type-safety em compile-time.
 
 ## Arquitetura Core
 
@@ -11,11 +11,11 @@ Biblioteca Dart/Flutter para logging estruturado com serialização JSON, format
 - Cada tipo implementa: `getColor()`, `getMessage([withColor])`, `toJson()`, `fromJson()`
 - **Localização**: `lib/src/logs_object/` - um arquivo por tipo + gerados `.g.dart`
 
-### Sistema de Configuração (Singleton)
-- **`LogCustomPrinterBase`** (singleton): Gerencia configuração global de logging
+### Sistema de Configuração (DI via get_it)
+- **`registerLogPrinter(LogPrinterBase)`**: Registra a impressora no get_it (obrigatório no startup)
+- **`registerLogPrinterColor()` / `registerLogPrinterSimple()`**: Atalhos para configuração comum
 - **`ConfigLog`**: Controla `enableLog` (padrão `kDebugMode`), `onlyClasses` (filtragem de tipos) e `isSaveLogFile` (se os logs devem ser salvos em disco via `LogDisplayHandler`)
-- **ErrorLog sempre processado**: Mesmo com `enableLog: false`, erros são registrados
-- Factory construtores: `colorPrint()`, `simplePrint()`, `customPrint()`
+- **ErrorLog sempre processado**: Mesmo com `enableLog: false`, erros são registrados (via `alwaysPrint`)
 
 ### Printers (Strategy Pattern)
 - **Interface**: `LogPrinterBase` com `printLog(LoggerObjectBase)` e `canPrintLog(LoggerObjectBase)`
@@ -42,7 +42,7 @@ dart run build_runner build --delete-conflicting-outputs
 ### Estrutura de Teste
 - Testes em `test/`: Unit tests por componente + `data_logs/` com JSONs de exemplo
 - Rodar: `dart test` (Dart puro) ou `flutter test` (com dependências Flutter)
-- Padrão: Setup singleton no `setUp()` → testar comportamento → verificar output
+- Padrão: `registerLogPrinter(fakePrinter)` no `setUp()` → testar comportamento → `GetIt.instance.reset()` no `tearDown()`
 
 ### Scripts de Automação (`ci.sh`)
 - `./ci.sh -upgrade`: Atualiza dependências com `flutter pub upgrade --major-versions`
@@ -93,30 +93,34 @@ class MinhaFeature with LoggerClassMixin {
 ```
 **Métodos disponíveis**: `logDebug()`, `logInfo()`, `logWarning()`, `logError()` - todos capturam `runtimeType` via `logClassType`.
 
-### Configuração de Filtragem
+### Configuração de Filtragem (no startup, ex: main.dart)
 ```dart
-// Apenas debug e info com cores
-final printer = LogCustomPrinterBase.colorPrint(
-  config: ConfigLog(onlyClasses: {DebugLog, InfoLog})
-);
+void main() {
+  // Apenas debug e info com cores
+  registerLogPrinterColor(
+    config: ConfigLog(onlyClasses: {DebugLog, InfoLog})
+  );
 
-// Produção: apenas errors, sem cores
-final prodPrinter = LogCustomPrinterBase.simplePrint(
-  config: ConfigLog(
-    enableLog: false,  // ErrorLog ainda será processado
-    onlyClasses: {ErrorLog}
-  )
-);
+  // Ou produção: apenas errors, sem cores
+  registerLogPrinterSimple(
+    config: ConfigLog(
+      enableLog: false,  // ErrorLog ainda será processado
+      onlyClasses: {ErrorLog}
+    )
+  );
+
+  runApp(MyApp());
+}
 ```
 
 ### Envio Manual de Logs
 ```dart
 // Logs NÃO são enviados no construtor
 final log = DebugLog('Minha mensagem', typeClass: runtimeType);
-log.sendLog();  // Envio explícito necessário
+log.sendLog();  // Envio explícito necessário (usa get_it internamente)
 
-// Ou use métodos diretos do singleton
-LogCustomPrinterBase().logDebug('Mensagem direta');
+// Ou via GetIt
+GetIt.instance<LogPrinterBase>().printLog(DebugLog('Mensagem direta'));
 ```
 
 ## Integrações e Dependências
@@ -141,15 +145,16 @@ LogCustomPrinterBase().logDebug('Mensagem direta');
 - `ConfigLog.enableLog` desabilita logs **exceto ErrorLog** (sempre processado)
 - Construtores são `const` quando possível (imutabilidade)
 - `typeClass` opcional: fallback para `runtimeType` se omitido
-- Singleton thread-safe: Inicialização lazy protegida por factory
+- `registerLogPrinter()` deve ser chamado antes de qualquer uso de logs
 
 ## Estrutura de Arquivos Chave
 ```
 lib/
   log_custom_printer.dart           # Export público da biblioteca
   src/
-    config_log.dart                  # Configuração singleton
-    log_custom_printer_base.dart    # Singleton principal
+    config_log.dart                  # Configuração
+    log_printer_locator.dart        # DI: registerLogPrinter, resolveLogPrinter
+    log_custom_printer_base.dart    # LogPrinterBase (classe abstrata)
     logs_object/                     # Hierarquia sealed + gerados
       logger_object.dart             # Base abstrata
       debug_log.dart, *.g.dart       # Implementações
