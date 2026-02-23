@@ -5,31 +5,55 @@ import 'package:log_custom_printer/src/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
-/// Implementação concreta de [LoggerCacheRepository] usando armazenamento em memória e opcionalmente em arquivo.
-/// Guarda os logs em memoria e caso seja configurado, também salva em arquivo usando [LoggerCache].
+/// Implementação concreta de [LoggerCacheRepository] usando armazenamento em memória
+/// e opcionalmente em arquivo.
+///
+/// Mantém os logs organizados por tipo em memória usando [LoggerJsonList].
+/// Se um [saveLogFilePath] for fornecido, também persiste os logs em disco
+/// através da classe [LoggerCache].
+///
+/// {@category Utilities}
 final class LoggerCacheImpl implements LoggerCacheRepository {
+  /// Número máximo de entradas de log por tipo.
   final int maxLogEntries;
 
+  /// Caminho base para salvar os arquivos de log (opcional).
   final String? saveLogFilePath;
+
+  /// Gerenciador de persistência em arquivo.
   LoggerCache? _loggerCache;
+
+  /// Mapa que armazena as listas de logs em memória por tipo.
   final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
+
+  /// Future que rastreia a inicialização do cache persistente.
   Future<void>? _futureInitialization;
+
+  /// Cria uma nova instância da implementação de cache.
+  ///
+  /// [maxLogEntries]: limite de logs mantidos em memória por tipo (padrão: 1000).
+  /// [saveLogFilePath]: diretório base para persistência (se omitido, não salva em disco).
   LoggerCacheImpl({this.maxLogEntries = 1000, this.saveLogFilePath}) {
     if (saveLogFilePath != null) {
       _loggerCache = LoggerCache(saveLogFilePath!);
       _futureInitialization = initialize();
     }
   }
+
   @override
   Future<void> addLog(LoggerObjectBase log) async {
     LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
     if (loggerList == null) {
-      loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
+      loggerList = LoggerJsonList(
+        type: log.runtimeType.toString(),
+        maxLogEntries: maxLogEntries,
+      );
       _loggerJsonList[log.enumLoggerType] = loggerList;
     }
     loggerList.addLogger(log);
     if (_loggerCache != null) {
-      await _futureInitialization; // Garante que a inicialização do cache foi concluída antes de tentar escrever
+      // Garante que a inicialização do cache foi concluída antes de tentar escrever
+      await _futureInitialization;
       await _loggerCache!.writeLogToFile(log.enumLoggerType.name, loggerList);
     }
   }
@@ -68,6 +92,7 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
     return [];
   }
 
+  /// Inicializa o repositório carregando logs persistidos anteriormente do disco.
   Future<void> initialize() async {
     if (_loggerCache != null) {
       await _loggerCache!.futureInitialization;

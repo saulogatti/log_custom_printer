@@ -81,6 +81,8 @@ enum EnumAnsiColors {
 ///
 /// Esta classe permite formatar mensagens com cores ANSI para exibição em terminais.
 ///
+/// {@category Utilities}
+///
 /// Exemplo de uso:
 /// ```dart
 /// final loggerColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
