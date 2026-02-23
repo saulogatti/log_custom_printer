@@ -95,7 +95,6 @@ class MinhaFeature with LoggerClassMixin {
 ### Configuração de Filtragem (no startup, ex: main.dart)
 ```dart
 void main() {
-  // Apenas debug e info com cores, com cache em memória e arquivo
   final cacheRepo = registerLogPrinterColor(
     config: ConfigLog(enableLog: true, onlyClasses: {DebugLog, InfoLog}),
     maxLogsInCache: 200,
