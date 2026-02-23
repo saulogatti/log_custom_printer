@@ -2,6 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/src/log_printer_locator.dart';
 import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
+import 'package:meta/meta.dart';
 
 /// Marca base para objetos de log.
 ///
@@ -107,6 +108,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// Implementação padrão obtém o `LogPrinterBase` via [fetchLogPrinterService]
   /// (get_it) e delega a impressão. Requer que [registerLogPrinter] tenha
   /// sido chamado no startup.
+  @mustCallSuper
   void sendLog() {
     final logPrinterService = fetchLogPrinterService();
 
