@@ -13,13 +13,15 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
   final String? saveLogFilePath;
   LoggerCache? _loggerCache;
   final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
+  Future<void>? _futureInitialization;
   LoggerCacheImpl({this.maxLogEntries = 1000, this.saveLogFilePath}) {
     if (saveLogFilePath != null) {
       _loggerCache = LoggerCache(saveLogFilePath!);
+      _futureInitialization = initialize();
     }
   }
   @override
-  void addLog(LoggerObjectBase log) {
+  Future<void> addLog(LoggerObjectBase log) async {
     LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
     if (loggerList == null) {
       loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
@@ -27,24 +29,27 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
     }
     loggerList.addLogger(log);
     if (_loggerCache != null) {
-      _loggerCache!.writeLogToFile(log.enumLoggerType.name, loggerList);
+      await _futureInitialization; // Garante que a inicialização do cache foi concluída antes de tentar escrever
+      await _loggerCache!.writeLogToFile(log.enumLoggerType.name, loggerList);
     }
   }
 
   @override
-  void clearLogs() {
+  Future<void> clearLogs() async {
     _loggerJsonList.clear();
-    _loggerCache?.clearAll();
+    await _futureInitialization;
+    await _loggerCache?.clearAll();
   }
 
   @override
-  void clearLogsByType(EnumLoggerType type) {
+  Future<void> clearLogsByType(EnumLoggerType type) async {
     _loggerJsonList.remove(type);
-    _loggerCache?.clearLogByType(type.name);
+    await _futureInitialization;
+    await _loggerCache?.clearLogByType(type.name);
   }
 
   @override
-  List<LoggerObjectBase> getAllLogs() {
+  Future<List<LoggerObjectBase>> getAllLogs() async {
     final List<LoggerObjectBase> allLogs = [];
     for (final loggerList in _loggerJsonList.values) {
       if (loggerList != null) {
@@ -55,7 +60,7 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
   }
 
   @override
-  List<LoggerObjectBase> getLogsByType(EnumLoggerType type) {
+  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
     final loggerList = _loggerJsonList[type];
     if (loggerList != null) {
       return (loggerList.loggerEntries);
@@ -65,6 +70,7 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
 
   Future<void> initialize() async {
     if (_loggerCache != null) {
+      await _loggerCache!.futureInitialization;
       final allLogs = await _loggerCache!.readAllLogs();
       if (allLogs != null) {
         _loggerJsonList.clear();

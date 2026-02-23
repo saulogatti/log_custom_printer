@@ -4,9 +4,9 @@ import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 /// Define as operações básicas para armazenamento, recuperação e limpeza de logs.
 /// Caso queira personalizar o armazenamento dos logs (ex: usar um banco de dados local, SharedPreferences, etc.), implemente esta interface e forneça a implementação personalizada para o LogDisplayHandler.
 abstract interface class LoggerCacheRepository {
-  void addLog(LoggerObjectBase log);
-  List<LoggerObjectBase> getAllLogs();
-  void clearLogs();
-  List<LoggerObjectBase> getLogsByType(EnumLoggerType type);
-  void clearLogsByType(EnumLoggerType type);
+  Future<void> addLog(LoggerObjectBase log);
+  Future<List<LoggerObjectBase>> getAllLogs();
+  Future<void> clearLogs();
+  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
+  Future<void> clearLogsByType(EnumLoggerType type);
 }

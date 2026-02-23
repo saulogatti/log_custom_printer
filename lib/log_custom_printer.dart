@@ -62,6 +62,7 @@
 /// {@category Core}
 library;
 
+export 'src/cache/logger_cache_repository.dart';
 export 'src/config_log.dart';
 export 'src/log_custom_printer_base.dart';
 export 'src/log_helpers/enum_logger_type.dart';

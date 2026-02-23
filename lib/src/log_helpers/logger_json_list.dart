@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:log_custom_printer/src/logs_object/info_log.dart';
@@ -100,7 +102,8 @@ class LoggerJsonList {
     }
     return loggerJsonList;
   }
-
+@JsonKey(includeFromJson: false, includeToJson: false)
+EnumLoggerType? get enumLoggerType => loggerEntries.isNotEmpty ? loggerEntries.first.enumLoggerType : null;
   /// A lista de objetos de log do tipo especificado.
   ///
   /// Contém instâncias de [LoggerObjectBase] ou suas subclasses,

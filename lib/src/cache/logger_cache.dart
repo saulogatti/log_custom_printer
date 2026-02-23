@@ -89,11 +89,11 @@ class LoggerCache {
   /// await cache.futureInit; // Aguardar configuração do diretório
   /// final path = cache.getPathLogs('debug.json'); // Seguro para usar
   /// ```
-  Future<void> get futureInit => _future;
+  Future<void> get futureInitialization => _future;
 
   Future<void> clearAll() async {
     try {
-      await futureInit; // Garantir que a inicialização esteja completa antes de limpar
+      await futureInitialization; // Garantir que a inicialização esteja completa antes de limpar
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
         await directory.delete(recursive: true);
@@ -105,7 +105,7 @@ class LoggerCache {
   }
 
   Future<void> clearLogByType(String name) async {
-    await futureInit; // Garantir que a inicialização esteja completa antes de limpar
+    await futureInitialization; // Garantir que a inicialização esteja completa antes de limpar
     final fileName = _getPathFile(name);
     final file = File(fileName);
     if (await file.exists()) {
@@ -138,7 +138,7 @@ class LoggerCache {
   /// ```
   Future<Map<String, dynamic>?> getLogResp(String fileName) async {
     try {
-      await futureInit; // Garantir que a inicialização esteja completa antes de acessar o arquivo
+      await futureInitialization; // Garantir que a inicialização esteja completa antes de acessar o arquivo
       final path = _getPathFile(fileName);
       final File file = File(path);
       if (await file.exists()) {
@@ -156,7 +156,7 @@ class LoggerCache {
 
   Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs() async {
     try {
-      await futureInit; // Garantir que a inicialização esteja completa antes de acessar os arquivos
+      await futureInitialization; // Garantir que a inicialização esteja completa antes de acessar os arquivos
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
         final files = directory.listSync().whereType<File>();
@@ -167,13 +167,11 @@ class LoggerCache {
             final mapJ = jsonDecode(data);
             if (mapJ is Map) {
               // LoggerJsonList é uma lista para cada tipo de log. Quando ele faz o json ele sabe qual tipo construir.
-              final loggerList = LoggerJsonList.fromJson( Map.from(mapJ));
-              final typeLog = loggerList.type;
-              final enumType = EnumLoggerType.values.firstWhere(
-                (e) => e.name == typeLog,
-                
-              );
-              allLogs[enumType] = loggerList;
+              final loggerList = LoggerJsonList.fromJson(Map.from(mapJ));
+              final typeLog = loggerList.enumLoggerType;
+              if (typeLog != null) {
+                allLogs[typeLog] = loggerList;
+              }
             }
           }
         }
@@ -190,7 +188,7 @@ class LoggerCache {
   /// This operation is asynchronous to avoid blocking the UI thread.
   Future<void> writeLogToFile(String fileName, Object loggerList) async {
     try {
-      await futureInit; // Ensure initialization is complete before writing
+      await futureInitialization; // Ensure initialization is complete before writing
       final path = _getPathFile(fileName);
       final File file = File(path);
       final spaces = ' ' * 2;
@@ -230,7 +228,7 @@ class LoggerCache {
   /// Exemplo:
   /// ```dart
   /// final cache = LoggerCache();
-  /// await cache.futureInit;
+  /// await cache.futureInitialization;
   ///
   /// final path = cache._getPathFile('error_log');
   /// // Retorna: '/caminho/para/app/support/loggerApp/logs/error_log.json'

@@ -18,7 +18,7 @@ void main() {
 
       cache = LoggerCache(tempDir.path);
       // Wait for initialization (even if it fails and defaults to 'logger')
-      await cache.futureInit;
+      await cache.futureInitialization;
     });
 
     tearDown(() {
