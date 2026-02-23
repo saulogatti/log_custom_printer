@@ -15,8 +15,7 @@ import 'package:path/path.dart' as path;
 /// a partir do diretório base fornecido.
 ///
 /// {@category Utilities}
-///
-/// FIXME: A documentação menciona que esta classe é um Singleton, mas a implementação atual permite múltiplas instâncias.
+
 class LoggerCache {
   /// O caminho para o diretório de logs.
   String _directoryPath = 'logger';

@@ -56,8 +56,8 @@
 /// ## Impressoras
 ///
 /// Escolha entre diferentes estratégias de impressão:
-/// - [LogSimplePrint]: Saída simples sem cores
-/// - [LogWithColorPrint]: Saída com formatação colorida ANSI
+/// - [registerLogPrinterSimple]: Saída simples sem cores
+/// - [registerLogPrinterColor]: Saída com formatação colorida ANSI
 ///
 /// {@category Core}
 library;

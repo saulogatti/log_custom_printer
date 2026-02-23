@@ -1,4 +1,3 @@
-import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/logs_object/error_log.dart';
 import 'package:log_custom_printer/src/logs_object/info_log.dart';
@@ -58,8 +57,5 @@ class ConfigLog {
   ///
   /// [enableLog]: controla se logs são processados (padrão: `false`).
   /// [onlyClasses]: tipos de log permitidos (padrão: [DebugLog], [WarningLog], [InfoLog]).
-  const ConfigLog({
-    this.enableLog = false,
-    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
-  });
+  const ConfigLog({this.enableLog = false, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});
 }

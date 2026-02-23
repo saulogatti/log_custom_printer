@@ -1,0 +1,3 @@
+LogTypes 
+
+## Tipos de Log

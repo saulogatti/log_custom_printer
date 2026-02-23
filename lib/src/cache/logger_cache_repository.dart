@@ -1,5 +1,5 @@
-import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
+import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_printer_service.dart';
 
 /// Interface para repositório de cache de logs.
 ///
@@ -13,15 +13,15 @@ abstract interface class LoggerCacheRepository {
   /// Adiciona uma entrada de log ao repositório.
   Future<void> addLog(LoggerObjectBase log);
 
-  /// Recupera todas as entradas de log armazenadas.
-  Future<List<LoggerObjectBase>> getAllLogs();
-
   /// Remove todas as entradas de log do repositório.
   Future<void> clearLogs();
 
-  /// Recupera entradas de log filtradas por tipo.
-  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
-
   /// Remove entradas de log de um tipo específico.
   Future<void> clearLogsByType(EnumLoggerType type);
+
+  /// Recupera todas as entradas de log armazenadas.
+  Future<List<LoggerObjectBase>> getAllLogs();
+
+  /// Recupera entradas de log filtradas por tipo.
+  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
 }

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/log_printer_locator.dart';
-import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
-import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
+import 'package:log_custom_printer/src/log_printer_service.dart';
 import 'package:meta/meta.dart';
 
 /// Marca base para objetos de log.
