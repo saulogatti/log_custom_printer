@@ -65,7 +65,6 @@ library;
 export 'src/config_log.dart';
 export 'src/log_custom_printer_base.dart';
 export 'src/log_helpers/enum_logger_type.dart';
-export 'src/log_helpers/log_display_handler.dart';
 export 'src/log_helpers/logger_class_mixin.dart';
 export 'src/log_printer_locator.dart'
     show registerLogPrinter, registerLogPrinterColor, registerLogPrinterSimple;

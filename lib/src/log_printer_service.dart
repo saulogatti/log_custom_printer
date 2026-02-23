@@ -6,7 +6,7 @@ import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 final class LogPrinterService {
   final LogPrinterBase logPrinter;
   final LoggerCacheRepository _cacheRepository;
-  LogPrinterService(this.logPrinter, [LoggerCacheRepository? cacheRepository])
+  LogPrinterService(this.logPrinter, {LoggerCacheRepository? cacheRepository})
     : _cacheRepository = cacheRepository ?? LoggerCacheImpl();
   LoggerCacheRepository get cacheRepository => _cacheRepository;
   // Centralizei todo o processo de impressão do log aqui para evitar que cada LoggerObjectBase precise resolver o LogPrinterBase e delegar a impressão. Assim, o LoggerObjectBase só precisa chamar logPrinterService.executePrint(this) e toda a lógica de verificação de configuração e formatação fica centralizada aqui.

@@ -15,3 +15,10 @@ analyzer:
     unnecessary_null_in_if_null_operators: error
     unnecessary_nullable_for_final_variable_declarations: error
     must_call_super: error
+    deprecated_member_use_from_same_package: error
+    deprecated_lint: error
+    deprecated_consistency: error
+    deprecated_instantiate: error
+    deprecated_extend: error
+    deprecated_implement: error
+    deprecated_mixin: error

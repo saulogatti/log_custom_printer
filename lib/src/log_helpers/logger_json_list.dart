@@ -61,7 +61,7 @@ class LoggerJsonList {
   /// final errorList = LoggerJsonList(type: 'ErrorLog');
   /// final debugList = LoggerJsonList(type: 'DebugLog');
   /// ```
-  LoggerJsonList({required this.type});
+  LoggerJsonList({required this.type, this.maxLogEntries = 100});
 
   /// Cria uma instância de [LoggerJsonList] a partir de dados JSON.
   ///

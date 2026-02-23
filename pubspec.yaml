@@ -6,8 +6,8 @@ environment:
   sdk: ^3.11.0
 
 dependencies:
-  get_it: ^9.2.0
-  meta: ^1.17.0
+  get_it: ^9.2.1
+
   json_annotation: ^4.11.0
 
   path: ^1.9.1

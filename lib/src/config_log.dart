@@ -62,20 +62,10 @@ class ConfigLog {
   /// [LogPrinterBase] utilizada. Por padrão é `false`, ou seja, os logs
   /// não são gravados em arquivo.
 
-  final int maxLogEntriesInFile;
-
-  final String saveLogFilePath;
-
   /// Cria uma configuração de log.
   ///
   /// [enableLog]: controla se logs são processados (padrão: [false], ou seja, desabilitado por padrão)
   /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
   /// [isSaveLogFile]: se os logs também devem ser salvos em arquivo (padrão: false)
-  const ConfigLog({
-    this.enableLog = false,
-    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
-
-    this.maxLogEntriesInFile = 1000,
-    this.saveLogFilePath = "",
-  });
+  const ConfigLog({this.enableLog = false, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});
 }

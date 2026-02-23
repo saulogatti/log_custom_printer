@@ -27,37 +27,37 @@ void main() {
       }
     });
 
-    test('getLogResp returns null when JSON is a list', () {
+    test('getLogResp returns null when JSON is a list', () async {
       final file = File('${tempDir.path}/test_list.json');
       file.writeAsStringSync(jsonEncode([1, 2, 3]));
 
-      expect(cache.getLogResp('test_list'), isNull);
+      expect(await cache.getLogResp('test_list'), isNull);
     });
 
-    test('getLogResp returns null when JSON is a primitive', () {
+    test('getLogResp returns null when JSON is a primitive', () async {
       final file = File('${tempDir.path}/test_primitive.json');
       file.writeAsStringSync(jsonEncode("not a map"));
 
-      expect(cache.getLogResp('test_primitive'), isNull);
+      expect(await cache.getLogResp('test_primitive'), isNull);
     });
 
-    test('getLogResp returns null when JSON is malformed', () {
+    test('getLogResp returns null when JSON is malformed', () async {
       final file = File('${tempDir.path}/test_malformed.json');
       file.writeAsStringSync('{invalid}');
 
-      expect(cache.getLogResp('test_malformed'), isNull);
+      expect(await cache.getLogResp('test_malformed'), isNull);
     });
 
-    test('getLogResp returns null when file does not exist', () {
-      expect(cache.getLogResp('non_existent'), isNull);
+    test('getLogResp returns null when file does not exist', () async {
+      expect(await cache.getLogResp('non_existent'), isNull);
     });
 
-    test('getLogResp returns map when JSON is valid map', () {
+    test('getLogResp returns map when JSON is valid map', () async {
       final file = File('${tempDir.path}/test_valid.json');
       final data = {'type': 'DebugLog', 'loggerJson': <dynamic>[]};
       file.writeAsStringSync(jsonEncode(data));
 
-      final result = cache.getLogResp('test_valid');
+      final result = await cache.getLogResp('test_valid');
       expect(result, isNotNull);
       expect(result!['type'], equals('DebugLog'));
     });
