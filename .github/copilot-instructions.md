@@ -13,21 +13,20 @@ Biblioteca Dart/Flutter para logging estruturado com serialização JSON, format
 
 ### Sistema de Configuração (DI via get_it)
 - **`registerLogPrinter(LogPrinterBase)`**: Registra a impressora no get_it (obrigatório no startup)
-- **`registerLogPrinterColor()` / `registerLogPrinterSimple()`**: Atalhos para configuração comum
-- **`ConfigLog`**: Controla `enableLog` (padrão `kDebugMode`), `onlyClasses` (filtragem de tipos) e `isSaveLogFile` (se os logs devem ser salvos em disco via `LogDisplayHandler`)
+- **`registerLogPrinterColor()` / `registerLogPrinterSimple()`**: Atalhos para configuração comum. Retornam um `LoggerCacheRepository`.
+- **`ConfigLog`**: Controla `enableLog` (padrão `false`), `onlyClasses` (filtragem de tipos).
 - **ErrorLog sempre processado**: Mesmo com `enableLog: false`, erros são registrados (via `alwaysPrint`)
 
 ### Printers (Strategy Pattern)
 - **Interface**: `LogPrinterBase` com `printLog(LoggerObjectBase)` e `canPrintLog(LoggerObjectBase)`
 - **`LogSimplePrint`**: Usa `debugPrint()` sem ANSI, formato `[ClassName] <timestamp> <message>`
 - **`LogWithColorPrint`**: Usa `dart:developer.log()` com blocos separadores coloridos
-- Filtragem via `ConfigLog.onlyClasses` aplicada em `canPrintLog()`
+- Filtragem via `ConfigLog.onlyClasses` aplicada em `LogPrinterService.executePrint()`
 
 ### Sistema de Cache (Feature)
-- **`LoggerCache`** (singleton): Persiste logs em JSON no diretório de suporte da app (`loggerApp/logs/`)
-- Operações: `addLogs()`, `getLogs()`, `clearLogs()`, `getLogResp()` (leitura de arquivo)
-- Cache in-memory: `Map<String, List<String>>` por categoria
-- Async init via `futureInit` - aguardar antes de operações de arquivo
+- **`LoggerCacheRepository`** (interface): Define operações de cache (`addLog`, `getAllLogs`, `clearLogs`, `getLogsByType`, `clearLogsByType`).
+- **`LoggerCacheImpl`**: Implementação em memória e opcionalmente em arquivo (se `saveLogFilePath` for fornecido).
+- O repositório de cache é retornado ao chamar `registerLogPrinter`, `registerLogPrinterColor` ou `registerLogPrinterSimple`.
 
 ## Workflows Críticos
 
@@ -56,7 +55,7 @@ dart run build_runner build --delete-conflicting-outputs
 2. Anote classe com `@JsonSerializable()`
 3. Adicione `part '<tipo>_log.g.dart';`
 4. Estenda `LoggerObjectBase` com construtor delegando para `super`
-5. Implemente `getColor()` retornando `LoggerAnsiColor.<cor>`
+5. Implemente `getColor()` retornando `LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.<cor>)`
 6. Adicione factories: `fromJson(Map<String, dynamic>)` e override `toJson()`
 7. **RODAR**: `dart run build_runner build --delete-conflicting-outputs`
 8. Adicione ao export público em `lib/log_custom_printer.dart`
@@ -65,10 +64,10 @@ Exemplo:
 ```dart
 @JsonSerializable()
 class CustomLog extends LoggerObjectBase {
-  const CustomLog(super.message, {super.typeClass, super.createdAt});
+  CustomLog(super.message, {super.typeClass, super.createdAt});
   
   @override
-  LoggerAnsiColor getColor() => LoggerAnsiColor.blue;
+  LoggerAnsiColor getColor() => LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.blue);
   
   factory CustomLog.fromJson(Map<String, dynamic> json) => _$CustomLogFromJson(json);
   
@@ -96,13 +95,14 @@ class MinhaFeature with LoggerClassMixin {
 ### Configuração de Filtragem (no startup, ex: main.dart)
 ```dart
 void main() {
-  // Apenas debug e info com cores
-  registerLogPrinterColor(
-    config: ConfigLog(onlyClasses: {DebugLog, InfoLog})
+  final cacheRepo = registerLogPrinterColor(
+    config: ConfigLog(enableLog: true, onlyClasses: {DebugLog, InfoLog}),
+    maxLogsInCache: 200,
+    cacheFilePath: '/caminho/para/logs',
   );
 
   // Ou produção: apenas errors, sem cores
-  registerLogPrinterSimple(
+  final cacheRepoProd = registerLogPrinterSimple(
     config: ConfigLog(
       enableLog: false,  // ErrorLog ainda será processado
       onlyClasses: {ErrorLog}
@@ -120,7 +120,8 @@ final log = DebugLog('Minha mensagem', typeClass: runtimeType);
 log.sendLog();  // Envio explícito necessário (usa get_it internamente)
 
 // Ou via GetIt
-GetIt.instance<LogPrinterBase>().printLog(DebugLog('Mensagem direta'));
+// Apenas para debug ou teste usando diratamente o GetIt.
+GetIt.instance<LogPrinterService>().executePrint(DebugLog('Mensagem direta'));
 ```
 
 ## Integrações e Dependências
@@ -136,7 +137,7 @@ GetIt.instance<LogPrinterBase>().printLog(DebugLog('Mensagem direta'));
 - `path_provider` ^2.1.5: Diretório de suporte para cache de logs
 
 ### Utils Internos
-- `LoggerAnsiColor`: Enum com transformadores de cor ANSI (via `call()` operator)
+- `LoggerAnsiColor`: Classe com transformadores de cor ANSI baseada em `EnumAnsiColors`
 - `DateTimeLogHelper`: Extension em `DateTime` para `logFullDateTime` formatado
 - `StackTraceExtensions`: Parsing e formatação de stack traces
 
@@ -155,6 +156,7 @@ lib/
     config_log.dart                  # Configuração
     log_printer_locator.dart        # DI: registerLogPrinter, resolveLogPrinter
     log_custom_printer_base.dart    # LogPrinterBase (classe abstrata)
+    log_printer_service.dart        # Serviço que orquestra impressão e cache
     logs_object/                     # Hierarquia sealed + gerados
       logger_object.dart             # Base abstrata
       debug_log.dart, *.g.dart       # Implementações
@@ -162,8 +164,10 @@ lib/
       log_simple_print.dart          # Com/sem cores
     log_helpers/
       logger_class_mixin.dart        # Mixin utilitário
+      enum_logger_type.dart          # Enum de tipos de log
     cache/
-      logger_cache.dart              # Persistência JSON
+      logger_cache_repository.dart   # Interface de cache
+      logger_cache_impl.dart         # Implementação de cache
     utils/                           # Extensions e helpers
 ```
 

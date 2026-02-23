@@ -8,6 +8,7 @@ Biblioteca Dart/Flutter para logging customizado com serialização JSON, format
 - 🎨 **Formatação colorida**: Códigos ANSI para logs visuais no terminal
 - 📦 **Serialização JSON**: Auto-geração com `json_serializable`
 - 🔧 **Configuração flexível**: Filtragem por tipos e controle de habilitação
+- 💾 **Sistema de Cache**: Armazenamento de logs em memória e persistência em arquivo JSON
 - 🏗️ **Injeção de Dependência**: Configuração via `registerLogPrinter` (get_it)
 - 🎭 **Mixin utilities**: `LoggerClassMixin` para integração fácil em classes
 - 🔍 **Rastreabilidade**: Identificação automática da classe de origem
@@ -28,8 +29,6 @@ dependencies:
 Execute:
 
 ```bash
-flutter pub get  # Para projetos Flutter
-# ou
 dart pub get     # Para projetos Dart puro
 ```
 
@@ -42,13 +41,33 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 
 void main() {
   // Configuração com cores (recomendado para desenvolvimento)
-  registerLogPrinter(LogWithColorPrint(config: ConfigLog(enableLog: true)));
+  final cacheRepository = registerLogPrinterColor(
+    config: ConfigLog(enableLog: true),
+    maxLogsInCache: 100, // Opcional: limite de logs em memória
+    cacheFilePath: '/caminho/para/salvar/logs', // Opcional: salva logs em arquivo
+  );
 
   // Ou configuração simples sem cores
-  // registerLogPrinterSimple(config: ConfigLog(enableLog: true));
+  // final cacheRepository = registerLogPrinterSimple(config: ConfigLog(enableLog: true));
 
   runApp(MyApp());
 }
+```
+
+### Sistema de Cache
+
+A biblioteca possui um sistema de cache integrado que armazena os logs em memória e, opcionalmente, em arquivo. O repositório de cache é retornado ao registrar a impressora de logs.
+
+```dart
+// Recuperar todos os logs
+final allLogs = await cacheRepository.getAllLogs();
+
+// Recuperar logs por tipo
+final errorLogs = await cacheRepository.getLogsByType(EnumLoggerType.error);
+
+// Limpar logs
+await cacheRepository.clearLogs();
+await cacheRepository.clearLogsByType(EnumLoggerType.debug);
 ```
 
 ### Usando o Mixin (Recomendado)
@@ -89,12 +108,10 @@ final logRecriado = DebugLog.fromJson(json);
 ```dart
 void main() {
   // Configuração customizada - apenas logs de erro e debug
-  registerLogPrinter(
-    LogWithColorPrint(
-      config: ConfigLog(
-        enableLog: true,
-        onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
-      ),
+  registerLogPrinterColor(
+    config: ConfigLog(
+      enableLog: true,
+      onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
     ),
   );
 
@@ -120,6 +137,7 @@ void main() {
 - **`LoggerObjectBase`** — Classe abstrata com funcionalidades comuns
 - **`registerLogPrinter`** / **`registerLogPrinterColor`** / **`registerLogPrinterSimple`** — Injeção de dependência via get_it
 - **`ConfigLog`** — Configuração de habilitação e filtragem
+- **`LoggerCacheRepository`** — Interface para repositório de cache de logs
 - **`LoggerClassMixin`** — Mixin para integração fácil em classes
 
 ### Tipos de Log Disponíveis
@@ -216,7 +234,7 @@ class CustomLog extends LoggerObjectBase {
       _$CustomLogFromJson(json);
 
   @override
-  LoggerAnsiColor getColor() => LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.purple);
+  LoggerAnsiColor getColor() => LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.magenta);
 
   @override
   Map<String, dynamic> toJson() => _$CustomLogToJson(this);

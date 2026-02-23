@@ -35,19 +35,13 @@ void main() {
       final stackTrace = StackTrace.fromString(stackTraceString);
 
       final map = stackTrace.stackInMap(3);
-      expect(
-        map,
-        equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}),
-      );
+      expect(map, equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}));
 
       final formatted = stackTrace.formatStackTrace(
         const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
         3,
       );
-      expect(
-        formatted,
-        contains('MyClass.method (package:my_app/src/file.dart:10:3)'),
-      );
+      expect(formatted, contains('MyClass.method (package:my_app/src/file.dart:10:3)'));
       expect(formatted, isNot(contains('flutter/src/widgets/framework.dart')));
       expect(formatted, contains(LoggerAnsiColor.ansiEsc));
     });
@@ -74,17 +68,6 @@ void main() {
       expect(EnumAnsiColors.magenta.getFgColor(), equals(35));
       expect(EnumAnsiColors.cyan.getFgColor(), equals(36));
       expect(EnumAnsiColors.white.getFgColor(), equals(37));
-    });
-
-    test('getWidgetColor returns correct Flutter colors', () {
-      expect(EnumAnsiColors.black.getWidgetColor(), equals(Colors.black));
-      expect(EnumAnsiColors.red.getWidgetColor(), equals(Colors.red));
-      expect(EnumAnsiColors.green.getWidgetColor(), equals(Colors.green));
-      expect(EnumAnsiColors.yellow.getWidgetColor(), equals(Colors.yellow));
-      expect(EnumAnsiColors.blue.getWidgetColor(), equals(Colors.blue));
-      expect(EnumAnsiColors.magenta.getWidgetColor(), equals(Colors.orange));
-      expect(EnumAnsiColors.cyan.getWidgetColor(), equals(Colors.cyan));
-      expect(EnumAnsiColors.white.getWidgetColor(), equals(Colors.white));
     });
   });
 }

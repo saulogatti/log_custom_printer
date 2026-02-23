@@ -65,6 +65,11 @@ abstract class LoggerObjectBase extends LoggerObject {
     className = typeClass?.toString() ?? runtimeType.toString();
   }
 
+  /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
+  ///
+  /// Útil para [ErrorLog], que deve sempre ser exibido. Padrão: `false`.
+  bool get alwaysPrint => false;
+
   /// Cabeçalho formatado do log (nome da classe/origem).
   String get _logHeader =>
       runtimeType.toString().toUpperCase() + (className.isNotEmpty ? " - $className".toUpperCase() : "");
@@ -72,11 +77,6 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
   /// [getMessage] for chamada com `withColor = true`.
   LoggerAnsiColor getColor();
-
-  /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
-  ///
-  /// Útil para [ErrorLog], que deve sempre ser exibido. Padrão: `false`.
-  bool get alwaysPrint => false;
 
   /// Formata a mensagem incluindo timestamp e aplicando cor opcional.
   ///
@@ -105,22 +105,14 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// Checa se o log está habilitado via configuração antes de imprimir.
   /// Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.
   ///
-  /// Implementação padrão obtém o `LogPrinterBase` via [resolveLogPrinter]
+  /// Implementação padrão obtém o `LogPrinterBase` via [fetchLogPrinterService]
   /// (get_it) e delega a impressão. Requer que [registerLogPrinter] tenha
   /// sido chamado no startup.
   @mustCallSuper
   void sendLog() {
-    final logPrinterBase = resolveLogPrinter();
-    final bool canPrintLog =
-        logPrinterBase.configLog.enableLog &&
-        (logPrinterBase.configLog.onlyClasses.isEmpty ||
-            logPrinterBase.configLog.onlyClasses.contains(runtimeType));
-    // Se o log não pode ser impresso e não tem alwaysPrint, retorna sem fazer nada
-    if (!canPrintLog && !alwaysPrint) {
-      return;
-    }
+    final logPrinterService = fetchLogPrinterService();
 
-    logPrinterBase.printLog(this);
+    logPrinterService.executePrint(this);
   }
 
   /// Serializa o objeto de log para JSON.

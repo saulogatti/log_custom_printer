@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:developer' as dev;
 import 'dart:io';
 
+import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/utils/string_extension.dart';
 import 'package:path/path.dart' as path;
 
@@ -48,12 +51,6 @@ class LoggerCache {
   /// de suporte da aplicação durante [_init].
   String _directoryPath = 'logger';
 
-  /// Cache em memória armazenando entradas de log por chave de categoria.
-  ///
-  /// Cada chave representa uma categoria de log (ex: 'debug', 'error'),
-  /// e os valores são listas de mensagens de log para essa categoria.
-  final Map<String, List<String>> _cache = {};
-
   /// Completer para rastrear o estado de inicialização.
   ///
   /// Isso garante que a criação do diretório e configuração do caminho sejam concluídas
@@ -83,7 +80,7 @@ class LoggerCache {
   /// Um [Future] que completa quando a inicialização do cache termina.
   ///
   /// Use isso para garantir que a estrutura de diretórios esteja configurada antes
-  /// de realizar operações de arquivo que dependem de [getPathLogs] ou [getNameFile].
+  /// de realizar operações de arquivo que dependem de [getPathLogs] ou [_getPathFile].
   ///
   /// Exemplo:
   /// ```dart
@@ -91,23 +88,28 @@ class LoggerCache {
   /// await cache.futureInit; // Aguardar configuração do diretório
   /// final path = cache.getPathLogs('debug.json'); // Seguro para usar
   /// ```
-  Future<void> get futureInit => _future;
+  Future<void> get futureInitialization => _future;
 
-  /// Remove todas as entradas de log em cache para a [key] especificada.
-  ///
-  /// Isso afeta apenas o cache em memória e não exclui
-  /// nenhum arquivo de log persistido do disco.
-  ///
-  /// Parâmetros:
-  /// * [key]: A categoria de log para limpar (ex: 'debug', 'error', 'info')
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// final cache = LoggerCache();
-  /// cache.clearLogs('error'); // Remove todos os logs de erro do cache
-  /// ```
-  void clearLogs(String key) {
-    _cache.remove(key);
+  Future<void> clearAll() async {
+    try {
+      await futureInitialization; // Garantir que a inicialização esteja completa antes de limpar
+      final directory = Directory(_directoryPath);
+      if (await directory.exists()) {
+        await directory.delete(recursive: true);
+        await directory.create(recursive: true);
+      }
+    } catch (e, stack) {
+      dev.log('Erro ao limpar os arquivos de log: $e', stackTrace: stack);
+    }
+  }
+
+  Future<void> clearLogByType(String name) async {
+    await futureInitialization; // Garantir que a inicialização esteja completa antes de limpar
+    final fileName = _getPathFile(name);
+    final file = File(fileName);
+    if (await file.exists()) {
+      await file.delete();
+    }
   }
 
   /// Lê e analisa um arquivo de log como dados JSON.
@@ -128,46 +130,84 @@ class LoggerCache {
   /// final cache = LoggerCache();
   /// await cache.futureInit;
   ///
-  /// final logData = cache.getLogResp('error_2023_11_17');
+  /// final logData = await cache.getLogResp('error_2023_11_17');
   /// if (logData != null) {
   ///   print('Encontradas ${logData.length} entradas de log');
   /// }
   /// ```
-  Map<String, dynamic>? getLogResp(String fileName) {
-    final path = getNameFile(fileName);
-    final File file = File(path);
-    if (file.existsSync()) {
-      final data = file.readAsStringSync();
-      final mapJ = jsonDecode(data);
-      if (mapJ is Map) {
-        return Map<String, dynamic>.from(mapJ);
+  Future<Map<String, dynamic>?> getLogResp(String fileName) async {
+    try {
+      await futureInitialization; // Garantir que a inicialização esteja completa antes de acessar o arquivo
+      final path = _getPathFile(fileName);
+      final File file = File(path);
+      if (await file.exists()) {
+        final data = await file.readAsString();
+        final mapJ = jsonDecode(data);
+        if (mapJ is Map) {
+          return Map<String, dynamic>.from(mapJ);
+        }
       }
+    } catch (e, stack) {
+      dev.log('Erro ao ler ou analisar o arquivo de log: $e', stackTrace: stack);
     }
     return null;
   }
 
-  /// Recupera entradas de log em cache para a [key] especificada.
+  Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs() async {
+    try {
+      await futureInitialization; // Garantir que a inicialização esteja completa antes de acessar os arquivos
+      final directory = Directory(_directoryPath);
+      if (await directory.exists()) {
+        final files = directory.listSync().whereType<File>();
+        final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
+        for (final file in files) {
+          if (file.path.endsWith('.json')) {
+            final data = await file.readAsString();
+            final mapJ = jsonDecode(data);
+            if (mapJ is Map) {
+              // LoggerJsonList é uma lista para cada tipo de log. Quando ele faz o json ele sabe qual tipo construir.
+              final loggerList = LoggerJsonList.fromJson(Map.from(mapJ));
+              final typeLog = loggerList.enumLoggerType;
+              if (typeLog != null) {
+                allLogs[typeLog] = loggerList;
+              }
+            }
+          }
+        }
+        return allLogs;
+      }
+    } catch (e, stack) {
+      dev.log('Erro ao ler os arquivos de log: $e', stackTrace: stack);
+    }
+    return null;
+  }
+
+  /// Writes the [loggerList] to a file named by [fileName].
   ///
-  /// Retorna as mensagens de log em cache na memória para a categoria fornecida.
-  /// Este método acessa apenas o cache em memória e não lê do disco.
-  ///
-  /// Parâmetros:
-  /// * [key]: A categoria de log para recuperar (ex: 'debug', 'error', 'info')
-  ///
-  /// Retorna:
-  /// * [List<String>?]: Lista de mensagens de log para a categoria
-  /// * `null`: Se nenhum log estiver em cache para a chave especificada
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// final cache = LoggerCache();
-  /// final debugLogs = cache.getLogs('debug');
-  /// if (debugLogs != null) {
-  ///   print('Encontradas ${debugLogs.length} mensagens de debug');
-  /// }
-  /// ```
-  List<String>? getLogs(String key) {
-    return _cache[key];
+  /// This operation is asynchronous to avoid blocking the UI thread.
+  Future<void> writeLogToFile(String fileName, Object loggerList) async {
+    try {
+      await futureInitialization; // Ensure initialization is complete before writing
+      final path = _getPathFile(fileName);
+      final File file = File(path);
+      final spaces = ' ' * 2;
+
+      // Ensure file exists
+      if (!await file.exists()) {
+        await file.create(recursive: true);
+      }
+
+      final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
+      await file.writeAsString(jj);
+    } catch (e, stack) {
+      // In case of error, we can't do much inside the printer itself without causing loops.
+      // But we can print to console if debugging.
+      // For now, silently fail or use print as fallback.
+      // Ideally, error handling should be robust.
+      // Replicating _printMessage logic from original handler locally if needed.
+      onError?.call(e.toString(), stack);
+      dev.log('Erro ao escrever o arquivo de log: $e', stackTrace: stack);
+    }
   }
 
   /// Gera o caminho completo para um arquivo de log com extensão `.json`.
@@ -187,12 +227,12 @@ class LoggerCache {
   /// Exemplo:
   /// ```dart
   /// final cache = LoggerCache();
-  /// await cache.futureInit;
+  /// await cache.futureInitialization;
   ///
-  /// final path = cache.getNameFile('error_log');
+  /// final path = cache._getPathFile('error_log');
   /// // Retorna: '/caminho/para/app/support/loggerApp/logs/error_log.json'
   /// ```
-  String getNameFile(String fileName) {
+  String _getPathFile(String fileName) {
     assert(fileName.isNotEmpty, 'O nome do arquivo não pode ser vazio');
     assert(
       fileName.contains(path.separator) == false,
@@ -210,32 +250,6 @@ class LoggerCache {
     final pathLog = path.join(_directoryPath, fileJson);
 
     return pathLog;
-  }
-
-  /// Writes the [loggerList] to a file named by [fileName].
-  ///
-  /// This operation is asynchronous to avoid blocking the UI thread.
-  Future<void> writeLogToFile(String fileName, Object loggerList) async {
-    try {
-      final path = getNameFile(fileName);
-      final File file = File(path);
-      final spaces = ' ' * 2;
-
-      // Ensure file exists
-      if (!file.existsSync()) {
-        await file.create(recursive: true);
-      }
-
-      final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
-      await file.writeAsString(jj);
-    } catch (e, stack) {
-      // In case of error, we can't do much inside the printer itself without causing loops.
-      // But we can print to console if debugging.
-      // For now, silently fail or use print as fallback.
-      // Ideally, error handling should be robust.
-      // Replicating _printMessage logic from original handler locally if needed.
-      onError?.call(e.toString(), stack);
-    }
   }
 
   /// Inicializa a estrutura de diretórios do cache.
@@ -257,11 +271,11 @@ class LoggerCache {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-    } catch (e) {
+    } catch (e, stack) {
       if (onError != null) {
-        onError!(e, StackTrace.current);
+        onError!(e, stack);
       } else {
-        print('Erro ao inicializar LoggerCache: $e');
+        dev.log('Erro ao inicializar LoggerCache: $e', stackTrace: stack);
       }
     }
   }
