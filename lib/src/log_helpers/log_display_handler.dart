@@ -2,35 +2,10 @@ import 'dart:developer' as dev;
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
-import 'package:log_custom_printer/src/log_custom_printer_base.dart';
+import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
-import 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
-import 'package:log_custom_printer/src/logs_object/error_log.dart';
-import 'package:log_custom_printer/src/logs_object/info_log.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
-import 'package:log_custom_printer/src/logs_object/warning_log.dart';
-import 'package:log_custom_printer/src/utils/date_time_log_helper.dart';
 
 export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
-
-/// Define os tipos de mensagens de log que podem ser manipulados.
-///
-/// Cada valor representa uma severidade ou categoria diferente de entrada de log.
-///
-/// {@category Utilities}
-enum EnumLoggerType {
-  /// Representa uma mensagem de log de erro.
-  error,
-
-  /// Representa uma mensagem de log de depuração.
-  debug,
-
-  /// Representa uma mensagem de log de aviso.
-  warning,
-
-  /// Representa uma mensagem de log informativa.
-  info,
-}
 
 /// Gerencia a exibição e armazenamento de logs em toda a aplicação.
 ///
