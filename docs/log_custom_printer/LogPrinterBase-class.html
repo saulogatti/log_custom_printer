@@ -48,11 +48,11 @@
     data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
     data-below-sidebar="log_custom_printer&#47;LogPrinterBase-class-sidebar.html">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_custom_printer_base.dart#L115"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_custom_printer_base.dart#L39"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-class">LogPrinterBase</span> class 
     <a href="https://dart.dev/language/class-modifiers#abstract" class="feature feature-abstract" title="This type can not be directly constructed.">abstract</a>
  
-    <span class="category impressoras-de-log cp-2" title="This is part of the Impressoras de Log topic.">Impressoras&nbsp;de&nbsp;Log</span>
+    <span class="category impressoras-de-log cp-2 linked" title="This is part of the Impressoras de Log topic."><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></span>
 </h1></div>
 
     
@@ -64,8 +64,16 @@ como os logs serão formatados e exibidos.</p>
 <p>As implementações disponíveis são:</p>
 <ul>
 <li><a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a>: saída simples sem cores</li>
-<li><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a>: saída com códigos ANSI coloridos</li>
+<li><code>LogWithColorPrint</code>: saída com códigos ANSI coloridos</li>
 </ul>
+<p>Registre no startup via <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a>:</p>
+<pre class="language-dart"><code class="language-dart">void main() {
+  registerLogPrinter(
+    LogWithColorPrint(config: ConfigLog(enableLog: true)),
+  );
+  runApp(MyApp());
+}
+</code></pre>
 <p>Exemplo de implementação customizada:</p>
 <pre class="language-dart"><code class="language-dart">class MinhaImpressora extends LogPrinterBase {
   const MinhaImpressora({super.config});
@@ -89,9 +97,7 @@ como os logs serão formatados e exibidos.</p>
 
           <dt>Implementers</dt>
           <dd><ul class="comma-separated clazz-relationships">
-              <li><a href="../log_custom_printer/LogDisplayHandler-class.html">LogDisplayHandler</a></li>
               <li><a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a></li>
-              <li><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a></li>
           </ul></dd>
 
         
@@ -106,7 +112,7 @@ como os logs serão formatados e exibidos.</p>
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
         <dt id="LogPrinterBase.new" class="callable">
-          <span class="name"><a href="../log_custom_printer/LogPrinterBase/LogPrinterBase.html">LogPrinterBase.new</a></span><span class="signature">({<span class="parameter" id="-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span></span>})</span>
+          <span class="name"><a href="../log_custom_printer/LogPrinterBase/LogPrinterBase.html">LogPrinterBase</a></span><span class="signature">({<span class="parameter" id="-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span></span>})</span>
         </dt>
         <dd>
           Construtor const para permitir uso como constante.
@@ -133,8 +139,8 @@ como os logs serão formatados e exibidos.</p>
 </dd>
 
         <dt id="hashCode" class="property inherited">
-  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.11.0/dart-core/int-class.html">int</a></span>
   
 
 </dt>
@@ -145,8 +151,8 @@ como os logs serão formatados e exibidos.</p>
 </dd>
 
         <dt id="runtimeType" class="property inherited">
-  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
-  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.11.0/dart-core/Type-class.html">Type</a></span>
   
 
 </dt>
@@ -166,7 +172,7 @@ como os logs serão formatados e exibidos.</p>
     <h2>Methods</h2>
     <dl class="callables">
         <dt id="noSuchMethod" class="callable inherited">
-  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
   </span>
   
@@ -192,8 +198,8 @@ como os logs serão formatados e exibidos.</p>
 </dd>
 
         <dt id="toString" class="callable inherited">
-  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.11.0/dart-core/String-class.html">String</a></span>
   </span>
   
 
@@ -213,8 +219,8 @@ como os logs serão formatados e exibidos.</p>
     <h2>Operators</h2>
     <dl class="callables">
         <dt id="operator ==" class="callable inherited">
-  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.11.0/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
@@ -254,7 +260,7 @@ como os logs serão formatados e exibidos.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.0.0
   </span>
   
 </footer>

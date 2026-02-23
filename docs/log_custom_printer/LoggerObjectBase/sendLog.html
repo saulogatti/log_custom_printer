@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;LoggerObjectBase-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/logs_object/logger_object.dart#L99"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/logs_object/logger_object.dart#L115"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">sendLog</span> method 
 </h1></div>
 
@@ -57,7 +57,7 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.flutter.dev/flutter/widgets/mustCallSuper-constant.html">mustCallSuper</a></li>
+        <li>@<a href="https://pub.dev/documentation/meta/1.18.1/meta/mustCallSuper-constant.html">mustCallSuper</a></li>
     </ol>
   </div>
 <span class="returntype">void</span>
@@ -68,12 +68,14 @@
     </section>
     
 <section class="desc markdown">
-  <p>Envia (imprime) o log usando o <code>LogPrinterBase</code> configurado no
-pacote.
-Checa se o log está habilitado via configuração antes de imprimir.
-Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.</p>
-<p>Implementação padrão obtém o <code>LogPrinterBase</code> a partir de
-<code>LogCustomPrinterBase().getLogPrinterBase()</code> e delega a impressão.</p>
+  <p>Envia (imprime) o log usando o <a href="../../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a> configurado no
+pacote.</p>
+<p>Checa se o log está habilitado via configuração antes de imprimir.
+Se o log não puder ser impresso e não for um <code>ErrorLog</code> (ou outro com <code>alwaysPrint</code>),
+ele não será enviado para a saída nem para o cache.</p>
+<p>Implementação padrão obtém o <code>LogPrinterService</code> via <code>fetchLogPrinterService</code>
+(get_it) e delega a impressão. Requer que <a href="../../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> tenha
+sido chamado no startup.</p>
 </section>
 
 
@@ -82,17 +84,9 @@ Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.</
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@mustCallSuper
 void sendLog() {
-  final logPrinterBase = LogCustomPrinterBase().getLogPrinterBase();
-  final bool canPrintLog =
-      logPrinterBase.configLog.enableLog &amp;&amp;
-      (logPrinterBase.configLog.onlyClasses.isEmpty ||
-          logPrinterBase.configLog.onlyClasses.contains(runtimeType));
-  &#47;&#47; Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada
-  if (!canPrintLog &amp;&amp; this is! ErrorLog) {
-    return;
-  }
+  final logPrinterService = fetchLogPrinterService();
 
-  logPrinterBase.printLog(this);
+  logPrinterService.executePrint(this);
 }</code></pre>
 </section>
 
@@ -121,7 +115,7 @@ void sendLog() {
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.0.0
   </span>
   
 </footer>

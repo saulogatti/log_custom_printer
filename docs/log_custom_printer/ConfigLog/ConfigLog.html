@@ -49,28 +49,28 @@
       data-above-sidebar="log_custom_printer&#47;ConfigLog-class-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L62"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L60"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-constructor">ConfigLog</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       const
-      <span class="name ">ConfigLog</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-enableLog"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableLog</span> = <span class="default-value">kDebugMode</span>, </span></li>
-<li><span class="parameter" id="-param-onlyClasses"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Set-class.html">Set</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>&gt;</span></span> <span class="parameter-name">onlyClasses</span> = <span class="default-value">const {DebugLog, WarningLog, InfoLog}</span>, </span></li>
+      <span class="name ">ConfigLog</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-enableLog"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">enableLog</span> = <span class="default-value">false</span>, </span></li>
+<li><span class="parameter" id="-param-onlyClasses"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Set-class.html">Set</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Type-class.html">Type</a></span>&gt;</span></span> <span class="parameter-name">onlyClasses</span> = <span class="default-value">const {DebugLog, WarningLog, InfoLog}</span>, </span></li>
 </ol>})
     </section>
     
 <section class="desc markdown">
   <p>Cria uma configuração de log.</p>
-<p><a href="../../log_custom_printer/ConfigLog/enableLog.html">enableLog</a>: controla se logs são processados (padrão: <a href="https://api.flutter.dev/flutter/foundation/kDebugMode-constant.html">kDebugMode</a>)
-<a href="../../log_custom_printer/ConfigLog/onlyClasses.html">onlyClasses</a>: tipos de log permitidos (padrão: todos os tipos)</p>
+<p><a href="../../log_custom_printer/ConfigLog/enableLog.html">enableLog</a>: controla se logs são processados (padrão: <code>false</code>).
+<a href="../../log_custom_printer/ConfigLog/onlyClasses.html">onlyClasses</a>: tipos de log permitidos (padrão: <a href="../../log_custom_printer/DebugLog-class.html">DebugLog</a>, <a href="../../log_custom_printer/WarningLog-class.html">WarningLog</a>, <a href="../../log_custom_printer/InfoLog-class.html">InfoLog</a>).</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const ConfigLog({this.enableLog = kDebugMode, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});</code></pre>
+  <pre class="language-dart"><code class="language-dart">const ConfigLog({this.enableLog = false, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});</code></pre>
 </section>
 
 
@@ -98,7 +98,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.0.0
   </span>
   
 </footer>

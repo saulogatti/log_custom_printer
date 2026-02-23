@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;ErrorLog-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/logs_object/error_log.dart#L66"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/logs_object/error_log.dart#L69"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">getMessage</span> method 
 </h1></div>
 
@@ -57,11 +57,11 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.11.0/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
-<span class="name ">getMessage</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span></span></li>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.11.0/dart-core/String-class.html">String</a></span>
+<span class="name ">getMessage</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span></span></li>
 </ol>])
 
       <div class="features"><span class="feature">override</span></div>
@@ -88,11 +88,11 @@ String getMessage([bool withColor = true]) {
       .map((e) =&gt; withColor ? color.call(e) : e)
       .toList();
 
-  for (final element in str.keys) {
+  for (final entry in str.entries) {
     if (withColor) {
-      strMessage.add(color.call(&quot;$element = ${str[element]}&quot;));
+      strMessage.add(color.call(&quot;${entry.key} = ${entry.value}&quot;));
     } else {
-      strMessage.add(&quot;$element = ${str[element]}&quot;);
+      strMessage.add(&quot;${entry.key} = ${entry.value}&quot;);
     }
   }
 
@@ -125,7 +125,7 @@ String getMessage([bool withColor = true]) {
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.0.0
   </span>
   
 </footer>

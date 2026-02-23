@@ -49,14 +49,14 @@
     data-above-sidebar="log_custom_printer&#47;ConfigLog-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L45"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L43"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-property">enableLog</span> property 
 </h1></div>
 
     
       <section class="multi-line-signature">
         
-        <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>
+        <a href="https://api.dart.dev/stable/3.11.0/dart-core/bool-class.html">bool</a>
         <span class="name ">enableLog</span>
         <div class="features"><span class="feature">final</span></div>
 
@@ -65,8 +65,8 @@
 <section class="desc markdown">
   <p>Se os logs devem ser enviados para saída.</p>
 <p>Quando <code>false</code>, todos os logs são ignorados independentemente
-do tipo. Por padrão usa <a href="https://api.flutter.dev/flutter/foundation/kDebugMode-constant.html">kDebugMode</a>, significando que logs
-são automaticamente desabilitados em builds de produção.</p>
+do tipo (exceto aqueles com <code>alwaysPrint</code> como <code>ErrorLog</code>).
+Por padrão é <code>false</code>.</p>
 </section>
 
       
@@ -101,7 +101,7 @@ são automaticamente desabilitados em builds de produção.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.0.0
   </span>
   
 </footer>
