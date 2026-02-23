@@ -9,5 +9,5 @@ part of 'logger_json_list.dart';
 Map<String, dynamic> _$LoggerJsonListToJson(LoggerJsonList instance) =>
     <String, dynamic>{
       'type': instance.type,
-      'loggerJson': instance.loggerJson.map((e) => e.toJson()).toList(),
+      'loggerJson': instance.loggerEntries.map((e) => e.toJson()).toList(),
     };

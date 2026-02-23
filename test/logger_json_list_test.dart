@@ -17,24 +17,24 @@ void main() {
 
       expect(decoded, isA<Map<String, dynamic>>());
       final loggerJsonList = LoggerJsonList.fromJson(decoded as Map<String, dynamic>);
-      expect(loggerJsonList.loggerJson.length, greaterThan(0));
-      expect(loggerJsonList.loggerJson.first, isA<WarningLog>());
+      expect(loggerJsonList.loggerEntries.length, greaterThan(0));
+      expect(loggerJsonList.loggerEntries.first, isA<WarningLog>());
     });
     test('decodes JSON DebugLog', () {
       final decoded = jsonTestDebug;
 
       expect(decoded, isA<Map<String, dynamic>>());
       final loggerJsonList = LoggerJsonList.fromJson(decoded as Map<String, dynamic>);
-      expect(loggerJsonList.loggerJson.length, greaterThan(0));
-      expect(loggerJsonList.loggerJson.first, isA<DebugLog>());
+      expect(loggerJsonList.loggerEntries.length, greaterThan(0));
+      expect(loggerJsonList.loggerEntries.first, isA<DebugLog>());
     });
     test('decodes JSON InfoLog', () {
       final decoded = jsonTestInfo;
 
       expect(decoded, isA<Map<String, dynamic>>());
       final loggerJsonList = LoggerJsonList.fromJson(decoded as Map<String, dynamic>);
-      expect(loggerJsonList.loggerJson.length, greaterThan(0));
-      expect(loggerJsonList.loggerJson.first, isA<InfoLog>());
+      expect(loggerJsonList.loggerEntries.length, greaterThan(0));
+      expect(loggerJsonList.loggerEntries.first, isA<InfoLog>());
     });
     test('decodes JSON ErrorLog', () {
       final decoded = jsonTestError;
@@ -42,8 +42,8 @@ void main() {
 
       expect(decoded, isA<Map<String, dynamic>>());
       final loggerJsonList = LoggerJsonList.fromJson(decoded as Map<String, dynamic>);
-      expect(loggerJsonList.loggerJson.length, greaterThan(0));
-      expect(loggerJsonList.loggerJson.first, isA<ErrorLog>());
+      expect(loggerJsonList.loggerEntries.length, greaterThan(0));
+      expect(loggerJsonList.loggerEntries.first, isA<ErrorLog>());
     });
 
     test('keeps the newest entries first and trims when capacity is exceeded', () {
@@ -53,9 +53,9 @@ void main() {
         loggerJsonList.addLogger(DebugLog('log-$i'));
       }
 
-      expect(loggerJsonList.loggerJson.length, equals(100));
-      expect((loggerJsonList.loggerJson.first as DebugLog).message, equals('log-104'));
-      expect((loggerJsonList.loggerJson.last as DebugLog).message, equals('log-5'));
+      expect(loggerJsonList.loggerEntries.length, equals(100));
+      expect((loggerJsonList.loggerEntries.first as DebugLog).message, equals('log-104'));
+      expect((loggerJsonList.loggerEntries.last as DebugLog).message, equals('log-5'));
     });
   });
 }

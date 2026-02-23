@@ -12,7 +12,7 @@ part 'logger_json_list.g.dart';
 /// Esta classe é usada para serializar e desserializar listas de entradas de log,
 /// onde cada entrada é uma subclasse de [LoggerObjectBase] (como [ErrorLog],
 /// [DebugLog], [WarningLog], ou [InfoLog]). O campo [type] indica o
-/// tipo de entradas de log contidas em [loggerJson].
+/// tipo de entradas de log contidas em [loggerEntries].
 ///
 /// Use [fromJson] para criar uma instância a partir de um mapa JSON, e [toJson] para
 /// converter a instância de volta para JSON.
@@ -21,7 +21,7 @@ part 'logger_json_list.g.dart';
 ///
 /// Campos:
 /// - [type]: O tipo de entradas de log na lista (ex: "ErrorLog").
-/// - [loggerJson]: A lista de objetos de entrada de log.
+/// - [loggerEntries]: A lista de objetos de entrada de log.
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
   static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _typeConstructors = {
@@ -41,7 +41,8 @@ class LoggerJsonList {
   ///
   /// Contém instâncias de [LoggerObjectBase] ou suas subclasses,
   /// organizadas com os logs mais recentes no início da lista.
-  List<LoggerObjectBase> loggerJson = [];
+  // O nome do campo no JSON é "loggerJson" (legado)
+  final List<LoggerObjectBase> _loggerEntries = [];
 
   /// Limite máximo de logs armazenados na lista.
   ///
@@ -100,6 +101,20 @@ class LoggerJsonList {
     return loggerJsonList;
   }
 
+  /// A lista de objetos de log do tipo especificado.
+  ///
+  /// Contém instâncias de [LoggerObjectBase] ou suas subclasses,
+  /// organizadas com os logs mais recentes no início da lista.
+  /// O nome do campo no JSON é "loggerJson" (legado), mas internamente é armazenado em [_loggerEntries].
+  /// O getter [loggerEntries] é usado para acessar a lista de logs e é anotado com @JsonKey para garantir que seja serializado corretamente. Sempre retorna uma nova lista para evitar modificações externas à lista interna.
+  @JsonKey(name: "loggerJson")
+  List<LoggerObjectBase> get loggerEntries => List<LoggerObjectBase>.from(_loggerEntries);
+
+  /// A lista de objetos de log do tipo especificado.
+  ///
+  /// Contém instâncias de [LoggerObjectBase] ou suas subclasses,
+  /// organizadas com os logs mais recentes no início da lista.
+
   /// Adiciona um novo objeto de log à lista.
   ///
   /// Insere o [logger] no início da lista, mantendo os logs mais recentes primeiro.
@@ -116,10 +131,10 @@ class LoggerJsonList {
   /// loggerList.addLogger(errorLog);
   /// ```
   void addLogger(LoggerObjectBase logger) {
-    if (loggerJson.length >= maxLogEntries) {
-      loggerJson.removeLast();
+    if (_loggerEntries.length >= maxLogEntries) {
+      _loggerEntries.removeLast();
     }
-    loggerJson.insert(0, logger);
+    _loggerEntries.insert(0, logger);
   }
 
   /// Converte esta instância em um mapa JSON.

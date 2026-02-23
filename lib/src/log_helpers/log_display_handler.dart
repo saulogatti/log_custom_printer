@@ -2,7 +2,6 @@ import 'dart:developer' as dev;
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
-import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 
 export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
@@ -31,8 +30,7 @@ export 'package:log_custom_printer/src/log_helpers/logger_notifier.dart';
 /// handler.clearAll();
 /// ```
 ///
-/// **Nota:** Esta classe configura automaticamente handlers globais de erro
-/// para capturar exceções não tratadas no Flutter e na plataforma.
+
 final class LogDisplayHandler extends LogPrinterBase {
   static LogDisplayHandler? _logger;
 
@@ -65,10 +63,10 @@ final class LogDisplayHandler extends LogPrinterBase {
     if (_loggerJsonList.containsKey(type)) {
       final loggerList = _loggerJsonList[type]!;
       if (index != -1) {
-        assert(index >= 0 && index < loggerList.loggerJson.length, "Índice fora do intervalo");
-        loggerList.loggerJson.removeAt(index);
+        assert(index >= 0 && index < loggerList.loggerEntries.length, "Índice fora do intervalo");
+        loggerList.loggerEntries.removeAt(index);
       } else {
-        loggerList.loggerJson.clear();
+        loggerList.loggerEntries.clear();
       }
       _loggerCache?.writeLogToFile(type.name, loggerList);
       notifier.changeListLog(_loggerJsonList);
@@ -77,13 +75,13 @@ final class LogDisplayHandler extends LogPrinterBase {
 
   List<LoggerObjectBase> getLogsType(EnumLoggerType enumLoggerType) {
     if (_loggerJsonList.containsKey(enumLoggerType)) {
-      return _loggerJsonList[enumLoggerType]!.loggerJson;
+      return _loggerJsonList[enumLoggerType]!.loggerEntries;
     } else {
       final json = _loggerCache?.getLogResp(enumLoggerType.name);
       if (json != null) {
         final LoggerJsonList loggerList = LoggerJsonList.fromJson(json);
         _loggerJsonList[enumLoggerType] = loggerList;
-        return loggerList.loggerJson;
+        return loggerList.loggerEntries;
       }
     }
     return [];
@@ -93,28 +91,16 @@ final class LogDisplayHandler extends LogPrinterBase {
   void printLog(LoggerObjectBase log) {
     if (configLog.enableLog || log is ErrorLog) {
       final separator = log.getColor().call("=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-");
-      final time = log.getColor().call(log.logCreationDate.onlyTime());
+
       final start = log.getStartLog();
       final List<String> messageLog = [" ", separator];
-      if (log is ErrorLog) {
-        // _printMessage("$start ${logger.message} ", stack: logger.stackTrace);
-        messageLog.add(log.getMessage());
-        // _toFileLog(logger);
-      } else {
-        messageLog.add(log.getColor().call(log.message));
-      }
-      // if (logger.showStackTrace) {
-      //   final ss = logger.getStackTrace();
-
-      //   messageLog.add(separator);
-      //   messageLog.add(ss);
-      // }
-
+      messageLog.add(log.getMessage());
       messageLog.add(separator);
 
-      final String logStr = "$time ${messageLog.join("\n")}";
+      final String logFormated = messageLog.join("\n");
+
+      dev.log(logFormated, name: start);
       _toFileLog(log);
-      dev.log(logStr, name: start);
     }
   }
 
