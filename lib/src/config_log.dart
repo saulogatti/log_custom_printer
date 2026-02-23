@@ -7,14 +7,13 @@ import 'package:log_custom_printer/src/logs_object/warning_log.dart';
 /// Configuração para controle de logs na biblioteca.
 ///
 /// Esta classe define as regras de habilitação e filtragem dos logs.
-/// Por padrão, os logs são habilitados apenas em modo debug ([kDebugMode])
-/// e todos os tipos de log são permitidos.
+/// Por padrão, os logs estão desabilitados e todos os tipos de log são permitidos.
 ///
 /// {@category Configuration}
 ///
 /// Exemplo de uso básico:
 /// ```dart
-/// final config = ConfigLog(); // Padrões: debug mode, todos os tipos
+/// final config = ConfigLog(); // Padrões: logs desabilitados, todos os tipos
 /// ```
 ///
 /// Exemplo com configuração customizada:
@@ -40,8 +39,8 @@ class ConfigLog {
   /// Se os logs devem ser enviados para saída.
   ///
   /// Quando `false`, todos os logs são ignorados independentemente
-  /// do tipo. Por padrão usa [kDebugMode], significando que logs
-  /// são automaticamente desabilitados em builds de produção.
+  /// do tipo (exceto aqueles com `alwaysPrint` como `ErrorLog`).
+  /// Por padrão é `false`.
   final bool enableLog;
 
   /// Conjunto de tipos de log permitidos.
@@ -52,20 +51,15 @@ class ConfigLog {
   ///
   /// Por padrão inclui todos os tipos: [DebugLog], [WarningLog],
   /// [InfoLog].
-  /// Por padrão sempre vai permitir [ErrorLog] para garantir que erros críticos
+  /// [ErrorLog] é sempre permitido para garantir que erros críticos sejam registrados.
   final Set<Type> onlyClasses;
-
-  /// Se os logs devem ser persistidos em arquivo.
-  ///
-  /// Quando `true`, além de enviados para a saída configurada, os logs
-  /// também podem ser salvos em arquivo conforme a implementação do
-  /// [LogPrinterBase] utilizada. Por padrão é `false`, ou seja, os logs
-  /// não são gravados em arquivo.
 
   /// Cria uma configuração de log.
   ///
-  /// [enableLog]: controla se logs são processados (padrão: [false], ou seja, desabilitado por padrão)
-  /// [onlyClasses]: tipos de log permitidos (padrão: todos os tipos)
-  /// [isSaveLogFile]: se os logs também devem ser salvos em arquivo (padrão: false)
-  const ConfigLog({this.enableLog = false, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});
+  /// [enableLog]: controla se logs são processados (padrão: `false`).
+  /// [onlyClasses]: tipos de log permitidos (padrão: [DebugLog], [WarningLog], [InfoLog]).
+  const ConfigLog({
+    this.enableLog = false,
+    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
+  });
 }

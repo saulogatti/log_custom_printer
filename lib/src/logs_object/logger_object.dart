@@ -52,9 +52,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   ///
   /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
   /// em modo de desenvolvimento. [createdAt] permite controlar a data do
-  /// log (útil em testes); quando omitido, o objeto NÃO enviará o log
-  /// automaticamente. Use o construtor nomeado `LoggerObjectBase.send`
-  /// para criar e enviar em uma única chamada.
+  /// log (útil em testes).
   LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag}) : tag = tag ?? "" {
     assert(
       message.isNotEmpty && message.trim().isNotEmpty,
@@ -100,12 +98,14 @@ abstract class LoggerObjectBase extends LoggerObject {
     return _logHeader;
   }
 
-  /// Envia (imprime) o log usando o `LogPrinterBase` configurado no
+  /// Envia (imprime) o log usando o [LogPrinterBase] configurado no
   /// pacote.
-  /// Checa se o log está habilitado via configuração antes de imprimir.
-  /// Se o log não pode ser impresso e não é um ErrorLog, retorna sem fazer nada.
   ///
-  /// Implementação padrão obtém o `LogPrinterBase` via [fetchLogPrinterService]
+  /// Checa se o log está habilitado via configuração antes de imprimir.
+  /// Se o log não puder ser impresso e não for um `ErrorLog` (ou outro com `alwaysPrint`),
+  /// ele não será enviado para a saída nem para o cache.
+  ///
+  /// Implementação padrão obtém o [LogPrinterService] via [fetchLogPrinterService]
   /// (get_it) e delega a impressão. Requer que [registerLogPrinter] tenha
   /// sido chamado no startup.
   @mustCallSuper
