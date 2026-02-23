@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 
 /// Notifica ouvintes sobre mudanças nos dados de log para diferentes [EnumLoggerType]s.
@@ -21,7 +19,7 @@ import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 ///   print('Logs atualizados: ${errorLogs.length} erros');
 /// });
 /// ```
-class LoggerNotifier with ChangeNotifier {
+class LoggerNotifier {
   final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
 
   /// Atualiza o mapa de logs e notifica os ouvintes.
@@ -30,24 +28,6 @@ class LoggerNotifier with ChangeNotifier {
   void changeListLog(Map<EnumLoggerType, LoggerJsonList?> listLog) {
     _loggerJsonList.clear();
     _loggerJsonList.addAll(listLog);
-    notifyListeners();
-  }
-
-  /// Obtém a lista de logs para um tipo específico.
-  ///
-  /// [enumLoggerType] é o tipo de log desejado.
-  /// Retorna uma lista de [LoggerObjectBase] para o tipo especificado.
-  List<LoggerObjectBase> getLogsType(EnumLoggerType enumLoggerType) {
-    if (_loggerJsonList.containsKey(enumLoggerType)) {
-      return _loggerJsonList[enumLoggerType]!.loggerJson;
-    } else {
-      final json = LoggerCache().getLogResp(enumLoggerType.name);
-      if (json != null) {
-        final LoggerJsonList loggerList = LoggerJsonList.fromJson(json);
-        _loggerJsonList[enumLoggerType] = loggerList;
-        return loggerList.loggerJson;
-      }
-    }
-    return [];
   }
 }
+// TODO pensar em algo para notificar quando um log for adicionado, sem usar algo do Flutter, apenas dart, para que seja possível usar em qualquer tipo de projeto, não apenas Flutter. Talvez usando Streams ou algo do tipo.
