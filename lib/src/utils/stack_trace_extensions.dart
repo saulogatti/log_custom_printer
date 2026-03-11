@@ -6,6 +6,9 @@ final _browserStackTraceRegex = RegExp(r'^(?:package:)?(dart:\S+|\S+)');
 /// Regex para detectar linhas de stack trace de dispositivo.
 final _deviceStackTraceRegex = RegExp(r'#[0-9]+\s+(.+) \((\S+)\)');
 
+/// Regex para extrair a parte principal da linha de stack trace.
+final _stackTraceLineRegex = RegExp(r'#\d+\s+');
+
 /// Extension para formatação e manipulação de stack traces.
 ///
 /// Fornece métodos para formatar stack traces de forma legível, filtrar
@@ -54,7 +57,7 @@ extension StackTraceSdk on StackTrace {
     }
 
     for (int count = 0; count < stackTraceLength; count++) {
-      final line = lines[count].replaceFirst(RegExp(r'#\d+\s+'), '');
+      final line = lines[count].replaceFirst(_stackTraceLineRegex, '');
       if (sdkLevel != null) {
         formatted.add(sdkLevel.call('#$count $line'));
       } else {
@@ -95,7 +98,7 @@ extension StackTraceSdk on StackTrace {
     }
 
     for (int count = 0; count < stackTraceLength; count++) {
-      final line = lines[count].replaceFirst(RegExp(r'#\d+\s+'), '');
+      final line = lines[count].replaceFirst(_stackTraceLineRegex, '');
       map['#$count'] = line;
       formatted.add('#$count $line');
     }
