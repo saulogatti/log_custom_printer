@@ -6,8 +6,8 @@ final _browserStackTraceRegex = RegExp(r'^(?:package:)?(dart:\S+|\S+)');
 /// Regex para detectar linhas de stack trace de dispositivo.
 final _deviceStackTraceRegex = RegExp(r'#[0-9]+\s+(.+) \((\S+)\)');
 
-/// Regex para limpar o prefixo do frame do stack trace.
-final _stackFrameCleanerRegex = RegExp(r'#\d+\s+');
+/// Regex para extrair a parte principal da linha de stack trace.
+final _stackTraceLineRegex = RegExp(r'#\d+\s+');
 
 /// Extension para formatação e manipulação de stack traces.
 ///
@@ -27,7 +27,7 @@ final _stackFrameCleanerRegex = RegExp(r'#\d+\s+');
 ///     LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
 ///     10, // máximo de linhas
 ///   );
-///   
+///
 ///   // Ou converter para Map
 ///   final map = stackTrace.stackInMap(8);
 /// }
