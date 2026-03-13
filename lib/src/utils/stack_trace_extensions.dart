@@ -94,7 +94,7 @@ extension StackTraceSdk on StackTrace {
 
     final List<String> cleanedLines = [];
     for (int count = 0; count < stackTraceLength; count++) {
-      cleanedLines.add(lines[count].replaceFirst(_stackFrameCleanerRegex, ''));
+      cleanedLines.add(lines[count].replaceFirst(_stackTraceLineRegex, ''));
     }
     return cleanedLines;
   }
