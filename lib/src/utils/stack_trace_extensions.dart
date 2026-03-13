@@ -6,6 +6,9 @@ final _browserStackTraceRegex = RegExp(r'^(?:package:)?(dart:\S+|\S+)');
 /// Regex para detectar linhas de stack trace de dispositivo.
 final _deviceStackTraceRegex = RegExp(r'#[0-9]+\s+(.+) \((\S+)\)');
 
+/// Regex para limpar o prefixo do frame do stack trace.
+final _stackFrameCleanerRegex = RegExp(r'#\d+\s+');
+
 /// Extension para formatação e manipulação de stack traces.
 ///
 /// Fornece métodos para formatar stack traces de forma legível, filtrar
@@ -37,24 +40,11 @@ extension StackTraceSdk on StackTrace {
   ///
   /// Retorna uma string formatada com o stack trace limpo e numerado.
   String formatStackTrace(LoggerAnsiColor? sdkLevel, int linesCount) {
-    final List<String> lines = toString()
-        .split('\n')
-        .where(
-          (line) =>
-              !_discardDeviceStacktraceLine(line) &&
-              line.isNotEmpty &&
-              !_discardBrowserStacktraceLine(line),
-        )
-        .toList();
+    final List<String> lines = _getCleanedLines(linesCount);
     final List<String> formatted = [];
 
-    int stackTraceLength = lines.length;
-    if (stackTraceLength > linesCount) {
-      stackTraceLength = linesCount;
-    }
-
-    for (int count = 0; count < stackTraceLength; count++) {
-      final line = lines[count].replaceFirst(RegExp(r'#\d+\s+'), '');
+    for (int count = 0; count < lines.length; count++) {
+      final line = lines[count];
       if (sdkLevel != null) {
         formatted.add(sdkLevel.call('#$count $line'));
       } else {
@@ -86,20 +76,27 @@ extension StackTraceSdk on StackTrace {
   /// ```
   Map<String, dynamic> stackInMap([int linesCount = 8]) {
     final Map<String, String> map = {};
-    final List<String> lines = _getLines();
-    final List<String> formatted = [];
+    final List<String> lines = _getCleanedLines(linesCount);
 
+    for (int count = 0; count < lines.length; count++) {
+      final line = lines[count];
+      map['#$count'] = line;
+    }
+    return map;
+  }
+
+  List<String> _getCleanedLines(int linesCount) {
+    final List<String> lines = _getLines();
     int stackTraceLength = lines.length;
     if (stackTraceLength > linesCount) {
       stackTraceLength = linesCount;
     }
 
+    final List<String> cleanedLines = [];
     for (int count = 0; count < stackTraceLength; count++) {
-      final line = lines[count].replaceFirst(RegExp(r'#\d+\s+'), '');
-      map['#$count'] = line;
-      formatted.add('#$count $line');
+      cleanedLines.add(lines[count].replaceFirst(_stackFrameCleanerRegex, ''));
     }
-    return map;
+    return cleanedLines;
   }
 
   bool _discardBrowserStacktraceLine(String line) {
