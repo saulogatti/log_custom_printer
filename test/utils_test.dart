@@ -2,6 +2,8 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 import 'package:test/test.dart';
 
+import 'package:log_custom_printer/src/utils/string_extension.dart';
+
 void main() {
   group('DateTimeLogHelper', () {
     test('formats date and time consistently', () {
@@ -68,6 +70,24 @@ void main() {
       expect(EnumAnsiColors.magenta.getFgColor(), equals(35));
       expect(EnumAnsiColors.cyan.getFgColor(), equals(36));
       expect(EnumAnsiColors.white.getFgColor(), equals(37));
+    });
+  });
+
+  group('StringExtension', () {
+    test('formattedName trims and lowercases', () {
+      expect('  Saulo Gatti  '.formattedName, equals('saulo gatti'));
+      expect('HELLO'.formattedName, equals('hello'));
+      expect('   '.formattedName, equals(''));
+      expect(''.formattedName, equals(''));
+    });
+
+    test('sanitizedFileName replaces invalid characters', () {
+      expect('file<name>.log'.sanitizedFileName, equals('file_name_.log'));
+      expect(
+        'a/b\\c:d*e?f"g|h<i.j'.sanitizedFileName,
+        equals('a_b_c_d_e_f_g_h_i.j'),
+      );
+      expect('clean_name.txt'.sanitizedFileName, equals('clean_name.txt'));
     });
   });
 }
