@@ -87,7 +87,10 @@ void main() {
         'a/b\\c:d*e?f"g|h>i<j.k'.sanitizedFileName,
         equals('a_b_c_d_e_f_g_h_i_j.k'),
       );
+     
       expect('clean_name.txt'.sanitizedFileName, equals('clean_name.txt'));
+      expect(''.sanitizedFileName, equals(''));
+      expect('<>:"'.sanitizedFileName, equals('____'));
     });
   });
 }
