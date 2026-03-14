@@ -18,4 +18,6 @@ class ConsoleModel {
   void read() {
     loadLogs();
   }
+
+  void clearLogs() {}
 }

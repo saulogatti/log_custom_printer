@@ -5,7 +5,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/widgets/card_log_object.dart';
 import 'package:log_custom_printer/src/widgets/view/console_model.dart';
 import 'package:provider/provider.dart';
 
@@ -21,10 +20,35 @@ class ConsoleWidget extends StatelessWidget {
         return Container(
           color: Colors.black.withAlpha(200),
           padding: const EdgeInsets.all(8.0),
-          child: ListView.builder(
+          child: ListView.separated(
             itemCount: snapshot.length,
+            separatorBuilder: (context, index) => const Divider(height: 4.0),
             itemBuilder: (context, index) {
-              return CardLogObject(loggerObject: snapshot[index]);
+              final logObject = snapshot[index];
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      logObject.getStartLog(false),
+                      style: TextStyle(
+                        color: logObject.getColor().enumAnsiColors.toColor(),
+                        fontFamily: 'monospace',
+                        fontSize: 12,
+                      ),
+                    ),
+                    Text(
+                      logObject.getMessage(false),
+                      style: TextStyle(
+                        color: logObject.getColor().enumAnsiColors.toColor(),
+                        fontFamily: 'monospace',
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
         );
