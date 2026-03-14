@@ -20,7 +20,6 @@ part 'logger_ansi_color.g.dart';
 /// Cada cor possui métodos para obter:
 /// - Código ANSI para cor de fundo (`getBgColor`)
 /// - Código ANSI para cor de texto (`getFgColor`)
-/// - Cor equivalente no Flutter (`getWidgetColor`)
 /// {@endtemplate}
 enum EnumAnsiColors {
   black,

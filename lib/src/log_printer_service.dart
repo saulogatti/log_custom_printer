@@ -20,6 +20,8 @@ final class LogPrinterService {
   /// O repositório responsável pelo cache e persistência dos logs.
   final LoggerCacheRepository _cacheRepository;
 
+  void Function()? consoleModel;
+
   /// Cria uma nova instância do serviço de impressão.
   ///
   /// [logPrinter]: a estratégia de impressão a ser utilizada.
@@ -49,5 +51,6 @@ final class LogPrinterService {
       _cacheRepository.addLog(log);
       logPrinter.printLog(log);
     }
+    consoleModel?.call();
   }
 }
