@@ -6,7 +6,7 @@ final _browserStackTraceRegex = RegExp(r'^(?:package:)?(dart:\S+|\S+)');
 /// Regex para detectar linhas de stack trace de dispositivo.
 final _deviceStackTraceRegex = RegExp(r'#[0-9]+\s+(.+) \((\S+)\)');
 
-/// Regex para extrair a parte principal da linha de stack trace.
+/// Regex para extrair o índice e o espaçamento inicial de uma linha de stack trace.
 final _stackTraceLineRegex = RegExp(r'#\d+\s+');
 
 /// Extension para formatação e manipulação de stack traces.
@@ -85,29 +85,13 @@ extension StackTraceSdk on StackTrace {
     return map;
   }
 
-  List<String> _getCleanedLines(int linesCount) {
-    final List<String> lines = _getLines();
-    int stackTraceLength = lines.length;
-    if (stackTraceLength > linesCount) {
-      stackTraceLength = linesCount;
-    }
-
-    final List<String> cleanedLines = [];
-    for (int count = 0; count < stackTraceLength; count++) {
-      cleanedLines.add(lines[count].replaceFirst(_stackTraceLineRegex, ''));
-    }
-    return cleanedLines;
-  }
-
   bool _discardBrowserStacktraceLine(String line) {
     final match = _browserStackTraceRegex.matchAsPrefix(line);
     if (match == null) {
       return false;
     }
     final segment = match.group(1)!;
-    if (segment.startsWith('package:logger') ||
-        segment.startsWith('dart:') ||
-        !segment.startsWith("#")) {
+    if (segment.startsWith('package:logger') || segment.startsWith('dart:') || !segment.startsWith("#")) {
       return true;
     }
     return false;
@@ -128,11 +112,23 @@ extension StackTraceSdk on StackTrace {
     return false;
   }
 
+  List<String> _getCleanedLines(int linesCount) {
+    final List<String> lines = _getLines();
+    int stackTraceLength = lines.length;
+    if (stackTraceLength > linesCount) {
+      stackTraceLength = linesCount;
+    }
+
+    final List<String> cleanedLines = [];
+    for (int count = 0; count < stackTraceLength; count++) {
+      cleanedLines.add(lines[count].replaceFirst(_stackTraceLineRegex, ''));
+    }
+    return cleanedLines;
+  }
+
   List<String> _getLines() {
     return toString().split('\n').where((line) {
-      return line.isNotEmpty &&
-          !_discardDeviceStacktraceLine(line) &&
-          !_discardBrowserStacktraceLine(line);
+      return line.isNotEmpty && !_discardDeviceStacktraceLine(line) && !_discardBrowserStacktraceLine(line);
     }).toList();
   }
 }
