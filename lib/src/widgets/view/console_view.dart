@@ -6,13 +6,17 @@ import 'package:provider/provider.dart';
 
 /// Tela de console para exibir logs usando o log_custom_printer.
 class ConsoleView extends StatelessWidget {
-  const ConsoleView({super.key});
+  final VoidCallback onClose;
+  const ConsoleView({super.key, required this.onClose});
   @override
   Widget build(BuildContext context) {
     return Provider<ConsoleModel>(
       create: (_) => ConsoleModel(logPrinterService: fetchLogPrinterService()),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Console'), leading: BackButton()),
+        appBar: AppBar(
+          title: const Text('Console'),
+          leading: IconButton(icon: const Icon(Icons.close), onPressed: onClose),
+        ),
         body: ConsoleWidget(),
       ),
     );

@@ -5,7 +5,7 @@ class ConsoleOverlayManager {
   static OverlayEntry? _overlayEntry;
 
   /// Oculta o overlay do console caso esteja em execução.
-  static void hideOverlay() {
+  static void hideConsoleOverlayManager() {
     _overlayEntry?.remove();
     _overlayEntry = null;
   }
@@ -37,7 +37,7 @@ class ConsoleOverlayManager {
                   clipBehavior: Clip.antiAlias,
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
 
-                  child: ConsoleView(),
+                  child: ConsoleView(onClose: hideConsoleOverlayManager),
                 ),
               ),
             ),
@@ -88,7 +88,7 @@ class DraggableOverlay {
                       shape: BoxShape.circle,
                       boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4))],
                     ),
-                    child: ConsoleView(),
+                    child: ConsoleView(onClose: hide),
                   ),
                 ),
               ),
