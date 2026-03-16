@@ -27,7 +27,7 @@ final _stackLineIndexRegex = RegExp(r'#\d+\s+');
 ///     LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
 ///     10, // máximo de linhas
 ///   );
-///   
+///
 ///   // Ou converter para Map
 ///   final map = stackTrace.stackInMap(8);
 /// }
@@ -44,9 +44,7 @@ extension StackTraceSdk on StackTrace {
         .split('\n')
         .where(
           (line) =>
-              !_discardDeviceStacktraceLine(line) &&
-              line.isNotEmpty &&
-              !_discardBrowserStacktraceLine(line),
+              !_discardDeviceStacktraceLine(line) && line.isNotEmpty && !_discardBrowserStacktraceLine(line),
         )
         .toList();
     final List<String> formatted = [];
@@ -109,9 +107,7 @@ extension StackTraceSdk on StackTrace {
       return false;
     }
     final segment = match.group(1)!;
-    if (segment.startsWith('package:logger') ||
-        segment.startsWith('dart:') ||
-        !segment.startsWith("#")) {
+    if (segment.startsWith('package:logger') || segment.startsWith('dart:') || !segment.startsWith("#")) {
       return true;
     }
     return false;
@@ -134,9 +130,7 @@ extension StackTraceSdk on StackTrace {
 
   List<String> _getLines() {
     return toString().split('\n').where((line) {
-      return line.isNotEmpty &&
-          !_discardDeviceStacktraceLine(line) &&
-          !_discardBrowserStacktraceLine(line);
+      return line.isNotEmpty && !_discardDeviceStacktraceLine(line) && !_discardBrowserStacktraceLine(line);
     }).toList();
   }
 }
