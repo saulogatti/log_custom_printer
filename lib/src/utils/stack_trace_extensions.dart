@@ -7,7 +7,7 @@ final _browserStackTraceRegex = RegExp(r'^(?:package:)?(dart:\S+|\S+)');
 final _deviceStackTraceRegex = RegExp(r'#[0-9]+\s+(.+) \((\S+)\)');
 
 /// Regex para extrair o índice e o espaçamento inicial de uma linha de stack trace.
-final _stackLineIndexRegex = RegExp(r'#\d+\s+');
+final _stackTraceLineRegex = RegExp(r'#\d+\s+');
 
 /// Extension para formatação e manipulação de stack traces.
 ///
@@ -40,22 +40,11 @@ extension StackTraceSdk on StackTrace {
   ///
   /// Retorna uma string formatada com o stack trace limpo e numerado.
   String formatStackTrace(LoggerAnsiColor? sdkLevel, int linesCount) {
-    final List<String> lines = toString()
-        .split('\n')
-        .where(
-          (line) =>
-              !_discardDeviceStacktraceLine(line) && line.isNotEmpty && !_discardBrowserStacktraceLine(line),
-        )
-        .toList();
+    final List<String> lines = _getCleanedLines(linesCount);
     final List<String> formatted = [];
 
-    int stackTraceLength = lines.length;
-    if (stackTraceLength > linesCount) {
-      stackTraceLength = linesCount;
-    }
-
-    for (int count = 0; count < stackTraceLength; count++) {
-      final line = lines[count].replaceFirst(_stackLineIndexRegex, '');
+    for (int count = 0; count < lines.length; count++) {
+      final line = lines[count];
       if (sdkLevel != null) {
         formatted.add(sdkLevel.call('#$count $line'));
       } else {
@@ -87,15 +76,10 @@ extension StackTraceSdk on StackTrace {
   /// ```
   Map<String, dynamic> stackInMap([int linesCount = 8]) {
     final Map<String, String> map = {};
-    final List<String> lines = _getLines();
+    final List<String> lines = _getCleanedLines(linesCount);
 
-    int stackTraceLength = lines.length;
-    if (stackTraceLength > linesCount) {
-      stackTraceLength = linesCount;
-    }
-
-    for (int count = 0; count < stackTraceLength; count++) {
-      final line = lines[count].replaceFirst(_stackLineIndexRegex, '');
+    for (int count = 0; count < lines.length; count++) {
+      final line = lines[count];
       map['#$count'] = line;
     }
     return map;
@@ -126,6 +110,20 @@ extension StackTraceSdk on StackTrace {
     }
 
     return false;
+  }
+
+  List<String> _getCleanedLines(int linesCount) {
+    final List<String> lines = _getLines();
+    int stackTraceLength = lines.length;
+    if (stackTraceLength > linesCount) {
+      stackTraceLength = linesCount;
+    }
+
+    final List<String> cleanedLines = [];
+    for (int count = 0; count < stackTraceLength; count++) {
+      cleanedLines.add(lines[count].replaceFirst(_stackTraceLineRegex, ''));
+    }
+    return cleanedLines;
   }
 
   List<String> _getLines() {

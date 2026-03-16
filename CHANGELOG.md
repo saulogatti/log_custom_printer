@@ -1,3 +1,7 @@
+## 2.0.1
+- Fix: corrigir o caminho dos logs para ambiente de teste, garantindo que os logs sejam gravados corretamente durante os testes.
+- Atualizar o changelog para refletir a correção do caminho dos logs em ambiente de teste, destacando a importância dessa correção para garantir a funcionalidade adequada da biblioteca durante os testes.
+
 ## 2.0.0
 - Refactor: remover dependências de arquivos específicos do projeto, como date_time_log_helper e
 - logger_ansi_color, para tornar a biblioteca mais genérica e reutilizável.
