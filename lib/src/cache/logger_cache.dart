@@ -16,7 +16,7 @@ import 'package:path/path.dart' as path;
 ///
 /// {@category Utilities}
 
-class LoggerCache {
+final class LoggerCache {
   /// O caminho para o diretório de logs.
   String _directoryPath = 'logger';
 
@@ -58,25 +58,6 @@ class LoggerCache {
     if (await file.exists()) {
       await file.delete();
     }
-  }
-
-  /// Lê o conteúdo de um arquivo de log específico e o retorna como um Mapa JSON.
-  Future<Map<String, dynamic>?> getLogResp(String fileName) async {
-    try {
-      await futureInitialization;
-      final path = _getPathFile(fileName);
-      final File file = File(path);
-      if (await file.exists()) {
-        final data = await file.readAsString();
-        final mapJ = jsonDecode(data);
-        if (mapJ is Map) {
-          return Map<String, dynamic>.from(mapJ);
-        }
-      }
-    } catch (e, stack) {
-      dev.log('Erro ao ler ou analisar o arquivo de log: $e', stackTrace: stack);
-    }
-    return null;
   }
 
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.

@@ -5,7 +5,7 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:test/test.dart';
 
-import 'data_logs/jsons_test.dart';
+import 'data_logs/jsons_mocks.dart';
 
 void main() {
   setUp(() {
