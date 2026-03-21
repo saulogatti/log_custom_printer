@@ -12,6 +12,9 @@ dependencies:
   json_annotation: ^4.11.0
 
   path: ^1.9.1
+  flutter:
+    sdk: flutter
+  provider: ^6.1.5+1
 
 dev_dependencies:
   lints: ^6.1.0

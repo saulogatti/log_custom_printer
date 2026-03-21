@@ -270,8 +270,7 @@ enum EnumAnsiColors {
 Funcionalidades:
 - `getBgColor()`: Código ANSI para fundo
 - `getFgColor()`: Código ANSI para texto
-- `getWidgetColor()`: Color do Flutter
-
+ 
 ### LoggerAnsiColor
 ```dart
 class LoggerAnsiColor {
