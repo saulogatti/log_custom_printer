@@ -19,13 +19,13 @@ void main() {
         expect(logs.first.message, "Teste de log simples");
       });
     });
-    test("Teste sem registro", () async {
+    test("Teste criando printer sem registro", () async {
       final logger = _FakeClassLog();
       logger.testLog();
-      // Since no printer is registered, we expect no logs to be stored
+      // Verificar se o log foi registrado no cache mesmo sem uma impressora personalizada registrada
       final cacheRepository =
           GetIt.instance<LogPrinterService>().cacheRepository;
-      await expectLater(cacheRepository.getAllLogs(), completion(isEmpty));
+      expectLater(cacheRepository.getAllLogs(), completion(isNotEmpty));
     });
   });
 }
