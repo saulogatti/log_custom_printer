@@ -18,10 +18,7 @@ import 'package:log_custom_printer/src/log_printers/log_with_color_print.dart';
 LogPrinterService fetchLogPrinterService() {
   final getIt = GetIt.instance;
   if (!getIt.isRegistered<LogPrinterService>()) {
-    throw StateError(
-      'LogPrinterService não está registrado. '
-      'Chame registerLogPrinter() no startup (ex: main()) antes de usar logs.',
-    );
+    registerLogPrinterSimple();
   }
   return getIt<LogPrinterService>();
 }
@@ -45,12 +42,17 @@ LogPrinterService fetchLogPrinterService() {
 /// ```
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinter(LogPrinterBase printer, {LoggerCacheRepository? cacheRepository}) {
+LoggerCacheRepository registerLogPrinter(
+  LogPrinterBase printer, {
+  LoggerCacheRepository? cacheRepository,
+}) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {
     locator.unregister<LogPrinterService>();
   }
-  locator.registerSingleton<LogPrinterService>(LogPrinterService(printer, cacheRepository: cacheRepository));
+  locator.registerSingleton<LogPrinterService>(
+    LogPrinterService(printer, cacheRepository: cacheRepository),
+  );
   return locator<LogPrinterService>().cacheRepository;
 }
 
@@ -70,7 +72,10 @@ LoggerCacheRepository registerLogPrinterColor({
 }) {
   return registerLogPrinter(
     LogWithColorPrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(maxLogEntries: maxLogsInCache, saveLogFilePath: cacheFilePath),
+    cacheRepository: LoggerCacheImpl(
+      maxLogEntries: maxLogsInCache,
+      saveLogFilePath: cacheFilePath,
+    ),
   );
 }
 
@@ -90,6 +95,9 @@ LoggerCacheRepository registerLogPrinterSimple({
 }) {
   return registerLogPrinter(
     LogSimplePrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(maxLogEntries: maxLogsInCache, saveLogFilePath: cacheFilePath),
+    cacheRepository: LoggerCacheImpl(
+      maxLogEntries: maxLogsInCache,
+      saveLogFilePath: cacheFilePath,
+    ),
   );
 }
