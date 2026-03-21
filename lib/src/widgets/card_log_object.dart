@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
+/// Widget para exibir um log individual em um card.
 class CardLogObject extends StatelessWidget {
   final LoggerObjectBase loggerObject;
   const CardLogObject({super.key, required this.loggerObject});

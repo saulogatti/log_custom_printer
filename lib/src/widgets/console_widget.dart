@@ -25,28 +25,20 @@ class ConsoleWidget extends StatelessWidget {
             separatorBuilder: (context, index) => const Divider(height: 4.0),
             itemBuilder: (context, index) {
               final logObject = snapshot[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      logObject.getStartLog(false),
-                      style: TextStyle(
-                        color: logObject.getColor().enumAnsiColors.toColor(),
-                        fontFamily: 'monospace',
-                        fontSize: 12,
-                      ),
-                    ),
-                    Text(
-                      logObject.getMessage(false),
-                      style: TextStyle(
-                        color: logObject.getColor().enumAnsiColors.toColor(),
-                        fontFamily: 'monospace',
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
+              final logStyle = TextStyle(
+                color: logObject.getColor().enumAnsiColors.toColor(),
+                fontFamily: 'monospace',
+                fontSize: 12,
+              );
+              return ListTile(
+                dense: true,
+                title: Text(
+                  logObject.getStartLog(false),
+                  style: logStyle,
+                ),
+                subtitle: Text(
+                  logObject.getMessage(false),
+                  style: logStyle,
                 ),
               );
             },

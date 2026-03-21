@@ -11,7 +11,7 @@ class ConsoleOverlayManager {
   }
 
   /// Exibe o overlay do console sobrepondo a rota ativa.
-  static void showOverlay(BuildContext context) {
+  static void showOverlay(BuildContext context, [bool draggable = false]) {
     if (_overlayEntry != null) return;
 
     _overlayEntry = OverlayEntry(
@@ -20,7 +20,7 @@ class ConsoleOverlayManager {
         // Isso garante que eventos físicos de toque atravessem o console
         // e cheguem na aplicação abaixo de forma ininterrupta.
         return IgnorePointer(
-          ignoring: true,
+          ignoring: !draggable, // Se for arrastável, não ignoramos os eventos
           child: SafeArea(
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -30,7 +30,13 @@ class ConsoleOverlayManager {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
-                  boxShadow: const [BoxShadow(color: Colors.black45, blurRadius: 10.0, offset: Offset(0, 4))],
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black45,
+                      blurRadius: 10.0,
+                      offset: Offset(0, 4),
+                    ),
+                  ],
                 ),
                 child: Material(
                   color: Colors.transparent,
@@ -85,8 +91,14 @@ class DraggableOverlay {
                     height: 260,
                     decoration: const BoxDecoration(
                       color: Colors.blueAccent,
-                      shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, offset: Offset(0, 4))],
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: ConsoleView(onClose: hide),
                   ),

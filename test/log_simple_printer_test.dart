@@ -25,7 +25,7 @@ void main() {
       // Since no printer is registered, we expect no logs to be stored
       final cacheRepository =
           GetIt.instance<LogPrinterService>().cacheRepository;
-      expectLater(cacheRepository.getAllLogs(), completion(isEmpty));
+      await expectLater(cacheRepository.getAllLogs(), completion(isEmpty));
     });
   });
 }
