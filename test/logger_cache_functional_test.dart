@@ -9,7 +9,7 @@ void main() {
   late LoggerCache cache;
 
   setUp(() async {
-    tempDir = Directory.systemTemp.createTempSync('logger_cache_test');
+    tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
     cache = LoggerCache(tempDir.path);
     await cache.futureInitialization;
   });
