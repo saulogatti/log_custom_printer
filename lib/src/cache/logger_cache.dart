@@ -114,11 +114,11 @@ final class LoggerCache {
   String _getPathFile(String fileName) {
     assert(fileName.isNotEmpty, 'O nome do arquivo não pode ser vazio');
     assert(
-      fileName.contains(path.separator) == false,
+      !fileName.contains(path.separator),
       'O nome do arquivo não deve conter separadores de caminho',
     );
     assert(
-      fileName.endsWith('.json') == false,
+      !fileName.endsWith('.json'),
       'O nome do arquivo não deve conter a extensão .json, ela será adicionada automaticamente',
     );
 
