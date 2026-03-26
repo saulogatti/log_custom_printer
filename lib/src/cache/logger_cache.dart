@@ -66,7 +66,7 @@ final class LoggerCache {
       await futureInitialization;
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
-        final files = directory.listSync().whereType<File>();
+        final files = await directory.list().where((entity) => entity is File).cast<File>().toList();
         final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
         for (final file in files) {
           if (file.path.endsWith('.json')) {
