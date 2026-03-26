@@ -5,7 +5,7 @@ import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 
 void main() async {
-  final tempDir = Directory.systemTemp.createTempSync('logger_cache_benchmark');
+  final tempDir = await Directory.systemTemp.createTemp('logger_cache_benchmark');
   final cache = LoggerCache(tempDir.path);
   await cache.futureInitialization;
 
