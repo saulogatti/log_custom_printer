@@ -45,7 +45,7 @@ final class LoggerCache {
         await directory.delete(recursive: true);
         await directory.create(recursive: true);
       }
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       dev.log('Erro ao limpar os arquivos de log: $e', stackTrace: stack);
     }
   }
@@ -83,7 +83,7 @@ final class LoggerCache {
         }
         return allLogs;
       }
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       dev.log('Erro ao ler os arquivos de log: $e', stackTrace: stack);
     }
     return null;
@@ -103,9 +103,10 @@ final class LoggerCache {
 
       final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
       await file.writeAsString(jj);
-    } catch (e, stack) {
-      onError?.call(e.toString(), stack);
+    } on Exception catch (e, stack) {
+      onError?.call(e, stack);
       dev.log('Erro ao escrever o arquivo de log: $e', stackTrace: stack);
+
     }
   }
 
@@ -137,7 +138,7 @@ final class LoggerCache {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       if (onError != null) {
         onError!(e, stack);
       } else {

@@ -1,11 +1,13 @@
 import 'dart:io';
+
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
-import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
 
 void main() async {
-  final tempDir = await Directory.systemTemp.createTemp('logger_cache_benchmark');
+  final tempDir = await Directory.systemTemp.createTemp(
+    'logger_cache_benchmark',
+  );
   final cache = LoggerCache(tempDir.path);
   await cache.futureInitialization;
 
@@ -29,7 +31,9 @@ void main() async {
   }
   stopwatch.stop();
 
-  print('readAllLogs: ${stopwatch.elapsedMilliseconds / iterations} ms per iteration');
+  print(
+    'readAllLogs: ${stopwatch.elapsedMilliseconds / iterations} ms per iteration',
+  );
 
   // Clean up
   await tempDir.delete(recursive: true);

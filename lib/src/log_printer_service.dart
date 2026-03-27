@@ -40,7 +40,10 @@ final class LogPrinterService {
   /// 1. Adicionado ao cache via [_cacheRepository].
   /// 2. Impresso via [logPrinter].
   void executePrint(LoggerObjectBase log) {
-    if (logPrinter.configLog.enableLog &&
+    if (!logPrinter.configLog.enableLog) {
+      return;
+    }
+    if (
         (logPrinter.configLog.onlyClasses.isEmpty ||
             logPrinter.configLog.onlyClasses.contains(log.runtimeType))) {
       // O log pode ser impresso, então adicionamos ao cache e imprimimos
