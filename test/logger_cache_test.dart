@@ -12,7 +12,7 @@ void main() {
     setUp(() async {
       tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
       loggerCache = LoggerCache(tempDir.path);
-      await loggerCache.futureInitialization;
+      await loggerCache.futureInitialization.future;
     });
 
     tearDown(() async {

@@ -1,24 +1,33 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
 
-class ConsoleModel {
-  final ValueNotifier<List<LoggerObjectBase>> _logs = ValueNotifier([]);
+class ConsoleModelNotifier extends ChangeNotifier {
+  List<LoggerObjectBase> _logs = [];
   final LogPrinterService _logPrinterService;
-  ConsoleModel({required LogPrinterService logPrinterService})
+  ConsoleModelNotifier({required LogPrinterService logPrinterService})
     : _logPrinterService = logPrinterService {
     loadLogs();
-    _logPrinterService.consoleModel = read;
+    _logPrinterService.cacheRepository.consoleModel = changeList;
   }
-  ValueListenable<List<LoggerObjectBase>> get logs => _logs;
+  List<LoggerObjectBase> get logs => _logs;
 
-  void clearLogs() {
-    _logPrinterService.cacheRepository.clearLogs();
-    _logs.value = [];
+  void changeList(List<LoggerObjectBase> newLogs) {
+    _logs = newLogs;
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _logPrinterService.cacheRepository.consoleModel = null;
+    super.dispose();
   }
 
   Future<void> loadLogs() async {
-    _logs.value = await _logPrinterService.cacheRepository.getAllLogs();
+    _logs = await _logPrinterService.cacheRepository.getAllLogs();
+    notifyListeners();
   }
 
   void read() {

@@ -5,6 +5,8 @@ import 'package:log_custom_printer/src/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
+
+
 /// Implementação concreta de [LoggerCacheRepository] usando armazenamento em memória
 /// e opcionalmente em arquivo.
 ///
@@ -13,7 +15,7 @@ import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 /// através da classe [LoggerCache].
 ///
 /// {@category Utilities}
-final class LoggerCacheImpl implements LoggerCacheRepository {
+final class LoggerCacheImpl implements ILoggerCacheRepository {
   /// Número máximo de entradas de log por tipo.
   final int maxLogEntries;
 
@@ -94,8 +96,9 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
 
   /// Inicializa o repositório carregando logs persistidos anteriormente do disco.
   Future<void> initialize() async {
-    if (_loggerCache != null) {
-      await _loggerCache!.futureInitialization;
+    if (_loggerCache != null &&
+        !_loggerCache!.futureInitialization.isCompleted) {
+      await _loggerCache!.futureInitialization.future;
       final allLogs = await _loggerCache!.readAllLogs();
       if (allLogs != null) {
         _loggerJsonList.clear();

@@ -20,14 +20,14 @@ final class LogPrinterService {
   /// O repositório responsável pelo cache e persistência dos logs.
   final LoggerCacheRepository _cacheRepository;
 
-  void Function()? consoleModel;
-
   /// Cria uma nova instância do serviço de impressão.
   ///
   /// [logPrinter]: a estratégia de impressão a ser utilizada.
   /// [cacheRepository]: repositório de cache (padrão: [LoggerCacheImpl]).
-  LogPrinterService(this.logPrinter, {LoggerCacheRepository? cacheRepository})
-    : _cacheRepository = cacheRepository ?? LoggerCacheImpl();
+  LogPrinterService(this.logPrinter, {ILoggerCacheRepository? cacheRepository})
+    : _cacheRepository = LoggerCacheRepository(
+        cacheRepository: cacheRepository,
+      );
 
   /// Retorna o repositório de cache associado a este serviço.
   LoggerCacheRepository get cacheRepository => _cacheRepository;
@@ -43,9 +43,8 @@ final class LogPrinterService {
     if (!logPrinter.configLog.enableLog) {
       return;
     }
-    if (
-        (logPrinter.configLog.onlyClasses.isEmpty ||
-            logPrinter.configLog.onlyClasses.contains(log.runtimeType))) {
+    if ((logPrinter.configLog.onlyClasses.isEmpty ||
+        logPrinter.configLog.onlyClasses.contains(log.runtimeType))) {
       // O log pode ser impresso, então adicionamos ao cache e imprimimos
       _cacheRepository.addLog(log);
       logPrinter.printLog(log);
@@ -54,6 +53,5 @@ final class LogPrinterService {
       _cacheRepository.addLog(log);
       logPrinter.printLog(log);
     }
-    consoleModel?.call();
   }
 }

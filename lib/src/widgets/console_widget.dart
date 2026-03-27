@@ -13,10 +13,13 @@ class ConsoleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final logs = context.watch<ConsoleModel>().logs;
-    return ValueListenableBuilder<List<LoggerObjectBase>>(
-      valueListenable: logs,
-      builder: (context, snapshot, _) {
+    final logs = context.watch<ConsoleModelNotifier>();
+    print("Building ConsoleWidget with ${logs.hashCode} logs");
+    return ListenableBuilder(
+      listenable: logs,
+      builder: (context, child) {
+        final snapshot = logs.logs;
+        print("Rebuild ConsoleWidget with ${snapshot.length} logs");
         return Container(
           color: Colors.black.withAlpha(200),
           padding: const EdgeInsets.all(8.0),
@@ -32,14 +35,8 @@ class ConsoleWidget extends StatelessWidget {
               );
               return ListTile(
                 dense: true,
-                title: Text(
-                  logObject.getStartLog(false),
-                  style: logStyle,
-                ),
-                subtitle: Text(
-                  logObject.getMessage(false),
-                  style: logStyle,
-                ),
+                title: Text(logObject.getStartLog(false), style: logStyle),
+                subtitle: Text(logObject.getMessage(false), style: logStyle),
               );
             },
           ),

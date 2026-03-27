@@ -9,7 +9,7 @@ void main() async {
     'logger_cache_benchmark',
   );
   final cache = LoggerCache(tempDir.path);
-  await cache.futureInitialization;
+  await cache.futureInitialization.future;
 
   // Create some dummy logs
   for (var i = 0; i < 50; i++) {

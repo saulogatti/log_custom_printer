@@ -10,12 +10,15 @@ class ConsoleView extends StatelessWidget {
   const ConsoleView({super.key, required this.onClose});
   @override
   Widget build(BuildContext context) {
-    return Provider<ConsoleModel>(
-      create: (_) => ConsoleModel(logPrinterService: fetchLogPrinterService()),
+    return ChangeNotifierProvider<ConsoleModelNotifier>.value(
+      value: ConsoleModelNotifier(logPrinterService: fetchLogPrinterService()),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Console'),
-          leading: IconButton(icon: const Icon(Icons.close), onPressed: onClose),
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: onClose,
+          ),
         ),
         body: ConsoleWidget(),
       ),

@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/logs_object/debug_log.dart';
@@ -11,7 +12,7 @@ void main() {
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
     cache = LoggerCache(tempDir.path);
-    await cache.futureInitialization;
+    await cache.futureInitialization.future;
   });
 
   tearDown(() async {
@@ -31,6 +32,9 @@ void main() {
     expect(allLogs, isNotNull);
     expect(allLogs!.length, equals(1));
     expect(allLogs.values.first!.loggerEntries.length, equals(1));
-    expect((allLogs.values.first!.loggerEntries.first as DebugLog).message, equals('Test message'));
+    expect(
+      (allLogs.values.first!.loggerEntries.first as DebugLog).message,
+      equals('Test message'),
+    );
   });
 }
