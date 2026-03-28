@@ -4,7 +4,7 @@ import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/utils/string_extension.dart';
 import 'package:path/path.dart' as path;
 

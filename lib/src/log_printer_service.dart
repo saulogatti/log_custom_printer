@@ -1,5 +1,6 @@
 import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 

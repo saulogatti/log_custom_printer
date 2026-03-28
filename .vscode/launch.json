@@ -4,13 +4,6 @@
     // Para obter mais informações, acesse: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
-        {
-            "name": "Dart",
-            "type": "dart",
-            "request": "launch",
-            "program": "exemple/lib/main.dart"
-        },
         {
             "name": "log_custom_printer",
             "request": "launch",

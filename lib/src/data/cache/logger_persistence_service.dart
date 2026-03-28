@@ -1,25 +1,8 @@
 import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
-
-import '../../domain/log_helpers/enum_logger_type.dart';
-import '../../log_printer_service.dart';
-import '../../domain/logs_object/logger_object.dart';
-
-abstract interface class ILoggerCacheRepository {
-  /// Adiciona uma entrada de log ao repositório.
-  Future<void> addLog(LoggerObjectBase log);
-
-  /// Remove todas as entradas de log do repositório.
-  Future<void> clearLogs();
-
-  /// Remove entradas de log de um tipo específico.
-  Future<void> clearLogsByType(EnumLoggerType type);
-
-  /// Recupera todas as entradas de log armazenadas.
-  Future<List<LoggerObjectBase>> getAllLogs();
-
-  /// Recupera entradas de log filtradas por tipo.
-  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
-}
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/log_printer_service.dart';
 
 /// Interface para repositório de cache de logs.
 ///
@@ -31,45 +14,43 @@ abstract interface class ILoggerCacheRepository {
 /// {@category Utilities}
 final class LoggerPersistenceService {
   final ILoggerCacheRepository _cacheRepository;
-  void Function(List<LoggerObjectBase>)? consoleModel;
+  void Function(List<LoggerObjectBase>)? logOutputHandler;
   LoggerPersistenceService({ILoggerCacheRepository? cacheRepository})
     : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
 
   /// Adiciona uma entrada de log ao repositório.
   Future<void> addLog(LoggerObjectBase log) async {
     await _cacheRepository.addLog(log);
-    if (consoleModel != null) {
+    if (logOutputHandler != null) {
       final logs = await _cacheRepository.getAllLogs();
-      consoleModel?.call(logs);
+      logOutputHandler?.call(logs);
     }
   }
 
   /// Remove todas as entradas de log do repositório.
   Future<void> clearLogs() async {
-    consoleModel?.call([]);
+    logOutputHandler?.call([]);
     await _cacheRepository.clearLogs();
   }
 
   /// Remove entradas de log de um tipo específico.
   Future<void> clearLogsByType(EnumLoggerType type) async {
     await _cacheRepository.clearLogsByType(type);
-    if (consoleModel != null) {
+    if (logOutputHandler != null) {
       final logs = await _cacheRepository.getAllLogs();
-      consoleModel?.call(logs);
+      logOutputHandler?.call(logs);
     }
   }
 
   /// Recupera todas as entradas de log armazenadas.
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final logs = await _cacheRepository.getAllLogs();
-    consoleModel?.call(logs);
     return logs;
   }
 
   /// Recupera entradas de log filtradas por tipo.
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
     final logs = await _cacheRepository.getLogsByType(type);
-    consoleModel?.call(logs);
     return logs;
   }
 }

@@ -5,7 +5,9 @@ import 'package:test/test.dart';
 
 void main() {
   setUp(() {
-    final fakePrinter = _FakeLogPrinter(config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}));
+    final fakePrinter = _FakeLogPrinter(
+      config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
+    );
     registerLogPrinter(fakePrinter);
   });
 
@@ -15,7 +17,8 @@ void main() {
 
   group('LoggerObjectBase.sendLog', () {
     test('respects onlyClasses filter for non-error logs', () {
-      final fakePrinter = GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
+      final fakePrinter =
+          GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
 
       DebugLog('debug skipped').sendLog();
       InfoLog('info allowed').sendLog();
@@ -23,24 +26,25 @@ void main() {
       expect(fakePrinter.printed.length, equals(1));
       expect(fakePrinter.printed.single, isA<InfoLog>());
     });
+    test('always sends ErrorLog regardless of onlyClasses filter', () {
+      final fakePrinter =
+          GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
 
-    test('ErrorLog is printed even when logging is disabled', () async {
-      await GetIt.instance.reset();
-      final fakePrinter = _FakeLogPrinter(config: const ConfigLog(enableLog: false, onlyClasses: <Type>{}));
-      registerLogPrinter(fakePrinter);
-
-      DebugLog('debug skipped').sendLog();
-      ErrorLog('boom', StackTrace.fromString('#0 example')).sendLog();
+      ErrorLog(
+        'error should be sent',
+        StackTrace.fromString('#0 example'),
+      ).sendLog();
 
       expect(fakePrinter.printed.length, equals(1));
       expect(fakePrinter.printed.single, isA<ErrorLog>());
     });
   });
-
   group('LoggerClassMixin', () {
     test('uses host runtimeType as className', () async {
       await GetIt.instance.reset();
-      final fakePrinter = _FakeLogPrinter(config: const ConfigLog(enableLog: true));
+      final fakePrinter = _FakeLogPrinter(
+        config: const ConfigLog(enableLog: true),
+      );
       registerLogPrinter(fakePrinter);
       final service = _FakeService();
 

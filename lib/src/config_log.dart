@@ -57,5 +57,8 @@ class ConfigLog {
   ///
   /// [enableLog]: controla se logs são processados (padrão: `false`).
   /// [onlyClasses]: tipos de log permitidos (padrão: [DebugLog], [WarningLog], [InfoLog]).
-  const ConfigLog({this.enableLog = false, this.onlyClasses = const {DebugLog, WarningLog, InfoLog}});
+  const ConfigLog({
+    this.enableLog = false,
+    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
+  });
 }
