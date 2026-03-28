@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:log_custom_printer/src/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 

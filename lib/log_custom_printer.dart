@@ -62,21 +62,21 @@
 /// {@category Core}
 library;
 
-export 'src/cache/logger_cache_repository_impl.dart';
+export 'src/data/cache/logger_cache_repository_impl.dart';
 export 'src/config_log.dart';
 export 'src/log_custom_printer_base.dart';
-export 'src/log_helpers/enum_logger_type.dart';
-export 'src/log_helpers/logger_class_mixin.dart';
+export 'src/domain/log_helpers/enum_logger_type.dart';
+export 'src/domain/log_helpers/logger_class_mixin.dart';
 export 'src/log_printer_locator.dart'
     show registerLogPrinter, registerLogPrinterColor, registerLogPrinterSimple;
-export 'src/log_printers/log_simple_print.dart';
-export 'src/logs_object/debug_log.dart';
-export 'src/logs_object/error_log.dart';
-export 'src/logs_object/info_log.dart';
-export 'src/logs_object/logger_object.dart';
-export 'src/logs_object/warning_log.dart';
+export 'src/domain/log_printers/log_simple_print.dart';
+export 'src/domain/logs_object/debug_log.dart';
+export 'src/domain/logs_object/error_log.dart';
+export 'src/domain/logs_object/info_log.dart';
+export 'src/domain/logs_object/logger_object.dart';
+export 'src/domain/logs_object/warning_log.dart';
 export 'src/utils/date_time_log_helper.dart';
 export 'src/utils/logger_ansi_color.dart';
-export 'src/widgets/console_overlay.dart';
-export 'src/widgets/console_widget.dart';
-export 'src/widgets/view/console_view.dart';
+export 'src/view/console/console_overlay.dart';
+export 'src/view/console/console_widget.dart';
+export 'src/view/console/console_view.dart';

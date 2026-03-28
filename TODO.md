@@ -3,9 +3,9 @@
 ## 🧱 Fase 1 — Funcionalidades Essenciais
 
 ### 1. Exportação de logs (JSON e TXT)
-- Criar serviço de exportação com suporte a múltiplos formatos.
+- Criar serviço de exportação com suporte a múltiplos formatos (JSON, TXT).
 - Permitir exportar todos os logs ou apenas os filtrados.
-- Opção de salvar localmente ou compartilhar.
+- Opção de salvar localmente ou compartilhar. (Componente share ja faz isso, basta integrar)
 
 ### 2. Ordenação de logs
 - Ordenar por data (asc/desc).
@@ -28,7 +28,8 @@
 
 ### 5. Busca avançada
 - Buscar por texto, tag ou tipo de log.
-- Implementar busca incremental (live search).
+- Suporte a expressões regulares.
+- Destaque dos resultados encontrados.
 
 ### 6. Controle de tamanho do console
 - Permitir definir altura máxima.
@@ -50,20 +51,21 @@
 ### 9. Salvar logs localmente
 - Salvar manualmente ou automaticamente.
 - Opção de sobrescrever ou criar versões.
-
+- Gerenciar espaço de armazenamento (limpar logs antigos).  
+- Opção de usar armazenamento local ou remoto (Firebase, AWS S3, etc).
+- Tipos de arquivos: JSON, TXT, CSV, talvez sqlite. isar.
 ---
 
 ## 🗂️ Fase 4 — Organização Avançada e Produtividade
 
 ### 10. Suporte a múltiplas abas de console
-- Cada aba representa uma categoria, tag, tipo de log ou sessão.
-- Permite separar logs de módulos distintos.
-
+- Cada aba representa uma  tipo de log .
+ 
 ### 11. Destaque de logs importantes
 - Marcar logs como importantes ou críticos.
-- Exibir com cores, ícones ou estilos especiais.
+ 
 
-### 12. Personalização do tema do console
+### 12. Personalização do tema do console (Opcional e para o fim do projeto)
 - Cores personalizadas.
 - Tamanho da fonte.
 - Tema claro/escuro.
@@ -73,7 +75,7 @@
 
 ## 🌐 Fase 5 — Integrações e Recursos Avançados
 
-### 13. Integração com serviços externos
+### 13. Integração com serviços externos (opcional e para o fim do projeto)
 Enviar logs em tempo real para:
 - Sentry
 - Loggly
@@ -85,7 +87,7 @@ Opções:
 - Envio manual.
 - Envio apenas de erros críticos.
 
-### 14. API pública da biblioteca
+### 14. API pública da biblioteca (opcional e para o fim do projeto)
 - Permitir extensões e plugins.
 - Facilitar integrações futuras.
 
@@ -109,5 +111,5 @@ Opções:
 - Replay de sessão (ações + logs).
 - Modo silencioso.
 - Análise automática de padrões.
-- Exportação em CSV.
+- Exportação em CSV. 
 - Compressão automática de logs antigos.

@@ -1,7 +1,7 @@
-import 'package:log_custom_printer/src/cache/logger_cache_repository_impl.dart';
-import 'package:log_custom_printer/src/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/log_custom_printer_base.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
 /// Serviço central que coordena o processo de impressão e armazenamento de logs.
 ///

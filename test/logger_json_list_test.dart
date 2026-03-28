@@ -2,7 +2,7 @@
 // This file provides basic tests to validate JSON encoding/decoding
 
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_json_list.dart';
 import 'package:test/test.dart';
 
 import 'data_logs/jsons_mocks.dart';

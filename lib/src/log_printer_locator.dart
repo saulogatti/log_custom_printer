@@ -1,10 +1,10 @@
 import 'package:get_it/get_it.dart';
-import 'package:log_custom_printer/src/cache/logger_cache_repository_impl.dart';
-import 'package:log_custom_printer/src/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/config_log.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
-import 'package:log_custom_printer/src/log_printers/log_simple_print.dart';
-import 'package:log_custom_printer/src/log_printers/log_with_color_print.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
 
 /// Resolve o [LogPrinterService] registrado no get_it.
 ///
