@@ -17,7 +17,7 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 /// ```
 class LogWithColorPrint extends LogPrinterBase {
   /// Construtor const para uso imutável/compilado.
-  const LogWithColorPrint({super.config});
+  const LogWithColorPrint( );
 
   /// Imprime o log usando códigos ANSI e `dart:developer.log`.
   ///

@@ -1,6 +1,5 @@
-import 'config_log.dart';
-import 'domain/logs_object/logger_object.dart';
 import 'domain/log_printers/log_with_color_print.dart';
+import 'domain/logs_object/logger_object.dart';
 
 /// Classe base abstrata para impressoras de logs.
 ///
@@ -38,13 +37,12 @@ import 'domain/log_printers/log_with_color_print.dart';
 /// ```
 abstract class LogPrinterBase {
   /// Configuração de filtragem e habilitação de logs.
-  final ConfigLog configLog;
 
   /// Construtor const para permitir uso como constante.
   ///
   /// [config] define as regras de filtragem. Se não fornecida,
   /// usa a configuração padrão.
-  const LogPrinterBase({ConfigLog? config}) : configLog = config ?? const ConfigLog();
+  const LogPrinterBase();
 
   /// Imprime/processa o log fornecido.
   ///

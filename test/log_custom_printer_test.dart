@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/log_printer_service.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
+import 'package:log_custom_printer/src/log_printer_service.dart';
 import 'package:test/test.dart';
 
 void main() {

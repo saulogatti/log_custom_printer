@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 
+import 'package:log_custom_printer/src/data/file_utils/i_file_manager_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/utils/string_extension.dart';
@@ -19,6 +20,7 @@ import 'package:path/path.dart' as path;
 final class LoggerCache {
   /// O caminho para o diretório de logs.
   String _directoryPath = 'logger';
+  final IFileManagerType _fileManagerType;
 
   /// Future para rastrear o estado de inicialização do diretório.
   late Completer<void> _future;
@@ -29,7 +31,9 @@ final class LoggerCache {
   /// Cria um gerenciador de cache.
   ///
   /// [directory]: o diretório base onde os logs serão armazenados.
-  LoggerCache(String directory) {
+  LoggerCache(String directory, {IFileManagerType? fileManagerType})
+    : _fileManagerType =
+          fileManagerType ?? FileManager(fileType: FileType.json) {
     _future = Completer<void>();
     _init(directory);
   }
@@ -41,11 +45,7 @@ final class LoggerCache {
   Future<void> clearAll() async {
     try {
       await futureInitialization.future;
-      final directory = Directory(_directoryPath);
-      if (await directory.exists()) {
-        await directory.delete(recursive: true);
-        await directory.create(recursive: true);
-      }
+      await _fileManagerType.deleteDirectory(_directoryPath);
     } on Exception catch (e, stack) {
       dev.log('Erro ao limpar os arquivos de log: $e', stackTrace: stack);
     }
@@ -55,10 +55,7 @@ final class LoggerCache {
   Future<void> clearLogByType(String name) async {
     await futureInitialization.future;
     final fileName = _getPathFile(name);
-    final file = File(fileName);
-    if (await file.exists()) {
-      await file.delete();
-    }
+    await _fileManagerType.deleteFile(fileName);
   }
 
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
@@ -75,7 +72,7 @@ final class LoggerCache {
         final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
         for (final file in files) {
           if (file.path.endsWith('.json')) {
-            final data = await file.readAsString();
+            final data = await _fileManagerType.readFile(file.path);
             final mapJ = jsonDecode(data);
             if (mapJ is Map) {
               final loggerList = LoggerJsonList.fromJson(Map.from(mapJ));
@@ -99,15 +96,17 @@ final class LoggerCache {
     try {
       await futureInitialization.future;
       final path = _getPathFile(fileName);
-      final File file = File(path);
-      const spaces = '  ';
+      assert(
+        loggerList is Map && loggerList.isNotEmpty,
+        'A lista de logs não pode ser nula.',
+      );
+      assert(
+        loggerList is String && loggerList.isNotEmpty,
+        'A lista de logs não pode ser nula.',
+      );
+      final objEncode = JsonEncoder.withIndent('  ').convert(loggerList);
 
-      if (!await file.exists()) {
-        await file.create(recursive: true);
-      }
-
-      final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
-      await file.writeAsString(jj);
+      await _fileManagerType.writeFile(path, objEncode);
     } on Exception catch (e, stack) {
       onError?.call(e, stack);
       dev.log('Erro ao escrever o arquivo de log: $e', stackTrace: stack);
@@ -121,10 +120,6 @@ final class LoggerCache {
     assert(
       !fileName.contains(path.separator),
       'O nome do arquivo não deve conter separadores de caminho',
-    );
-    assert(
-      !fileName.endsWith('.json'),
-      'O nome do arquivo não deve conter a extensão .json, ela será adicionada automaticamente',
     );
 
     final sanitizedFileName = fileName.sanitizedFileName.formattedName;
