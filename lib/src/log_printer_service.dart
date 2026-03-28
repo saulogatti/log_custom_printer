@@ -1,8 +1,8 @@
 import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
-import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 
 /// Serviço central que coordena o processo de impressão e armazenamento de logs.
 ///
@@ -41,11 +41,9 @@ final class LogPrinterService {
   /// 1. Adicionado ao cache via [_loggerPersistenceService].
   /// 2. Impresso via [logPrinter].
   void executePrint(LoggerObjectBase log) {
-    if (!logPrinter.configLog.enableLog) {
-      return;
-    }
-    if ((logPrinter.configLog.onlyClasses.isEmpty ||
-        logPrinter.configLog.onlyClasses.contains(log.runtimeType))) {
+    if (logPrinter.configLog.enableLog &&
+        (logPrinter.configLog.onlyClasses.isEmpty ||
+            logPrinter.configLog.onlyClasses.contains(log.runtimeType))) {
       // O log pode ser impresso, então adicionamos ao cache e imprimimos
       _loggerPersistenceService.addLog(log);
       logPrinter.printLog(log);

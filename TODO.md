@@ -53,13 +53,13 @@
 - Opção de sobrescrever ou criar versões.
 - Gerenciar espaço de armazenamento (limpar logs antigos).  
 - Opção de usar armazenamento local ou remoto (Firebase, AWS S3, etc).
-- Tipos de arquivos: JSON, TXT, CSV, talvez sqlite. isar.
+- Tipos de arquivos: JSON, TXT, CSV, talvez sqlite, isar.
 ---
 
 ## 🗂️ Fase 4 — Organização Avançada e Produtividade
 
 ### 10. Suporte a múltiplas abas de console
-- Cada aba representa uma  tipo de log .
+- Cada aba representa um tipo de log.
  
 ### 11. Destaque de logs importantes
 - Marcar logs como importantes ou críticos.
