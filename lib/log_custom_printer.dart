@@ -62,7 +62,7 @@
 /// {@category Core}
 library;
 
-export 'src/cache/logger_cache_repository.dart';
+export 'src/cache/logger_cache_repository_impl.dart';
 export 'src/config_log.dart';
 export 'src/log_custom_printer_base.dart';
 export 'src/log_helpers/enum_logger_type.dart';
@@ -78,4 +78,5 @@ export 'src/logs_object/warning_log.dart';
 export 'src/utils/date_time_log_helper.dart';
 export 'src/utils/logger_ansi_color.dart';
 export 'src/widgets/console_overlay.dart';
+export 'src/widgets/console_widget.dart';
 export 'src/widgets/view/console_view.dart';

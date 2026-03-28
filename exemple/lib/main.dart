@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 
@@ -10,7 +12,6 @@ final logConfig = registerLogPrinterColor(
     enableLog: true,
     onlyClasses: {DebugLog, InfoLog, WarningLog, ErrorLog},
   ),
-  cacheFilePath: "/logs",
 );
 
 class MainApp extends StatelessWidget with LoggerClassMixin {
@@ -28,39 +29,25 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class Teste implements ILoggerCacheRepository {
-  @override
-  Future<void> addLog(LoggerObjectBase log) {
-    // TODO: implement addLog
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> clearLogs() {
-    // TODO: implement clearLogs
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<void> clearLogsByType(EnumLoggerType type) {
-    // TODO: implement clearLogsByType
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<LoggerObjectBase>> getAllLogs() {
-    // TODO: implement getAllLogs
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) {
-    // TODO: implement getLogsByType
-    throw UnimplementedError();
+class TesteLog with LoggerClassMixin {
+  bool isTest = true;
+  void logTest() {
+    isTest = !isTest;
+    Timer.periodic(Duration(seconds: 4), (timer) {
+      if (!isTest) {
+        timer.cancel();
+        return;
+      }
+      logDebug('Teste de log debug');
+      logInfo('Teste de log info');
+    });
+    logWarning('Teste de log warning');
+    logError('Teste de log error', StackTrace.current);
   }
 }
 
 class _MyAppState extends State<MyApp> with LoggerClassMixin {
+  TesteLog testeLog = TesteLog();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,6 +64,30 @@ class _MyAppState extends State<MyApp> with LoggerClassMixin {
             icon: const Icon(Icons.close),
             onPressed: () {
               ConsoleOverlayManager.hideConsoleOverlayManager();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.code),
+            onPressed: () {
+              ConsoleOverlayManager.showOverlay(context, true);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.close_fullscreen_outlined),
+            onPressed: () {
+              ConsoleOverlayManager.hide();
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.co2_rounded),
+            onPressed: () {
+              ConsoleOverlayManager.show(context);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              testeLog.logTest();
             },
           ),
         ],
@@ -116,6 +127,19 @@ class _MyAppState extends State<MyApp> with LoggerClassMixin {
               );
             },
             child: const Text("Adiciona logs"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              testeLog.logTest();
+            },
+            child: const Text("Inicia Teste de Logs"),
+          ),
+          Flexible(
+            child: ConsoleView(
+              onClose: () {
+                logInfo('Fechando a visualização de logs');
+              },
+            ),
           ),
         ],
       ),

@@ -1,4 +1,4 @@
-import 'package:log_custom_printer/src/cache/logger_cache_impl.dart';
+import 'package:log_custom_printer/src/cache/logger_cache_repository_impl.dart';
 
 import '../log_helpers/enum_logger_type.dart';
 import '../log_printer_service.dart';
@@ -29,15 +29,14 @@ abstract interface class ILoggerCacheRepository {
 /// personalizada para o [LogPrinterService] via [registerLogPrinter].
 ///
 /// {@category Utilities}
-final class LoggerCacheRepository {
+final class LoggerPersistenceService {
   final ILoggerCacheRepository _cacheRepository;
   void Function(List<LoggerObjectBase>)? consoleModel;
-  LoggerCacheRepository({ILoggerCacheRepository? cacheRepository})
-    : _cacheRepository = cacheRepository ?? LoggerCacheImpl();
+  LoggerPersistenceService({ILoggerCacheRepository? cacheRepository})
+    : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
 
   /// Adiciona uma entrada de log ao repositório.
   Future<void> addLog(LoggerObjectBase log) async {
-   
     await _cacheRepository.addLog(log);
     if (consoleModel != null) {
       final logs = await _cacheRepository.getAllLogs();

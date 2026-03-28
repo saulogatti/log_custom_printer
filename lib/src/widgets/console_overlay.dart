@@ -4,10 +4,70 @@ import 'package:log_custom_printer/src/widgets/view/console_view.dart';
 class ConsoleOverlayManager {
   static OverlayEntry? _overlayEntry;
 
+  static OverlayEntry? _customOverlayEntry;
+
+  // Define a posição inicial na tela
+  static final ValueNotifier<Offset> _position = ValueNotifier(
+    const Offset(100, 100),
+  );
+
+  static void hide() {
+    _customOverlayEntry?.remove();
+    _customOverlayEntry = null;
+  }
+
   /// Oculta o overlay do console caso esteja em execução.
   static void hideConsoleOverlayManager() {
     _overlayEntry?.remove();
     _overlayEntry = null;
+  }
+
+  static void show(BuildContext context) {
+    // Evita abrir dois overlays e dar dor de cabeça
+    if (_customOverlayEntry != null) return;
+
+    _customOverlayEntry = OverlayEntry(
+      canSizeOverlay: true,
+      builder: (context) {
+        return ValueListenableBuilder<Offset>(
+          valueListenable: _position,
+          builder: (context, offset, child) {
+            return Positioned(
+              left: offset.dx,
+              top: offset.dy,
+              child: GestureDetector(
+                // O segredo do drag está aqui
+                onPanUpdate: (details) {
+                  _position.value += details.delta;
+                },
+                child: Material(
+                  color: Colors.transparent,
+                  elevation: 0,
+                  child: Container(
+                    width: 400,
+                    height: 260,
+                    decoration: const BoxDecoration(
+                      color: Colors.blueAccent,
+                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: ConsoleView(onClose: hide),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    Overlay.of(context).insert(_customOverlayEntry!);
   }
 
   /// Exibe o overlay do console sobrepondo a rota ativa.
@@ -15,6 +75,7 @@ class ConsoleOverlayManager {
     if (_overlayEntry != null) return;
 
     _overlayEntry = OverlayEntry(
+      canSizeOverlay: true,
       builder: (context) {
         // Envolvemos todo o construto em `IgnorePointer`.
         // Isso garante que eventos físicos de toque atravessem o console
@@ -48,64 +109,6 @@ class ConsoleOverlayManager {
               ),
             ),
           ),
-        );
-      },
-    );
-
-    Overlay.of(context).insert(_overlayEntry!);
-  }
-}
-
-class DraggableOverlay {
-  OverlayEntry? _overlayEntry;
-  // Define a posição inicial na tela
-  final ValueNotifier<Offset> _position = ValueNotifier(const Offset(100, 100));
-
-  void hide() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
-
-  void show(BuildContext context) {
-    // Evita abrir dois overlays e dar dor de cabeça
-    if (_overlayEntry != null) return;
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) {
-        return ValueListenableBuilder<Offset>(
-          valueListenable: _position,
-          builder: (context, offset, child) {
-            return Positioned(
-              left: offset.dx,
-              top: offset.dy,
-              child: GestureDetector(
-                // O segredo do drag está aqui
-                onPanUpdate: (details) {
-                  _position.value += details.delta;
-                },
-                child: Material(
-                  color: Colors.transparent,
-                  elevation: 0,
-                  child: Container(
-                    width: 300,
-                    height: 260,
-                    decoration: const BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: ConsoleView(onClose: hide),
-                  ),
-                ),
-              ),
-            );
-          },
         );
       },
     );

@@ -5,25 +5,37 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/log_printer_locator.dart';
 import 'package:log_custom_printer/src/widgets/view/console_model.dart';
 import 'package:provider/provider.dart';
+
+class ConsoleProvider extends StatelessWidget {
+  const ConsoleProvider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableProvider<ConsoleModelNotifier>(
+      create: (context) =>
+          ConsoleModelNotifier(logPrinterService: fetchLogPrinterService()),
+      child: ConsoleWidget(),
+    );
+  }
+}
 
 class ConsoleWidget extends StatelessWidget {
   const ConsoleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final logs = context.watch<ConsoleModelNotifier>();
-    print("Building ConsoleWidget with ${logs.hashCode} logs");
-    return ListenableBuilder(
-      listenable: logs,
-      builder: (context, child) {
-        final snapshot = logs.logs;
-        print("Rebuild ConsoleWidget with ${snapshot.length} logs");
-        return Container(
-          color: Colors.black.withAlpha(200),
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.separated(
+    final logs = context.read<ConsoleModelNotifier>();
+    return Container(
+      color: Colors.black.withAlpha(200),
+      padding: const EdgeInsets.all(8.0),
+      child: ListenableBuilder(
+        listenable: logs,
+        builder: (context, child) {
+          final snapshot = logs.logs;
+          return ListView.separated(
             itemCount: snapshot.length,
             separatorBuilder: (context, index) => const Divider(height: 4.0),
             itemBuilder: (context, index) {
@@ -37,11 +49,13 @@ class ConsoleWidget extends StatelessWidget {
                 dense: true,
                 title: Text(logObject.getStartLog(false), style: logStyle),
                 subtitle: Text(logObject.getMessage(false), style: logStyle),
+                leading: Icon(logObject.getIcon(), color: logStyle.color),
+                trailing: Text(index.toString(), style: logStyle),
               );
             },
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -65,6 +79,23 @@ extension EnumColorExtension on EnumAnsiColors {
         return Colors.cyan;
       case EnumAnsiColors.white:
         return Colors.white;
+    }
+  }
+}
+
+extension LoggerObjectBaseExtension on LoggerObject {
+  IconData getIcon() {
+    switch (this) {
+      case DebugLog():
+        return Icons.bug_report;
+      case InfoLog():
+        return Icons.info;
+      case WarningLog():
+        return Icons.warning;
+      case ErrorLog():
+        return Icons.error;
+      case LoggerObjectBase():
+        return Icons.description;
     }
   }
 }

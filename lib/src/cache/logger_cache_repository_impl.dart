@@ -1,13 +1,11 @@
 import 'package:log_custom_printer/src/cache/logger_cache.dart';
-import 'package:log_custom_printer/src/cache/logger_cache_repository.dart';
+import 'package:log_custom_printer/src/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
 import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 
-
-
-/// Implementação concreta de [LoggerCacheRepository] usando armazenamento em memória
+/// Implementação concreta de [LoggerPersistenceService] usando armazenamento em memória
 /// e opcionalmente em arquivo.
 ///
 /// Mantém os logs organizados por tipo em memória usando [LoggerJsonList].
@@ -15,7 +13,7 @@ import 'package:log_custom_printer/src/logs_object/logger_object.dart';
 /// através da classe [LoggerCache].
 ///
 /// {@category Utilities}
-final class LoggerCacheImpl implements ILoggerCacheRepository {
+final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// Número máximo de entradas de log por tipo.
   final int maxLogEntries;
 
@@ -35,7 +33,7 @@ final class LoggerCacheImpl implements ILoggerCacheRepository {
   ///
   /// [maxLogEntries]: limite de logs mantidos em memória por tipo (padrão: 1000).
   /// [saveLogFilePath]: diretório base para persistência (se omitido, não salva em disco).
-  LoggerCacheImpl({this.maxLogEntries = 1000, this.saveLogFilePath}) {
+  LoggerCacheRepositoryImpl({this.maxLogEntries = 1000, this.saveLogFilePath}) {
     if (saveLogFilePath != null) {
       _loggerCache = LoggerCache(saveLogFilePath!);
       _futureInitialization = initialize();
