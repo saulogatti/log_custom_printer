@@ -14,9 +14,9 @@ O `log_custom_printer` é uma biblioteca Dart/Flutter completa para logging cust
 - Permite pattern matching exhaustivo
 
 #### 2. Service Locator / Dependency Injection
-- `registerLogPrinter` e `resolveLogPrinter` usam get_it para injeção de dependência
-- `LoggerCache` usa singleton para gerenciamento centralizado de cache
-- `LogDisplayHandler` usa singleton para manipulação unificada de logs
+- `registerLogPrinter` e `fetchLogPrinterService` usam get_it para injeção de dependência
+- `LogPrinterService` centraliza regras de filtragem e envio para impressão/cache
+- `LoggerPersistenceService` encapsula operações de cache/persistência
 
 #### 3. Strategy Pattern
 - `LogPrinterBase` define a interface para estratégias de impressão
@@ -62,8 +62,12 @@ Campos principais:
 
 #### Log Printer Locator (DI)
 ```dart
-void registerLogPrinter(LogPrinterBase printer, {GetIt? getIt});
-LogPrinterBase resolveLogPrinter();
+LoggerPersistenceService registerLogPrinter(
+  LogPrinterBase printer, {
+  ILoggerCacheRepository? cacheRepository,
+  required ConfigLog config,
+});
+LogPrinterService fetchLogPrinterService();
 ```
 Responsabilidades:
 - Registro da impressora no get_it (startup)
@@ -121,7 +125,7 @@ class ConfigLog {
 Funcionalidades:
 - Controle global de habilitação
 - Filtragem por tipos de log
-- Padrão: habilitado apenas em `kDebugMode`
+- Padrão: `enableLog = false`
 - ErrorLog sempre processado (segurança)
 
 ### Utilities (Utilitários)
@@ -155,25 +159,14 @@ extension StackTraceSdk on StackTrace {
 ```
 Formatação e filtragem de stack traces.
 
-**LoggerDispose**
-```dart
-extension LoggerDispose on State {
-  void debugDispose();
-}
-```
-Logging automático de dispose em widgets.
-
-#### LogDisplayHandler
-Gerenciador avançado:
-- Coleta e armazena logs por tipo
-- Integração com cache persistente
-- Notificação de ouvintes
-- Handler global de erros Flutter
-- Formatação visual elaborada
+#### LoggerPersistenceService
+Serviço de persistência e acesso a logs:
+- Encapsula um `ILoggerCacheRepository`
+- Expõe leitura/limpeza (`getAllLogs`, `getLogsByType`, `clearLogs`, `clearLogsByType`)
+- É retornado por `registerLogPrinter`, `registerLogPrinterColor` e `registerLogPrinterSimple`
 
 #### LoggerCache
 Cache persistente:
-- Singleton para acesso global
 - Armazenamento em JSON
 - Diretório: `applicationSupport/loggerApp/logs/`
 - Cache em memória + disco
@@ -186,11 +179,7 @@ Container serializável:
 - Serialização/deserialização automática
 - Logs mais recentes primeiro
 
-#### LoggerNotifier
-Notificador reativo:
-- Baseado em `ChangeNotifier`
-- Notifica mudanças em logs
-- Integração com widgets Flutter
+> Nota: componentes de UI/notificação reativa em Flutter não fazem parte da API core atual da biblioteca.
 
 ## Fluxo de Dados
 
@@ -211,29 +200,27 @@ log.sendLog()
 ```
 sendLog()
   ↓
-resolveLogPrinter() (get_it)
+fetchLogPrinterService() (get_it)
   ↓
 Verifica ConfigLog
   ↓
-logPrinterBase.printLog(log)
+LogPrinterService.executePrint(log)
   ↓
 LogSimplePrint ou LogWithColorPrint
   ↓
 Console/Terminal
 ```
 
-### 3. Armazenamento (LogDisplayHandler)
+### 3. Armazenamento (LoggerPersistenceService)
 
 ```
-printLog()
+executePrint()
   ↓
-LogDisplayHandler._toFileLog()
+LoggerPersistenceService.addLog()
   ↓
 LoggerJsonList.addLogger()
   ↓
 LoggerCache (memória + disco)
-  ↓
-LoggerNotifier.notifyListeners()
 ```
 
 ## Serialização JSON
@@ -329,38 +316,7 @@ tearDown(() async => await GetIt.instance.reset());
 ## Integração com Flutter
 
 ### Error Handling Global
-```dart
-// LogDisplayHandler configura automaticamente:
-FlutterError.onError = (details) {
-  ErrorLog(details.exceptionAsString(), details.stack).sendLog();
-};
-
-PlatformDispatcher.instance.onError = (error, stack) {
-  ErrorLog(error.toString(), stack).sendLog();
-  return true;
-};
-```
-
-### Widget Integration
-```dart
-class MyWidget extends StatefulWidget {
-  // ...
-}
-
-class _MyWidgetState extends State<MyWidget> with LoggerClassMixin {
-  @override
-  void initState() {
-    super.initState();
-    logDebug('Widget inicializado');
-  }
-
-  @override
-  void dispose() {
-    debugDispose(); // Extension automática
-    super.dispose();
-  }
-}
-```
+Você pode integrar tratamento global de erros manualmente no app e enviar via `ErrorLog(...).sendLog()`.
 
 ## Geração de Documentação
 
@@ -425,14 +381,14 @@ flutter test     # Com Flutter
 ## Performance
 
 ### Otimizações
-1. **Singleton**: Evita múltiplas instâncias
+1. **Service Locator (get_it)**: centraliza resolução de `LogPrinterService`
 2. **Const Constructors**: Quando possível
-3. **Lazy Initialization**: Cache e notifiers
+3. **Inicialização assíncrona**: cache/persistência com carregamento sob demanda
 4. **Filtragem Early**: ConfigLog verifica antes de processar
 5. **Limite de Logs**: LoggerJsonList mantém máximo de 100 entradas
 
 ### Debug Mode Only
-Por padrão, logs são desabilitados em produção via `kDebugMode`.
+Por padrão, logs ficam desabilitados quando `ConfigLog(enableLog: false)`.
 
 ## Manutenção
 
@@ -462,7 +418,7 @@ dart run build_runner build --delete-conflicting-outputs
 ### Custom Printer
 ```dart
 class MyCustomPrinter extends LogPrinterBase {
-  const MyCustomPrinter({super.config});
+  const MyCustomPrinter();
 
   @override
   void printLog(LoggerObjectBase log) {
