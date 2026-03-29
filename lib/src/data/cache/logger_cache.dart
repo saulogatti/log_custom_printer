@@ -16,7 +16,6 @@ import 'package:path/path.dart' as path;
 /// a partir do diretório base fornecido.
 ///
 /// {@category Utilities}
-
 final class LoggerCache {
   /// O caminho para o diretório de logs.
   String _directoryPath = 'logger';
@@ -42,6 +41,9 @@ final class LoggerCache {
   Completer<void> get futureInitialization => _future;
 
   /// Limpa todos os arquivos de log do diretório.
+  ///
+  /// A operação aguarda a inicialização do diretório e ignora falhas,
+  /// registrando o erro via `dart:developer.log`.
   Future<void> clearAll() async {
     try {
       await futureInitialization.future;
@@ -52,6 +54,8 @@ final class LoggerCache {
   }
 
   /// Limpa os logs de um tipo específico (baseado no nome do arquivo).
+  ///
+  /// [name] corresponde ao identificador usado no nome do arquivo de log.
   Future<void> clearLogByType(String name) async {
     await futureInitialization.future;
     final fileName = _getPathFile(name);
@@ -59,6 +63,9 @@ final class LoggerCache {
   }
 
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
+  ///
+  /// Retorna `null` quando o diretório não existe, está vazio ou ocorre erro
+  /// de leitura/parsing.
   Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs() async {
     try {
       await futureInitialization.future;
@@ -92,6 +99,9 @@ final class LoggerCache {
   }
 
   /// Escreve uma lista de logs ([loggerList]) em um arquivo identificado por [fileName].
+  ///
+  /// O conteúdo é serializado como JSON formatado antes da escrita.
+  /// Erros de I/O acionam [onError] quando definido.
   Future<void> writeLogToFile(String fileName, Object loggerList) async {
     try {
       await futureInitialization.future;
@@ -130,6 +140,8 @@ final class LoggerCache {
   }
 
   /// Inicializa a estrutura de diretórios (`loggerApp/logs`) no caminho fornecido.
+  ///
+  /// Completa [futureInitialization] após criar (ou validar) o diretório.
   Future<void> _init(String directory) async {
     try {
       final directoryPath = Directory('$directory/loggerApp/logs');

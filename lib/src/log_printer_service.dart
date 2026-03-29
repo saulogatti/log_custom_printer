@@ -15,6 +15,8 @@ import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 final class LogPrinterService {
   /// A impressora configurada para formatar e exibir os logs.
   final LogPrinterBase logPrinter;
+
+  /// Configuração global de habilitação e filtros de tipos de log.
   final ConfigLog configLog;
 
   /// O repositório responsável pelo cache e persistência dos logs.
@@ -32,7 +34,11 @@ final class LogPrinterService {
          cacheRepository: cacheRepository,
        );
 
-  /// Retorna o repositório de cache associado a este serviço.
+  /// Retorna o serviço de persistência associado a esta instância.
+  ///
+  /// O retorno permite consultar e filtrar logs já armazenados,
+  /// além de registrar callbacks de atualização via
+  /// [LoggerPersistenceService.logOutputHandler].
   LoggerPersistenceService get cacheRepository => _loggerPersistenceService;
 
   /// Executa o processo de log para um [LoggerObjectBase].
@@ -42,6 +48,10 @@ final class LogPrinterService {
   /// `alwaysPrint = true`, ele será:
   /// 1. Adicionado ao cache via [_loggerPersistenceService].
   /// 2. Impresso via [logPrinter].
+  ///
+  /// Observação: a persistência é assíncrona e não é aguardada neste método.
+  /// Assim, `executePrint` mantém fluxo síncrono para o chamador, enquanto
+  /// o armazenamento ocorre em segundo plano.
   void executePrint(LoggerObjectBase log) {
     if (configLog.enableLog &&
         (configLog.onlyClasses.isEmpty ||

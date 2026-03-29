@@ -53,12 +53,12 @@ class ErrorLog extends LoggerObjectBase {
   /// [typeClass] identifica a classe de origem (opcional).
   ErrorLog(super.message, this.stackTrace, {super.typeClass}) : super();
 
-  @override
-  bool get alwaysPrint => true;
-
   /// Cria uma instância a partir de JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) =>
       _$ErrorLogFromJson(json);
+
+  @override
+  bool get alwaysPrint => true;
 
   @override
   LoggerAnsiColor getColor() {
@@ -90,15 +90,27 @@ class ErrorLog extends LoggerObjectBase {
   Map<String, dynamic> toJson() => _$ErrorLogToJson(this);
 }
 
+/// Conversor JSON para serialização de [StackTrace].
+///
+/// Converte [StackTrace] para `String` durante o `toJson` e reconstrói o
+/// objeto via [StackTrace.fromString] no `fromJson`.
+///
+/// Usado por [ErrorLog] para suportar `json_serializable` em campos de
+/// stack trace.
+///
+/// {@category Utilities}
 class StackTraceConverter implements JsonConverter<StackTrace, String> {
+  /// Cria um conversor constante para campos de stack trace.
   const StackTraceConverter();
 
   @override
+  /// Reconstrói [StackTrace] a partir da representação textual [json].
   StackTrace fromJson(String json) {
     return StackTrace.fromString(json);
   }
 
   @override
+  /// Serializa [object] para `String` no payload JSON.
   String toJson(StackTrace object) {
     return object.toString();
   }

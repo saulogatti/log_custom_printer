@@ -1,3 +1,4 @@
+import 'domain/log_printers/log_simple_print.dart';
 import 'domain/log_printers/log_with_color_print.dart';
 import 'domain/logs_object/logger_object.dart';
 
@@ -13,11 +14,12 @@ import 'domain/logs_object/logger_object.dart';
 /// - [LogSimplePrint]: saída simples sem cores
 /// - [LogWithColorPrint]: saída com códigos ANSI coloridos
 ///
-/// Registre no startup via [registerLogPrinter]:
+/// Registre a implementação no startup da aplicação via `registerLogPrinter`:
 /// ```dart
 /// void main() {
 ///   registerLogPrinter(
-///     LogWithColorPrint(config: ConfigLog(enableLog: true)),
+///     LogWithColorPrint(),
+///     config: const ConfigLog(enableLog: true),
 ///   );
 ///   runApp(MyApp());
 /// }
@@ -36,12 +38,7 @@ import 'domain/logs_object/logger_object.dart';
 /// }
 /// ```
 abstract class LogPrinterBase {
-  /// Configuração de filtragem e habilitação de logs.
-
   /// Construtor const para permitir uso como constante.
-  ///
-  /// [config] define as regras de filtragem. Se não fornecida,
-  /// usa a configuração padrão.
   const LogPrinterBase();
 
   /// Imprime/processa o log fornecido.

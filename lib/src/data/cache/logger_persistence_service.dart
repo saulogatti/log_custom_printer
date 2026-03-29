@@ -2,23 +2,34 @@ import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.d
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
-import 'package:log_custom_printer/src/log_printer_service.dart';
 
-/// Interface para repositório de cache de logs.
+/// Serviço de persistência e consulta de logs.
 ///
-/// Define as operações básicas para armazenamento, recuperação e limpeza de logs.
-/// Caso queira personalizar o armazenamento dos logs (ex: usar um banco de dados local,
-/// SharedPreferences, etc.), implemente esta interface e forneça a implementação
-/// personalizada para o [LogPrinterService] via [registerLogPrinter].
+/// Encapsula operações de armazenamento, recuperação, limpeza e busca
+/// sobre o repositório de logs configurado.
+///
+/// Quando [logOutputHandler] está definido, operações que alteram o estado
+/// do cache notificam o consumidor com a lista de logs atualizada.
 ///
 /// {@category Utilities}
 final class LoggerPersistenceService {
   final ILoggerCacheRepository _cacheRepository;
+
+  /// Callback opcional para observar mudanças na coleção persistida.
+  ///
+  /// Recebe a lista de logs atual após operações de escrita/limpeza.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
+
+  /// Cria o serviço com um [cacheRepository] customizado.
+  ///
+  /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
   LoggerPersistenceService({ILoggerCacheRepository? cacheRepository})
     : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
 
   /// Adiciona uma entrada de log ao repositório.
+  ///
+  /// Se [logOutputHandler] estiver definido, busca os logs atualizados e
+  /// dispara o callback ao final da operação.
   Future<void> addLog(LoggerObjectBase log) async {
     await _cacheRepository.addLog(log);
     if (logOutputHandler != null) {
@@ -28,12 +39,18 @@ final class LoggerPersistenceService {
   }
 
   /// Remove todas as entradas de log do repositório.
+  ///
+  /// Notifica imediatamente [logOutputHandler] com lista vazia e, em seguida,
+  /// executa a limpeza no repositório.
   Future<void> clearLogs() async {
     logOutputHandler?.call([]);
     await _cacheRepository.clearLogs();
   }
 
   /// Remove entradas de log de um tipo específico.
+  ///
+  /// Após a remoção, notifica [logOutputHandler] com o estado atualizado,
+  /// quando o callback estiver definido.
   Future<void> clearLogsByType(EnumLoggerType type) async {
     await _cacheRepository.clearLogsByType(type);
     if (logOutputHandler != null) {
@@ -55,7 +72,9 @@ final class LoggerPersistenceService {
   }
 
   /// Busca logs criados dentro do intervalo de datas especificado.
-  /// O filtro é aplicado ao campo `logCreationDate` dos logs, permitindo encontrar entradas criadas entre as datas `start` e `end`.
+  ///
+  /// O filtro é aplicado ao campo `logCreationDate` para encontrar entradas
+  /// criadas entre [start] (inclusivo) e [end] (exclusivo).
   Future<List<LoggerObjectBase>> searchLogByCreated({
     required DateTime start,
     required DateTime end,
@@ -70,7 +89,10 @@ final class LoggerPersistenceService {
         .toList();
   }
 
-  /// Busca logs com o runtimeType especificado. O filtro é aplicado ao campo `className` dos logs para encontrar entradas que correspondam exatamente a uma classe específica.
+  /// Busca logs com o runtimeType especificado.
+  ///
+  /// O filtro é aplicado ao campo `className` para retornar apenas entradas
+  /// que correspondam exatamente ao [runtimeType] informado.
   Future<List<LoggerObjectBase>> searchLogByRuntimeType(
     String runtimeType,
   ) async {
