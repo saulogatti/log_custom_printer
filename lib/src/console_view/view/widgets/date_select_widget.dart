@@ -4,7 +4,7 @@ class DateSelectWidget extends StatelessWidget {
   final String label;
 
   final DateTime? selectedDate;
-  final ValueChanged<DateTime?> onDateSelected;
+  final ValueChanged<DateTimeRange?> onDateSelected;
   const DateSelectWidget({
     required this.label,
     required this.selectedDate,
@@ -14,27 +14,70 @@ class DateSelectWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(label),
-        const SizedBox(width: 8),
-        ElevatedButton(
-          onPressed: () async {
-            final picked = await showDatePicker(
-              context: context,
-              initialDate: selectedDate ?? DateTime.now(),
-              firstDate: DateTime(2000),
-              lastDate: DateTime(2100),
-            );
-            onDateSelected(picked);
-          },
-          child: Text(
-            selectedDate != null
-                ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
-                : 'Selecionar',
+    return Material(
+      child: Row(
+        children: [
+          Text(label),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: () async {
+              final picked = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(2000, 1, 1, 0, 0, 0),
+                lastDate: DateTime(2100, 12, 31, 23, 59, 59),
+                initialDateRange: selectedDate != null
+                    ? DateTimeRange(start: selectedDate!, end: selectedDate!)
+                    : null,
+              );
+              onDateSelected(picked);
+            },
+            child: Text(
+              selectedDate != null
+                  ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
+                  : 'Selecionar',
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+}
+
+class TimeSelectWidget extends StatelessWidget {
+  final String label;
+  final TimeOfDay? selectedTime;
+  final ValueChanged<TimeOfDay?> onTimeSelected;
+
+  const TimeSelectWidget({
+    required this.label,
+    required this.selectedTime,
+    required this.onTimeSelected,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Row(
+        children: [
+          Text(label),
+          const SizedBox(width: 8),
+          ElevatedButton(
+            onPressed: () async {
+              final picked = await showTimePicker(
+                context: context,
+                initialTime: selectedTime ?? TimeOfDay.now(),
+              );
+              onTimeSelected(picked);
+            },
+            child: Text(
+              selectedTime != null
+                  ? '${selectedTime!.hour}:${selectedTime!.minute.toString().padLeft(2, '0')}'
+                  : 'Selecionar',
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

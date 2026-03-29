@@ -4,6 +4,8 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
+import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/widgets/select_option_widget.dart';
 
 import 'console_widget.dart';
 
@@ -71,6 +73,24 @@ class _ConsoleViewState extends State<ConsoleView> {
               _sendLogsForTest();
             },
             icon: const Icon(Icons.share),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => ConsoleOptionsWidget(
+                    option: ConsoleOptions(
+                      onSelectedOption: (selected) {},
+                      options: [
+                        OptionItem(title: 'Opção 1', description: 'opcao1'),
+                        OptionItem(title: 'Opção 2', description: 'opcao2'),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+            icon: Icon(Icons.settings),
           ),
         ],
       ),

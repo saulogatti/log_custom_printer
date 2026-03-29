@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_state.dart';
+import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
 
 class ConsoleWidget extends StatelessWidget {
   const ConsoleWidget({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,57 +21,25 @@ class ConsoleWidget extends StatelessWidget {
               return Center(child: Text(state.message));
             case ConsoleLoaded():
               final snapshot = state.logs;
-              return ListView.separated(
-                itemCount: snapshot.length,
-                separatorBuilder: (context, index) =>
-                    const Divider(height: 4.0),
-                itemBuilder: (context, index) {
-                  final logObject = snapshot[index];
-                  final logStyle = TextStyle(
-                    color: logObject.type.color,
-                    fontFamily: 'monospace',
-                    fontSize: 12,
-                  );
-                  return ListTile(
-                    dense: true,
-                    title: Text(logObject.title, style: logStyle),
-                    subtitle: Text(logObject.message, style: logStyle),
-                    leading: Icon(logObject.type.icon, color: logStyle.color),
-                    trailing: Text(index.toString(), style: logStyle),
-                  );
-                },
+              return CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Text('Total de logs: ${snapshot.length}'),
+                  ),
+                  SliverList.separated(
+                    itemBuilder: ((context, index) {
+                      final logObject = snapshot[index];
+
+                      return LogCardWidget(messageLog: logObject);
+                    }),
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemCount: snapshot.length,
+                  ),
+                ],
               );
           }
         },
       ),
     );
-  }
-}
-
-extension LogTypeExtension on LogType {
-  Color get color {
-    switch (this) {
-      case LogType.info:
-        return Colors.white;
-      case LogType.warning:
-        return Colors.green;
-      case LogType.error:
-        return Colors.red;
-      case LogType.debug:
-        return Colors.yellow;
-    }
-  }
-
-  IconData get icon {
-    switch (this) {
-      case LogType.info:
-        return Icons.info;
-      case LogType.warning:
-        return Icons.warning;
-      case LogType.error:
-        return Icons.error;
-      case LogType.debug:
-        return Icons.bug_report;
-    }
   }
 }
