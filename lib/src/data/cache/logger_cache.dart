@@ -17,6 +17,15 @@ import 'package:path/path.dart' as path;
 ///
 /// {@category Utilities}
 final class LoggerCache {
+  /// O caminho para o diretório de logs.
+  String _directoryPath = 'logger';
+  final IFileManagerType _fileManagerType;
+
+  /// Future para rastrear o estado de inicialização do diretório.
+  late Completer<void> _future;
+
+  /// Callback opcional para lidar com erros durante a inicialização ou escrita.
+  void Function(Object error, StackTrace stackTrace)? onError;
 
   /// Cria um gerenciador de cache.
   ///
@@ -27,15 +36,6 @@ final class LoggerCache {
     _future = Completer<void>();
     _init(directory);
   }
-  /// O caminho para o diretório de logs.
-  String _directoryPath = 'logger';
-  final IFileManagerType _fileManagerType;
-
-  /// Future para rastrear o estado de inicialização do diretório.
-  late Completer<void> _future;
-
-  /// Callback opcional para lidar com erros durante a inicialização ou escrita.
-  void Function(Object error, StackTrace stackTrace)? onError;
 
   /// Um [Future] que completa quando a inicialização do diretório termina.
   Completer<void> get futureInitialization => _future;
@@ -70,7 +70,7 @@ final class LoggerCache {
     try {
       await futureInitialization.future;
       final directory = Directory(_directoryPath);
-      if (await directory.exists()) {
+      if (directory.existsSync()) {
         final files = await directory
             .list()
             .where((entity) => entity is File)
@@ -110,7 +110,7 @@ final class LoggerCache {
       await futureInitialization.future;
       final path = _getPathFile(fileName);
 
-      final objEncode = JsonEncoder.withIndent('  ').convert(loggerList);
+      final objEncode = const JsonEncoder.withIndent('  ').convert(loggerList);
 
       await _fileManagerType.writeFile(path, objEncode);
     } on Exception catch (e, stack) {
@@ -141,7 +141,7 @@ final class LoggerCache {
   Future<void> _init(String directory) async {
     try {
       final directoryPath = Directory('$directory/loggerApp/logs');
-      if (!await directoryPath.exists()) {
+      if (!directoryPath.existsSync()) {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;

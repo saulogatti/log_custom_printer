@@ -17,7 +17,7 @@ void main() {
 
   group('LoggerAnsiColor', () {
     test('wraps messages with ANSI codes', () {
-      final ansiColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.green);
+      final ansiColor = const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.green);
 
       final formatted = ansiColor('message');
       final expected =

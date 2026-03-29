@@ -18,6 +18,11 @@ analyzer:
     unnecessary_nullable_for_final_variable_declarations: error
     unused_import: warning
     unused_local_variable: error
+    async_for_in_wrong_context: error
+    await_only_futures: error
+    unnecessary_async: error
+    unnecessary_await_in_return: error
+    avoid_slow_async_io: ignore
   language:
     strict-casts: true
     strict-inference: true
@@ -26,3 +31,12 @@ analyzer:
 linter:
   rules:
     - always_put_required_named_parameters_first
+    - avoid_slow_async_io
+    - unnecessary_async
+    - unnecessary_await_in_return
+    - await_only_futures
+    - prefer_final_locals
+    - use_build_context_synchronously
+    - prefer_const_constructors
+    - prefer_const_literals_to_create_immutables
+

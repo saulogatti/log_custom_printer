@@ -25,7 +25,7 @@ void main() {
       // Verificar se o log foi registrado no cache mesmo sem uma impressora personalizada registrada
       final cacheRepository =
           GetIt.instance<LogPrinterService>().cacheRepository;
-      expectLater(cacheRepository.getAllLogs(), completion(isNotEmpty));
+      await expectLater(cacheRepository.getAllLogs(), completion(isNotEmpty));
     });
   });
 }

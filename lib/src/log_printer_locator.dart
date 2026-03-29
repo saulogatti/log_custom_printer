@@ -93,7 +93,7 @@ LoggerPersistenceService registerLogPrinterColor({
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogWithColorPrint(),
+    const LogWithColorPrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
       saveLogFilePath: cacheFilePath,
@@ -128,7 +128,7 @@ LoggerPersistenceService registerLogPrinterSimple({
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogSimplePrint(),
+    const LogSimplePrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
       saveLogFilePath: cacheFilePath,

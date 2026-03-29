@@ -11,7 +11,7 @@ void initAppInjection() {
     () => MessageRepositoryImpl(
       dataSource: MessageLogDataSource(
         loggerCacheRepositoryImpl: registerLogPrinterColor(
-          config: ConfigLog(enableLog: true),
+          config: const ConfigLog(enableLog: true),
           cacheFilePath: "test/data_logs",
         ),
       ),

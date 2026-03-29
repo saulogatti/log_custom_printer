@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-
-class OptionItem {
-  final String title;
-  final String description;
-  OptionItem({required this.title, required this.description});
-}
+import 'package:log_custom_printer/src/console_view/domain/models/option_item.dart';
 
 class SelectOptionWidget extends StatelessWidget {
   final List<OptionItem> options;

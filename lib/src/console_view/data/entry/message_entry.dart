@@ -8,7 +8,7 @@ class MessageEntry {
   final LoggerObjectBase loggerObjectBase;
 
   MessageLog fromLoggerObjectBase() {
-    LogType level = getLogType(loggerObjectBase);
+    final LogType level = getLogType(loggerObjectBase);
 
     return MessageLog(
       title: loggerObjectBase.getStartLog(false),

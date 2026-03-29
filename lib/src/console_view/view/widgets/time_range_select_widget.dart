@@ -1,27 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/text_values_dropdown_widget.dart';
-
-DateTime _copyWithTime(DateTime base, {int? hour, int? minute, int? second}) {
-  return DateTime(
-    base.year,
-    base.month,
-    base.day,
-    hour ?? base.hour,
-    minute ?? base.minute,
-    second ?? base.second,
-  );
-}
-
-String _formatLocalizedTimeWithSeconds(BuildContext context, DateTime value) {
-  final localizations = MaterialLocalizations.of(context);
-  final use24h = MediaQuery.alwaysUse24HourFormatOf(context);
-  final formattedTime = localizations.formatTimeOfDay(
-    TimeOfDay.fromDateTime(value),
-    alwaysUse24HourFormat: use24h,
-  );
-  final seconds = value.second.toString().padLeft(2, '0');
-  return '$formattedTime • ${seconds}s';
-}
+import 'package:log_custom_printer/src/extensions/date_time_log_helper.dart';
 
 /// Widget reutilizável para selecionar um intervalo de horário (início/fim).
 ///
@@ -30,15 +9,14 @@ String _formatLocalizedTimeWithSeconds(BuildContext context, DateTime value) {
 /// horário atual.
 class TimeRangeSelectWidget extends StatelessWidget {
   final String label;
-  final DateTime? initialStartDateTime;
-  final DateTime? initialEndDateTime;
+
+  final DateTimeRange? initialDateTimeRange;
   final ValueChanged<DateTimeRange?> onTimeRangeSelected;
 
   const TimeRangeSelectWidget({
     required this.label,
     required this.onTimeRangeSelected,
-    this.initialStartDateTime,
-    this.initialEndDateTime,
+    this.initialDateTimeRange,
     super.key,
   });
 
@@ -51,12 +29,14 @@ class TimeRangeSelectWidget extends StatelessWidget {
           const SizedBox(width: 8),
           ElevatedButton(
             onPressed: () async {
-              final base = initialStartDateTime ?? DateTime.now();
+              final base = initialDateTimeRange?.start ?? DateTime.now();
               final picked = await Navigator.of(context).push<DateTimeRange>(
                 MaterialPageRoute(
                   builder: (_) => _TimeRangePickerFullscreen(
-                    initialStartDateTime: base,
-                    initialEndDateTime: initialEndDateTime ?? base,
+                    initialDateTimeRange: DateTimeRange(
+                      start: base,
+                      end: initialDateTimeRange?.end ?? base,
+                    ),
                   ),
                 ),
               );
@@ -70,20 +50,16 @@ class TimeRangeSelectWidget extends StatelessWidget {
   }
 
   String _buttonLabel(BuildContext context) {
-    if (initialStartDateTime == null && initialEndDateTime == null) {
+    if (initialDateTimeRange == null) {
       return 'Selecionar';
     }
 
-    final start = initialStartDateTime ?? DateTime.now();
-    final end = initialEndDateTime ?? start;
+    final start = initialDateTimeRange?.start ?? DateTime.now();
+    final end = initialDateTimeRange?.end ?? start;
 
-    final startLabel = _formatTimeWithSeconds(context, start);
-    final endLabel = _formatTimeWithSeconds(context, end);
+    final startLabel = start.formatLocalizedTimeWithSeconds(context, start);
+    final endLabel = end.formatLocalizedTimeWithSeconds(context, end);
     return '$startLabel - $endLabel';
-  }
-
-  String _formatTimeWithSeconds(BuildContext context, DateTime value) {
-    return _formatLocalizedTimeWithSeconds(context, value);
   }
 }
 
@@ -144,13 +120,9 @@ class _TimeAndSecondsCard extends StatelessWidget {
 }
 
 class _TimeRangePickerFullscreen extends StatefulWidget {
-  final DateTime initialStartDateTime;
-  final DateTime initialEndDateTime;
+  final DateTimeRange initialDateTimeRange;
 
-  const _TimeRangePickerFullscreen({
-    required this.initialStartDateTime,
-    required this.initialEndDateTime,
-  });
+  const _TimeRangePickerFullscreen({required this.initialDateTimeRange});
 
   @override
   State<_TimeRangePickerFullscreen> createState() =>
@@ -168,8 +140,14 @@ class _TimeRangePickerFullscreenState
 
   @override
   Widget build(BuildContext context) {
-    final startLabel = _formatTimeWithSeconds(_startDateTime);
-    final endLabel = _formatTimeWithSeconds(_endDateTime);
+    final startLabel = _startDateTime.formatLocalizedTimeWithSeconds(
+      context,
+      _startDateTime,
+    );
+    final endLabel = _endDateTime.formatLocalizedTimeWithSeconds(
+      context,
+      _endDateTime,
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -224,10 +202,10 @@ class _TimeRangePickerFullscreenState
 
     _secondOptions = _buildSecondOptions();
 
-    final start = widget.initialStartDateTime;
+    final start = widget.initialDateTimeRange.start;
     _startDateTime = _normalizeDateTime(start);
 
-    final end = widget.initialEndDateTime;
+    final end = widget.initialDateTimeRange.end;
     _endDateTime = DateTime(
       start.year,
       start.month,
@@ -262,10 +240,6 @@ class _TimeRangePickerFullscreenState
     return List.generate(60, (index) => _secondsToText(index));
   }
 
-  String _formatTimeWithSeconds(DateTime value) {
-    return _formatLocalizedTimeWithSeconds(context, value);
-  }
-
   DateTime _normalizeDateTime(DateTime value) {
     return DateTime(
       value.year,
@@ -281,7 +255,7 @@ class _TimeRangePickerFullscreenState
     final seconds = int.tryParse(value);
     if (seconds == null) return;
 
-    final candidate = _copyWithTime(_endDateTime, second: seconds);
+    final candidate = _endDateTime.copyWithTime(second: seconds);
     _applyEndDateTime(candidate, reopenPickerOnInvalid: true);
   }
 
@@ -290,7 +264,7 @@ class _TimeRangePickerFullscreenState
     if (seconds == null) return;
 
     setState(() {
-      _startDateTime = _copyWithTime(_startDateTime, second: seconds);
+      _startDateTime = _startDateTime.copyWithTime(second: seconds);
       _endHelpText = null;
     });
 
@@ -310,8 +284,7 @@ class _TimeRangePickerFullscreenState
       return;
     }
 
-    final candidate = _copyWithTime(
-      _endDateTime,
+    final candidate = _endDateTime.copyWithTime(
       hour: picked.hour,
       minute: picked.minute,
     );
@@ -327,8 +300,7 @@ class _TimeRangePickerFullscreenState
     if (picked == null || !mounted) return;
 
     setState(() {
-      _startDateTime = _copyWithTime(
-        _startDateTime,
+      _startDateTime = _startDateTime.copyWithTime(
         hour: picked.hour,
         minute: picked.minute,
       );
@@ -361,8 +333,10 @@ class _TimeRangePickerFullscreenState
 
     if (!reopenPicker) return;
 
-    await Future<void>.delayed(const Duration(milliseconds: 200));
     if (!mounted) return;
-    await _pickEndTime();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _pickEndTime();
+    });
   }
 }

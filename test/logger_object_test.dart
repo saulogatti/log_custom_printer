@@ -8,7 +8,7 @@ void main() {
     final fakePrinter = _FakeLogPrinter();
     registerLogPrinter(
       fakePrinter,
-      config: ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
+      config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
     );
   });
 

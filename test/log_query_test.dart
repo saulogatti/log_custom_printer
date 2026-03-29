@@ -298,7 +298,7 @@ void main() {
 
     test('combined filter + sort (desc)', () async {
       final result = await service.queryLogs(
-        LogQuery(
+        const LogQuery(
           types: {EnumLoggerType.debug, EnumLoggerType.error},
           sortField: LogSortField.date,
           sortDirection: SortDirection.desc,

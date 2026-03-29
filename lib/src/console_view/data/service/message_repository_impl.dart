@@ -3,10 +3,9 @@ import 'package:log_custom_printer/src/console_view/domain/models/message_log.da
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 
 class MessageRepositoryImpl implements MessageRepository {
-
+  final MessageLogDataSource _dataSource;
   MessageRepositoryImpl({required MessageLogDataSource dataSource})
     : _dataSource = dataSource;
-  final MessageLogDataSource _dataSource;
 
   @override
   void clearMessages() {
@@ -14,7 +13,7 @@ class MessageRepositoryImpl implements MessageRepository {
   }
 
   @override
-  Future<List<MessageLog>> getMessages() async {
-    return await _dataSource.getMessages();
+  Future<List<MessageLog>> getMessages() {
+    return _dataSource.getMessages();
   }
 }

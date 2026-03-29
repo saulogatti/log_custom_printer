@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 class DateSelectWidget extends StatelessWidget {
   final String label;
 
-  final DateTime? selectedDate;
+  final DateTimeRange? selectedDate;
   final ValueChanged<DateTimeRange?> onDateSelected;
   const DateSelectWidget({
     required this.label,
-    required this.selectedDate,
     required this.onDateSelected,
+    this.selectedDate,
     super.key,
   });
 
@@ -25,15 +25,13 @@ class DateSelectWidget extends StatelessWidget {
                 context: context,
                 firstDate: DateTime(2000, 1, 1, 0, 0, 0),
                 lastDate: DateTime(2100, 12, 31, 23, 59, 59),
-                initialDateRange: selectedDate != null
-                    ? DateTimeRange(start: selectedDate!, end: selectedDate!)
-                    : null,
+                initialDateRange: selectedDate,
               );
               onDateSelected(picked);
             },
             child: Text(
               selectedDate != null
-                  ? '${selectedDate!.day}/${selectedDate!.month}/${selectedDate!.year}'
+                  ? '${selectedDate!.start.day}/${selectedDate!.start.month}/${selectedDate!.start.year} - ${selectedDate!.end.day}/${selectedDate!.end.month}/${selectedDate!.end.year}'
                   : 'Selecionar',
             ),
           ),
