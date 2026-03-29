@@ -1,6 +1,5 @@
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
- 
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
@@ -44,7 +43,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     if (saveLogFilePath != null) {
       _loggerCache = LoggerCache(
         saveLogFilePath!,
-        fileManagerType: F(fileType: fileType),
+        fileManagerType: FileManager(fileType: fileType),
       );
       _futureInitialization = initialize();
     }
