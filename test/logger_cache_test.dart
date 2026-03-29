@@ -48,8 +48,8 @@ void main() {
 
     test(
       '_getPathFile should throw assertion error for filename with .json',
-      () {
-        expect(
+      () async {
+        await expectLater(
           () => loggerCache.writeLogToFile('test.json', {}),
           throwsA(isA<AssertionError>()),
         );

@@ -5,10 +5,11 @@ import 'package:test/test.dart';
 
 void main() {
   setUp(() {
-    final fakePrinter = _FakeLogPrinter(
-      config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
+    final fakePrinter = _FakeLogPrinter();
+    registerLogPrinter(
+      fakePrinter,
+      config: ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
     );
-    registerLogPrinter(fakePrinter);
   });
 
   tearDown(() async {
@@ -42,10 +43,8 @@ void main() {
   group('LoggerClassMixin', () {
     test('uses host runtimeType as className', () async {
       await GetIt.instance.reset();
-      final fakePrinter = _FakeLogPrinter(
-        config: const ConfigLog(enableLog: true),
-      );
-      registerLogPrinter(fakePrinter);
+      final fakePrinter = _FakeLogPrinter();
+      registerLogPrinter(fakePrinter, config: const ConfigLog(enableLog: true));
       final service = _FakeService();
 
       service.logWarning('check');
@@ -59,7 +58,7 @@ void main() {
 class _FakeLogPrinter extends LogPrinterBase {
   final List<LoggerObjectBase> printed = [];
 
-  _FakeLogPrinter({super.config});
+  _FakeLogPrinter();
 
   @override
   void printLog(LoggerObjectBase log) {

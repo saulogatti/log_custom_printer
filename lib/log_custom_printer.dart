@@ -74,6 +74,10 @@ export 'src/domain/logs_object/logger_object.dart';
 export 'src/domain/logs_object/warning_log.dart';
 export 'src/log_custom_printer_base.dart';
 export 'src/log_printer_locator.dart'
-    show registerLogPrinter, registerLogPrinterColor, registerLogPrinterSimple;
+    show
+        registerLogPrinter,
+        registerLogPrinterColor,
+        registerLogPrinterSimple,
+        FileType;
 export 'src/utils/date_time_log_helper.dart';
 export 'src/utils/logger_ansi_color.dart';
