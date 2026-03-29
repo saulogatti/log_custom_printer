@@ -70,7 +70,7 @@ final class LoggerCache {
     try {
       await futureInitialization.future;
       final directory = Directory(_directoryPath);
-      if (directory.existsSync()) {
+      if (await directory.exists()) {
         final files = await directory
             .list()
             .where((entity) => entity is File)
@@ -141,7 +141,7 @@ final class LoggerCache {
   Future<void> _init(String directory) async {
     try {
       final directoryPath = Directory('$directory/loggerApp/logs');
-      if (!directoryPath.existsSync()) {
+      if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;

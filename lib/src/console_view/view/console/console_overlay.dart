@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
+import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 
 import 'console_view.dart';
 
@@ -59,7 +61,11 @@ class ConsoleOverlayManager {
                         ),
                       ],
                     ),
-                    child: const ConsoleView(onClose: hide),
+                    child: BlocProvider(
+                      create: (context) =>
+                          ConsoleBloc(messageRepository: messageRepository),
+                      child: const ConsoleView(onClose: hide),
+                    ),
                   ),
                 ),
               ),
@@ -105,12 +111,18 @@ class ConsoleOverlayManager {
                     ),
                   ],
                 ),
-                child: const Material(
+                child: Material(
                   color: Colors.transparent,
                   clipBehavior: Clip.antiAlias,
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
 
-                  child: ConsoleView(onClose: hideConsoleOverlayManager),
+                  child: BlocProvider(
+                    create: (_) =>
+                        ConsoleBloc(messageRepository: messageRepository),
+                    child: const ConsoleView(
+                      onClose: hideConsoleOverlayManager,
+                    ),
+                  ),
                 ),
               ),
             ),
