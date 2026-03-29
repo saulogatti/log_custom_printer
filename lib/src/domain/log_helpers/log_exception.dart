@@ -5,11 +5,11 @@
 ///
 /// {@category Utilities}
 class LogException implements Exception {
-  /// Mensagem descritiva da falha.
-  final String message;
 
   /// Cria uma nova exceção de log com [message].
   LogException(this.message);
+  /// Mensagem descritiva da falha.
+  final String message;
 
   @override
   /// Retorna uma representação legível da exceção.

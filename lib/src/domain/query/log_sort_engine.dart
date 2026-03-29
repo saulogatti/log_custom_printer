@@ -13,14 +13,14 @@ import 'log_query.dart';
 ///
 /// {@category Query}
 class LogSortEngine {
+
+  const LogSortEngine();
   static const Map<EnumLoggerType, int> _severityIndex = {
     EnumLoggerType.debug: 0,
     EnumLoggerType.info: 1,
     EnumLoggerType.warning: 2,
     EnumLoggerType.error: 3,
   };
-
-  const LogSortEngine();
 
   /// Retorna uma nova lista ordenada de acordo com [query].
   ///

@@ -12,6 +12,17 @@ import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 ///
 /// {@category Core}
 final class LogPrinterService {
+
+  /// Cria uma nova instância do serviço de impressão.
+  ///
+  /// [logPrinter]: a estratégia de impressão a ser utilizada.
+  /// [cacheRepository]: repositório de cache (padrão: [LoggerCacheRepositoryImpl]).
+  LogPrinterService(
+    this.logPrinter, {
+    required this.configLog, ILoggerCacheRepository? cacheRepository,
+  }) : _loggerPersistenceService = LoggerPersistenceService(
+         cacheRepository: cacheRepository,
+       );
   /// A impressora configurada para formatar e exibir os logs.
   final LogPrinterBase logPrinter;
 
@@ -20,18 +31,6 @@ final class LogPrinterService {
 
   /// O repositório responsável pelo cache e persistência dos logs.
   final LoggerPersistenceService _loggerPersistenceService;
-
-  /// Cria uma nova instância do serviço de impressão.
-  ///
-  /// [logPrinter]: a estratégia de impressão a ser utilizada.
-  /// [cacheRepository]: repositório de cache (padrão: [LoggerCacheRepositoryImpl]).
-  LogPrinterService(
-    this.logPrinter, {
-    ILoggerCacheRepository? cacheRepository,
-    required this.configLog,
-  }) : _loggerPersistenceService = LoggerPersistenceService(
-         cacheRepository: cacheRepository,
-       );
 
   /// Retorna o serviço de persistência associado a esta instância.
   ///

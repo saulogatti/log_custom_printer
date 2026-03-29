@@ -7,11 +7,11 @@ import 'dart:io';
 ///
 /// {@category Utilities}
 class FileManager implements IFileManagerType {
-  /// Tipo de arquivo permitido para esta instância.
-  final FileType fileType;
 
   /// Cria um gerenciador de arquivos para o [fileType] informado.
   FileManager({required this.fileType});
+  /// Tipo de arquivo permitido para esta instância.
+  final FileType fileType;
 
   /// Remove o diretório em [path] quando ele existir.
   ///

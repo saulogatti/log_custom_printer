@@ -21,24 +21,6 @@ part 'logger_json_list.g.dart';
 /// {@category Utilities}
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
-  /// Mapa de construtores para desserialização baseada no nome do tipo.
-  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)>
-  _typeConstructors = {
-    "ErrorLog": ErrorLog.fromJson,
-    "DebugLog": DebugLog.fromJson,
-    "WarningLog": WarningLog.fromJson,
-    "InfoLog": InfoLog.fromJson,
-  };
-
-  /// O tipo de entradas de log armazenadas nesta lista (nome da classe).
-  String type;
-
-  /// Lista interna de entradas de log.
-  final List<LoggerObjectBase> _loggerEntries = [];
-
-  /// Limite máximo de logs armazenados nesta lista.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  int maxLogEntries = 100;
 
   /// Cria uma nova lista para o [type] especificado.
   LoggerJsonList({required this.type, this.maxLogEntries = 100});
@@ -63,6 +45,24 @@ class LoggerJsonList {
     }
     return loggerJsonList;
   }
+  /// Mapa de construtores para desserialização baseada no nome do tipo.
+  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)>
+  _typeConstructors = {
+    "ErrorLog": ErrorLog.fromJson,
+    "DebugLog": DebugLog.fromJson,
+    "WarningLog": WarningLog.fromJson,
+    "InfoLog": InfoLog.fromJson,
+  };
+
+  /// O tipo de entradas de log armazenadas nesta lista (nome da classe).
+  String type;
+
+  /// Lista interna de entradas de log.
+  final List<LoggerObjectBase> _loggerEntries = [];
+
+  /// Limite máximo de logs armazenados nesta lista.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  int maxLogEntries = 100;
 
   /// Retorna o [EnumLoggerType] correspondente ao tipo de logs nesta lista.
   @JsonKey(includeFromJson: false, includeToJson: false)

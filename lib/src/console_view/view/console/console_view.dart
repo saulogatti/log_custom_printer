@@ -9,7 +9,7 @@ import 'console_widget.dart';
 
 class ConsoleProvider extends StatelessWidget {
   final MessageRepository messageRepository;
-  const ConsoleProvider({super.key, required this.messageRepository});
+  const ConsoleProvider({required this.messageRepository, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +20,9 @@ class ConsoleProvider extends StatelessWidget {
   }
 }
 
-/// TODO implementar exportação de logs em json ou txt, fazer ordenação por data, tipo de log.
-/// Outras ideias: Fazer TAG que o usuário possa colocar para organizar os logs, implementar busca por texto, tag ou tipo de log. Pensar sobre permitir colocar tamanho do console para não atrapalhar a visualização do app, implementar filtros para mostrar apenas tipos específicos de logs, implementar funcionalidade de pausar/retomar a captura de logs, adicionar opção para limpar os logs diretamente do console, permitir salvar os logs em um arquivo local para análise posterior, implementar suporte para múltiplas abas de console para diferentes categorias de logs, adicionar funcionalidade de destacar logs importantes ou críticos, permitir personalização do tema do console (cores, fontes, etc.), implementar integração com serviços de monitoramento externos (como Sentry ou Loggly) para enviar os logs em tempo real.
-///
 /// Tela de console para exibir logs usando o log_custom_printer.
 class ConsoleView extends StatefulWidget {
   final VoidCallback? onClose;
-
   const ConsoleView({super.key, this.onClose});
 
   @override
@@ -35,7 +31,7 @@ class ConsoleView extends StatefulWidget {
 
 class TesteLog with LoggerClassMixin {
   Future<void> enviarLogs() async {
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 10; i++) {
       logDebug('Log $i');
       logWarning('Log de aviso $i');
       logInfo('Log de informação $i');

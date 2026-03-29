@@ -17,15 +17,6 @@ import 'package:path/path.dart' as path;
 ///
 /// {@category Utilities}
 final class LoggerCache {
-  /// O caminho para o diretório de logs.
-  String _directoryPath = 'logger';
-  final IFileManagerType _fileManagerType;
-
-  /// Future para rastrear o estado de inicialização do diretório.
-  late Completer<void> _future;
-
-  /// Callback opcional para lidar com erros durante a inicialização ou escrita.
-  void Function(Object error, StackTrace stackTrace)? onError;
 
   /// Cria um gerenciador de cache.
   ///
@@ -36,6 +27,15 @@ final class LoggerCache {
     _future = Completer<void>();
     _init(directory);
   }
+  /// O caminho para o diretório de logs.
+  String _directoryPath = 'logger';
+  final IFileManagerType _fileManagerType;
+
+  /// Future para rastrear o estado de inicialização do diretório.
+  late Completer<void> _future;
+
+  /// Callback opcional para lidar com erros durante a inicialização ou escrita.
+  void Function(Object error, StackTrace stackTrace)? onError;
 
   /// Um [Future] que completa quando a inicialização do diretório termina.
   Completer<void> get futureInitialization => _future;

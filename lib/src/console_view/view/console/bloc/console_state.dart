@@ -1,8 +1,8 @@
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 
 class ConsoleError extends ConsoleState {
-  final String message;
   const ConsoleError({required this.message});
+  final String message;
 }
 
 class ConsoleInitial extends ConsoleState {
@@ -10,8 +10,8 @@ class ConsoleInitial extends ConsoleState {
 }
 
 class ConsoleLoaded extends ConsoleState {
-  final List<MessageLog> logs;
   const ConsoleLoaded({required this.logs});
+  final List<MessageLog> logs;
 }
 
 class ConsoleLoading extends ConsoleState {

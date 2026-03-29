@@ -50,8 +50,7 @@ LogPrinterService fetchLogPrinterService() {
 /// {@category Core}
 LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
-  ILoggerCacheRepository? cacheRepository,
-  required ConfigLog config,
+  required ConfigLog config, ILoggerCacheRepository? cacheRepository,
 }) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {

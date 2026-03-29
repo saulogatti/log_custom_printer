@@ -3,9 +3,9 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 
 class MessageEntry {
-  final LoggerObjectBase loggerObjectBase;
 
   MessageEntry({required this.loggerObjectBase});
+  final LoggerObjectBase loggerObjectBase;
 
   MessageLog fromLoggerObjectBase() {
     LogType level = getLogType(loggerObjectBase);

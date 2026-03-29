@@ -17,16 +17,6 @@ import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 ///
 /// {@category Utilities}
 final class LoggerPersistenceService {
-  final ILoggerCacheRepository _cacheRepository;
-
-  /// Callback opcional para observar mudanças na coleção persistida.
-  ///
-  /// Recebe a lista de logs atual após operações de escrita/limpeza.
-  void Function(List<LoggerObjectBase>)? logOutputHandler;
-
-  final LogFilterEngine _filterEngine;
-  final LogSortEngine _sortEngine;
-  final LogExportService _exportService;
 
   /// Cria o serviço com um [cacheRepository] customizado.
   ///
@@ -44,6 +34,16 @@ final class LoggerPersistenceService {
        _filterEngine = filterEngine,
        _sortEngine = sortEngine,
        _exportService = exportService;
+  final ILoggerCacheRepository _cacheRepository;
+
+  /// Callback opcional para observar mudanças na coleção persistida.
+  ///
+  /// Recebe a lista de logs atual após operações de escrita/limpeza.
+  void Function(List<LoggerObjectBase>)? logOutputHandler;
+
+  final LogFilterEngine _filterEngine;
+  final LogSortEngine _sortEngine;
+  final LogExportService _exportService;
 
   /// Adiciona uma entrada de log ao repositório.
   ///

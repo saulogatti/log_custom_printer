@@ -29,6 +29,15 @@ enum ExportFormat {
 ///
 /// {@category Query}
 class LogQuery {
+
+  /// Cria um objeto de consulta com filtros e ordenação opcionais.
+  const LogQuery({
+    this.types,
+    this.start,
+    this.end,
+    this.sortField,
+    this.sortDirection = SortDirection.asc,
+  });
   /// Conjunto de tipos de log para filtrar. `null` ou vazio retorna todos os tipos.
   final Set<EnumLoggerType>? types;
 
@@ -45,15 +54,6 @@ class LogQuery {
   ///
   /// Padrão: [SortDirection.asc].
   final SortDirection sortDirection;
-
-  /// Cria um objeto de consulta com filtros e ordenação opcionais.
-  const LogQuery({
-    this.types,
-    this.start,
-    this.end,
-    this.sortField,
-    this.sortDirection = SortDirection.asc,
-  });
 }
 
 /// Campo de ordenação de logs.

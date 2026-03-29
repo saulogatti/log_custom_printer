@@ -4,7 +4,6 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_ev
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_state.dart';
 
 class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
-  final MessageRepository _messageRepository;
   ConsoleBloc({required MessageRepository messageRepository})
     : _messageRepository = messageRepository,
       super(const ConsoleInitial()) {
@@ -21,4 +20,5 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
       }
     });
   }
+  final MessageRepository _messageRepository;
 }

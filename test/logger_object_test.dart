@@ -53,9 +53,9 @@ void main() {
 }
 
 class _FakeLogPrinter extends LogPrinterBase {
-  final List<LoggerObjectBase> printed = [];
 
   _FakeLogPrinter();
+  final List<LoggerObjectBase> printed = [];
 
   @override
   void printLog(LoggerObjectBase log) {

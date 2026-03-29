@@ -3,8 +3,8 @@ import 'package:log_custom_printer/src/console_view/domain/models/message_log.da
 
 /// Widget para exibir um log individual em um card.
 class LogCardWidget extends StatelessWidget {
+  const LogCardWidget({required this.messageLog, super.key});
   final MessageLog messageLog;
-  const LogCardWidget({super.key, required this.messageLog});
 
   @override
   Widget build(BuildContext context) {
