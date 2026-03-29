@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
 
 import 'console_widget.dart';
 
@@ -45,6 +47,7 @@ class ConsoleView extends StatefulWidget {
   @override
   State<ConsoleView> createState() => _ConsoleViewState();
 }
+
 // TODO Remover classe de teste
 class TesteLog with LoggerClassMixin {
   Future<void> enviarLogs() async {
@@ -58,11 +61,15 @@ class TesteLog with LoggerClassMixin {
 }
 
 class _ConsoleViewState extends State<ConsoleView> {
+  LogType _selectedLogType = LogType.debug;
 
   @override
   Widget build(BuildContext context) {
     final consoleBloc = context.read<OptionsBloc>();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('Console'),
         leading: widget.onClose != null
@@ -106,7 +113,42 @@ class _ConsoleViewState extends State<ConsoleView> {
           ),
         ],
       ),
-      body: const ConsoleWidget(),
+      body: const SafeArea(
+        bottom: true,
+        minimum: EdgeInsets.only(bottom: 50),
+        child: ConsoleWidget(),
+      ),
+      bottomSheet: SegmentedButton(
+        expandedInsets: const EdgeInsets.all(8),
+        segments: [
+          ButtonSegment(
+            value: LogType.debug,
+            label: const Text('Debug'),
+            icon: Icon(LogType.debug.icon, color: LogType.debug.color),
+          ),
+          ButtonSegment(
+            value: LogType.info,
+            label: const Text('Info'),
+            icon: Icon(LogType.info.icon, color: LogType.info.color),
+          ),
+          ButtonSegment(
+            value: LogType.warning,
+            label: const Text('Warning'),
+            icon: Icon(LogType.warning.icon, color: LogType.warning.color),
+          ),
+          ButtonSegment(
+            value: LogType.error,
+            label: const Text('Error'),
+            icon: Icon(LogType.error.icon, color: LogType.error.color),
+          ),
+        ],
+        selected: {_selectedLogType},
+        onSelectionChanged: (value) {
+          context.read<ConsoleBloc>().add(ConsoleFilterByType(value.first));
+          _selectedLogType = value.first;
+          setState(() {});
+        },
+      ),
     );
   }
 

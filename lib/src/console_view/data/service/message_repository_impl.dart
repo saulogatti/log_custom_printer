@@ -13,6 +13,17 @@ class MessageRepositoryImpl implements MessageRepository {
   }
 
   @override
+  Future<List<MessageLog>> getFilterMessages({
+    LogType? logType,
+    String? searchText,
+  }) {
+    return _dataSource.getFilterMessages(
+      logType: logType,
+      searchText: searchText,
+    );
+  }
+
+  @override
   Future<List<MessageLog>> getMessages() {
     return _dataSource.getMessages();
   }
