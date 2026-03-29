@@ -16,23 +16,41 @@ class OptionsBloc extends Cubit<OptionsState> {
   }
 
   Future<void> selectDate(DateTimeRange? dateRange) async {
+    final currentState = state;
+    if (currentState is LoadedOptionsState) {
+      final updatedOptions = currentState.options.copyWith(
+        selectedDate: dateRange,
+        clearSelectedDate: dateRange == null,
+      );
+      emit(LoadedOptionsState(updatedOptions));
+    }
     await _optionsRepository.selectDate(
       dateRange?.start.millisecondsSinceEpoch ?? 0,
       dateRange?.end.millisecondsSinceEpoch ?? 0,
     );
-    loadOptions();
   }
 
   Future<void> selectOption(OptionItem option) async {
+    final currentState = state;
+    if (currentState is LoadedOptionsState) {
+      final updatedOptions = currentState.options.copyWith(option: option);
+      emit(LoadedOptionsState(updatedOptions));
+    }
     await _optionsRepository.selectOption(option);
-    loadOptions();
   }
 
   Future<void> selectTimeRange(DateTimeRange? timeRange) async {
+    final currentState = state;
+    if (currentState is LoadedOptionsState) {
+      final updatedOptions = currentState.options.copyWith(
+        selectedTimeRange: timeRange,
+        clearSelectedTimeRange: timeRange == null,
+      );
+      emit(LoadedOptionsState(updatedOptions));
+    }
     await _optionsRepository.selectTimeRange(
       timeRange?.start.millisecondsSinceEpoch ?? 0,
       timeRange?.end.millisecondsSinceEpoch ?? 0,
     );
-    loadOptions();
   }
 }
