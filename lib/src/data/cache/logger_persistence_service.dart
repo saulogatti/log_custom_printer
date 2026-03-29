@@ -2,6 +2,10 @@ import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.d
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/query/log_export_service.dart';
+import 'package:log_custom_printer/src/domain/query/log_filter_engine.dart';
+import 'package:log_custom_printer/src/domain/query/log_query.dart';
+import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 
 /// Serviço de persistência e consulta de logs.
 ///
@@ -20,11 +24,26 @@ final class LoggerPersistenceService {
   /// Recebe a lista de logs atual após operações de escrita/limpeza.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
 
+  final LogFilterEngine _filterEngine;
+  final LogSortEngine _sortEngine;
+  final LogExportService _exportService;
+
   /// Cria o serviço com um [cacheRepository] customizado.
   ///
   /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
-  LoggerPersistenceService({ILoggerCacheRepository? cacheRepository})
-    : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
+  ///
+  /// Os parâmetros [filterEngine], [sortEngine] e [exportService] são opcionais
+  /// e permitem injetar implementações customizadas (útil em testes). Quando
+  /// omitidos, usam as implementações padrão constantes da biblioteca.
+  LoggerPersistenceService({
+    ILoggerCacheRepository? cacheRepository,
+    LogFilterEngine filterEngine = const LogFilterEngine(),
+    LogSortEngine sortEngine = const LogSortEngine(),
+    LogExportService exportService = const LogExportService(),
+  }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl(),
+       _filterEngine = filterEngine,
+       _sortEngine = sortEngine,
+       _exportService = exportService;
 
   /// Adiciona uma entrada de log ao repositório.
   ///
@@ -105,5 +124,30 @@ final class LoggerPersistenceService {
     final allLogs = await _cacheRepository.getAllLogs();
     final tagRegex = RegExp(r'\b' + RegExp.escape(tag) + r'\b');
     return allLogs.where((log) => tagRegex.hasMatch(log.tag)).toList();
+  }
+
+  /// Consulta os logs aplicando filtros, ordenação e retornando a lista resultante.
+  ///
+  /// A pipeline é: `getAllLogs → filter(query) → sort(query)`.
+  ///
+  /// Quando [query] não possui filtros nem ordenação definidos, equivale a
+  /// chamar [getAllLogs] diretamente.
+  Future<List<LoggerObjectBase>> queryLogs(LogQuery query) async {
+    final allLogs = await getAllLogs();
+    final filtered = _filterEngine.apply(allLogs, query);
+    return _sortEngine.apply(filtered, query);
+  }
+
+  /// Exporta os logs para uma [String] no [format] especificado.
+  ///
+  /// A consulta aplica os filtros e a ordenação definidos em [query] antes de
+  /// serializar. Passe [LogQuery()] (sem parâmetros) para exportar todos os logs
+  /// sem filtro ou ordenação.
+  ///
+  /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
+  /// do conteúdo gerado fica a cargo da camada consumidora.
+  Future<String> exportLogs(LogQuery query, ExportFormat format) async {
+    final logs = await queryLogs(query);
+    return _exportService.export(logs, format);
   }
 }
