@@ -4,33 +4,35 @@ import 'package:log_custom_printer/src/console_view/domain/models/console_option
 import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 
-// TODO finalizar implementação do bloc de opções, integrando com o repositório e a UI
 class OptionsBloc extends Cubit<OptionsState> {
   final IOptionsRepository _optionsRepository;
   OptionsBloc({required IOptionsRepository optionsRepository})
     : _optionsRepository = optionsRepository,
       super(InitialOptionsState());
 
-  void loadOptions(ConsoleOptions options) {
-    emit(UpdatedOptionsState(options));
+  Future<void> loadOptions() async {
+    final options = await _optionsRepository.getCurrentOptions();
+    emit(LoadedOptionsState(options));
   }
 
-  void selectDate(DateTimeRange? dateRange) {
-    if (state is UpdatedOptionsState) {
-      final options = (state as UpdatedOptionsState).options;
-      options.selectedDate = dateRange;
-      emit(UpdatedOptionsState(options));
-    }
+  Future<void> selectDate(DateTimeRange? dateRange) async {
+    await _optionsRepository.selectDate(
+      dateRange?.start.millisecondsSinceEpoch ?? 0,
+      dateRange?.end.millisecondsSinceEpoch ?? 0,
+    );
+    loadOptions();
   }
 
-  void selectOption(OptionItem option) {
-    _optionsRepository.selectOption(option);
+  Future<void> selectOption(OptionItem option) async {
+    await _optionsRepository.selectOption(option);
+    loadOptions();
   }
 
-  void selectTimeRange(DateTimeRange? timeRange) {
-    _optionsRepository.selectTimeRange(
+  Future<void> selectTimeRange(DateTimeRange? timeRange) async {
+    await _optionsRepository.selectTimeRange(
       timeRange?.start.millisecondsSinceEpoch ?? 0,
       timeRange?.end.millisecondsSinceEpoch ?? 0,
     );
+    loadOptions();
   }
 }

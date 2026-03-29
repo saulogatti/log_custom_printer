@@ -22,7 +22,8 @@ analyzer:
     await_only_futures: error
     unnecessary_async: error
     unnecessary_await_in_return: error
-    avoid_slow_async_io: ignore
+    avoid_types_on_closure_parameters: error
+
   language:
     strict-casts: true
     strict-inference: true
@@ -31,7 +32,7 @@ analyzer:
 linter:
   rules:
     - always_put_required_named_parameters_first
-    - avoid_slow_async_io
+    - avoid_void_async
     - unnecessary_async
     - unnecessary_await_in_return
     - await_only_futures
@@ -39,4 +40,4 @@ linter:
     - use_build_context_synchronously
     - prefer_const_constructors
     - prefer_const_literals_to_create_immutables
-
+    - avoid_types_on_closure_parameters

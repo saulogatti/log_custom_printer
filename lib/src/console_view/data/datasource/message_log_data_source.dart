@@ -7,7 +7,7 @@ class MessageLogDataSource {
   MessageLogDataSource({required this.loggerCacheRepositoryImpl});
   LoggerPersistenceService loggerCacheRepositoryImpl;
 
-  void clearMessages() async {
+  Future<void> clearMessages() async {
     await loggerCacheRepositoryImpl.clearLogs();
   }
 
