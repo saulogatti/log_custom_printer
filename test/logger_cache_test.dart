@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:log_custom_printer/src/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
@@ -9,13 +9,13 @@ void main() {
     late LoggerCache loggerCache;
     late Directory tempDir;
 
-    setUp(() async {
+    setUpAll(() async {
       tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
       loggerCache = LoggerCache(tempDir.path);
-      await loggerCache.futureInitialization;
+      await loggerCache.futureInitialization.future;
     });
 
-    tearDown(() async {
+    tearDownAll(() async {
       await tempDir.delete(recursive: true);
     });
 

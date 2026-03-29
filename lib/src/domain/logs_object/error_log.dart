@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 

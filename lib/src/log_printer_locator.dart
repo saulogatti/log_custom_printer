@@ -1,10 +1,11 @@
 import 'package:get_it/get_it.dart';
-import 'package:log_custom_printer/src/cache/logger_cache_impl.dart';
-import 'package:log_custom_printer/src/cache/logger_cache_repository.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/config_log.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
-import 'package:log_custom_printer/src/log_printers/log_simple_print.dart';
-import 'package:log_custom_printer/src/log_printers/log_with_color_print.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
 
 /// Resolve o [LogPrinterService] registrado no get_it.
 ///
@@ -42,9 +43,9 @@ LogPrinterService fetchLogPrinterService() {
 /// ```
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinter(
+LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
-  LoggerCacheRepository? cacheRepository,
+  ILoggerCacheRepository? cacheRepository,
 }) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {
@@ -65,14 +66,14 @@ LoggerCacheRepository registerLogPrinter(
 /// [cacheFilePath]: Caminho opcional para persistência em arquivo.
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinterColor({
+LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
 }) {
   return registerLogPrinter(
     LogWithColorPrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(
+    cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
       saveLogFilePath: cacheFilePath,
     ),
@@ -88,14 +89,14 @@ LoggerCacheRepository registerLogPrinterColor({
 /// [cacheFilePath]: Caminho opcional para persistência em arquivo.
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinterSimple({
+LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
 }) {
   return registerLogPrinter(
     LogSimplePrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(
+    cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
       saveLogFilePath: cacheFilePath,
     ),

@@ -1,6 +1,6 @@
 import 'config_log.dart';
-import 'logs_object/logger_object.dart';
-import 'log_printers/log_with_color_print.dart';
+import 'domain/logs_object/logger_object.dart';
+import 'domain/log_printers/log_with_color_print.dart';
 
 /// Classe base abstrata para impressoras de logs.
 ///

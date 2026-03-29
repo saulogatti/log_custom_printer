@@ -1,6 +1,6 @@
 import 'dart:developer' as dev show log;
 import 'package:log_custom_printer/src/log_custom_printer_base.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
 /// Impressora de logs que preserva cor/estilo ANSI.
 ///

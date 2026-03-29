@@ -1,8 +1,8 @@
-import 'package:log_custom_printer/src/logs_object/debug_log.dart';
-import 'package:log_custom_printer/src/logs_object/error_log.dart';
-import 'package:log_custom_printer/src/logs_object/info_log.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
-import 'package:log_custom_printer/src/logs_object/warning_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/info_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 
 /// Mixin que fornece métodos utilitários de log para uma classe.
 ///

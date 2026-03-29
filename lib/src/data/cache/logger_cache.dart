@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 
-import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
-import 'package:log_custom_printer/src/log_helpers/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/utils/string_extension.dart';
 import 'package:path/path.dart' as path;
 
@@ -21,7 +21,7 @@ final class LoggerCache {
   String _directoryPath = 'logger';
 
   /// Future para rastrear o estado de inicialização do diretório.
-  late Future<void> _future;
+  late Completer<void> _future;
 
   /// Callback opcional para lidar com erros durante a inicialização ou escrita.
   void Function(Object error, StackTrace stackTrace)? onError;
@@ -30,29 +30,30 @@ final class LoggerCache {
   ///
   /// [directory]: o diretório base onde os logs serão armazenados.
   LoggerCache(String directory) {
-    _future = _init(directory);
+    _future = Completer<void>();
+    _init(directory);
   }
 
   /// Um [Future] que completa quando a inicialização do diretório termina.
-  Future<void> get futureInitialization => _future;
+  Completer<void> get futureInitialization => _future;
 
   /// Limpa todos os arquivos de log do diretório.
   Future<void> clearAll() async {
     try {
-      await futureInitialization;
+      await futureInitialization.future;
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
         await directory.delete(recursive: true);
         await directory.create(recursive: true);
       }
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       dev.log('Erro ao limpar os arquivos de log: $e', stackTrace: stack);
     }
   }
 
   /// Limpa os logs de um tipo específico (baseado no nome do arquivo).
   Future<void> clearLogByType(String name) async {
-    await futureInitialization;
+    await futureInitialization.future;
     final fileName = _getPathFile(name);
     final file = File(fileName);
     if (await file.exists()) {
@@ -63,10 +64,14 @@ final class LoggerCache {
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
   Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs() async {
     try {
-      await futureInitialization;
+      await futureInitialization.future;
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
-        final files = await directory.list().where((entity) => entity is File).cast<File>().toList();
+        final files = await directory
+            .list()
+            .where((entity) => entity is File)
+            .cast<File>()
+            .toList();
         final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
         for (final file in files) {
           if (file.path.endsWith('.json')) {
@@ -83,7 +88,7 @@ final class LoggerCache {
         }
         return allLogs;
       }
-    } catch (e, stack) {
+    } on Exception catch (e, stack) {
       dev.log('Erro ao ler os arquivos de log: $e', stackTrace: stack);
     }
     return null;
@@ -92,7 +97,7 @@ final class LoggerCache {
   /// Escreve uma lista de logs ([loggerList]) em um arquivo identificado por [fileName].
   Future<void> writeLogToFile(String fileName, Object loggerList) async {
     try {
-      await futureInitialization;
+      await futureInitialization.future;
       final path = _getPathFile(fileName);
       final File file = File(path);
       const spaces = '  ';
@@ -103,8 +108,8 @@ final class LoggerCache {
 
       final jj = JsonEncoder.withIndent(spaces).convert(loggerList);
       await file.writeAsString(jj);
-    } catch (e, stack) {
-      onError?.call(e.toString(), stack);
+    } on Exception catch (e, stack) {
+      onError?.call(e, stack);
       dev.log('Erro ao escrever o arquivo de log: $e', stackTrace: stack);
     }
   }
@@ -137,7 +142,8 @@ final class LoggerCache {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-    } catch (e, stack) {
+      _future.complete();
+    } on Exception catch (e, stack) {
       if (onError != null) {
         onError!(e, stack);
       } else {
