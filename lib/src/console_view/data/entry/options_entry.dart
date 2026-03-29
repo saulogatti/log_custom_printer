@@ -80,12 +80,12 @@ class OptionsEntry {
       _$OptionsEntryFromJson(json);
 
   OptionsEntry copyWith({
-    OptionItemEntry? option,
+    OptionItemEntry? selectedOption,
     DateRangeEpochEntry? selectedDate,
     DateRangeEpochEntry? selectedTimeRange,
   }) {
     return OptionsEntry(
-      selectedOption: option ?? selectedOption,
+      selectedOption: selectedOption ?? this.selectedOption,
       selectedDate: selectedDate ?? this.selectedDate,
       selectedTimeRange: selectedTimeRange ?? this.selectedTimeRange,
     );
