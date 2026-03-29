@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/rendering.dart' show debugPrint;
 import 'package:log_custom_printer/src/console_view/data/entry/options_entry.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/console_options.dart';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
@@ -28,7 +29,7 @@ class OptionsConsoleDataSource {
         return OptionsEntry.fromJson(jsonMap);
       }
     } on Exception catch (e) {
-      print("Error reading options: $e");
+      debugPrint("Error reading options: $e");
     }
     return OptionsEntry.fromConsoleOptions(ConsoleOptions.empty());
   }

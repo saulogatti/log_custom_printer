@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart' show debugPrint;
 import 'package:log_custom_printer/src/console_view/data/datasource/options/options_console_data_source.dart';
 import 'package:log_custom_printer/src/console_view/data/entry/option_item_entry.dart';
 import 'package:log_custom_printer/src/console_view/data/entry/options_entry.dart';
@@ -16,9 +17,9 @@ class OptionsRepositoryImpl implements IOptionsRepository {
       return data.toConsoleOptions();
     } on Exception catch (e) {
       // Handle exceptions, maybe log them
-      print("Error fetching options: $e");
-      return ConsoleOptions.empty();
+      debugPrint("Error fetching options: $e");
     }
+    return ConsoleOptions.empty();
   }
 
   @override
