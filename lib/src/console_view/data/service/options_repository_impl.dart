@@ -40,7 +40,7 @@ class OptionsRepositoryImpl implements IOptionsRepository {
     );
 
     data = data.copyWith(option: updatedOption);
-    _dataSource.saveOptions(data);
+    await _dataSource.saveOptions(data);
   }
 
   @override
