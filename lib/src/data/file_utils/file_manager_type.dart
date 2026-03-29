@@ -11,6 +11,20 @@ class FileManager implements IFileManagerType {
   /// Cria um gerenciador de arquivos para o [fileType] informado.
   FileManager({required this.fileType});
 
+  /// Remove o diretório em [path] quando ele existir.
+  ///
+  /// Retorna `true` quando a remoção acontece e `false` quando o diretório não
+  /// existe.
+  @override
+  Future<bool> deleteDirectory(String path) async {
+    final directory = Directory(path);
+    if (await directory.exists()) {
+      await directory.delete(recursive: true);
+      return true;
+    }
+    return false;
+  }
+
   /// Remove o arquivo em [path] quando ele existir.
   ///
   /// Retorna `true` quando a remoção acontece e `false` quando o arquivo não
@@ -55,7 +69,6 @@ class FileManager implements IFileManagerType {
   @override
   Future<bool> writeFile(String path, String content) async {
     _extensionIncludePath(path);
-    assert(content.isNotEmpty, 'O conteúdo a ser escrito não pode ser vazio.');
     final file = File(path);
     if (!await file.exists()) {
       await file.create(recursive: true);
@@ -90,6 +103,8 @@ enum FileType { txt, json, log }
 
 /// Contrato para operações de leitura, escrita e remoção de arquivos.
 abstract interface class IFileManagerType {
+  Future<bool> deleteDirectory(String path);
+
   /// Remove o arquivo em [path].
   ///
   /// Retorna `true` quando o arquivo é removido.
