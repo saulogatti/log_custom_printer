@@ -23,51 +23,56 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
       ),
       body: BlocBuilder<OptionsBloc, OptionsState>(
         builder: (context, state) {
-          return CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () => context.read<OptionsBloc>().clearLogs(),
-                      child: const Text('Limpar Logs'),
+          switch (state) {
+            case ErrorOptionsState():
+              return Center(
+                child: Text('Erro ao carregar opções: ${(state).message}'),
+              );
+            case InitialOptionsState():
+            case LoadingOptionsState():
+              return const Center(child: CircularProgressIndicator());
+            case LoadedOptionsState():
+              final options = state.options;
+              return CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        DateSelectWidget(
+                          label: "Seleciona Data",
+                          selectedDate: options.selectedDate,
+                          onDateSelected: (date) {
+                            // Lógica para lidar com a data selecionada
+                            context.read<OptionsBloc>().selectDate(date);
+                          },
+                        ),
+                        TimeRangeSelectWidget(
+                          initialDateTimeRange: options.selectedTimeRange,
+                          label: 'Selecionar intervalo de horário',
+                          onTimeRangeSelected: (range) {
+                            // Lógica para lidar com o intervalo selecionado
+                            context.read<OptionsBloc>().selectTimeRange(range);
+                          },
+                        ),
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () => context.read<OptionsBloc>().exportLogs(),
-                      child: const Text('Exportar Logs'),
-                    ),
-                    DateSelectWidget(
-                      label: "Seleciona Data",
-                      // selectedDate: DateTime.now(),
-                      onDateSelected: (date) {
-                        print('Data selecionada: $date');
-                      },
-                    ),
-                    TimeRangeSelectWidget(
-                      initialDateTimeRange: DateTimeRange(
-                        start: DateTime.now(),
-                        end: DateTime.now(),
-                      ),
-                      label: 'Selecionar intervalo de horário',
-                      onTimeRangeSelected: (range) {
-                        // Lógica para lidar com o intervalo selecionado
-                        print(
-                          " Intervalo selecionado: ${range?.start} - ${range?.end}",
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              SelectOptionWidget(
-                options: (state as UpdatedOptionsState).options.options,
-                onOptionSelected: (option) =>
-                    context.read<OptionsBloc>().selectOption(option),
-              ),
-            ],
-          );
+                  ),
+                  SelectOptionWidget(
+                    options: options.options,
+                    onOptionSelected: (option) =>
+                        context.read<OptionsBloc>().selectOption(option),
+                  ),
+                ],
+              );
+          }
         },
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<OptionsBloc>().loadOptions();
   }
 }

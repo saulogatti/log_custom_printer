@@ -17,9 +17,3 @@ class LoadedOptionsState extends OptionsState {
 class LoadingOptionsState extends OptionsState {}
 
 sealed class OptionsState {}
-
-class UpdatedOptionsState extends OptionsState {
-  final ConsoleOptions options;
-
-  UpdatedOptionsState(this.options);
-}

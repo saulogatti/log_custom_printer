@@ -27,7 +27,9 @@ class DateSelectWidget extends StatelessWidget {
                 lastDate: DateTime(2100, 12, 31, 23, 59, 59),
                 initialDateRange: selectedDate,
               );
-              onDateSelected(picked);
+              if (picked != null) {
+                onDateSelected(picked);
+              }
             },
             child: Text(
               selectedDate != null

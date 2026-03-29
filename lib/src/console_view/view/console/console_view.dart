@@ -1,21 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
+import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
 
 import 'console_widget.dart';
 
 class ConsoleProvider extends StatelessWidget {
   final MessageRepository messageRepository;
-  const ConsoleProvider({required this.messageRepository, super.key});
+  final IOptionsRepository optionsRepository;
+  const ConsoleProvider({
+    required this.messageRepository,
+    required this.optionsRepository,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ConsoleBloc>(
-      create: (context) => ConsoleBloc(messageRepository: messageRepository),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ConsoleBloc>(
+          create: (context) =>
+              ConsoleBloc(messageRepository: messageRepository),
+        ),
+        BlocProvider(
+          create: (context) =>
+              OptionsBloc(optionsRepository: optionsRepository),
+        ),
+      ],
       child: const ConsoleView(),
     );
   }
@@ -42,8 +58,10 @@ class TesteLog with LoggerClassMixin {
 }
 
 class _ConsoleViewState extends State<ConsoleView> {
+
   @override
   Widget build(BuildContext context) {
+    final consoleBloc = context.read<OptionsBloc>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Console'),
@@ -77,7 +95,10 @@ class _ConsoleViewState extends State<ConsoleView> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (context) => const ConsoleOptionsWidget(),
+                  builder: (context) => BlocProvider.value(
+                    value: consoleBloc,
+                    child: const ConsoleOptionsWidget(),
+                  ),
                 ),
               );
             },
@@ -90,7 +111,7 @@ class _ConsoleViewState extends State<ConsoleView> {
   }
 
   // TODO Remover método de teste
-  void _sendLogsForTest() async {
+  Future<void> _sendLogsForTest() async {
     final testeLog = TesteLog();
     await testeLog.enviarLogs();
   }

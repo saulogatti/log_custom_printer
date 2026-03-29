@@ -13,6 +13,16 @@ class FileManager implements IFileManagerType {
   /// Cria um gerenciador de arquivos para o [fileType] informado.
   FileManager({required this.fileType});
 
+  @override
+  Future<bool> createDirectory(String path) async {
+    final directory = Directory(path);
+    if (await directory.exists()) {
+      return false;
+    }
+    await directory.create(recursive: true);
+    return true;
+  }
+
   /// Remove o diretório em [path] quando ele existir.
   ///
   /// Retorna `true` quando a remoção acontece e `false` quando o diretório não
@@ -116,6 +126,13 @@ enum FileType {
 ///
 /// {@category Utilities}
 abstract interface class IFileManagerType {
+  /// Cria um diretório em [path] se ele não existir.
+  ///
+  /// Retorna `true` quando o diretório foi criado e `false`
+  /// quando o diretório já existia.
+
+  Future<bool> createDirectory(String path);
+
   /// Remove o diretório em [path], se existir.
   ///
   /// Retorna `true` quando o diretório foi removido e `false`
