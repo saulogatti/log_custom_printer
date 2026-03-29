@@ -62,7 +62,7 @@ Serviço central que coordena a impressão e o armazenamento de logs.
 ```dart
 final class LogPrinterService {
   final LogPrinterBase logPrinter;
-  LoggerCacheRepository get cacheRepository;
+  LoggerPersistenceService get cacheRepository;
 
   void executePrint(LoggerObjectBase log);
 }
@@ -96,30 +96,33 @@ Registra a impressora principal no `get_it`. Deve ser chamada no *startup* da ap
 antes de qualquer uso de logs.
 
 ```dart
-LoggerCacheRepository registerLogPrinter(
+LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
-  LoggerCacheRepository? cacheRepository,
+  ILoggerCacheRepository? cacheRepository,
+  required ConfigLog config,
 });
 ```
 
-Retorna o `LoggerCacheRepository` associado ao serviço registrado, para que o chamador
-possa consultar e gerenciar os logs em cache.
+Retorna o `LoggerPersistenceService` associado ao serviço registrado, para que o chamador
+possa consultar e gerenciar os logs em cache/persistência.
 
 **Atalhos de registro:**
 
 ```dart
 // Com formatação ANSI colorida (recomendado para desenvolvimento)
-LoggerCacheRepository registerLogPrinterColor({
+LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  FileType fileType = FileType.json,
 });
 
 // Sem cores, usando debugPrint (útil em CI/CD ou consoles sem ANSI)
-LoggerCacheRepository registerLogPrinterSimple({
+LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  FileType fileType = FileType.json,
 });
 ```
 
@@ -147,7 +150,8 @@ void main() {
 ```dart
 setUp(() {
   registerLogPrinter(
-    LogSimplePrint(config: ConfigLog(enableLog: true)),
+    const LogSimplePrint(),
+    config: const ConfigLog(enableLog: true),
   );
 });
 

@@ -194,13 +194,13 @@ Usado por `ErrorLog.getMessage()` para incluir o stack trace formatado na saída
 
 ---
 
-## LoggerCacheRepository
+## ILoggerCacheRepository
 
 Interface que define as operações de cache de logs. Implemente esta interface para
 customizar o armazenamento (ex: banco de dados local, `SharedPreferences`, servidor remoto).
 
 ```dart
-abstract interface class LoggerCacheRepository {
+abstract interface class ILoggerCacheRepository {
   Future<void> addLog(LoggerObjectBase log);
   Future<void> clearLogs();
   Future<void> clearLogsByType(EnumLoggerType type);
@@ -209,8 +209,11 @@ abstract interface class LoggerCacheRepository {
 }
 ```
 
-O repositório é retornado pelas funções `registerLogPrinter*` e pode ser usado para
-consultar e gerenciar os logs coletados em runtime.
+Essa interface é usada para customizar o armazenamento quando você chama
+`registerLogPrinter(..., cacheRepository: seuRepositorio, config: ...)`.
+
+As funções `registerLogPrinterColor` e `registerLogPrinterSimple` retornam
+um `LoggerPersistenceService`, que expõe os métodos de consulta e limpeza.
 
 **Exemplo de uso do repositório:**
 
@@ -229,13 +232,13 @@ await cache.clearLogs();
 
 ---
 
-## LoggerCacheImpl
+## LoggerCacheRepositoryImpl
 
-Implementação padrão de `LoggerCacheRepository`. Armazena logs em memória usando
+Implementação padrão de `ILoggerCacheRepository`. Armazena logs em memória usando
 `LoggerJsonList` e, opcionalmente, persiste em disco via `LoggerCache`.
 
 ```dart
-final class LoggerCacheImpl implements LoggerCacheRepository {
+final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   final int maxLogEntries;    // padrão: 1000
   final String? saveLogFilePath; // se fornecido, persiste em disco
 }
@@ -245,6 +248,21 @@ final class LoggerCacheImpl implements LoggerCacheRepository {
 - Se `saveLogFilePath` for fornecido, os logs são gravados em arquivos JSON em
   `<saveLogFilePath>/loggerApp/logs/<tipo>.json`.
 - Na inicialização com caminho de arquivo, carrega os logs previamente persistidos.
+
+## LoggerPersistenceService
+
+Serviço de alto nível retornado pelos `registerLogPrinter*`. Encapsula o
+`ILoggerCacheRepository` e fornece API simples para uso na aplicação.
+
+```dart
+final class LoggerPersistenceService {
+  Future<void> addLog(LoggerObjectBase log);
+  Future<void> clearLogs();
+  Future<void> clearLogsByType(EnumLoggerType type);
+  Future<List<LoggerObjectBase>> getAllLogs();
+  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
+}
+```
 
 ---
 
@@ -266,5 +284,5 @@ class LoggerCache {
 ```
 
 Os arquivos são criados em `<directory>/loggerApp/logs/<tipo>.json`.
-Usado internamente por `LoggerCacheImpl`; normalmente não é necessário interagir
+Usado internamente por `LoggerCacheRepositoryImpl`; normalmente não é necessário interagir
 diretamente com esta classe.

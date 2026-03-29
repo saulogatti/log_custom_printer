@@ -1,12 +1,12 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/src/log_helpers/enum_logger_type.dart';
-import 'package:log_custom_printer/src/log_helpers/logger_enum.dart';
-import 'package:log_custom_printer/src/logs_object/debug_log.dart';
-import 'package:log_custom_printer/src/logs_object/error_log.dart';
-import 'package:log_custom_printer/src/logs_object/info_log.dart';
-import 'package:log_custom_printer/src/logs_object/logger_object.dart';
-import 'package:log_custom_printer/src/logs_object/warning_log.dart';
-import 'dart:developer' as dev;
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
+import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/info_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 
 part 'logger_json_list.g.dart';
 
@@ -22,7 +22,8 @@ part 'logger_json_list.g.dart';
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
   /// Mapa de construtores para desserialização baseada no nome do tipo.
-  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _typeConstructors = {
+  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)>
+  _typeConstructors = {
     "ErrorLog": ErrorLog.fromJson,
     "DebugLog": DebugLog.fromJson,
     "WarningLog": WarningLog.fromJson,
@@ -56,7 +57,7 @@ class LoggerJsonList {
           final ob = constructor(element);
           loggerJsonList.addLogger(ob);
         } else {
-          devLog('Tipo de logger desconhecido: $type');
+          throw LogException('Tipo de logger desconhecido: $type');
         }
       }
     }
@@ -65,13 +66,15 @@ class LoggerJsonList {
 
   /// Retorna o [EnumLoggerType] correspondente ao tipo de logs nesta lista.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  EnumLoggerType? get enumLoggerType => _loggerEntries.isNotEmpty ? _loggerEntries.first.enumLoggerType : null;
+  EnumLoggerType? get enumLoggerType =>
+      _loggerEntries.isNotEmpty ? _loggerEntries.first.enumLoggerType : null;
 
   /// A lista de objetos de log, organizada do mais recente para o mais antigo.
   ///
   /// O nome do campo no JSON é `loggerJson` por compatibilidade.
   @JsonKey(name: "loggerJson")
-  List<LoggerObjectBase> get loggerEntries => List<LoggerObjectBase>.from(_loggerEntries);
+  List<LoggerObjectBase> get loggerEntries =>
+      List<LoggerObjectBase>.from(_loggerEntries);
 
   /// Adiciona um novo objeto de log à lista.
   ///
@@ -85,9 +88,4 @@ class LoggerJsonList {
 
   /// Converte a instância em um mapa JSON.
   Map<String, dynamic> toJson() => _$LoggerJsonListToJson(this);
-}
-
-/// Atalho interno para log de desenvolvedor para evitar loops.
-void devLog(String message) {
-  dev.log(message, name: 'log_custom_printer');
 }

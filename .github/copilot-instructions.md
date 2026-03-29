@@ -9,24 +9,24 @@ Biblioteca Dart/Flutter para logging estruturado com serialização JSON, format
 - **Base selada**: `LoggerObject` (marker class) → `LoggerObjectBase` (abstract contract)
 - **Implementações**: `DebugLog` (yellow), `InfoLog` (white), `WarningLog` (green), `ErrorLog` (red)
 - Cada tipo implementa: `getColor()`, `getMessage([withColor])`, `toJson()`, `fromJson()`
-- **Localização**: `lib/src/logs_object/` - um arquivo por tipo + gerados `.g.dart`
+- **Localização**: `lib/src/domain/logs_object/` - um arquivo por tipo + gerados `.g.dart`
 
 ### Sistema de Configuração (DI via get_it)
 - **`registerLogPrinter(LogPrinterBase)`**: Registra a impressora no get_it (obrigatório no startup)
-- **`registerLogPrinterColor()` / `registerLogPrinterSimple()`**: Atalhos para configuração comum. Retornam um `LoggerCacheRepository`.
+- **`registerLogPrinterColor()` / `registerLogPrinterSimple()`**: Atalhos para configuração comum. Retornam um `LoggerPersistenceService`.
 - **`ConfigLog`**: Controla `enableLog` (padrão `false`), `onlyClasses` (filtragem de tipos).
 - **ErrorLog sempre processado**: Mesmo com `enableLog: false`, erros são registrados (via `alwaysPrint`)
 
 ### Printers (Strategy Pattern)
-- **Interface**: `LogPrinterBase` com `printLog(LoggerObjectBase)` e `canPrintLog(LoggerObjectBase)`
-- **`LogSimplePrint`**: Usa `debugPrint()` sem ANSI, formato `[ClassName] <timestamp> <message>`
+- **Interface**: `LogPrinterBase` com `printLog(LoggerObjectBase)`
+- **`LogSimplePrint`**: Saída simples sem ANSI, formato `[ClassName] <timestamp> <message>`
 - **`LogWithColorPrint`**: Usa `dart:developer.log()` com blocos separadores coloridos
 - Filtragem via `ConfigLog.onlyClasses` aplicada em `LogPrinterService.executePrint()`
 
 ### Sistema de Cache (Feature)
-- **`LoggerCacheRepository`** (interface): Define operações de cache (`addLog`, `getAllLogs`, `clearLogs`, `getLogsByType`, `clearLogsByType`).
-- **`LoggerCacheImpl`**: Implementação em memória e opcionalmente em arquivo (se `saveLogFilePath` for fornecido).
-- O repositório de cache é retornado ao chamar `registerLogPrinter`, `registerLogPrinterColor` ou `registerLogPrinterSimple`.
+- **`ILoggerCacheRepository`** (interface): Define operações de cache (`addLog`, `getAllLogs`, `clearLogs`, `getLogsByType`, `clearLogsByType`).
+- **`LoggerCacheRepositoryImpl`**: Implementação em memória e opcionalmente em arquivo (se `saveLogFilePath` for fornecido).
+- **`LoggerPersistenceService`**: Serviço retornado ao chamar `registerLogPrinter`, `registerLogPrinterColor` ou `registerLogPrinterSimple`.
 
 ## Workflows Críticos
 
@@ -51,7 +51,7 @@ dart run build_runner build --delete-conflicting-outputs
 ## Convenções e Padrões Específicos
 
 ### Criação de Novo Tipo de Log
-1. Crie arquivo em `lib/src/logs_object/<tipo>_log.dart`
+1. Crie arquivo em `lib/src/domain/logs_object/<tipo>_log.dart`
 2. Anote classe com `@JsonSerializable()`
 3. Adicione `part '<tipo>_log.g.dart';`
 4. Estenda `LoggerObjectBase` com construtor delegando para `super`
@@ -131,10 +131,11 @@ GetIt.instance<LogPrinterService>().executePrint(DebugLog('Mensagem direta'));
 - `build_runner` ^2.11.1 gerencia code generation
 - Configuração: `build.yaml` força `explicit_to_json: true` para nested objects
 
-### Flutter Framework
-- `flutter/material.dart`: `debugPrint()`, `@mustCallSuper`, `kDebugMode`
-- `dart:developer`: `log()` para output com ANSI preservado
-- `path_provider` ^2.1.5: Diretório de suporte para cache de logs
+### Runtime e Saída
+- Biblioteca base em Dart puro (sem dependência obrigatória de Flutter no pacote)
+- `dart:developer`: `log()` na impressora colorida
+- `print()` na impressora simples
+- Persistência em arquivo usando `dart:io` + `path`
 
 ### Utils Internos
 - `LoggerAnsiColor`: Classe com transformadores de cor ANSI baseada em `EnumAnsiColors`
@@ -154,20 +155,16 @@ lib/
   log_custom_printer.dart           # Export público da biblioteca
   src/
     config_log.dart                  # Configuração
-    log_printer_locator.dart        # DI: registerLogPrinter, resolveLogPrinter
+    log_printer_locator.dart        # DI: registerLogPrinter, fetchLogPrinterService
     log_custom_printer_base.dart    # LogPrinterBase (classe abstrata)
     log_printer_service.dart        # Serviço que orquestra impressão e cache
-    logs_object/                     # Hierarquia sealed + gerados
-      logger_object.dart             # Base abstrata
-      debug_log.dart, *.g.dart       # Implementações
-    log_printers/                    # Strategy pattern
-      log_simple_print.dart          # Com/sem cores
-    log_helpers/
-      logger_class_mixin.dart        # Mixin utilitário
-      enum_logger_type.dart          # Enum de tipos de log
-    cache/
-      logger_cache_repository.dart   # Interface de cache
-      logger_cache_impl.dart         # Implementação de cache
+    domain/
+      logs_object/                   # Hierarquia sealed + gerados
+      log_printers/                  # Strategy pattern
+      log_helpers/                   # Mixin e enums
+      i_logger_cache_repository.dart # Interface de cache
+    data/
+      cache/                         # Implementações de cache/persistência
     utils/                           # Extensions e helpers
 ```
 

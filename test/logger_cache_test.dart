@@ -1,65 +1,66 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:log_custom_printer/src/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
+import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 void main() {
-  group('LoggerCache Reproduction', () {
+  group('LoggerCache', () {
+    late LoggerCache loggerCache;
     late Directory tempDir;
-    late LoggerCache cache;
 
-    setUp(() async {
-      tempDir = Directory('logger');
-      if (tempDir.existsSync()) {
-        tempDir.deleteSync(recursive: true);
-      }
-      tempDir.createSync();
-
-      cache = LoggerCache(tempDir.path);
-      // Wait for initialization (even if it fails and defaults to 'logger')
-      await cache.futureInitialization;
+    setUpAll(() async {
+      tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
+      loggerCache = LoggerCache(tempDir.path);
+      await loggerCache.futureInitialization.future;
     });
 
-    tearDown(() {
-      if (tempDir.existsSync()) {
-        tempDir.deleteSync(recursive: true);
-      }
+    tearDownAll(() async {
+      await tempDir.delete(recursive: true);
     });
 
-    test('getLogResp returns null when JSON is a list', () async {
-      final file = File('${tempDir.path}/test_list.json');
-      file.writeAsStringSync(jsonEncode([1, 2, 3]));
-
-      expect(await cache.getLogResp('test_list'), isNull);
+    test('_getPathFile should work for valid filename', () async {
+      // _getPathFile is private, so we'll test it through a public method that uses it
+      // or just trust it if it doesn't crash.
+      // Actually we can't easily test it directly if it's private.
+      // But we can test writeLogToFile which calls it.
+      await loggerCache.writeLogToFile('test_log', {'key': 'value'});
+      final expectedPath = path.join(
+        tempDir.path,
+        'loggerApp',
+        'logs',
+        'test_log.json',
+      );
+      final file = File(expectedPath);
+      expect(await file.exists(), isTrue);
     });
 
-    test('getLogResp returns null when JSON is a primitive', () async {
-      final file = File('${tempDir.path}/test_primitive.json');
-      file.writeAsStringSync(jsonEncode("not a map"));
+    test(
+      '_getPathFile should throw assertion error for filename with separator',
+      () {
+        expect(
+          () =>
+              loggerCache.writeLogToFile('path${path.separator}separator', {}),
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
 
-      expect(await cache.getLogResp('test_primitive'), isNull);
-    });
+    test(
+      '_getPathFile should throw assertion error for filename with .json',
+      () async {
+        await expectLater(
+          () => loggerCache.writeLogToFile('test.json', {}),
+          throwsA(isA<AssertionError>()),
+        );
+      },
+    );
 
-    test('getLogResp returns null when JSON is malformed', () async {
-      final file = File('${tempDir.path}/test_malformed.json');
-      file.writeAsStringSync('{invalid}');
-
-      expect(await cache.getLogResp('test_malformed'), isNull);
-    });
-
-    test('getLogResp returns null when file does not exist', () async {
-      expect(await cache.getLogResp('non_existent'), isNull);
-    });
-
-    test('getLogResp returns map when JSON is valid map', () async {
-      final file = File('${tempDir.path}/test_valid.json');
-      final data = {'type': 'DebugLog', 'loggerJson': <dynamic>[]};
-      file.writeAsStringSync(jsonEncode(data));
-
-      final result = await cache.getLogResp('test_valid');
-      expect(result, isNotNull);
-      expect(result!['type'], equals('DebugLog'));
+    test('_getPathFile should throw assertion error for empty filename', () {
+      expect(
+        () => loggerCache.writeLogToFile('', {}),
+        throwsA(isA<AssertionError>()),
+      );
     });
   });
 }

@@ -1,10 +1,16 @@
 import 'package:get_it/get_it.dart';
-import 'package:log_custom_printer/src/cache/logger_cache_impl.dart';
-import 'package:log_custom_printer/src/cache/logger_cache_repository.dart';
 import 'package:log_custom_printer/src/config_log.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart'
+    show FileType;
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
-import 'package:log_custom_printer/src/log_printers/log_simple_print.dart';
-import 'package:log_custom_printer/src/log_printers/log_with_color_print.dart';
+
+export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart'
+    show FileType;
 
 /// Resolve o [LogPrinterService] registrado no get_it.
 ///
@@ -18,10 +24,7 @@ import 'package:log_custom_printer/src/log_printers/log_with_color_print.dart';
 LogPrinterService fetchLogPrinterService() {
   final getIt = GetIt.instance;
   if (!getIt.isRegistered<LogPrinterService>()) {
-    throw StateError(
-      'LogPrinterService não está registrado. '
-      'Chame registerLogPrinter() no startup (ex: main()) antes de usar logs.',
-    );
+    registerLogPrinterSimple();
   }
   return getIt<LogPrinterService>();
 }
@@ -45,12 +48,22 @@ LogPrinterService fetchLogPrinterService() {
 /// ```
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinter(LogPrinterBase printer, {LoggerCacheRepository? cacheRepository}) {
+LoggerPersistenceService registerLogPrinter(
+  LogPrinterBase printer, {
+  ILoggerCacheRepository? cacheRepository,
+  required ConfigLog config,
+}) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {
     locator.unregister<LogPrinterService>();
   }
-  locator.registerSingleton<LogPrinterService>(LogPrinterService(printer, cacheRepository: cacheRepository));
+  locator.registerSingleton<LogPrinterService>(
+    LogPrinterService(
+      printer,
+      cacheRepository: cacheRepository,
+      configLog: config,
+    ),
+  );
   return locator<LogPrinterService>().cacheRepository;
 }
 
@@ -63,18 +76,24 @@ LoggerCacheRepository registerLogPrinter(LogPrinterBase printer, {LoggerCacheRep
 /// [cacheFilePath]: Caminho opcional para persistência em arquivo.
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinterColor({
+LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogWithColorPrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(maxLogEntries: maxLogsInCache, saveLogFilePath: cacheFilePath),
+    LogWithColorPrint(),
+    cacheRepository: LoggerCacheRepositoryImpl(
+      maxLogEntries: maxLogsInCache,
+      saveLogFilePath: cacheFilePath,
+      fileType: fileType,
+    ),
+    config: config ?? const ConfigLog(),
   );
 }
 
-/// Registra uma impressora simples (sem cores).
+/// Registra uma impressora simples (sem cores.
 ///
 /// Atalho para [registerLogPrinter] com [LogSimplePrint].
 ///
@@ -83,13 +102,19 @@ LoggerCacheRepository registerLogPrinterColor({
 /// [cacheFilePath]: Caminho opcional para persistência em arquivo.
 ///
 /// {@category Core}
-LoggerCacheRepository registerLogPrinterSimple({
+LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogSimplePrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(maxLogEntries: maxLogsInCache, saveLogFilePath: cacheFilePath),
+    LogSimplePrint(),
+    cacheRepository: LoggerCacheRepositoryImpl(
+      maxLogEntries: maxLogsInCache,
+      saveLogFilePath: cacheFilePath,
+      fileType: fileType,
+    ),
+    config: config ?? const ConfigLog(),
   );
 }
