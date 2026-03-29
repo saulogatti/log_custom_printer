@@ -27,14 +27,14 @@ void main() {
       expect(fakePrinter.printed.length, equals(1));
       expect(fakePrinter.printed.single, isA<InfoLog>());
     });
-    test('always sends ErrorLog regardless of onlyClasses filter', () {
-      final fakePrinter =
-          GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
+    test('ErrorLog is printed even when logging is disabled', () async {
+      await GetIt.instance.reset();
+      final fakePrinter = _FakeLogPrinter(
+        config: const ConfigLog(enableLog: false),
+      );
+      registerLogPrinter(fakePrinter);
 
-      ErrorLog(
-        'error should be sent',
-        StackTrace.fromString('#0 example'),
-      ).sendLog();
+      ErrorLog('boom', StackTrace.fromString('#0 example')).sendLog();
 
       expect(fakePrinter.printed.length, equals(1));
       expect(fakePrinter.printed.single, isA<ErrorLog>());

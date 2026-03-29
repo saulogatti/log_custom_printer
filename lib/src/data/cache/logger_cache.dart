@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:developer' as dev;
 import 'dart:io';
 
-import 'package:log_custom_printer/src/data/file_utils/i_file_manager_type.dart';
+import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/utils/string_extension.dart';

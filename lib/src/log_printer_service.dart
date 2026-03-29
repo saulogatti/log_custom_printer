@@ -43,11 +43,9 @@ final class LogPrinterService {
   /// 1. Adicionado ao cache via [_loggerPersistenceService].
   /// 2. Impresso via [logPrinter].
   void executePrint(LoggerObjectBase log) {
-    if (!configLog.enableLog) {
-      return;
-    }
-    if ((configLog.onlyClasses.isEmpty ||
-        configLog.onlyClasses.contains(log.runtimeType))) {
+    if (configLog.enableLog &&
+        (configLog.onlyClasses.isEmpty ||
+            configLog.onlyClasses.contains(log.runtimeType))) {
       // O log pode ser impresso, então adicionamos ao cache e imprimimos
       _loggerPersistenceService.addLog(log);
       logPrinter.printLog(log);

@@ -1,13 +1,13 @@
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
-import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
-import 'package:log_custom_printer/src/data/file_utils/i_file_manager_type.dart';
+import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
+ 
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
-/// Implementação concreta de [LoggerPersistenceService] usando armazenamento em memória
+/// Implementação concreta de [ILoggerCacheRepository] usando armazenamento em memória
 /// e opcionalmente em arquivo.
 ///
 /// Mantém os logs organizados por tipo em memória usando [LoggerJsonList].
@@ -44,7 +44,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     if (saveLogFilePath != null) {
       _loggerCache = LoggerCache(
         saveLogFilePath!,
-        fileManagerType: FileManager(fileType: fileType),
+        fileManagerType: F(fileType: fileType),
       );
       _futureInitialization = initialize();
     }
