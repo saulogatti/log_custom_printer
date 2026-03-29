@@ -45,7 +45,7 @@ class ConsoleView extends StatefulWidget {
   @override
   State<ConsoleView> createState() => _ConsoleViewState();
 }
-
+// TODO Remover classe de teste
 class TesteLog with LoggerClassMixin {
   Future<void> enviarLogs() async {
     for (int i = 0; i < 10; i++) {
@@ -110,6 +110,7 @@ class _ConsoleViewState extends State<ConsoleView> {
     );
   }
 
+  // TODO Remover método de teste
   Future<void> _sendLogsForTest() async {
     final testeLog = TesteLog();
     await testeLog.enviarLogs();
