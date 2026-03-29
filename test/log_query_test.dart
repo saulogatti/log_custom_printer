@@ -1,61 +1,9 @@
 import 'dart:convert';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
-import 'package:log_custom_printer/src/domain/query/log_export_service.dart';
-import 'package:log_custom_printer/src/domain/query/log_filter_engine.dart';
-import 'package:log_custom_printer/src/domain/query/log_query.dart';
-import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 import 'package:test/test.dart';
-
-// ---------------------------------------------------------------------------
-// Fake in-memory repository (no file I/O, no GetIt).
-// ---------------------------------------------------------------------------
-
-class _FakeCacheRepository implements ILoggerCacheRepository {
-  final List<LoggerObjectBase> _logs = [];
-
-  @override
-  Future<void> addLog(LoggerObjectBase log) async => _logs.insert(0, log);
-
-  @override
-  Future<void> clearLogs() async => _logs.clear();
-
-  @override
-  Future<void> clearLogsByType(EnumLoggerType type) async =>
-      _logs.removeWhere((l) => l.enumLoggerType == type);
-
-  @override
-  Future<List<LoggerObjectBase>> getAllLogs() async =>
-      List<LoggerObjectBase>.from(_logs);
-
-  @override
-  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async =>
-      _logs.where((l) => l.enumLoggerType == type).toList();
-}
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-DateTime _dt(int hour, [int minute = 0]) =>
-    DateTime(2024, 1, 15, hour, minute);
-
-/// Creates a [LoggerPersistenceService] backed by a fake repo pre-seeded
-/// with [initialLogs].
-///
-/// The list is inserted in reverse so that, after [_FakeCacheRepository.addLog]
-/// inserts each element at index 0, the resulting order in the repository
-/// mirrors the original [initialLogs] order (first element first).
-LoggerPersistenceService _makeService(List<LoggerObjectBase> initialLogs) {
-  final repo = _FakeCacheRepository();
-  for (final log in initialLogs.reversed) {
-    repo.addLog(log);
-  }
-  return LoggerPersistenceService(cacheRepository: repo);
-}
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -91,9 +39,7 @@ void main() {
     test('filter by multiple types', () {
       final result = filter.apply(
         allLogs,
-        const LogQuery(
-          types: {EnumLoggerType.debug, EnumLoggerType.warning},
-        ),
+        const LogQuery(types: {EnumLoggerType.debug, EnumLoggerType.warning}),
       );
       expect(result, hasLength(2));
       expect(result.whereType<DebugLog>(), hasLength(1));
@@ -128,11 +74,7 @@ void main() {
       // Only ErrorLog within [10:00, 12:00) — error is at 11:00.
       final result = filter.apply(
         allLogs,
-        LogQuery(
-          types: {EnumLoggerType.error},
-          start: _dt(10),
-          end: _dt(12),
-        ),
+        LogQuery(types: {EnumLoggerType.error}, start: _dt(10), end: _dt(12)),
       );
       expect(result, hasLength(1));
       expect(result.single, isA<ErrorLog>());
@@ -223,10 +165,11 @@ void main() {
       final d2 = DebugLog('second')..logCreationDate = _dt(7);
       final d3 = DebugLog('third')..logCreationDate = _dt(3);
 
-      final result = sorter.apply(
-        [d2, d3, d1],
-        const LogQuery(sortField: LogSortField.type),
-      );
+      final result = sorter.apply([
+        d2,
+        d3,
+        d1,
+      ], const LogQuery(sortField: LogSortField.type));
       // All debug → stable tiebreak by date asc: d3(3), d1(5), d2(7)
       expect((result[0] as DebugLog).message, equals('third'));
       expect((result[1] as DebugLog).message, equals('first'));
@@ -235,10 +178,7 @@ void main() {
 
     test('sort does not mutate the original list', () {
       final original = List<LoggerObjectBase>.from(unsorted);
-      sorter.apply(
-        unsorted,
-        const LogQuery(sortField: LogSortField.date),
-      );
+      sorter.apply(unsorted, const LogQuery(sortField: LogSortField.date));
       expect(unsorted, equals(original));
     });
   });
@@ -263,8 +203,9 @@ void main() {
       test('each entry contains logType field', () {
         final output = exporter.export([debug1, error1], ExportFormat.json);
         final decoded = jsonDecode(output) as List;
-        final types =
-            decoded.map((e) => (e as Map<String, dynamic>)['logType']).toList();
+        final types = decoded
+            .map((e) => (e as Map<String, dynamic>)['logType'])
+            .toList();
         expect(types, containsAll(['DebugLog', 'ErrorLog']));
       });
 
@@ -383,8 +324,10 @@ void main() {
     });
 
     test('exports all logs as JSON', () async {
-      final output =
-          await service.exportLogs(const LogQuery(), ExportFormat.json);
+      final output = await service.exportLogs(
+        const LogQuery(),
+        ExportFormat.json,
+      );
       final decoded = jsonDecode(output) as List;
       expect(decoded, hasLength(2));
     });
@@ -403,8 +346,10 @@ void main() {
     });
 
     test('exports all logs as TXT', () async {
-      final output =
-          await service.exportLogs(const LogQuery(), ExportFormat.txt);
+      final output = await service.exportLogs(
+        const LogQuery(),
+        ExportFormat.txt,
+      );
       final lines = output.split('\n');
       expect(lines, hasLength(2));
     });
@@ -426,8 +371,9 @@ void main() {
     late LoggerPersistenceService service;
 
     setUp(() {
-      service =
-          LoggerPersistenceService(cacheRepository: _FakeCacheRepository());
+      service = LoggerPersistenceService(
+        cacheRepository: _FakeCacheRepository(),
+      );
     });
 
     test('addLog and getAllLogs work as before', () async {
@@ -489,4 +435,50 @@ void main() {
       expect(notifications.single, hasLength(1));
     });
   });
+}
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+DateTime _dt(int hour, [int minute = 0]) => DateTime(2024, 1, 15, hour, minute);
+
+/// Creates a [LoggerPersistenceService] backed by a fake repo pre-seeded
+/// with [initialLogs].
+///
+/// The list is inserted in reverse so that, after [_FakeCacheRepository.addLog]
+/// inserts each element at index 0, the resulting order in the repository
+/// mirrors the original [initialLogs] order (first element first).
+LoggerPersistenceService _makeService(List<LoggerObjectBase> initialLogs) {
+  final repo = _FakeCacheRepository();
+  for (final log in initialLogs.reversed) {
+    repo.addLog(log);
+  }
+  return LoggerPersistenceService(cacheRepository: repo);
+}
+
+// ---------------------------------------------------------------------------
+// Fake in-memory repository (no file I/O, no GetIt).
+// ---------------------------------------------------------------------------
+
+class _FakeCacheRepository implements ILoggerCacheRepository {
+  final List<LoggerObjectBase> _logs = [];
+
+  @override
+  Future<void> addLog(LoggerObjectBase log) async => _logs.insert(0, log);
+
+  @override
+  Future<void> clearLogs() async => _logs.clear();
+
+  @override
+  Future<void> clearLogsByType(EnumLoggerType type) async =>
+      _logs.removeWhere((l) => l.enumLoggerType == type);
+
+  @override
+  Future<List<LoggerObjectBase>> getAllLogs() async =>
+      List<LoggerObjectBase>.from(_logs);
+
+  @override
+  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async =>
+      _logs.where((l) => l.enumLoggerType == type).toList();
 }

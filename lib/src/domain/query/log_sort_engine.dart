@@ -13,8 +13,6 @@ import 'log_query.dart';
 ///
 /// {@category Query}
 class LogSortEngine {
-  const LogSortEngine();
-
   static const Map<EnumLoggerType, int> _severityIndex = {
     EnumLoggerType.debug: 0,
     EnumLoggerType.info: 1,
@@ -22,14 +20,13 @@ class LogSortEngine {
     EnumLoggerType.error: 3,
   };
 
+  const LogSortEngine();
+
   /// Retorna uma nova lista ordenada de acordo com [query].
   ///
   /// Quando [LogQuery.sortField] é `null`, a lista original é retornada
   /// sem modificação.
-  List<LoggerObjectBase> apply(
-    List<LoggerObjectBase> logs,
-    LogQuery query,
-  ) {
+  List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {
     if (query.sortField == null) return logs;
 
     final sorted = List<LoggerObjectBase>.from(logs);

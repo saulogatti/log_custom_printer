@@ -78,6 +78,19 @@ final class LoggerPersistenceService {
     }
   }
 
+  /// Exporta os logs para uma [String] no [format] especificado.
+  ///
+  /// A consulta aplica os filtros e a ordenação definidos em [query] antes de
+  /// serializar. Passe [LogQuery()] (sem parâmetros) para exportar todos os logs
+  /// sem filtro ou ordenação.
+  ///
+  /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
+  /// do conteúdo gerado fica a cargo da camada consumidora.
+  Future<String> exportLogs(LogQuery query, ExportFormat format) async {
+    final logs = await queryLogs(query);
+    return _exportService.export(logs, format);
+  }
+
   /// Recupera todas as entradas de log armazenadas.
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final logs = await _cacheRepository.getAllLogs();
@@ -88,6 +101,18 @@ final class LoggerPersistenceService {
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
     final logs = await _cacheRepository.getLogsByType(type);
     return logs;
+  }
+
+  /// Consulta os logs aplicando filtros, ordenação e retornando a lista resultante.
+  ///
+  /// A pipeline é: `getAllLogs → filter(query) → sort(query)`.
+  ///
+  /// Quando [query] não possui filtros nem ordenação definidos, equivale a
+  /// chamar [getAllLogs] diretamente.
+  Future<List<LoggerObjectBase>> queryLogs(LogQuery query) async {
+    final allLogs = await getAllLogs();
+    final filtered = _filterEngine.apply(allLogs, query);
+    return _sortEngine.apply(filtered, query);
   }
 
   /// Busca logs criados dentro do intervalo de datas especificado.
@@ -124,30 +149,5 @@ final class LoggerPersistenceService {
     final allLogs = await _cacheRepository.getAllLogs();
     final tagRegex = RegExp(r'\b' + RegExp.escape(tag) + r'\b');
     return allLogs.where((log) => tagRegex.hasMatch(log.tag)).toList();
-  }
-
-  /// Consulta os logs aplicando filtros, ordenação e retornando a lista resultante.
-  ///
-  /// A pipeline é: `getAllLogs → filter(query) → sort(query)`.
-  ///
-  /// Quando [query] não possui filtros nem ordenação definidos, equivale a
-  /// chamar [getAllLogs] diretamente.
-  Future<List<LoggerObjectBase>> queryLogs(LogQuery query) async {
-    final allLogs = await getAllLogs();
-    final filtered = _filterEngine.apply(allLogs, query);
-    return _sortEngine.apply(filtered, query);
-  }
-
-  /// Exporta os logs para uma [String] no [format] especificado.
-  ///
-  /// A consulta aplica os filtros e a ordenação definidos em [query] antes de
-  /// serializar. Passe [LogQuery()] (sem parâmetros) para exportar todos os logs
-  /// sem filtro ou ordenação.
-  ///
-  /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
-  /// do conteúdo gerado fica a cargo da camada consumidora.
-  Future<String> exportLogs(LogQuery query, ExportFormat format) async {
-    final logs = await queryLogs(query);
-    return _exportService.export(logs, format);
   }
 }

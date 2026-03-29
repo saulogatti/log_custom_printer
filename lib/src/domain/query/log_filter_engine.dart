@@ -19,20 +19,17 @@ class LogFilterEngine {
   ///
   /// Todos os predicados são avaliados em uma única passagem para evitar
   /// alocações intermediárias desnecessárias.
-  List<LoggerObjectBase> apply(
-    List<LoggerObjectBase> logs,
-    LogQuery query,
-  ) {
-    final filterTypes =
-        query.types != null && query.types!.isNotEmpty ? query.types : null;
+  List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {
+    final filterTypes = query.types != null && query.types!.isNotEmpty
+        ? query.types
+        : null;
     final start = query.start;
     final end = query.end;
 
     if (filterTypes == null && start == null && end == null) return logs;
 
     return logs.where((log) {
-      if (filterTypes != null &&
-          !filterTypes.contains(log.enumLoggerType)) {
+      if (filterTypes != null && !filterTypes.contains(log.enumLoggerType)) {
         return false;
       }
       if (start != null && log.logCreationDate.isBefore(start)) return false;

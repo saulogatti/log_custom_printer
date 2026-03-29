@@ -11,30 +11,6 @@ enum ExportFormat {
   txt,
 }
 
-/// Campo de ordenação de logs.
-///
-/// {@category Query}
-enum LogSortField {
-  /// Ordena pela data de criação do log.
-  date,
-
-  /// Ordena pela severidade do tipo do log.
-  ///
-  /// Ordem crescente de severidade: `debug < info < warning < error`.
-  type,
-}
-
-/// Direção de ordenação.
-///
-/// {@category Query}
-enum SortDirection {
-  /// Ordenação crescente (menor → maior / mais antigo → mais recente).
-  asc,
-
-  /// Ordenação decrescente (maior → menor / mais recente → mais antigo).
-  desc,
-}
-
 /// Parâmetros de consulta para filtro, ordenação e exportação de logs.
 ///
 /// Todos os campos são opcionais. Quando omitidos, nenhum filtro ou ordenação
@@ -78,4 +54,28 @@ class LogQuery {
     this.sortField,
     this.sortDirection = SortDirection.asc,
   });
+}
+
+/// Campo de ordenação de logs.
+///
+/// {@category Query}
+enum LogSortField {
+  /// Ordena pela data de criação do log.
+  date,
+
+  /// Ordena pela severidade do tipo do log.
+  ///
+  /// Ordem crescente de severidade: `debug < info < warning < error`.
+  type,
+}
+
+/// Direção de ordenação.
+///
+/// {@category Query}
+enum SortDirection {
+  /// Ordenação crescente (menor → maior / mais antigo → mais recente).
+  asc,
+
+  /// Ordenação decrescente (maior → menor / mais recente → mais antigo).
+  desc,
 }
