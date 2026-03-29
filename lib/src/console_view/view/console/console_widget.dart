@@ -53,13 +53,13 @@ extension LogTypeExtension on LogType {
   Color get color {
     switch (this) {
       case LogType.info:
-        return Colors.blue;
+        return Colors.white;
       case LogType.warning:
-        return Colors.yellow;
+        return Colors.green;
       case LogType.error:
         return Colors.red;
       case LogType.debug:
-        return Colors.green;
+        return Colors.yellow;
     }
   }
 

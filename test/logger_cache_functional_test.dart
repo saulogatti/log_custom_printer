@@ -24,7 +24,7 @@ void main() {
       () async {
         final list = LoggerJsonList(type: 'DebugLog');
         list.addLogger(DebugLog('Test message'));
-        await cache.writeLogToFile('debug', list.toJson());
+        await cache.writeLogToFile('debug', list);
 
         final expectedFile = File('${tempDir.path}/debug.json');
         expect(await expectedFile.exists(), isTrue);
@@ -34,7 +34,7 @@ void main() {
       // 1. Create and write a log list
       final list = LoggerJsonList(type: 'DebugLog');
       list.addLogger(DebugLog('Test message'));
-      await cache.writeLogToFile('debug', list.toJson());
+      await cache.writeLogToFile('debug', list);
 
       // 2. Read all logs
       final allLogs = await cache.readAllLogs();

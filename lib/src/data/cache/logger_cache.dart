@@ -102,18 +102,14 @@ final class LoggerCache {
   ///
   /// O conteúdo é serializado como JSON formatado antes da escrita.
   /// Erros de I/O acionam [onError] quando definido.
-  Future<void> writeLogToFile(String fileName, Object loggerList) async {
+  Future<void> writeLogToFile(
+    String fileName,
+    LoggerJsonList loggerList,
+  ) async {
     try {
       await futureInitialization.future;
       final path = _getPathFile(fileName);
-      assert(
-        loggerList is Map && loggerList.isNotEmpty,
-        'A lista de logs não pode ser nula.',
-      );
-      assert(
-        loggerList is String && loggerList.isNotEmpty,
-        'A lista de logs não pode ser nula.',
-      );
+
       final objEncode = JsonEncoder.withIndent('  ').convert(loggerList);
 
       await _fileManagerType.writeFile(path, objEncode);

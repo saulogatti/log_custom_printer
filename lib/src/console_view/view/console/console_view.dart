@@ -33,6 +33,17 @@ class ConsoleView extends StatefulWidget {
   State<ConsoleView> createState() => _ConsoleViewState();
 }
 
+class TesteLog with LoggerClassMixin {
+  Future<void> enviarLogs() async {
+    for (int i = 0; i < 100; i++) {
+      logDebug('Log $i');
+      logWarning('Log de aviso $i');
+      logInfo('Log de informação $i');
+      await Future.delayed(const Duration(seconds: 1), () {});
+    }
+  }
+}
+
 class _ConsoleViewState extends State<ConsoleView> {
   @override
   Widget build(BuildContext context) {
@@ -72,9 +83,7 @@ class _ConsoleViewState extends State<ConsoleView> {
   }
 
   void _sendLogsForTest() async {
-    for (int i = 0; i < 100; i++) {
-      DebugLog('Log $i').sendLog();
-      await Future.delayed(const Duration(seconds: 1), () {});
-    }
+    final testeLog = TesteLog();
+    await testeLog.enviarLogs();
   }
 }

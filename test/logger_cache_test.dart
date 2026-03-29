@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
@@ -24,7 +25,10 @@ void main() {
       // or just trust it if it doesn't crash.
       // Actually we can't easily test it directly if it's private.
       // But we can test writeLogToFile which calls it.
-      await loggerCache.writeLogToFile('test_log', {'key': 'value'});
+      await loggerCache.writeLogToFile(
+        'test_log',
+        LoggerJsonList(type: 'TestLog'),
+      );
       final expectedPath = path.join(
         tempDir.path,
         'loggerApp',
@@ -39,8 +43,10 @@ void main() {
       '_getPathFile should throw assertion error for filename with separator',
       () {
         expect(
-          () =>
-              loggerCache.writeLogToFile('path${path.separator}separator', {}),
+          () => loggerCache.writeLogToFile(
+            'path${path.separator}separator',
+            LoggerJsonList(type: 'TestLog'),
+          ),
           throwsA(isA<AssertionError>()),
         );
       },
@@ -50,7 +56,10 @@ void main() {
       '_getPathFile should throw assertion error for filename with .json',
       () async {
         await expectLater(
-          () => loggerCache.writeLogToFile('test.json', {}),
+          () => loggerCache.writeLogToFile(
+            'test.json',
+            LoggerJsonList(type: 'TestLog'),
+          ),
           throwsA(isA<AssertionError>()),
         );
       },
@@ -58,7 +67,7 @@ void main() {
 
     test('_getPathFile should throw assertion error for empty filename', () {
       expect(
-        () => loggerCache.writeLogToFile('', {}),
+        () => loggerCache.writeLogToFile('', LoggerJsonList(type: 'TestLog')),
         throwsA(isA<AssertionError>()),
       );
     });
