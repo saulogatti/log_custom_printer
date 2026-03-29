@@ -28,14 +28,6 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
               SliverToBoxAdapter(
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () => context.read<OptionsBloc>().clearLogs(),
-                      child: const Text('Limpar Logs'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () => context.read<OptionsBloc>().exportLogs(),
-                      child: const Text('Exportar Logs'),
-                    ),
                     DateSelectWidget(
                       label: "Seleciona Data",
                       // selectedDate: DateTime.now(),
