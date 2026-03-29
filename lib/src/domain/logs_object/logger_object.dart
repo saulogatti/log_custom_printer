@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import '../../config_log.dart';
 import '../../log_printer_locator.dart';
 import '../../log_printer_service.dart';
-import '../../utils/date_time_log_helper.dart';
+import '../../extensions/date_time_log_helper.dart';
 import '../../utils/logger_ansi_color.dart';
 
 /// Marca base para objetos de log.
@@ -25,6 +25,26 @@ sealed class LoggerObject {}
 ///
 /// {@category Core}
 abstract class LoggerObjectBase extends LoggerObject {
+
+  /// Cria um objeto de log.
+  ///
+  /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
+  /// em modo de desenvolvimento. [createdAt] permite controlar a data do
+  /// log (útil em testes).
+  LoggerObjectBase(
+    this.message, {
+    DateTime? createdAt,
+    Type? typeClass,
+    String? tag,
+  }) : tag = tag ?? "" {
+    assert(
+      message.isNotEmpty && message.trim().isNotEmpty,
+      "Mensagem não pode ser vazia ou apenas espaços em branco",
+    );
+
+    logCreationDate = createdAt ?? DateTime.now();
+    className = typeClass?.toString() ?? runtimeType.toString();
+  }
   /// Nome da classe/origem que emitiu o log.
   ///
   /// Inicializado no construtor a partir de `typeClass` (quando fornecido)
@@ -50,26 +70,6 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// `DateTime.now()`; caso contrário usa o valor fornecido.
   @JsonKey(name: "logCreationDate")
   DateTime logCreationDate = DateTime.now();
-
-  /// Cria um objeto de log.
-  ///
-  /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
-  /// em modo de desenvolvimento. [createdAt] permite controlar a data do
-  /// log (útil em testes).
-  LoggerObjectBase(
-    this.message, {
-    DateTime? createdAt,
-    Type? typeClass,
-    String? tag,
-  }) : tag = tag ?? "" {
-    assert(
-      message.isNotEmpty && message.trim().isNotEmpty,
-      "Mensagem não pode ser vazia ou apenas espaços em branco",
-    );
-
-    logCreationDate = createdAt ?? DateTime.now();
-    className = typeClass?.toString() ?? runtimeType.toString();
-  }
 
   /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
   ///

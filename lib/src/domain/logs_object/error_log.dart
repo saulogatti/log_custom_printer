@@ -39,12 +39,6 @@ part 'error_log.g.dart';
 /// ```
 @JsonSerializable()
 class ErrorLog extends LoggerObjectBase {
-  /// Stack trace associado ao erro.
-  ///
-  /// Captura a pilha de execução no momento do erro para facilitar
-  /// a depuração e identificação da origem do problema.
-  @StackTraceConverter()
-  final StackTrace stackTrace;
 
   /// Cria um log de erro.
   ///
@@ -56,6 +50,12 @@ class ErrorLog extends LoggerObjectBase {
   /// Cria uma instância a partir de JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) =>
       _$ErrorLogFromJson(json);
+  /// Stack trace associado ao erro.
+  ///
+  /// Captura a pilha de execução no momento do erro para facilitar
+  /// a depuração e identificação da origem do problema.
+  @StackTraceConverter()
+  final StackTrace stackTrace;
 
   @override
   bool get alwaysPrint => true;

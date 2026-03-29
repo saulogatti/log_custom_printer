@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Extension para formatação de data/hora em logs.
 ///
 /// Fornece métodos utilitários para formatar timestamps de forma consistente
@@ -12,12 +14,34 @@
 /// print(agora.onlyDate());      // "18/11/2025"
 /// print(agora.logFullDateTime); // "18/11/2025 14:30:25.123"
 /// ```
-extension DateTimeLogHelper on DateTime {
+extension DateTimeLoggingExtensions on DateTime {
   /// Retorna a data e hora completas no formato usado nos logs.
   ///
   /// Combina [onlyDate] e [onlyTime] para produzir uma string no formato
   /// "dd/MM/yyyy HH:mm:ss.SSS", ideal para timestamps de log.
   String get logFullDateTime => '${onlyDate()} ${onlyTime()}';
+
+  DateTime copyWithTime({int? hour, int? minute, int? second}) {
+    return DateTime(
+      year,
+      month,
+      day,
+      hour ?? this.hour,
+      minute ?? this.minute,
+      second ?? this.second,
+    );
+  }
+
+  String formatLocalizedTimeWithSeconds(BuildContext context, DateTime value) {
+    final localizations = MaterialLocalizations.of(context);
+    final use24h = MediaQuery.alwaysUse24HourFormatOf(context);
+    final formattedTime = localizations.formatTimeOfDay(
+      TimeOfDay.fromDateTime(value),
+      alwaysUse24HourFormat: use24h,
+    );
+    final seconds = value.second.toString().padLeft(2, '0');
+    return '$formattedTime • ${seconds}s';
+  }
 
   /// Formata apenas a data no formato dd/MM/yyyy.
   ///

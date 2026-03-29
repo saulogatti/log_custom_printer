@@ -2,6 +2,10 @@ import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.d
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/query/log_export_service.dart';
+import 'package:log_custom_printer/src/domain/query/log_filter_engine.dart';
+import 'package:log_custom_printer/src/domain/query/log_query.dart';
+import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 
 /// Serviço de persistência e consulta de logs.
 ///
@@ -13,6 +17,23 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 ///
 /// {@category Utilities}
 final class LoggerPersistenceService {
+
+  /// Cria o serviço com um [cacheRepository] customizado.
+  ///
+  /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
+  ///
+  /// Os parâmetros [filterEngine], [sortEngine] e [exportService] são opcionais
+  /// e permitem injetar implementações customizadas (útil em testes). Quando
+  /// omitidos, usam as implementações padrão constantes da biblioteca.
+  LoggerPersistenceService({
+    ILoggerCacheRepository? cacheRepository,
+    LogFilterEngine filterEngine = const LogFilterEngine(),
+    LogSortEngine sortEngine = const LogSortEngine(),
+    LogExportService exportService = const LogExportService(),
+  }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl(),
+       _filterEngine = filterEngine,
+       _sortEngine = sortEngine,
+       _exportService = exportService;
   final ILoggerCacheRepository _cacheRepository;
 
   /// Callback opcional para observar mudanças na coleção persistida.
@@ -20,11 +41,9 @@ final class LoggerPersistenceService {
   /// Recebe a lista de logs atual após operações de escrita/limpeza.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
 
-  /// Cria o serviço com um [cacheRepository] customizado.
-  ///
-  /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
-  LoggerPersistenceService({ILoggerCacheRepository? cacheRepository})
-    : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
+  final LogFilterEngine _filterEngine;
+  final LogSortEngine _sortEngine;
+  final LogExportService _exportService;
 
   /// Adiciona uma entrada de log ao repositório.
   ///
@@ -59,6 +78,19 @@ final class LoggerPersistenceService {
     }
   }
 
+  /// Exporta os logs para uma [String] no [format] especificado.
+  ///
+  /// A consulta aplica os filtros e a ordenação definidos em [query] antes de
+  /// serializar. Passe [LogQuery()] (sem parâmetros) para exportar todos os logs
+  /// sem filtro ou ordenação.
+  ///
+  /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
+  /// do conteúdo gerado fica a cargo da camada consumidora.
+  Future<String> exportLogs(LogQuery query, ExportFormat format) async {
+    final logs = await queryLogs(query);
+    return _exportService.export(logs, format);
+  }
+
   /// Recupera todas as entradas de log armazenadas.
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final logs = await _cacheRepository.getAllLogs();
@@ -69,6 +101,18 @@ final class LoggerPersistenceService {
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
     final logs = await _cacheRepository.getLogsByType(type);
     return logs;
+  }
+
+  /// Consulta os logs aplicando filtros, ordenação e retornando a lista resultante.
+  ///
+  /// A pipeline é: `getAllLogs → filter(query) → sort(query)`.
+  ///
+  /// Quando [query] não possui filtros nem ordenação definidos, equivale a
+  /// chamar [getAllLogs] diretamente.
+  Future<List<LoggerObjectBase>> queryLogs(LogQuery query) async {
+    final allLogs = await getAllLogs();
+    final filtered = _filterEngine.apply(allLogs, query);
+    return _sortEngine.apply(filtered, query);
   }
 
   /// Busca logs criados dentro do intervalo de datas especificado.

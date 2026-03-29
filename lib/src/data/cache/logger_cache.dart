@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
-import 'package:log_custom_printer/src/utils/string_extension.dart';
+import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:path/path.dart' as path;
 
 /// Gerenciador de cache para persistência de arquivos de log em disco.
@@ -102,19 +102,15 @@ final class LoggerCache {
   ///
   /// O conteúdo é serializado como JSON formatado antes da escrita.
   /// Erros de I/O acionam [onError] quando definido.
-  Future<void> writeLogToFile(String fileName, Object loggerList) async {
+  Future<void> writeLogToFile(
+    String fileName,
+    LoggerJsonList loggerList,
+  ) async {
     try {
       await futureInitialization.future;
       final path = _getPathFile(fileName);
-      assert(
-        loggerList is Map && loggerList.isNotEmpty,
-        'A lista de logs não pode ser nula.',
-      );
-      assert(
-        loggerList is String && loggerList.isNotEmpty,
-        'A lista de logs não pode ser nula.',
-      );
-      final objEncode = JsonEncoder.withIndent('  ').convert(loggerList);
+
+      final objEncode = const JsonEncoder.withIndent('  ').convert(loggerList);
 
       await _fileManagerType.writeFile(path, objEncode);
     } on Exception catch (e, stack) {

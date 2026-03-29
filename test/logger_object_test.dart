@@ -8,7 +8,7 @@ void main() {
     final fakePrinter = _FakeLogPrinter();
     registerLogPrinter(
       fakePrinter,
-      config: ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
+      config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
     );
   });
 
@@ -53,9 +53,9 @@ void main() {
 }
 
 class _FakeLogPrinter extends LogPrinterBase {
-  final List<LoggerObjectBase> printed = [];
 
   _FakeLogPrinter();
+  final List<LoggerObjectBase> printed = [];
 
   @override
   void printLog(LoggerObjectBase log) {

@@ -57,7 +57,7 @@ class FileManager implements IFileManagerType {
         final bytes = await file.readAsBytes();
         return String.fromCharCodes(bytes);
       }
-      return await file.readAsString();
+      return file.readAsString();
     }
     throw Exception('File not found: $path');
   }
