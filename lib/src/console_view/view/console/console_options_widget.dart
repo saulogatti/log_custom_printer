@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/date_select_widget.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/select_option_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/widgets/time_range_select_widget.dart';
 
 class ConsoleOptions {
   final VoidCallback? onClearLogs;
@@ -53,11 +54,15 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
                     print('Data selecionada: $date');
                   },
                 ),
-                TimeSelectWidget(
-                  label: "Seleciona Hora",
-                  selectedTime: TimeOfDay.now(),
-                  onTimeSelected: (time) {
-                    print('Hora selecionada: $time');
+                TimeRangeSelectWidget(
+                  initialStartDateTime: DateTime.now(),
+                  initialEndDateTime: DateTime.now(),
+                  label: 'Selecionar intervalo de horário',
+                  onTimeRangeSelected: (range) {
+                    // Lógica para lidar com o intervalo selecionado
+                    print(
+                      " Intervalo selecionado: ${range?.start} - ${range?.end}",
+                    );
                   },
                 ),
               ],

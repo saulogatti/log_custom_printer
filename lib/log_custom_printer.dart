@@ -85,5 +85,5 @@ export 'src/log_printer_locator.dart'
         registerLogPrinterColor,
         registerLogPrinterSimple,
         FileType;
-export 'src/utils/date_time_log_helper.dart';
+export 'src/extensions/date_time_log_helper.dart';
 export 'src/utils/logger_ansi_color.dart';

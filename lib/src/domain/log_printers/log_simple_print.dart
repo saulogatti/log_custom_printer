@@ -30,6 +30,7 @@ class LogSimplePrint extends LogPrinterBase {
     final className = log.className;
     final message = log.getMessage(false);
 
+    // ignore: avoid_print
     print('[$className] $message');
   }
 }

@@ -12,7 +12,7 @@
 /// print(agora.onlyDate());      // "18/11/2025"
 /// print(agora.logFullDateTime); // "18/11/2025 14:30:25.123"
 /// ```
-extension DateTimeLogHelper on DateTime {
+extension DateTimeLoggingExtensions on DateTime {
   /// Retorna a data e hora completas no formato usado nos logs.
   ///
   /// Combina [onlyDate] e [onlyTime] para produzir uma string no formato

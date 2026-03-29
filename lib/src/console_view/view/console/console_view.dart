@@ -6,6 +6,7 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bl
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/select_option_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/widgets/time_range_select_widget.dart';
 
 import 'console_widget.dart';
 
@@ -92,6 +93,7 @@ class _ConsoleViewState extends State<ConsoleView> {
             },
             icon: Icon(Icons.settings),
           ),
+         
         ],
       ),
       body: const ConsoleWidget(),

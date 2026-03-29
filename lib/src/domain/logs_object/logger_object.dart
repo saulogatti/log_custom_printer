@@ -4,7 +4,7 @@ import 'package:meta/meta.dart';
 import '../../config_log.dart';
 import '../../log_printer_locator.dart';
 import '../../log_printer_service.dart';
-import '../../utils/date_time_log_helper.dart';
+import '../../extensions/date_time_log_helper.dart';
 import '../../utils/logger_ansi_color.dart';
 
 /// Marca base para objetos de log.
