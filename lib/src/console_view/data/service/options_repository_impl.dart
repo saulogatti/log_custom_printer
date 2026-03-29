@@ -28,7 +28,7 @@ class OptionsRepositoryImpl implements IOptionsRepository {
     data = data.copyWith(
       selectedDate: DateRangeEpochEntry(start: start, end: end),
     );
-    _dataSource.saveOptions(data);
+    await _dataSource.saveOptions(data);
   }
 
   @override
