@@ -53,4 +53,34 @@ final class LoggerPersistenceService {
     final logs = await _cacheRepository.getLogsByType(type);
     return logs;
   }
+
+  /// Busca logs criados dentro do intervalo de datas especificado.
+  /// O filtro é aplicado ao campo `logCreationDate` dos logs, permitindo encontrar entradas criadas entre as datas `start` e `end`.
+  Future<List<LoggerObjectBase>> searchLogByCreated({
+    required DateTime start,
+    required DateTime end,
+  }) async {
+    final allLogs = await _cacheRepository.getAllLogs();
+    return allLogs
+        .where(
+          (log) =>
+              log.logCreationDate.isAfter(start) &&
+              log.logCreationDate.isBefore(end),
+        )
+        .toList();
+  }
+
+  /// Busca logs que contenham o runtimeType especificado. O filtro é aplicado ao campo `className` dos logs, permitindo encontrar entradas que correspondam a uma classe específica ou que contenham o nome da classe.
+  Future<List<LoggerObjectBase>> searchLogByRuntimeType(
+    String runtimeType,
+  ) async {
+    final allLogs = await _cacheRepository.getAllLogs();
+    return allLogs.where((log) => log.className.contains(runtimeType)).toList();
+  }
+
+  /// Busca logs que contenham a tag especificada.
+  Future<List<LoggerObjectBase>> searchLogByTag(String tag) async {
+    final allLogs = await _cacheRepository.getAllLogs();
+    return allLogs.where((log) => log.tag.contains(tag)).toList();
+  }
 }
