@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the addLog method from the LoggerCacheRepository class, for the Dart programming language.">
-  <title>addLog method - LoggerCacheRepository class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the getLogsByType method from the LoggerCacheRepositoryImpl class, for the Dart programming language.">
+  <title>getLogsByType method - LoggerCacheRepositoryImpl class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></li>
-    <li class="self-crumb">addLog abstract method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">getLogsByType method</li>
   </ol>
-  <div class="self-name">addLog</div>
+  <div class="self-name">getLogsByType</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,17 +46,22 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepository-class-sidebar.html"
+    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/cache/logger_cache_repository.dart#L15"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-method">addLog</span> abstract method 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L116"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">getLogsByType</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.dart.dev/stable/3.11.0/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
-<span class="name ">addLog</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="addLog-param-log"><span class="type-annotation"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span> <span class="parameter-name">log</span></span></li>
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.dart.dev/stable/3.11.4/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.11.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span>&gt;</span></span>
+<span class="name ">getLogsByType</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="getLogsByType-param-type"><span class="type-annotation"><a href="../../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span> <span class="parameter-name">type</span></span></li>
 </ol>)
 
       
@@ -64,14 +69,22 @@
     </section>
     
 <section class="desc markdown">
-  <p>Adiciona uma entrada de log ao repositório.</p>
+  <p>Retorna os logs em memória apenas do <code>type</code> solicitado.</p>
+<p>Retorna lista vazia quando não houver entradas desse tipo.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; addLog(LoggerObjectBase log);</code></pre>
+  <pre class="language-dart"><code class="language-dart">@override
+Future&lt;List&lt;LoggerObjectBase&gt;&gt; getLogsByType(EnumLoggerType type) async {
+  final loggerList = _loggerJsonList[type];
+  if (loggerList != null) {
+    return (loggerList.loggerEntries);
+  }
+  return [];
+}</code></pre>
 </section>
 
 
@@ -86,11 +99,11 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></li>
-    <li class="self-crumb">addLog abstract method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">getLogsByType method</li>
 </ol>
 
-    <h5>LoggerCacheRepository class</h5>
+    <h5>LoggerCacheRepositoryImpl class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
@@ -99,7 +112,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.0.0
+      2.1.0
   </span>
   
 </footer>

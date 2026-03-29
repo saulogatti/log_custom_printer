@@ -49,6 +49,11 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     }
   }
 
+  /// Adiciona [log] ao cache em memória e, quando configurado,
+  /// persiste o estado atualizado em arquivo.
+  ///
+  /// Aguarda a inicialização do cache em disco antes de escrever,
+  /// garantindo que o diretório de destino exista.
   @override
   Future<void> addLog(LoggerObjectBase log) async {
     LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
@@ -67,6 +72,10 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     }
   }
 
+  /// Remove todos os logs do cache em memória.
+  ///
+  /// Se a persistência em arquivo estiver habilitada, também remove os
+  /// arquivos físicos após a inicialização do cache.
   @override
   Future<void> clearLogs() async {
     _loggerJsonList.clear();
@@ -74,6 +83,10 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     await _loggerCache?.clearAll();
   }
 
+  /// Remove apenas os logs do [type] informado.
+  ///
+  /// A remoção é aplicada na memória e refletida no armazenamento em disco,
+  /// quando habilitado.
   @override
   Future<void> clearLogsByType(EnumLoggerType type) async {
     _loggerJsonList.remove(type);
@@ -81,6 +94,10 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     await _loggerCache?.clearLogByType(type.name);
   }
 
+  /// Retorna todos os logs atualmente carregados em memória.
+  ///
+  /// Esta operação não força leitura do disco; retorna o estado já
+  /// materializado no repositório.
   @override
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final List<LoggerObjectBase> allLogs = [];
@@ -92,6 +109,9 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     return allLogs;
   }
 
+  /// Retorna os logs em memória apenas do [type] solicitado.
+  ///
+  /// Retorna lista vazia quando não houver entradas desse tipo.
   @override
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
     final loggerList = _loggerJsonList[type];
@@ -102,6 +122,9 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   }
 
   /// Inicializa o repositório carregando logs persistidos anteriormente do disco.
+  ///
+  /// Quando houver dados válidos, o estado em memória é reconstruído para
+  /// permitir consultas imediatas sem nova leitura dos arquivos.
   Future<void> initialize() async {
     if (_loggerCache != null &&
         !_loggerCache!.futureInitialization.isCompleted) {

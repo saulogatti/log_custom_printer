@@ -167,13 +167,14 @@ class MinhaClasse with LoggerClassMixin {
   Classe para manipulação de cores ANSI em logs.
 </dd>
 
-          <dt id="LoggerCacheRepository">
-  <span class="name "><a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></span> 
+          <dt id="LoggerCacheRepositoryImpl">
+  <span class="name "><a href="../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></span> 
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Interface para repositório de cache de logs.
+  Implementação concreta de <code>ILoggerCacheRepository</code> usando armazenamento em memória
+e opcionalmente em arquivo.
 </dd>
 
           <dt id="LoggerObject">
@@ -214,10 +215,11 @@ class MinhaClasse with LoggerClassMixin {
 
           <dt id="StackTraceConverter">
   <span class="name "><a href="../log_custom_printer/StackTraceConverter-class.html">StackTraceConverter</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  
+  Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a>.
 </dd>
 
           <dt id="WarningLog">
@@ -252,6 +254,15 @@ class MinhaClasse with LoggerClassMixin {
   Define os tipos de mensagens de log que podem ser manipulados.
 </dd>
 
+          <dt id="FileType">
+  <span class="name "><a href="../log_custom_printer/FileType.html">FileType</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Tipos de arquivo suportados pelo <code>FileManager</code>.
+</dd>
+
       </dl>
     </section>
 
@@ -276,7 +287,7 @@ class MinhaClasse with LoggerClassMixin {
       <dl>
           <dt id="DateTimeLogHelper">
   <span class="name "><a href="../log_custom_printer/DateTimeLogHelper.html">DateTimeLogHelper</a></span>
-  on <a href="https://api.dart.dev/stable/3.11.0/dart-core/DateTime-class.html">DateTime</a>
+  on <a href="https://api.dart.dev/stable/3.11.4/dart-core/DateTime-class.html">DateTime</a>
   
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
@@ -294,8 +305,8 @@ class MinhaClasse with LoggerClassMixin {
       <h2>Functions</h2>
       <dl class="callables">
           <dt id="registerLogPrinter" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})
-    <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></span>
+  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation">ILoggerCacheRepository?</span> <span class="parameter-name">cacheRepository</span>, </span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span></span>})
+    <span class="returntype parameter">&#8594; LoggerPersistenceService</span>
   </span>
   
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -308,8 +319,8 @@ class MinhaClasse with LoggerClassMixin {
 </dd>
 
           <dt id="registerLogPrinterColor" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span></span>})
-    <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></span>
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+    <span class="returntype parameter">&#8594; LoggerPersistenceService</span>
   </span>
   
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -322,8 +333,8 @@ class MinhaClasse with LoggerClassMixin {
 </dd>
 
           <dt id="registerLogPrinterSimple" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span></span>})
-    <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></span>
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+    <span class="returntype parameter">&#8594; LoggerPersistenceService</span>
   </span>
   
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -373,7 +384,7 @@ class MinhaClasse with LoggerClassMixin {
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.0.0
+      2.1.0
   </span>
   
 </footer>

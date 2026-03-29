@@ -46,7 +46,7 @@
   <h1 id="log_custom_printer">log_custom_printer</h1>
 <p>Biblioteca Dart/Flutter para logging customizado com serialização JSON, formatação colorida ANSI e injeção de dependência (get_it). Ideal para aplicações que necessitam de logs estruturados, rastreáveis e visualmente organizados.</p>
 <blockquote>
-<p><strong>v2.0.0</strong> — Refatoração da API de registro: <code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam <code>LoggerCacheRepository</code> e incluem cache integrado por padrão. Impressoras customizadas via <code>registerLogPrinter(LogPrinterBase, cacheRepository: ...)</code>.</p>
+<p><strong>v2.0.0</strong> — Refatoração da API de registro: <code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam <code>LoggerPersistenceService</code> e incluem cache integrado por padrão. Impressoras customizadas via <code>registerLogPrinter(LogPrinterBase, cacheRepository: ...)</code>.</p>
 </blockquote>
 <h2 id="-funcionalidades">✨ Funcionalidades</h2>
 <ul>
@@ -79,32 +79,32 @@ flutter pub get  # Projetos Flutter
 
 void main() {
   // Configuração com cores (recomendado para desenvolvimento)
-  // Retorna LoggerCacheRepository para acesso ao cache de logs
-  final cacheRepository = registerLogPrinterColor(
+  // Retorna LoggerPersistenceService para acesso ao cache de logs
+  final persistenceService = registerLogPrinterColor(
     config: ConfigLog(enableLog: true),
     maxLogsInCache: 100, // Opcional: limite de logs em memória por tipo (padrão: 100)
     cacheFilePath: '/caminho/para/salvar/logs', // Opcional: persistência em arquivo JSON
   );
 
   // Ou configuração simples sem cores
-  // final cacheRepository = registerLogPrinterSimple(config: ConfigLog(enableLog: true));
+  // final persistenceService = registerLogPrinterSimple(config: ConfigLog(enableLog: true));
 
   runApp(MyApp());
 }
 </code></pre>
 <h3 id="sistema-de-cache">Sistema de Cache</h3>
-<p><code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam um <code>LoggerCacheRepository</code> que armazena logs em memória e, opcionalmente, em arquivo via <code>cacheFilePath</code>.</p>
+<p><code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam um <code>LoggerPersistenceService</code> que expõe operações de leitura/limpeza de logs e usa um repositório de cache internamente (em memória e, opcionalmente, em arquivo via <code>cacheFilePath</code>).</p>
 <pre class="language-dart"><code class="language-dart">// Recuperar todos os logs
-final allLogs = await cacheRepository.getAllLogs();
+final allLogs = await persistenceService.getAllLogs();
 
 // Recuperar logs por tipo
-final errorLogs = await cacheRepository.getLogsByType(EnumLoggerType.error);
+final errorLogs = await persistenceService.getLogsByType(EnumLoggerType.error);
 
 // Limpar logs
-await cacheRepository.clearLogs();
-await cacheRepository.clearLogsByType(EnumLoggerType.debug);
+await persistenceService.clearLogs();
+await persistenceService.clearLogsByType(EnumLoggerType.debug);
 </code></pre>
-<p>Para implementar storage customizado (banco local, SharedPreferences etc.), implemente <code>LoggerCacheRepository</code> e passe via <code>registerLogPrinter(printer, cacheRepository: seuRepository)</code>.</p>
+<p>Para implementar storage customizado (banco local, SharedPreferences etc.), implemente <code>ILoggerCacheRepository</code> e passe via <code>registerLogPrinter(printer, cacheRepository: seuRepository, config: ...)</code>.</p>
 <h3 id="usando-o-mixin-recomendado">Usando o Mixin (Recomendado)</h3>
 <pre class="language-dart"><code class="language-dart">class MinhaClasse with LoggerClassMixin {
   void minhaFuncao() {
@@ -163,7 +163,8 @@ final logRecriado = DebugLog.fromJson(json);
 <li><strong><code>LogPrinterService</code></strong> — Serviço central que coordena impressão e cache (resolvido via get_it)</li>
 <li><strong><code>registerLogPrinter</code></strong> / <strong><code>registerLogPrinterColor</code></strong> / <strong><code>registerLogPrinterSimple</code></strong> — Injeção de dependência via get_it</li>
 <li><strong><code>ConfigLog</code></strong> — Configuração de habilitação e filtragem (padrão: <code>enableLog: false</code>, <code>onlyClasses: {DebugLog, WarningLog, InfoLog}</code>)</li>
-<li><strong><code>LoggerCacheRepository</code></strong> — Interface para repositório de cache de logs (retornado pelos <code>register*</code>)</li>
+<li><strong><code>LoggerPersistenceService</code></strong> — Serviço retornado pelos <code>register*</code> para acesso ao cache/persistência</li>
+<li><strong><code>ILoggerCacheRepository</code></strong> — Interface para implementação customizada de armazenamento de logs</li>
 <li><strong><code>LoggerClassMixin</code></strong> — Mixin para integração fácil em classes</li>
 </ul>
 <h3 id="tipos-de-log-disponveis">Tipos de Log Disponíveis</h3>
@@ -341,7 +342,7 @@ class CustomLog extends LoggerObjectBase {
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.0.0
+      2.1.0
   </span>
   
 </footer>

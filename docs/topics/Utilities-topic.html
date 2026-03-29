@@ -185,10 +185,10 @@ apenas o código da aplicação.</p>
 </code></pre>
 <p>Usado por <code>ErrorLog.getMessage()</code> para incluir o stack trace formatado na saída.</p>
 <hr>
-<h2 id="loggercacherepository">LoggerCacheRepository</h2>
+<h2 id="iloggercacherepository">ILoggerCacheRepository</h2>
 <p>Interface que define as operações de cache de logs. Implemente esta interface para
 customizar o armazenamento (ex: banco de dados local, <code>SharedPreferences</code>, servidor remoto).</p>
-<pre class="language-dart"><code class="language-dart">abstract interface class LoggerCacheRepository {
+<pre class="language-dart"><code class="language-dart">abstract interface class ILoggerCacheRepository {
   Future&lt;void&gt; addLog(LoggerObjectBase log);
   Future&lt;void&gt; clearLogs();
   Future&lt;void&gt; clearLogsByType(EnumLoggerType type);
@@ -196,8 +196,10 @@ customizar o armazenamento (ex: banco de dados local, <code>SharedPreferences</c
   Future&lt;List&lt;LoggerObjectBase&gt;&gt; getLogsByType(EnumLoggerType type);
 }
 </code></pre>
-<p>O repositório é retornado pelas funções <code>registerLogPrinter*</code> e pode ser usado para
-consultar e gerenciar os logs coletados em runtime.</p>
+<p>Essa interface é usada para customizar o armazenamento quando você chama
+<code>registerLogPrinter(..., cacheRepository: seuRepositorio, config: ...)</code>.</p>
+<p>As funções <code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam
+um <code>LoggerPersistenceService</code>, que expõe os métodos de consulta e limpeza.</p>
 <p><strong>Exemplo de uso do repositório:</strong></p>
 <pre class="language-dart"><code class="language-dart">final cache = registerLogPrinterColor(config: ConfigLog(enableLog: true));
 
@@ -211,10 +213,10 @@ final erros = await cache.getLogsByType(EnumLoggerType.error);
 await cache.clearLogs();
 </code></pre>
 <hr>
-<h2 id="loggercacheimpl">LoggerCacheImpl</h2>
-<p>Implementação padrão de <code>LoggerCacheRepository</code>. Armazena logs em memória usando
+<h2 id="loggercacherepositoryimpl">LoggerCacheRepositoryImpl</h2>
+<p>Implementação padrão de <code>ILoggerCacheRepository</code>. Armazena logs em memória usando
 <code>LoggerJsonList</code> e, opcionalmente, persiste em disco via <code>LoggerCache</code>.</p>
-<pre class="language-dart"><code class="language-dart">final class LoggerCacheImpl implements LoggerCacheRepository {
+<pre class="language-dart"><code class="language-dart">final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   final int maxLogEntries;    // padrão: 1000
   final String? saveLogFilePath; // se fornecido, persiste em disco
 }
@@ -225,6 +227,17 @@ await cache.clearLogs();
 <code>&lt;saveLogFilePath&gt;/loggerApp/logs/&lt;tipo&gt;.json</code>.</li>
 <li>Na inicialização com caminho de arquivo, carrega os logs previamente persistidos.</li>
 </ul>
+<h2 id="loggerpersistenceservice">LoggerPersistenceService</h2>
+<p>Serviço de alto nível retornado pelos <code>registerLogPrinter*</code>. Encapsula o
+<code>ILoggerCacheRepository</code> e fornece API simples para uso na aplicação.</p>
+<pre class="language-dart"><code class="language-dart">final class LoggerPersistenceService {
+  Future&lt;void&gt; addLog(LoggerObjectBase log);
+  Future&lt;void&gt; clearLogs();
+  Future&lt;void&gt; clearLogsByType(EnumLoggerType type);
+  Future&lt;List&lt;LoggerObjectBase&gt;&gt; getAllLogs();
+  Future&lt;List&lt;LoggerObjectBase&gt;&gt; getLogsByType(EnumLoggerType type);
+}
+</code></pre>
 <hr>
 <h2 id="loggercache">LoggerCache</h2>
 <p>Gerenciador de baixo nível para persistência de arquivos de log em disco.</p>
@@ -240,7 +253,7 @@ await cache.clearLogs();
 }
 </code></pre>
 <p>Os arquivos são criados em <code>&lt;directory&gt;/loggerApp/logs/&lt;tipo&gt;.json</code>.
-Usado internamente por <code>LoggerCacheImpl</code>; normalmente não é necessário interagir
+Usado internamente por <code>LoggerCacheRepositoryImpl</code>; normalmente não é necessário interagir
 diretamente com esta classe.</p>
 </section>
 
@@ -258,13 +271,23 @@ diretamente com esta classe.</p>
   Classe para manipulação de cores ANSI em logs.
 </dd>
 
-      <dt id="LoggerCacheRepository">
-  <span class="name "><a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></span> 
+      <dt id="LoggerCacheRepositoryImpl">
+  <span class="name "><a href="../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></span> 
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Interface para repositório de cache de logs.
+  Implementação concreta de <code>ILoggerCacheRepository</code> usando armazenamento em memória
+e opcionalmente em arquivo.
+</dd>
+
+      <dt id="StackTraceConverter">
+  <span class="name "><a href="../log_custom_printer/StackTraceConverter-class.html">StackTraceConverter</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a>.
 </dd>
 
     </dl>
@@ -290,7 +313,7 @@ diretamente com esta classe.</p>
     <dl>
       <dt id="DateTimeLogHelper">
   <span class="name "><a href="../log_custom_printer/DateTimeLogHelper.html">DateTimeLogHelper</a></span>
-  on <a href="https://api.dart.dev/stable/3.11.0/dart-core/DateTime-class.html">DateTime</a>
+  on <a href="https://api.dart.dev/stable/3.11.4/dart-core/DateTime-class.html">DateTime</a>
   
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
@@ -315,6 +338,15 @@ diretamente com esta classe.</p>
 </dt>
 <dd>
   Define os tipos de mensagens de log que podem ser manipulados.
+</dd>
+
+      <dt id="FileType">
+  <span class="name "><a href="../log_custom_printer/FileType.html">FileType</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Tipos de arquivo suportados pelo <code>FileManager</code>.
 </dd>
 
     </dl>
@@ -354,10 +386,12 @@ diretamente com esta classe.</p>
 
     <li class="section-title"><a href="../topics/Utilities-topic.html#classes">Classes</a></li>
       <li><a href="../log_custom_printer/LoggerAnsiColor-class.html">LoggerAnsiColor</a></li>
-      <li><a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></li>
+      <li><a href="../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+      <li><a href="../log_custom_printer/StackTraceConverter-class.html">StackTraceConverter</a></li>
 
     <li class="section-title"><a href="../topics/Utilities-topic.html#enums">Enums</a></li>
       <li><a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></li>
+      <li><a href="../log_custom_printer/FileType.html">FileType</a></li>
 
     <li class="section-title"><a href="../topics/Utilities-topic.html#mixins">Mixins</a></li>
       <li><a href="../log_custom_printer/LoggerClassMixin-mixin.html">LoggerClassMixin</a></li>
@@ -378,7 +412,7 @@ diretamente com esta classe.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.0.0
+      2.1.0
   </span>
   
 </footer>

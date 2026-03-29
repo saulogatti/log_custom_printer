@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the StackTraceConverter class from the log_custom_printer library, for the Dart programming language.">
-  <title>StackTraceConverter class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the FileType enum from the log_custom_printer library, for the Dart programming language.">
+  <title>FileType enum - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,9 +26,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">log_custom_printer</a></li>
     <li><a href="../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li class="self-crumb">StackTraceConverter class</li>
+    <li class="self-crumb">FileType enum</li>
   </ol>
-  <div class="self-name">StackTraceConverter</div>
+  <div class="self-name">FileType</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,58 +46,93 @@
     id="dartdoc-main-content"
     class="main-content"
     data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
-    data-below-sidebar="log_custom_printer&#47;StackTraceConverter-class-sidebar.html">
+    data-below-sidebar="log_custom_printer&#47;FileType-enum-sidebar.html">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/error_log.dart#L102"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-class">StackTraceConverter</span> class 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/file_utils/file_manager_type.dart#L104"><span class="material-symbols-outlined">description</span></a></div>
+
+      <h1>
+        <span class="kind-enum">FileType</span>
+        enum 
  
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
-</h1></div>
+
+      </h1>
+    </div>
 
     
 <section class="desc markdown">
-  <p>Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a>.</p>
-<p>Converte <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a> para <code>String</code> durante o <code>toJson</code> e reconstrói o
-objeto via <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace/StackTrace.fromString.html">StackTrace.fromString</a> no <code>fromJson</code>.</p>
-<p>Usado por <a href="../log_custom_printer/ErrorLog-class.html">ErrorLog</a> para suportar <code>json_serializable</code> em campos de
-stack trace.</p>
+  <p>Tipos de arquivo suportados pelo <code>FileManager</code>.</p>
+<p>Cada valor representa a extensão esperada no caminho do arquivo.</p>
 </section>
 
 
-    <section>
-      <dl class="dl-horizontal">
-        
-
-        
-  <dt>Implemented types</dt>
+      <section>
+        <dl class="dl-horizontal">
+          
+  <dt>Inheritance</dt>
   <dd>
-    <ul class="comma-separated clazz-relationships">
-        <li><a href="https://pub.dev/documentation/json_annotation/4.11.0/json_annotation/JsonConverter-class.html">JsonConverter</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a></span>, <span class="type-parameter"><a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a></span>&gt;</span></li>
+    <ul class="gt-separated dark eNum-relationships">
+      <li><a href="https://api.dart.dev/stable/3.11.4/dart-core/Object-class.html">Object</a></li>
+        <li><a href="https://api.dart.dev/stable/3.11.4/dart-core/Enum-class.html">Enum</a></li>
+      <li>FileType</li>
     </ul>
   </dd>
-        
+
+          
+          
+          
+  <dt>Available extensions</dt>
+  <dd><ul class="comma-separated clazz-relationships">
+      <li><a href="https://api.dart.dev/stable/3.11.4/dart-core/EnumName.html">EnumName</a></li>
+  </ul></dd>
+          
 
 
-        
-        
+        </dl>
+      </section>
 
+      <section class="summary offset-anchor" id="values">
+        <h2>Values</h2>
+        <dl class="properties">
+            <dt id="txt" class="constant">
+    <span class="name ">txt</span>
+  <span class="signature">&#8594; const <a href="../log_custom_printer/FileType.html">FileType</a></span>
+  
 
-      </dl>
-    </section>
+</dt>
+<dd>
+  <p>Arquivo de texto simples (<code>.txt</code>).</p>
+  
 
-    
-  <section class="summary offset-anchor" id="constructors">
-    <h2>Constructors</h2>
-    <dl class="constructor-summary-list">
-        <dt id="StackTraceConverter.new" class="callable">
-          <span class="name"><a href="../log_custom_printer/StackTraceConverter/StackTraceConverter.html">StackTraceConverter</a></span><span class="signature">()</span>
-        </dt>
-        <dd>
-          Cria um conversor constante para campos de stack trace.
-            <div class="constructor-modifier features">const</div>
-        </dd>
-    </dl>
-  </section>
+</dd>
+
+            <dt id="json" class="constant">
+    <span class="name ">json</span>
+  <span class="signature">&#8594; const <a href="../log_custom_printer/FileType.html">FileType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Arquivo JSON (<code>.json</code>).</p>
+  
+
+</dd>
+
+            <dt id="log" class="constant">
+    <span class="name ">log</span>
+  <span class="signature">&#8594; const <a href="../log_custom_printer/FileType.html">FileType</a></span>
+  
+
+</dt>
+<dd>
+  <p>Arquivo de log (<code>.log</code>).</p>
+  
+
+</dd>
+
+        </dl>
+      </section>
+
     
   <section
       class="summary offset-anchor inherited"
@@ -113,6 +148,34 @@ stack trace.</p>
 <dd class="inherited">
   The hash code for this object.
   <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="index" class="property inherited">
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Enum/index.html">index</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.11.4/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A numeric identifier for the enumerated value.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="name" class="property">
+  <span class="name"><a href="https://api.dart.dev/stable/3.11.4/dart-core/EnumName/name.html">name</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+      <p class="from-extension">
+        <span>Available on <a href="https://api.dart.dev/stable/3.11.4/dart-core/Enum-class.html">Enum</a>,
+        provided by the <a href="https://api.dart.dev/stable/3.11.4/dart-core/EnumName.html">EnumName</a> extension</span>
+      </p>
+  The name of the enum value.
+  <div class="features"><span class="feature">no setter</span></div>
 
 </dd>
 
@@ -133,23 +196,10 @@ stack trace.</p>
 
     
   <section
-      class="summary offset-anchor"
+      class="summary offset-anchor inherited"
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
-        <dt id="fromJson" class="callable">
-  <span class="name"><a href="../log_custom_printer/StackTraceConverter/fromJson.html">fromJson</a></span><span class="signature">(<wbr><span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">json</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Reconstrói <a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a> a partir da representação textual <code>json</code>.
-  <div class="features"><span class="feature">override</span></div>
-
-</dd>
-
         <dt id="noSuchMethod" class="callable inherited">
   <span class="name"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
@@ -160,19 +210,6 @@ stack trace.</p>
 <dd class="inherited">
   Invoked when a nonexistent method or property is accessed.
   <div class="features"><span class="feature">inherited</span></div>
-
-</dd>
-
-        <dt id="toJson" class="callable">
-  <span class="name"><a href="../log_custom_printer/StackTraceConverter/toJson.html">toJson</a></span><span class="signature">(<wbr><span class="parameter" id="toJson-param-object"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/StackTrace-class.html">StackTrace</a></span> <span class="parameter-name">object</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a></span>
-  </span>
-  
-
-</dt>
-<dd>
-  Serializa <code>object</code> para <code>String</code> no payload JSON.
-  <div class="features"><span class="feature">override</span></div>
 
 </dd>
 
@@ -216,9 +253,26 @@ stack trace.</p>
     
     
 
-  </div> <!-- /.main-content -->
-  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
-    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+  <section class="summary offset-anchor" id="constants">
+    <h2>Constants</h2>
+    <dl class="properties">
+        <dt id="values" class="constant">
+    <span class="name "><a href="../log_custom_printer/FileType/values-constant.html">values</a></span>
+  <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.11.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../log_custom_printer/FileType.html">FileType</a></span>&gt;</span></span>
+  
+
+</dt>
+<dd>
+  A constant List of the values in this enum, in order of their declaration.
+  
+
+</dd>
+
+    </dl>
+  </section>
+</div><!-- /.main-content -->
+<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
 <header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
@@ -227,14 +281,14 @@ stack trace.</p>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">log_custom_printer</a></li>
     <li><a href="../log_custom_printer/">log_custom_printer</a></li>
-    <li class="self-crumb">StackTraceConverter class</li>
+    <li class="self-crumb">FileType enum</li>
 </ol>
 
-    <h5>log_custom_printer library</h5>
-    <div id="dartdoc-sidebar-left-content"></div>
-  </div>
-  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
-  </div><!--/.sidebar-offcanvas-->
+  <h5>log_custom_printer library</h5>
+  <div id="dartdoc-sidebar-left-content"></div>
+</div>
+<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!-- /.sidebar-offcanvas -->
 </main>
 <footer>
   <span class="no-break">

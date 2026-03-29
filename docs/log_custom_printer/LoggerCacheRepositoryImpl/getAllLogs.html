@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the enumLoggerType property from the LoggerEnum extension, for the Dart programming language.">
-  <title>enumLoggerType property - LoggerEnum extension - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the getAllLogs method from the LoggerCacheRepositoryImpl class, for the Dart programming language.">
+  <title>getAllLogs method - LoggerCacheRepositoryImpl class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LoggerEnum.html">LoggerEnum</a></li>
-    <li class="self-crumb">enumLoggerType property</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">getAllLogs method</li>
   </ol>
-  <div class="self-name">enumLoggerType</div>
+  <div class="self-name">getAllLogs</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,45 +46,53 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="log_custom_printer&#47;LoggerEnum-extension-sidebar.html"
+    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_helpers/log_display_handler.dart#L237"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-property">enumLoggerType</span> property 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L102"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">getAllLogs</span> method 
 </h1></div>
 
-    
-
-    
-        
-  <section id="getter">
     <section class="multi-line-signature">
       
-      <span class="returntype"><a href="../../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span>
-      get
-      <span class="name ">enumLoggerType</span>
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.dart.dev/stable/3.11.4/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.11.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span>&gt;</span></span>
+<span class="name ">getAllLogs</span>(<wbr>)
+
       
 
     </section>
     
+<section class="desc markdown">
+  <p>Retorna todos os logs atualmente carregados em memória.</p>
+<p>Esta operação não força leitura do disco; retorna o estado já
+materializado no repositório.</p>
+</section>
+
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">EnumLoggerType get enumLoggerType {
-  if (this is ErrorLog) return EnumLoggerType.error;
-  if (this is WarningLog) return EnumLoggerType.warning;
-  if (this is InfoLog) return EnumLoggerType.info;
-  return EnumLoggerType.debug;
+  <pre class="language-dart"><code class="language-dart">@override
+Future&lt;List&lt;LoggerObjectBase&gt;&gt; getAllLogs() async {
+  final List&lt;LoggerObjectBase&gt; allLogs = [];
+  for (final loggerList in _loggerJsonList.values) {
+    if (loggerList != null) {
+      allLogs.addAll(loggerList.loggerEntries);
+    }
+  }
+  return allLogs;
 }</code></pre>
 </section>
 
-  </section>
 
-
-</div> <!-- /.main-content -->
-<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
-  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
 <header id="header-search-sidebar" class="hidden-l">
   <form class="search-sidebar" role="search">
     <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
@@ -93,20 +101,20 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LoggerEnum.html">LoggerEnum</a></li>
-    <li class="self-crumb">enumLoggerType property</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">getAllLogs method</li>
 </ol>
 
-  <h5>LoggerEnum extension on <a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></h5>
-  <div id="dartdoc-sidebar-left-content"></div>
-</div><!--/.sidebar-offcanvas-->
-<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>LoggerCacheRepositoryImpl class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
 </div><!--/.sidebar-offcanvas-->
 </main>
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.1.0
   </span>
   
 </footer>

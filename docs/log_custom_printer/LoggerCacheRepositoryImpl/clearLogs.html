@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the printLog method from the LogDisplayHandler class, for the Dart programming language.">
-  <title>printLog method - LogDisplayHandler class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the clearLogs method from the LoggerCacheRepositoryImpl class, for the Dart programming language.">
+  <title>clearLogs method - LoggerCacheRepositoryImpl class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LogDisplayHandler-class.html">LogDisplayHandler</a></li>
-    <li class="self-crumb">printLog method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">clearLogs method</li>
   </ol>
-  <div class="self-name">printLog</div>
+  <div class="self-name">clearLogs</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,32 +46,31 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="log_custom_printer&#47;LogDisplayHandler-class-sidebar.html"
+    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_helpers/log_display_handler.dart#L117"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-method">printLog</span> method 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L80"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">clearLogs</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.flutter.dev/flutter/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.11.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype">void</span>
-<span class="name ">printLog</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="printLog-param-log"><span class="type-annotation"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span> <span class="parameter-name">log</span></span></li>
-</ol>)
+<span class="returntype"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">clearLogs</span>(<wbr>)
 
-      <div class="features"><span class="feature">override</span></div>
+      
 
     </section>
     
 <section class="desc markdown">
-  <p>Imprime/processa o log fornecido.</p>
-<p>Implementações devem definir como o log será formatado e enviado
-para a saída (console, arquivo, serviço remoto, etc.).</p>
+  <p>Remove todos os logs do cache em memória.</p>
+<p>Se a persistência em arquivo estiver habilitada, também remove os
+arquivos físicos após a inicialização do cache.</p>
 </section>
 
 
@@ -79,37 +78,10 @@ para a saída (console, arquivo, serviço remoto, etc.).</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-void printLog(LoggerObjectBase log) {
-  if (debugEnable || log is ErrorLog) {
-    final separator = log.getColor().call(&quot;=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-&quot;);
-    final time = log.getColor().call(log.logCreationDate.onlyTime());
-    final start = log.getStartLog();
-    final List&lt;String&gt; messageLog = [&quot; &quot;, separator];
-    if (log is ErrorLog) {
-      &#47;&#47; _printMessage(&quot;$start ${logger.message} &quot;, stack: logger.stackTrace);
-      messageLog.add(log.getMessage());
-      &#47;&#47; _toFileLog(logger);
-    } else {
-      messageLog.add(log.getColor().call(log.message));
-    }
-    &#47;&#47; if (logger.showStackTrace) {
-    &#47;&#47;   final ss = logger.getStackTrace();
-
-    &#47;&#47;   messageLog.add(separator);
-    &#47;&#47;   messageLog.add(ss);
-    &#47;&#47; }
-
-    messageLog.add(separator);
-
-    final String logStr = &quot;$time ${messageLog.join(&quot;\n&quot;)}&quot;;
-    _toFileLog(log);
-    dev.log(logStr, name: start);
-  }
-
-  &#47;&#47; final bool saveLog = debugEnable || logger is LoggerError;
-  &#47;&#47; if (saveLog) {
-  &#47;&#47;   _toFileLog(logger);
-  &#47;&#47; }
+Future&lt;void&gt; clearLogs() async {
+  _loggerJsonList.clear();
+  await _futureInitialization;
+  await _loggerCache?.clearAll();
 }</code></pre>
 </section>
 
@@ -125,11 +97,11 @@ void printLog(LoggerObjectBase log) {
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LogDisplayHandler-class.html">LogDisplayHandler</a></li>
-    <li class="self-crumb">printLog method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">clearLogs method</li>
 </ol>
 
-    <h5>LogDisplayHandler class</h5>
+    <h5>LoggerCacheRepositoryImpl class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
@@ -138,7 +110,7 @@ void printLog(LoggerObjectBase log) {
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.1.0
   </span>
   
 </footer>

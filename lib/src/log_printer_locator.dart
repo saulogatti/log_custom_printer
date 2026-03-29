@@ -74,6 +74,17 @@ LoggerPersistenceService registerLogPrinter(
 /// [config]: Configuração de filtragem e habilitação.
 /// [maxLogsInCache]: Número máximo de logs mantidos em cache.
 /// [cacheFilePath]: Caminho opcional para persistência em arquivo.
+/// [fileType]: tipo de arquivo usado quando [cacheFilePath] estiver definido.
+///
+/// Exemplo:
+/// ```dart
+/// final persistence = registerLogPrinterColor(
+///   config: const ConfigLog(enableLog: true),
+///   maxLogsInCache: 200,
+///   cacheFilePath: 'C:/temp',
+///   fileType: FileType.json,
+/// );
+/// ```
 ///
 /// {@category Core}
 LoggerPersistenceService registerLogPrinterColor({
@@ -93,13 +104,22 @@ LoggerPersistenceService registerLogPrinterColor({
   );
 }
 
-/// Registra uma impressora simples (sem cores.
+/// Registra uma impressora simples (sem cores).
 ///
 /// Atalho para [registerLogPrinter] com [LogSimplePrint].
 ///
 /// [config]: Configuração de filtragem e habilitação.
 /// [maxLogsInCache]: Número máximo de logs mantidos em cache.
 /// [cacheFilePath]: Caminho opcional para persistência em arquivo.
+/// [fileType]: tipo de arquivo usado quando [cacheFilePath] estiver definido.
+///
+/// Exemplo:
+/// ```dart
+/// registerLogPrinterSimple(
+///   config: const ConfigLog(enableLog: false),
+///   maxLogsInCache: 100,
+/// );
+/// ```
 ///
 /// {@category Core}
 LoggerPersistenceService registerLogPrinterSimple({

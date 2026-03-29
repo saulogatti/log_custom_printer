@@ -4,6 +4,8 @@ import 'dart:io';
 ///
 /// A extensão do [path] é validada em todas as operações para garantir que
 /// o tipo de arquivo manipulado seja compatível com [fileType].
+///
+/// {@category Utilities}
 class FileManager implements IFileManagerType {
   /// Tipo de arquivo permitido para esta instância.
   final FileType fileType;
@@ -96,13 +98,28 @@ class FileManager implements IFileManagerType {
 
 /// Tipos de arquivo suportados pelo [FileManager].
 ///
-/// - [FileType.txt]: arquivo texto simples.
-/// - [FileType.json]: arquivo no formato JSON.
-/// - [FileType.log]: arquivo de log em bytes.
-enum FileType { txt, json, log }
+/// Cada valor representa a extensão esperada no caminho do arquivo.
+///
+/// {@category Utilities}
+enum FileType {
+  /// Arquivo de texto simples (`.txt`).
+  txt,
+
+  /// Arquivo JSON (`.json`).
+  json,
+
+  /// Arquivo de log (`.log`).
+  log,
+}
 
 /// Contrato para operações de leitura, escrita e remoção de arquivos.
+///
+/// {@category Utilities}
 abstract interface class IFileManagerType {
+  /// Remove o diretório em [path], se existir.
+  ///
+  /// Retorna `true` quando o diretório foi removido e `false`
+  /// quando o diretório não existe.
   Future<bool> deleteDirectory(String path);
 
   /// Remove o arquivo em [path].

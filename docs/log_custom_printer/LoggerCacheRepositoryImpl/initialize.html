@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the changeListLog method from the LoggerNotifier class, for the Dart programming language.">
-  <title>changeListLog method - LoggerNotifier class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the initialize method from the LoggerCacheRepositoryImpl class, for the Dart programming language.">
+  <title>initialize method - LoggerCacheRepositoryImpl class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LoggerNotifier-class.html">LoggerNotifier</a></li>
-    <li class="self-crumb">changeListLog method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">initialize method</li>
   </ol>
-  <div class="self-name">changeListLog</div>
+  <div class="self-name">initialize</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,36 +46,42 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="log_custom_printer&#47;LoggerNotifier-class-sidebar.html"
+    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_helpers/logger_notifier.dart#L30"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-method">changeListLog</span> method 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L128"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">initialize</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype">void</span>
-<span class="name ">changeListLog</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="changeListLog-param-listLog"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span>, <span class="type-parameter">LoggerJsonList?</span>&gt;</span></span> <span class="parameter-name">listLog</span></span></li>
-</ol>)
+<span class="returntype"><a href="https://api.dart.dev/stable/3.11.4/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">initialize</span>(<wbr>)
 
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Atualiza o mapa de logs e notifica os ouvintes.</p>
-<p><code>listLog</code> é o novo mapa de logs a ser usado.</p>
+  <p>Inicializa o repositório carregando logs persistidos anteriormente do disco.</p>
+<p>Quando houver dados válidos, o estado em memória é reconstruído para
+permitir consultas imediatas sem nova leitura dos arquivos.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">void changeListLog(Map&lt;EnumLoggerType, LoggerJsonList?&gt; listLog) {
-  _loggerJsonList.clear();
-  _loggerJsonList.addAll(listLog);
-  notifyListeners();
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; initialize() async {
+  if (_loggerCache != null &amp;&amp;
+      !_loggerCache!.futureInitialization.isCompleted) {
+    await _loggerCache!.futureInitialization.future;
+    final allLogs = await _loggerCache!.readAllLogs();
+    if (allLogs != null) {
+      _loggerJsonList.clear();
+      _loggerJsonList.addAll(allLogs);
+    }
+  }
 }</code></pre>
 </section>
 
@@ -91,11 +97,11 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LoggerNotifier-class.html">LoggerNotifier</a></li>
-    <li class="self-crumb">changeListLog method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">initialize method</li>
 </ol>
 
-    <h5>LoggerNotifier class</h5>
+    <h5>LoggerCacheRepositoryImpl class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
@@ -104,7 +110,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      1.1.0
+      2.1.0
   </span>
   
 </footer>

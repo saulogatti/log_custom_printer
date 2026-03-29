@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L66"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L90"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">registerLogPrinterColor</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -56,10 +56,11 @@
 
     <section class="multi-line-signature">
         
-<span class="returntype"><a href="../log_custom_printer/LoggerCacheRepository-class.html">LoggerCacheRepository</a></span>
+<span class="returntype">LoggerPersistenceService</span>
 <span class="name ">registerLogPrinterColor</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.0/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span>, </span></li>
 </ol>})
 
         
@@ -71,21 +72,36 @@
 <p>Atalho para <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> com <code>LogWithColorPrint</code>.</p>
 <p><code>config</code>: Configuração de filtragem e habilitação.
 <code>maxLogsInCache</code>: Número máximo de logs mantidos em cache.
-<code>cacheFilePath</code>: Caminho opcional para persistência em arquivo.</p>
+<code>cacheFilePath</code>: Caminho opcional para persistência em arquivo.
+<code>fileType</code>: tipo de arquivo usado quando <code>cacheFilePath</code> estiver definido.</p>
+<p>Exemplo:</p>
+<pre class="language-dart"><code class="language-dart">final persistence = registerLogPrinterColor(
+  config: const ConfigLog(enableLog: true),
+  maxLogsInCache: 200,
+  cacheFilePath: 'C:/temp',
+  fileType: FileType.json,
+);
+</code></pre>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">LoggerCacheRepository registerLogPrinterColor({
+  <pre class="language-dart"><code class="language-dart">LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogWithColorPrint(config: config ?? const ConfigLog()),
-    cacheRepository: LoggerCacheImpl(maxLogEntries: maxLogsInCache, saveLogFilePath: cacheFilePath),
+    LogWithColorPrint(),
+    cacheRepository: LoggerCacheRepositoryImpl(
+      maxLogEntries: maxLogsInCache,
+      saveLogFilePath: cacheFilePath,
+      fileType: fileType,
+    ),
+    config: config ?? const ConfigLog(),
   );
 }</code></pre>
 </section>
@@ -114,7 +130,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.0.0
+      2.1.0
   </span>
   
 </footer>

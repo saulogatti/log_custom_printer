@@ -52,16 +52,14 @@ como os logs serão formatados e enviados para o destino final (console, termina
 <h2 id="logprinterbase">LogPrinterBase</h2>
 <p>Classe abstrata que define o contrato para todas as impressoras de log.</p>
 <pre class="language-dart"><code class="language-dart">abstract class LogPrinterBase {
-  final ConfigLog configLog;
-
-  const LogPrinterBase({ConfigLog? config});
+  const LogPrinterBase();
 
   void printLog(LoggerObjectBase log);
 }
 </code></pre>
 <p>Para criar uma impressora customizada, estenda <code>LogPrinterBase</code> e implemente <code>printLog</code>:</p>
 <pre class="language-dart"><code class="language-dart">class MinhaImpressora extends LogPrinterBase {
-  const MinhaImpressora({super.config});
+  const MinhaImpressora();
 
   @override
   void printLog(LoggerObjectBase log) {
@@ -73,7 +71,8 @@ como os logs serão formatados e enviados para o destino final (console, termina
 <p>Registre-a no startup:</p>
 <pre class="language-dart"><code class="language-dart">void main() {
   registerLogPrinter(
-    MinhaImpressora(config: ConfigLog(enableLog: true)),
+    const MinhaImpressora(),
+    config: const ConfigLog(enableLog: true),
   );
   runApp(MyApp());
 }
@@ -82,7 +81,7 @@ como os logs serão formatados e enviados para o destino final (console, termina
 <h2 id="logsimpleprint">LogSimplePrint</h2>
 <p>Impressora simples sem formatação colorida. Usa <code>print()</code> para escrever a saída.</p>
 <pre class="language-dart"><code class="language-dart">class LogSimplePrint extends LogPrinterBase {
-  const LogSimplePrint({super.config});
+  const LogSimplePrint();
 
   @override
   void printLog(LoggerObjectBase log);
@@ -99,11 +98,10 @@ como os logs serão formatados e enviados para o destino final (console, termina
 </ul>
 <p><strong>Exemplo:</strong></p>
 <pre class="language-dart"><code class="language-dart">registerLogPrinter(
-  LogSimplePrint(
-    config: ConfigLog(
-      enableLog: true,
-      onlyClasses: {DebugLog, ErrorLog},
-    ),
+  const LogSimplePrint(),
+  config: const ConfigLog(
+    enableLog: true,
+    onlyClasses: {DebugLog, ErrorLog},
   ),
 );
 </code></pre>
@@ -117,7 +115,7 @@ como os logs serão formatados e enviados para o destino final (console, termina
 <p>Impressora avançada com formatação colorida usando códigos ANSI. Usa <code>dart:developer.log()</code>
 para enviar blocos formatados.</p>
 <pre class="language-dart"><code class="language-dart">class LogWithColorPrint extends LogPrinterBase {
-  const LogWithColorPrint({super.config});
+  const LogWithColorPrint();
 
   @override
   void printLog(LoggerObjectBase log);
@@ -139,9 +137,8 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 </ul>
 <p><strong>Exemplo:</strong></p>
 <pre class="language-dart"><code class="language-dart">registerLogPrinter(
-  LogWithColorPrint(
-    config: ConfigLog(enableLog: true),
-  ),
+  const LogWithColorPrint(),
+  config: const ConfigLog(enableLog: true),
 );
 </code></pre>
 <p>Atalho equivalente:</p>
@@ -262,7 +259,7 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.0.0
+      2.1.0
   </span>
   
 </footer>
