@@ -4,7 +4,8 @@ enum LogType {
   info,
   warning,
   error,
-  debug;
+  debug,
+  all;
 
   EnumLoggerType toEnum() {
     switch (this) {
@@ -16,6 +17,8 @@ enum LogType {
         return EnumLoggerType.error;
       case LogType.debug:
         return EnumLoggerType.debug;
+      case LogType.all:
+        return EnumLoggerType.debug; // TODO: Implementar all
     }
   }
 }

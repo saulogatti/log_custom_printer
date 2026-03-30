@@ -2,7 +2,6 @@ import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.d
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
-import 'package:log_custom_printer/src/domain/query/log_export_service.dart';
 import 'package:log_custom_printer/src/domain/query/log_filter_engine.dart';
 import 'package:log_custom_printer/src/domain/query/log_query.dart';
 import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
@@ -17,6 +16,16 @@ import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 ///
 /// {@category Utilities}
 final class LoggerPersistenceService {
+  final ILoggerCacheRepository _cacheRepository;
+
+  /// Callback opcional para observar mudanças na coleção persistida.
+  ///
+  /// Recebe a lista de logs atual após operações de escrita/limpeza.
+  void Function(List<LoggerObjectBase>)? logOutputHandler;
+
+  final LogFilterEngine _filterEngine;
+
+  final LogSortEngine _sortEngine;
 
   /// Cria o serviço com um [cacheRepository] customizado.
   ///
@@ -29,21 +38,9 @@ final class LoggerPersistenceService {
     ILoggerCacheRepository? cacheRepository,
     LogFilterEngine filterEngine = const LogFilterEngine(),
     LogSortEngine sortEngine = const LogSortEngine(),
-    LogExportService exportService = const LogExportService(),
   }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl(),
        _filterEngine = filterEngine,
-       _sortEngine = sortEngine,
-       _exportService = exportService;
-  final ILoggerCacheRepository _cacheRepository;
-
-  /// Callback opcional para observar mudanças na coleção persistida.
-  ///
-  /// Recebe a lista de logs atual após operações de escrita/limpeza.
-  void Function(List<LoggerObjectBase>)? logOutputHandler;
-
-  final LogFilterEngine _filterEngine;
-  final LogSortEngine _sortEngine;
-  final LogExportService _exportService;
+       _sortEngine = sortEngine;
 
   /// Adiciona uma entrada de log ao repositório.
   ///
@@ -86,9 +83,14 @@ final class LoggerPersistenceService {
   ///
   /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
   /// do conteúdo gerado fica a cargo da camada consumidora.
-  Future<String> exportLogs(LogQuery query, ExportFormat format) async {
-    final logs = await queryLogs(query);
-    return _exportService.export(logs, format);
+  Future<void> exportLogs(LogQuery query, ExportFormat format) async {
+    final listLogs = await queryLogs(query);
+
+    await _cacheRepository.exportLogs(listLogs, format);
+    if (logOutputHandler != null) {
+      final logs = await queryLogs(query);
+      logOutputHandler?.call(logs);
+    }
   }
 
   /// Recupera todas as entradas de log armazenadas.

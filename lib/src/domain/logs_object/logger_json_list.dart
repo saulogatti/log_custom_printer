@@ -21,30 +21,6 @@ part 'logger_json_list.g.dart';
 /// {@category Utilities}
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
-
-  /// Cria uma nova lista para o [type] especificado.
-  LoggerJsonList({required this.type, this.maxLogEntries = 100});
-
-  /// Cria uma instância a partir de dados JSON.
-  ///
-  /// Identifica o tipo de log e usa o construtor apropriado para recriar os objetos.
-  factory LoggerJsonList.fromJson(Map<String, dynamic> json) {
-    final String type = json['type'] as String;
-    final LoggerJsonList loggerJsonList = LoggerJsonList(type: type);
-    final list = json['loggerJson'] as List;
-    for (final element in list) {
-      if (element is Map<String, dynamic>) {
-        final constructor = _typeConstructors[type];
-        if (constructor != null) {
-          final ob = constructor(element);
-          loggerJsonList.addLogger(ob);
-        } else {
-          throw LogException('Tipo de logger desconhecido: $type');
-        }
-      }
-    }
-    return loggerJsonList;
-  }
   /// Mapa de construtores para desserialização baseada no nome do tipo.
   static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)>
   _typeConstructors = {
@@ -63,6 +39,33 @@ class LoggerJsonList {
   /// Limite máximo de logs armazenados nesta lista.
   @JsonKey(includeFromJson: false, includeToJson: false)
   int maxLogEntries = 100;
+
+  /// Cria uma nova lista para o [type] especificado.
+  LoggerJsonList({required this.type, this.maxLogEntries = 100});
+
+  /// Cria uma instância a partir de dados JSON.
+  ///
+  /// Identifica o tipo de log e usa o construtor apropriado para recriar os objetos.
+  factory LoggerJsonList.fromJson(Map<String, dynamic> json) {
+    if (json['type'] == null || json['type'] is! String) {
+      throw LogException('Tipo de logger não encontrado');
+    }
+    final String type = json['type'] as String;
+    final LoggerJsonList loggerJsonList = LoggerJsonList(type: type);
+    final list = json['loggerJson'] as List? ?? [];
+    for (final element in list) {
+      if (element is Map<String, dynamic>) {
+        final constructor = _typeConstructors[type];
+        if (constructor != null) {
+          final ob = constructor(element);
+          loggerJsonList.addLogger(ob);
+        } else {
+          throw LogException('Tipo de logger desconhecido: $type');
+        }
+      }
+    }
+    return loggerJsonList;
+  }
 
   /// Retorna o [EnumLoggerType] correspondente ao tipo de logs nesta lista.
   @JsonKey(includeFromJson: false, includeToJson: false)

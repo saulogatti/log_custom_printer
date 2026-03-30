@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 
 import 'console_view.dart';
 
@@ -42,6 +43,7 @@ class ConsoleOverlayManager {
   static void show(
     BuildContext context,
     MessageRepository messageRepository,
+    ILoggerCacheRepository loggerCacheRepository,
     Size size,
   ) {
     setSize(size);
@@ -83,8 +85,10 @@ class ConsoleOverlayManager {
                           ],
                         ),
                         child: BlocProvider(
-                          create: (context) =>
-                              ConsoleBloc(messageRepository: messageRepository),
+                          create: (context) => ConsoleBloc(
+                            messageRepository: messageRepository,
+                            loggerCacheRepository: loggerCacheRepository,
+                          ),
                           child: const ConsoleView(onClose: hide),
                         ),
                       );
@@ -104,7 +108,8 @@ class ConsoleOverlayManager {
   /// Exibe o overlay do console sobrepondo a rota ativa.
   static void showOverlay(
     BuildContext context,
-    MessageRepository messageRepository, [
+    MessageRepository messageRepository,
+    ILoggerCacheRepository loggerCacheRepository, [
     bool draggable = false,
   ]) {
     if (_overlayEntry != null) return;
@@ -140,8 +145,10 @@ class ConsoleOverlayManager {
                   borderRadius: const BorderRadius.all(Radius.circular(8.0)),
 
                   child: BlocProvider(
-                    create: (_) =>
-                        ConsoleBloc(messageRepository: messageRepository),
+                    create: (_) => ConsoleBloc(
+                      messageRepository: messageRepository,
+                      loggerCacheRepository: loggerCacheRepository,
+                    ),
                     child: const ConsoleView(
                       onClose: hideConsoleOverlayManager,
                     ),

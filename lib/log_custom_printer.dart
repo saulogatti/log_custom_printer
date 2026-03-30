@@ -79,7 +79,6 @@ export 'src/domain/logs_object/error_log.dart';
 export 'src/domain/logs_object/info_log.dart';
 export 'src/domain/logs_object/logger_object.dart';
 export 'src/domain/logs_object/warning_log.dart';
-export 'src/domain/query/log_export_service.dart';
 export 'src/domain/query/log_filter_engine.dart';
 export 'src/domain/query/log_query.dart';
 export 'src/domain/query/log_sort_engine.dart';

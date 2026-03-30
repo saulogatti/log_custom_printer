@@ -39,6 +39,8 @@ extension LogTypeExtension on LogType {
         return Colors.red;
       case LogType.debug:
         return Colors.yellow;
+      case LogType.all:
+        return Colors.black;
     }
   }
 
@@ -52,6 +54,8 @@ extension LogTypeExtension on LogType {
         return Icons.error;
       case LogType.debug:
         return Icons.bug_report;
+      case LogType.all:
+        return Icons.all_inclusive;
     }
   }
 }

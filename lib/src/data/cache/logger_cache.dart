@@ -4,10 +4,13 @@ import 'dart:developer' as dev;
 import 'dart:io';
 
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 
 /// Gerenciador de cache para persistência de arquivos de log em disco.
 ///
@@ -62,6 +65,17 @@ final class LoggerCache {
     await _fileManagerType.deleteFile(fileName);
   }
 
+  Future<(List<int>?, String?)> exportLogs(
+    List<LoggerObjectBase> logs,
+    ExportFormat format,
+  ) async {
+    await writeLogToFile("share.json", logs);
+    final pathFile = _getPathFile("share.json");
+    final objEncode = jsonEncode(logs);
+
+    return (objEncode.codeUnits, pathFile);
+  }
+
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
   ///
   /// Retorna `null` quando o diretório não existe, está vazio ou ocorre erro
@@ -102,10 +116,7 @@ final class LoggerCache {
   ///
   /// O conteúdo é serializado como JSON formatado antes da escrita.
   /// Erros de I/O acionam [onError] quando definido.
-  Future<void> writeLogToFile(
-    String fileName,
-    LoggerJsonList loggerList,
-  ) async {
+  Future<void> writeLogToFile(String fileName, Object loggerList) async {
     try {
       await futureInitialization.future;
       final path = _getPathFile(fileName);
@@ -140,7 +151,8 @@ final class LoggerCache {
   /// Completa [futureInitialization] após criar (ou validar) o diretório.
   Future<void> _init(String directory) async {
     try {
-      final directoryPath = Directory('$directory/loggerApp/logs');
+      final Directory directoryFDP = await getApplicationSupportDirectory();
+      final directoryPath = Directory('${directoryFDP.path}/loggerApp/logs');
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
