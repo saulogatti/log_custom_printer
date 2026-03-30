@@ -36,6 +36,9 @@ void main() {
     optionsBloc = OptionsBloc(optionsRepository: mockOptionsRepository);
   });
 
+  tearDown(() async {
+    await optionsBloc.close();
+  });
   test('Initial state is InitialOptionsState', () {
     expect(optionsBloc.state, isA<InitialOptionsState>());
   });
