@@ -83,11 +83,15 @@ class OptionsEntry {
     OptionItemEntry? selectedOption,
     DateRangeEpochEntry? selectedDate,
     DateRangeEpochEntry? selectedTimeRange,
+    bool clearSelectedDate = false,
+    bool clearSelectedTimeRange = false,
   }) {
     return OptionsEntry(
       selectedOption: selectedOption ?? this.selectedOption,
-      selectedDate: selectedDate ?? this.selectedDate,
-      selectedTimeRange: selectedTimeRange ?? this.selectedTimeRange,
+      selectedDate: clearSelectedDate ? null : (selectedDate ?? this.selectedDate),
+      selectedTimeRange: clearSelectedTimeRange
+          ? null
+          : (selectedTimeRange ?? this.selectedTimeRange),
     );
   }
 

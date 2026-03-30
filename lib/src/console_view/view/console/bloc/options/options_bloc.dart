@@ -16,23 +16,56 @@ class OptionsBloc extends Cubit<OptionsState> {
   }
 
   Future<void> selectDate(DateTimeRange? dateRange) async {
-    await _optionsRepository.selectDate(
-      dateRange?.start.millisecondsSinceEpoch ?? 0,
-      dateRange?.end.millisecondsSinceEpoch ?? 0,
-    );
-    loadOptions();
+    final currentState = state;
+    if (currentState is LoadedOptionsState) {
+      final updatedOptions = currentState.options.copyWith(
+        selectedDate: dateRange,
+        clearSelectedDate: dateRange == null,
+      );
+      emit(LoadedOptionsState(updatedOptions));
+
+      try {
+        await _optionsRepository.selectDate(
+          dateRange?.start.millisecondsSinceEpoch,
+          dateRange?.end.millisecondsSinceEpoch,
+        );
+      } catch (e) {
+        emit(currentState);
+      }
+    }
   }
 
   Future<void> selectOption(OptionItem option) async {
-    await _optionsRepository.selectOption(option);
-    loadOptions();
+    final currentState = state;
+    if (currentState is LoadedOptionsState) {
+      final updatedOptions = currentState.options.copyWith(option: option);
+      emit(LoadedOptionsState(updatedOptions));
+
+      try {
+        await _optionsRepository.selectOption(option);
+      } catch (e) {
+        emit(currentState);
+      }
+    }
   }
 
   Future<void> selectTimeRange(DateTimeRange? timeRange) async {
-    await _optionsRepository.selectTimeRange(
-      timeRange?.start.millisecondsSinceEpoch ?? 0,
-      timeRange?.end.millisecondsSinceEpoch ?? 0,
-    );
-    loadOptions();
+    final currentState = state;
+    if (currentState is LoadedOptionsState) {
+      final updatedOptions = currentState.options.copyWith(
+        selectedTimeRange: timeRange,
+        clearSelectedTimeRange: timeRange == null,
+      );
+      emit(LoadedOptionsState(updatedOptions));
+
+      try {
+        await _optionsRepository.selectTimeRange(
+          timeRange?.start.millisecondsSinceEpoch,
+          timeRange?.end.millisecondsSinceEpoch,
+        );
+      } catch (e) {
+        emit(currentState);
+      }
+    }
   }
 }
