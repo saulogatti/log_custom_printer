@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' show DateTimeRange;
-import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/console_view/data/entry/message_entry.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 
 class MessageLogDataSource {
@@ -19,9 +19,14 @@ class MessageLogDataSource {
     DateTimeRange? dateTimeRange,
     bool isDateTimeFilterEnabled = false,
   }) async {
-    final typeLog = logType != null
-        ? EnumLoggerType.values.firstWhere((e) => e.name == logType.name)
-        : null;
+    // `LogType.all` significa "sem filtro por tipo".
+    final typeLog = switch (logType) {
+      LogType.info => EnumLoggerType.info,
+      LogType.warning => EnumLoggerType.warning,
+      LogType.error => EnumLoggerType.error,
+      LogType.debug => EnumLoggerType.debug,
+      LogType.all || null => null,
+    };
 
     final shouldApplyDateTimeFilter =
         isDateTimeFilterEnabled && _isValidDateTimeRange(dateTimeRange);

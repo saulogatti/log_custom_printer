@@ -40,6 +40,31 @@ class ConsoleOverlayManager {
     _sizeListenable.value = size;
   }
 
+  /// Alterna a exibição do overlay "custom" (janela arrastável).
+  ///
+  /// - Se estiver aberto, fecha.
+  /// - Se estiver fechado, abre com:
+  ///   - largura = largura da tela do dispositivo
+  ///   - altura = metade da altura da tela do dispositivo
+  static void toggle(
+    BuildContext context,
+    MessageRepository messageRepository,
+    ILoggerCacheRepository loggerCacheRepository,
+  ) {
+    if (_customOverlayEntry != null) {
+      hide();
+      return;
+    }
+
+    final screenSize = MediaQuery.of(context).size;
+    show(
+      context,
+      messageRepository,
+      loggerCacheRepository,
+      Size(screenSize.width, screenSize.height / 2),
+    );
+  }
+
   static void show(
     BuildContext context,
     MessageRepository messageRepository,
@@ -49,6 +74,15 @@ class ConsoleOverlayManager {
     setSize(size);
     // Evita abrir dois overlays e dar dor de cabeça
     if (_customOverlayEntry != null) return;
+
+    // Se a janela estiver ocupando a largura toda, reposiciona para ficar
+    // alinhada à esquerda e centralizada verticalmente.
+    final screenSize = MediaQuery.of(context).size;
+    if (size.width >= screenSize.width) {
+      final availableHeight = screenSize.height - size.height;
+      final top = availableHeight <= 0 ? 0 : availableHeight / 2;
+      _position.value = Offset(0, top.clamp(0, screenSize.height).toDouble());
+    }
 
     _customOverlayEntry = OverlayEntry(
       canSizeOverlay: true,
