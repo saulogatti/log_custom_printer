@@ -3,8 +3,14 @@ import 'package:log_custom_printer/src/console_view/data/datasource/message_log_
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 
+/// Implementação de [MessageRepository] que delega ao [MessageLogDataSource].
+///
+/// Atua como camada de repositório entre o [ConsoleBloc] e a fonte de dados,
+/// seguindo o padrão Repository da Clean Architecture.
 class MessageRepositoryImpl implements MessageRepository {
   final MessageLogDataSource _dataSource;
+
+  /// Cria o repositório com o [dataSource] fornecido.
   MessageRepositoryImpl({required MessageLogDataSource dataSource})
     : _dataSource = dataSource;
 

@@ -1,6 +1,17 @@
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
+/// Formato de exportação de logs.
+///
+/// {@category Core}
+enum ExportFormat {
+  /// Exporta como JSON (array de objetos).
+  json,
+
+  /// Exporta como texto legível (uma linha por log).
+  txt,
+}
+
 /// Contrato para persistência e consulta de logs.
 ///
 /// Define as operações mínimas para armazenar, recuperar e limpar
@@ -25,6 +36,9 @@ abstract interface class ILoggerCacheRepository {
   /// [type] define a severidade alvo da remoção.
   Future<void> clearLogsByType(EnumLoggerType type);
 
+  /// Exporta todas as entradas de log armazenadas.
+  Future<void> exportLogs(List<LoggerObjectBase> logs, ExportFormat format);
+
   /// Recupera todas as entradas de log armazenadas.
   Future<List<LoggerObjectBase>> getAllLogs();
 
@@ -32,4 +46,7 @@ abstract interface class ILoggerCacheRepository {
   ///
   /// [type] define a severidade usada no filtro.
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
+
+  /// Importa todas as entradas de log armazenadas.
+  Future<void> importLogs(String content, ExportFormat format);
 }

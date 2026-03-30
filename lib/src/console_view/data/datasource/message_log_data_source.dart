@@ -1,26 +1,47 @@
 import 'package:flutter/material.dart' show DateTimeRange;
-import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/console_view/data/entry/message_entry.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 
+/// Fonte de dados responsável por recuperar e filtrar mensagens de log
+/// a partir do [LoggerPersistenceService].
+///
+/// Aplica filtros opcionais de tipo, texto e intervalo de data/hora antes
+/// de converter os objetos de domínio ([LoggerObjectBase]) em [MessageLog].
 class MessageLogDataSource {
+  /// Serviço de persistência utilizado como fonte primária de logs.
   LoggerPersistenceService loggerCacheRepositoryImpl;
+
+  /// Cria a fonte de dados com o [loggerCacheRepositoryImpl] fornecido.
   MessageLogDataSource({required this.loggerCacheRepositoryImpl});
 
+  /// Remove todos os logs do cache.
   Future<void> clearMessages() async {
     await loggerCacheRepositoryImpl.clearLogs();
   }
 
+  /// Retorna os logs após aplicar os filtros fornecidos.
+  ///
+  /// - [logType]: filtra por tipo (`null` ou [LogType.all] retorna todos).
+  /// - [searchText]: filtra por texto na mensagem do log.
+  /// - [dateTimeRange]: intervalo de data/hora.
+  /// - [isDateTimeFilterEnabled]: quando `false`, o filtro temporal é ignorado.
   Future<List<MessageLog>> getFilterMessages({
     LogType? logType,
     String? searchText,
     DateTimeRange? dateTimeRange,
     bool isDateTimeFilterEnabled = false,
   }) async {
-    final typeLog = logType != null
-        ? EnumLoggerType.values.firstWhere((e) => e.name == logType.name)
-        : null;
+    // `LogType.all` significa "sem filtro por tipo".
+    final typeLog = switch (logType) {
+      LogType.info => EnumLoggerType.info,
+      LogType.warning => EnumLoggerType.warning,
+      LogType.error => EnumLoggerType.error,
+      LogType.debug => EnumLoggerType.debug,
+      LogType.all || null => null,
+    };
 
     final shouldApplyDateTimeFilter =
         isDateTimeFilterEnabled && _isValidDateTimeRange(dateTimeRange);
@@ -59,6 +80,7 @@ class MessageLogDataSource {
     return filteredLogs.toList();
   }
 
+  /// Retorna todos os logs sem aplicar filtros.
   Future<List<MessageLog>> getMessages() async {
     final logs = await loggerCacheRepositoryImpl.getAllLogs();
     return logs
