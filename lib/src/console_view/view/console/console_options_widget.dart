@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
-import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/date_time_filter_widget.dart';
@@ -44,7 +42,6 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
                         isEnabled: options.isDateTimeFilterEnabled,
                         onChanged: (range, enabled) async {
                           final optionsBloc = context.read<OptionsBloc>();
-                          final consoleBloc = context.read<ConsoleBloc>();
 
                           if (range != null &&
                               range != options.selectedDateTimeRange) {
@@ -52,18 +49,8 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
                           }
 
                           if (enabled != options.isDateTimeFilterEnabled) {
-                            await optionsBloc.setDateTimeFilterEnabled(
-                              enabled,
-                            );
+                            await optionsBloc.setDateTimeFilterEnabled(enabled);
                           }
-
-                          consoleBloc.add(
-                            ConsoleUpdateDateTimeFilter(
-                              dateTimeRange:
-                                  range ?? options.selectedDateTimeRange,
-                              isDateTimeFilterEnabled: enabled,
-                            ),
-                          );
                         },
                       ),
                     ),

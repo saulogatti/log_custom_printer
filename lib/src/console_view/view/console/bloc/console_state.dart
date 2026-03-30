@@ -1,23 +1,25 @@
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 
 class ConsoleError extends ConsoleState {
-  const ConsoleError({required this.message});
   final String message;
+  const ConsoleError({required this.message, required super.selectedLogType});
 }
 
 class ConsoleInitial extends ConsoleState {
-  const ConsoleInitial();
+  const ConsoleInitial({required super.selectedLogType});
 }
 
 class ConsoleLoaded extends ConsoleState {
-  const ConsoleLoaded({required this.logs});
   final List<MessageLog> logs;
+  const ConsoleLoaded({required this.logs, required super.selectedLogType});
 }
 
 class ConsoleLoading extends ConsoleState {
-  const ConsoleLoading();
+  const ConsoleLoading({required super.selectedLogType});
 }
 
 sealed class ConsoleState {
-  const ConsoleState();
+  final LogType selectedLogType;
+
+  const ConsoleState({required this.selectedLogType});
 }
