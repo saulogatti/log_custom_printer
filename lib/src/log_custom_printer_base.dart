@@ -18,7 +18,7 @@ import 'domain/logs_object/logger_object.dart';
 /// ```dart
 /// void main() {
 ///   registerLogPrinter(
-///     LogWithColorPrint(),
+///     const LogWithColorPrint(),
 ///     config: const ConfigLog(enableLog: true),
 ///   );
 ///   runApp(MyApp());
@@ -28,7 +28,7 @@ import 'domain/logs_object/logger_object.dart';
 /// Exemplo de implementação customizada:
 /// ```dart
 /// class MinhaImpressora extends LogPrinterBase {
-///   const MinhaImpressora({super.config});
+///   const MinhaImpressora();
 ///
 ///   @override
 ///   void printLog(LoggerObjectBase log) {

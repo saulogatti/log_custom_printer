@@ -3,153 +3,28 @@
   "loggerJson": [
     {
       "className": "TesteLog",
-      "message": "Log de aviso 9",
-      "logCreationDate": "2026-03-29T21:06:42.397285"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 8",
-      "logCreationDate": "2026-03-29T21:06:41.395495"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 7",
-      "logCreationDate": "2026-03-29T21:06:40.394138"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 6",
-      "logCreationDate": "2026-03-29T21:06:39.392780"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 5",
-      "logCreationDate": "2026-03-29T21:06:38.389864"
-    },
-    {
-      "className": "TesteLog",
       "message": "Log de aviso 4",
-      "logCreationDate": "2026-03-29T21:06:37.387925"
+      "logCreationDate": "2026-03-30T00:19:58.199451"
     },
     {
       "className": "TesteLog",
       "message": "Log de aviso 3",
-      "logCreationDate": "2026-03-29T21:06:36.385524"
+      "logCreationDate": "2026-03-30T00:19:57.197836"
     },
     {
       "className": "TesteLog",
       "message": "Log de aviso 2",
-      "logCreationDate": "2026-03-29T21:06:35.383725"
+      "logCreationDate": "2026-03-30T00:19:56.196132"
     },
     {
       "className": "TesteLog",
       "message": "Log de aviso 1",
-      "logCreationDate": "2026-03-29T21:06:34.381667"
+      "logCreationDate": "2026-03-30T00:19:55.194817"
     },
     {
       "className": "TesteLog",
       "message": "Log de aviso 0",
-      "logCreationDate": "2026-03-29T21:06:33.380294"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 9",
-      "logCreationDate": "2026-03-29T18:29:14.532030"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 8",
-      "logCreationDate": "2026-03-29T18:29:13.530099"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 7",
-      "logCreationDate": "2026-03-29T18:29:12.527828"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 6",
-      "logCreationDate": "2026-03-29T18:29:11.525501"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 5",
-      "logCreationDate": "2026-03-29T18:29:10.522578"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 4",
-      "logCreationDate": "2026-03-29T18:29:09.520843"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 3",
-      "logCreationDate": "2026-03-29T18:29:08.518746"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 2",
-      "logCreationDate": "2026-03-29T18:29:07.515172"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 1",
-      "logCreationDate": "2026-03-29T18:29:06.513128"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 0",
-      "logCreationDate": "2026-03-29T18:29:05.511284"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 0",
-      "logCreationDate": "2026-03-29T19:52:04.290803"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 1",
-      "logCreationDate": "2026-03-29T19:52:05.293901"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 2",
-      "logCreationDate": "2026-03-29T19:52:06.295851"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 3",
-      "logCreationDate": "2026-03-29T19:52:07.297216"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 4",
-      "logCreationDate": "2026-03-29T19:52:08.298973"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 5",
-      "logCreationDate": "2026-03-29T19:52:09.300351"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 6",
-      "logCreationDate": "2026-03-29T19:52:10.304146"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 7",
-      "logCreationDate": "2026-03-29T19:52:11.307027"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 8",
-      "logCreationDate": "2026-03-29T19:52:12.309467"
-    },
-    {
-      "className": "TesteLog",
-      "message": "Log de aviso 9",
-      "logCreationDate": "2026-03-29T19:52:13.311270"
+      "logCreationDate": "2026-03-30T00:19:54.192770"
     }
   ]
 }

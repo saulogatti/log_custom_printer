@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
-import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/date_time_filter_widget.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/select_option_widget.dart';
 
+/// Tela de configurações do console visual.
+///
+/// Exibe controles para:
+/// - Filtro temporal ([DateTimeFilterWidget]).
+/// - Seleção de opções adicionais ([SelectOptionWidget]).
+///
+/// Observa o [OptionsBloc] para renderizar o estado atual das preferências.
 class ConsoleOptionsWidget extends StatefulWidget {
   const ConsoleOptionsWidget({super.key});
 
@@ -44,7 +49,6 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
                         isEnabled: options.isDateTimeFilterEnabled,
                         onChanged: (range, enabled) async {
                           final optionsBloc = context.read<OptionsBloc>();
-                          final consoleBloc = context.read<ConsoleBloc>();
 
                           if (range != null &&
                               range != options.selectedDateTimeRange) {
@@ -52,18 +56,8 @@ class _ConsoleOptionsWidgetState extends State<ConsoleOptionsWidget> {
                           }
 
                           if (enabled != options.isDateTimeFilterEnabled) {
-                            await optionsBloc.setDateTimeFilterEnabled(
-                              enabled,
-                            );
+                            await optionsBloc.setDateTimeFilterEnabled(enabled);
                           }
-
-                          consoleBloc.add(
-                            ConsoleUpdateDateTimeFilter(
-                              dateTimeRange:
-                                  range ?? options.selectedDateTimeRange,
-                              isDateTimeFilterEnabled: enabled,
-                            ),
-                          );
                         },
                       ),
                     ),

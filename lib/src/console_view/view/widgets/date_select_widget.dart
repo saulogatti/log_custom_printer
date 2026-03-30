@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
+/// Widget para seleção de um intervalo de datas via [showDateRangePicker].
+///
+/// Exibe um [label] e um botão com o intervalo selecionado (ou "Selecionar"
+/// se nenhum intervalo estiver definido). Ao confirmar, [onDateSelected] é
+/// chamado com o novo [DateTimeRange].
 class DateSelectWidget extends StatelessWidget {
+  /// Rótulo exibido à esquerda do botão.
   final String label;
 
+  /// Intervalo atualmente selecionado (nulo se nenhum).
   final DateTimeRange? selectedDate;
+
+  /// Callback invocado quando o usuário confirma um novo intervalo de datas.
   final ValueChanged<DateTimeRange?> onDateSelected;
   const DateSelectWidget({
     required this.label,

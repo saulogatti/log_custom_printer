@@ -15,6 +15,7 @@ Biblioteca Dart/Flutter para logging customizado com serialização JSON, format
 - 🏗️ **Injeção de Dependência**: Configuração via `registerLogPrinter`, `registerLogPrinterColor` ou `registerLogPrinterSimple` (get_it)
 - 🎭 **Mixin utilities**: `LoggerClassMixin` para integração fácil em classes
 - 🔍 **Rastreabilidade**: Identificação automática da classe de origem
+- 🖥️ **Console Visual**: Overlay Flutter para visualização e filtragem de logs em tempo real (`ConsoleOverlayManager`)
 
 ## 🚀 Instalação
 
@@ -169,6 +170,29 @@ void main() {
 
 Use `registerLogPrinterColor()` ou `registerLogPrinterSimple()` para configuração rápida; ou `registerLogPrinter(LogPrinterBase)` para impressoras customizadas.
 
+### Console Visual de Logs
+
+O pacote inclui um overlay Flutter para visualização dos logs em tempo real durante o desenvolvimento.
+
+```dart
+import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
+
+void main() {
+  initAppInjection(); // registra dependências do console visual
+  runApp(MyApp());
+}
+
+// Em qualquer widget com acesso ao BuildContext:
+ConsoleOverlayManager.toggle(
+  context,
+  appGetIt<MessageRepository>(),
+  appGetIt<ILoggerCacheRepository>(),
+);
+```
+
+Para documentação completa do console visual, consulte [ConsoleView.md](ConsoleView.md).
+
 ## 🛠️ Desenvolvimento
 
 ### Dependências de Desenvolvimento
@@ -212,7 +236,7 @@ Cobertura atual de testes automatizados:
 
 O projeto está configurado para gerar documentação usando `dartdoc`. A configuração está definida em `dartdoc_options.yaml` com:
 
-- Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities)
+- Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities, Console View)
 - Links para o código fonte no GitHub
 - Exclusão automática de arquivos gerados (*.g.dart, *.freezed.dart)
 - Saída em `doc/api`
@@ -270,6 +294,19 @@ class CustomLog extends LoggerObjectBase {
   Map<String, dynamic> toJson() => _$CustomLogToJson(this);
 }
 ```
+
+## 📚 Documentação
+
+| Arquivo | Conteúdo |
+|---------|----------|
+| [README.md](README.md) | Visão geral, instalação e uso básico |
+| [Core.md](Core.md) | Núcleo da biblioteca e injeção de dependência |
+| [LogTypes.md](LogTypes.md) | Tipos de log disponíveis |
+| [Printers.md](Printers.md) | Estratégias de impressão |
+| [Configuration.md](Configuration.md) | Configuração e filtros |
+| [Utilities.md](Utilities.md) | Utilitários, cache e extensões |
+| [ConsoleView.md](ConsoleView.md) | Console visual de logs (overlay Flutter) |
+| [DOCUMENTATION.md](DOCUMENTATION.md) | Documentação arquitetural expandida |
 
 ## 🤝 Contribuições
 

@@ -14,7 +14,10 @@ export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// registerLogPrinter(LogSimplePrint());
+/// registerLogPrinter(
+///   const LogSimplePrint(),
+///   config: const ConfigLog(enableLog: true),
+/// );
 /// ```
 class LogSimplePrint extends LogPrinterBase {
   /// Construtor const para permitir uso como constante quando configurado.

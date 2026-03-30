@@ -1,0 +1,39 @@
+---
+description: Effective Dart, UI, testes, logging, codegen e dependências
+globs: "**/*.dart"
+alwaysApply: false
+---
+
+# Dart/Flutter — práticas, testes e tooling
+
+## Dart
+
+- Effective Dart e `analysis_options.yaml`; nomes claros; responsabilidade única.
+- Erros tratados explicitamente; null safety sólido; evitar `!` sem garantia.
+- Documentar APIs públicas com `///` quando fizer sentido.
+
+## Flutter / UI
+
+- Widgets coesos e focados em renderização; `const` quando possível.
+- Listas longas: `ListView.builder`, `SliverList`; nada de trabalho pesado em `build()`.
+
+## Testes
+
+- Arrange–Act–Assert; priorizar domínio e bloc/cubit para regras críticas.
+- UI: validar por estado; preferir fakes/stubs a mocks quando viável.
+
+## Logging
+
+- Não usar `print` solto; usar a estratégia de logging do projeto; preferir logging estruturado quando aplicável.
+
+## Codegen
+
+- Não editar `*.g.dart` manualmente; após `@JsonSerializable`, regenerar com `build_runner` (ver [`.github/copilot-instructions.md`](.github/copilot-instructions.md)).
+
+## Dependências
+
+- Novo pacote só com ganho claro e justificação técnica; preferir o que o projeto já usa.
+
+## Checklist final
+
+Compatível com instruções de domínio ([`.github/copilot-instructions.md`](.github/copilot-instructions.md))? Duplicação, tamanho de widgets, separação UI/lógica e BLoC revisados?

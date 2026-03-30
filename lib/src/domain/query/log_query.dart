@@ -1,16 +1,5 @@
 import '../log_helpers/enum_logger_type.dart';
 
-/// Formato de exportação de logs.
-///
-/// {@category Query}
-enum ExportFormat {
-  /// Exporta como JSON (array de objetos).
-  json,
-
-  /// Exporta como texto legível (uma linha por log).
-  txt,
-}
-
 /// Parâmetros de consulta para filtro, ordenação e exportação de logs.
 ///
 /// Todos os campos são opcionais. Quando omitidos, nenhum filtro ou ordenação
@@ -29,15 +18,6 @@ enum ExportFormat {
 ///
 /// {@category Query}
 class LogQuery {
-
-  /// Cria um objeto de consulta com filtros e ordenação opcionais.
-  const LogQuery({
-    this.types,
-    this.start,
-    this.end,
-    this.sortField,
-    this.sortDirection = SortDirection.asc,
-  });
   /// Conjunto de tipos de log para filtrar. `null` ou vazio retorna todos os tipos.
   final Set<EnumLoggerType>? types;
 
@@ -53,7 +33,16 @@ class LogQuery {
   /// Direção de ordenação. Ignorado quando [sortField] é `null`.
   ///
   /// Padrão: [SortDirection.asc].
-  final SortDirection sortDirection;
+  final SortDirection? sortDirection;
+
+  /// Cria um objeto de consulta com filtros e ordenação opcionais.
+  const LogQuery({
+    this.types,
+    this.start,
+    this.end,
+    this.sortField,
+    this.sortDirection,
+  });
 }
 
 /// Campo de ordenação de logs.
