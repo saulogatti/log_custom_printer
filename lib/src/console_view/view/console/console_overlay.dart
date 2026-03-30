@@ -81,7 +81,7 @@ class ConsoleOverlayManager {
     if (size.width >= screenSize.width) {
       final availableHeight = screenSize.height - size.height;
       final top = availableHeight <= 0 ? 0 : availableHeight / 2;
-      _position.value = Offset(0, top.clamp(0, screenSize.height));
+      _position.value = Offset(0, top.clamp(0, screenSize.height).toDouble());
     }
 
     _customOverlayEntry = OverlayEntry(
