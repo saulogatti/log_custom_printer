@@ -11,6 +11,7 @@ Biblioteca Dart/Flutter para logging customizado com serialização JSON, format
 - 📦 **Serialização JSON**: Auto-geração com `json_serializable`
 - 🔧 **Configuração flexível**: Filtragem por tipos e controle de habilitação
 - 💾 **Sistema de Cache**: Armazenamento de logs em memória e persistência em arquivo JSON
+- 🔒 **I/O seguro em concorrência**: Operações de arquivo serializadas por caminho no `FileManager`
 - 🏗️ **Injeção de Dependência**: Configuração via `registerLogPrinter`, `registerLogPrinterColor` ou `registerLogPrinterSimple` (get_it)
 - 🎭 **Mixin utilities**: `LoggerClassMixin` para integração fácil em classes
 - 🔍 **Rastreabilidade**: Identificação automática da classe de origem
@@ -63,6 +64,8 @@ void main() {
 ### Sistema de Cache
 
 `registerLogPrinterColor` e `registerLogPrinterSimple` retornam um `LoggerPersistenceService` que expõe operações de leitura/limpeza de logs e usa um repositório de cache internamente (em memória e, opcionalmente, em arquivo via `cacheFilePath`).
+
+Quando a persistência em arquivo está habilitada, o `FileManager` interno aplica serialização assíncrona por caminho (path lock). Isso evita condições de corrida em cenários com múltiplas operações concorrentes sobre o mesmo arquivo/diretório.
 
 ```dart
 // Recuperar todos os logs
@@ -218,6 +221,20 @@ Para gerar a documentação:
 
 ```bash
 dart doc
+```
+
+Para gerar no diretório `docs/` (útil para servir localmente):
+
+```bash
+dart doc -o docs/
+```
+
+Visualização local (exemplo):
+
+```bash
+# em qualquer servidor estático, apontando para docs/
+# exemplo com Python:
+python -m http.server 8080 -d docs
 ```
 
 A documentação gerada incluirá:

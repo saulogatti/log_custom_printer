@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.1
+- Docs: atualizar `README.md`, `Utilities.md` e `DOCUMENTATION.md` com detalhes de persistência em arquivo e visualização local da documentação (`dart doc -o docs/`).
+- Docs: documentar `FileManager`/`FileType` e o comportamento de serialização de operações por caminho.
+- Fix: adicionar segurança de concorrência no `FileManager` para evitar condição de corrida em operações assíncronas no mesmo arquivo/diretório.
+
 ## 2.2.0
 - Adicionar filtros avançados para os logs, permitindo que os usuários filtrem os logs por tipo, data e outros critérios personalizados, facilitando a análise e organização dos logs.
 - Refactor: atualizar a estrutura do projeto para acomodar os novos filtros avançados, garantindo que a implementação seja modular e fácil de manter.
