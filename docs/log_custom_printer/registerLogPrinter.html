@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L51"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L63"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">registerLogPrinter</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -59,7 +59,7 @@
 <span class="returntype"><a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
 <span class="name ">registerLogPrinter</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span></li>
 <li><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation">ILoggerCacheRepository?</span> <span class="parameter-name">cacheRepository</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span>, </span></li>
 </ol>})
 
         
@@ -75,7 +75,8 @@ de logs (sendLog, LoggerClassMixin, etc.).</p>
 <p>Exemplo:</p>
 <pre class="language-dart"><code class="language-dart">void main() {
   registerLogPrinter(
-    LogWithColorPrint(config: ConfigLog(enableLog: true)),
+    const LogWithColorPrint(),
+    config: const ConfigLog(enableLog: true),
   );
   runApp(MyApp());
 }
@@ -88,7 +89,8 @@ de logs (sendLog, LoggerClassMixin, etc.).</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
-  required ConfigLog config, ILoggerCacheRepository? cacheRepository,
+  required ConfigLog config,
+  ILoggerCacheRepository? cacheRepository,
 }) {
   final locator = GetIt.instance;
   if (locator.isRegistered&lt;LogPrinterService&gt;()) {

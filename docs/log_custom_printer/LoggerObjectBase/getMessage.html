@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;LoggerObjectBase-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/logger_object.dart#L92"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/logger_object.dart#L91"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">getMessage</span> method 
 </h1></div>
 
@@ -75,11 +75,11 @@ por <a href="../../log_custom_printer/LoggerObjectBase/getColor.html">getColor</
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">String getMessage([bool withColor = true]) {
   final messageFormated = &quot;${logCreationDate.logFullDateTime} $message&quot;;
-  final String messa = withColor
+  final String formattedLine = withColor
       ? getColor().call(messageFormated)
       : messageFormated;
 
-  return messa;
+  return formattedLine;
 }</code></pre>
 </section>
 

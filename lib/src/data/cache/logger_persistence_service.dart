@@ -31,7 +31,7 @@ final class LoggerPersistenceService {
   ///
   /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
   ///
-  /// Os parâmetros [filterEngine], [sortEngine] e [exportService] são opcionais
+  /// Os parâmetros [filterEngine], [sortEngine] são opcionais
   /// e permitem injetar implementações customizadas (útil em testes). Quando
   /// omitidos, usam as implementações padrão constantes da biblioteca.
   LoggerPersistenceService({

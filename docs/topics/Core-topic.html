@@ -207,6 +207,15 @@ tearDown(() async =&gt; await GetIt.instance.reset());
   <section class="summary offset-anchor" id="classes">
     <h2>Classes</h2>
     <dl>
+      <dt id="ILoggerCacheRepository">
+  <span class="name "><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></span> 
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Contrato para persistência e consulta de logs.
+</dd>
+
       <dt id="LoggerObject">
   <span class="name "><a href="../log_custom_printer/LoggerObject-class.html">LoggerObject</a></span> 
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -225,6 +234,15 @@ tearDown(() async =&gt; await GetIt.instance.reset());
   Contrato base para objetos de log que podem ser impressos/serializados.
 </dd>
 
+      <dt id="LogPrinterService">
+  <span class="name "><a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></span> 
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Serviço central que coordena o processo de impressão e armazenamento de logs.
+</dd>
+
     </dl>
   </section>
 
@@ -235,8 +253,22 @@ tearDown(() async =&gt; await GetIt.instance.reset());
   <section class="summary offset-anchor" id="functions">
     <h2>Functions</h2>
     <dl class="callables">
+      <dt id="fetchLogPrinterService" class="callable">
+  <span class="name"><a href="../log_custom_printer/fetchLogPrinterService.html">fetchLogPrinterService</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></span>
+  </span>
+  
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Resolve o <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> registrado no get_it.
+  
+
+</dd>
+
       <dt id="registerLogPrinter" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation">ILoggerCacheRepository?</span> <span class="parameter-name">cacheRepository</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -280,6 +312,20 @@ tearDown(() async =&gt; await GetIt.instance.reset());
     </dl>
   </section>
 
+  <section class="summary offset-anchor" id="enums">
+    <h2>Enums</h2>
+    <dl>
+      <dt id="ExportFormat">
+  <span class="name "><a href="../log_custom_printer/ExportFormat.html">ExportFormat</a></span> 
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Formato de exportação de logs.
+</dd>
+
+    </dl>
+  </section>
 
 
 </div> <!-- /.main-content -->
@@ -303,6 +349,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
         <li><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="../topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="../topics/Utilities-topic.html">Utilitários</a></li>
+        <li><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
       <li><a href="../main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>
@@ -317,15 +364,20 @@ tearDown(() async =&gt; await GetIt.instance.reset());
       <li><a href="../log_custom_printer/">log_custom_printer</a></li>
 
     <li class="section-title"><a href="../topics/Core-topic.html#classes">Classes</a></li>
+      <li><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></li>
       <li><a href="../log_custom_printer/LoggerObject-class.html">LoggerObject</a></li>
       <li><a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></li>
+      <li><a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></li>
 
+    <li class="section-title"><a href="../topics/Core-topic.html#enums">Enums</a></li>
+      <li><a href="../log_custom_printer/ExportFormat.html">ExportFormat</a></li>
 
 
 
 
 
     <li class="section-title"><a href="../topics/Core-topic.html#functions">Functions</a></li>
+      <li><a href="../log_custom_printer/fetchLogPrinterService.html">fetchLogPrinterService</a></li>
       <li><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></li>
       <li><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></li>
       <li><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></li>

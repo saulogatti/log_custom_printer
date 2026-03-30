@@ -63,8 +63,8 @@ ConsoleOverlayManager.hideConsoleOverlayManager();
 
 Widget principal que exibe a tela de console com:
 
-- Lista de logs filtrados ([ConsoleWidget])
-- Barra de filtro por tipo de log ([SegmentedButton])
+- Lista de logs filtrados ([[console_widget.dart](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_widget.dart#L13)])
+- Barra de filtro por tipo de log ([[segmented_button.dart](https://api.flutter.dev/flutter/material/SegmentedButton-class.html)) com opções: All, Debug, Info, Warning, Error)])
 - Ações na AppBar: atualizar, limpar, exportar, configurações, abrir em overlay
 
 ```dart
@@ -84,8 +84,8 @@ ConsoleProvider(
 | Filtro | Como usar |
 |--------|-----------|
 | Por tipo | Botões segmentados na parte inferior: All, Debug, Info, Warning, Error |
-| Por texto | Via `searchText` no [MessageRepository] |
-| Por data/hora | Ativado via ícone de filtro na AppBar; configurado em [ConsoleOptionsWidget] |
+| Por texto | Via `searchText` no [MessageRepository](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_bloc.dart#L13) |
+| Por data/hora | Ativado via ícone de filtro na AppBar; configurado em [ConsoleOptionsWidget](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_options_widget.dart#L13) |
 
 ---
 
@@ -93,8 +93,8 @@ ConsoleProvider(
 
 Tela de configurações do console, acessível pelo ícone ⚙️ da AppBar:
 
-- **Filtro temporal**: seleção de intervalo via [DateTimeFilterWidget]
-- **Opções adicionais**: lista selecionável de preferências via [SelectOptionWidget]
+- **Filtro temporal**: seleção de intervalo via [DateTimeFilterWidget](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/widgets/date_select_widget.dart#L13)
+- **Opções adicionais**: lista selecionável de preferências via [SelectOptionWidget](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/widgets/select_option_widget.dart#L13)
 
 ---
 
@@ -111,7 +111,7 @@ enum LogType { info, warning, error, debug, all }
 Cada valor possui:
 - `.icon` — ícone associado para exibição
 - `.color` — cor associada para exibição
-- `.toEnum()` — conversão para [EnumLoggerType] do sistema de cache
+- `.toEnum()` — conversão para [EnumLoggerType](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/domain/models/enum_logger_type.dart) do sistema de cache
 
 ### MessageLog
 
@@ -148,7 +148,7 @@ Gerencia o ciclo de vida dos logs exibidos:
 |--------|------|
 | `ConsoleLoad` | Carrega/recarrega todos os logs |
 | `ConsoleClear` | Limpa os logs e recarrega |
-| `ConsoleFilterByType` | Filtra por [LogType] |
+| `ConsoleFilterByType` | Filtra por [LogType](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/domain/models/log_type.dart) |
 | `ConsoleUpdateDateTimeFilter` | Aplica/remove filtro temporal |
 | `ConsoleExportLogs` | Exporta logs no formato especificado |
 
@@ -179,7 +179,7 @@ void main() {
 }
 ```
 
-Ou forneça os repositórios diretamente ao [ConsoleOverlayManager]:
+Ou forneça os repositórios diretamente ao [ConsoleOverlayManager](https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_overlay_manager.dart):
 
 ```dart
 ConsoleOverlayManager.toggle(

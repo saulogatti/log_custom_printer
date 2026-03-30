@@ -77,7 +77,8 @@
 // Configuração inicial (obrigatório no startup)
 void main() {
   registerLogPrinter(
-    LogWithColorPrint(config: ConfigLog(enableLog: true)),
+    const LogWithColorPrint(),
+    config: const ConfigLog(enableLog: true),
   );
   runApp(MyApp());
 }
@@ -131,6 +132,15 @@ class MinhaClasse with LoggerClassMixin {
   Configuração para controle de logs na biblioteca.
 </dd>
 
+          <dt id="ConsoleOverlayManager">
+  <span class="name "><a href="../log_custom_printer/ConsoleOverlayManager-class.html">ConsoleOverlayManager</a></span> 
+    <span class="category console-visual-de-logs cp-5 linked" title="This is part of the Console Visual de Logs topic."><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></span>
+
+</dt>
+<dd>
+  Gerenciador de overlay do console visual de logs.
+</dd>
+
           <dt id="DebugLog">
   <span class="name "><a href="../log_custom_printer/DebugLog-class.html">DebugLog</a></span> 
     <span class="category tipos-de-log cp-1 linked" title="This is part of the Tipos de Log topic."><a href="../topics/Log Types-topic.html">Tipos&nbsp;de&nbsp;Log</a></span>
@@ -149,6 +159,15 @@ class MinhaClasse with LoggerClassMixin {
   Log de erro com formatação vermelha e stack trace.
 </dd>
 
+          <dt id="ILoggerCacheRepository">
+  <span class="name "><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></span> 
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Contrato para persistência e consulta de logs.
+</dd>
+
           <dt id="InfoLog">
   <span class="name "><a href="../log_custom_printer/InfoLog-class.html">InfoLog</a></span> 
     <span class="category tipos-de-log cp-1 linked" title="This is part of the Tipos de Log topic."><a href="../topics/Log Types-topic.html">Tipos&nbsp;de&nbsp;Log</a></span>
@@ -158,19 +177,9 @@ class MinhaClasse with LoggerClassMixin {
   Log de informação geral com formatação branca.
 </dd>
 
-          <dt id="LogExportService">
-  <span class="name "><a href="../log_custom_printer/LogExportService-class.html">LogExportService</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
-
-</dt>
-<dd>
-  Serializa uma lista de logs para os formatos <a href="../log_custom_printer/ExportFormat.html">ExportFormat.json</a> ou
-<a href="../log_custom_printer/ExportFormat.html">ExportFormat.txt</a> em memória (retorna uma <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>).
-</dd>
-
           <dt id="LogFilterEngine">
   <span class="name "><a href="../log_custom_printer/LogFilterEngine-class.html">LogFilterEngine</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -192,7 +201,7 @@ class MinhaClasse with LoggerClassMixin {
 
 </dt>
 <dd>
-  Implementação concreta de <code>ILoggerCacheRepository</code> usando armazenamento em memória
+  Implementação concreta de <a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a> usando armazenamento em memória
 e opcionalmente em arquivo.
 </dd>
 
@@ -232,9 +241,18 @@ e opcionalmente em arquivo.
   Classe base abstrata para impressoras de logs.
 </dd>
 
+          <dt id="LogPrinterService">
+  <span class="name "><a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></span> 
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Serviço central que coordena o processo de impressão e armazenamento de logs.
+</dd>
+
           <dt id="LogQuery">
   <span class="name "><a href="../log_custom_printer/LogQuery-class.html">LogQuery</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -252,11 +270,20 @@ e opcionalmente em arquivo.
 
           <dt id="LogSortEngine">
   <span class="name "><a href="../log_custom_printer/LogSortEngine-class.html">LogSortEngine</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
   Ordena uma lista de logs com base nos parâmetros de <a href="../log_custom_printer/LogQuery-class.html">LogQuery</a>.
+</dd>
+
+          <dt id="LogWithColorPrint">
+  <span class="name "><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a></span> 
+    <span class="category impressoras-de-log cp-2 linked" title="This is part of the Impressoras de Log topic."><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></span>
+
+</dt>
+<dd>
+  Impressora de logs que preserva cor/estilo ANSI.
 </dd>
 
           <dt id="StackTraceConverter">
@@ -302,7 +329,7 @@ e opcionalmente em arquivo.
 
           <dt id="ExportFormat">
   <span class="name "><a href="../log_custom_printer/ExportFormat.html">ExportFormat</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
 
 </dt>
 <dd>
@@ -320,7 +347,7 @@ e opcionalmente em arquivo.
 
           <dt id="LogSortField">
   <span class="name "><a href="../log_custom_printer/LogSortField.html">LogSortField</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -329,7 +356,7 @@ e opcionalmente em arquivo.
 
           <dt id="SortDirection">
   <span class="name "><a href="../log_custom_printer/SortDirection.html">SortDirection</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -377,8 +404,35 @@ e opcionalmente em arquivo.
     <section class="summary offset-anchor" id="functions">
       <h2>Functions</h2>
       <dl class="callables">
+          <dt id="fetchLogPrinterService" class="callable">
+  <span class="name"><a href="../log_custom_printer/fetchLogPrinterService.html">fetchLogPrinterService</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></span>
+  </span>
+  
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
+
+</dt>
+<dd>
+  Resolve o <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> registrado no get_it.
+  
+
+</dd>
+
+          <dt id="hideConsoleOverlay" class="callable">
+  <span class="name"><a href="../log_custom_printer/hideConsoleOverlay.html">hideConsoleOverlay</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
           <dt id="registerLogPrinter" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation">ILoggerCacheRepository?</span> <span class="parameter-name">cacheRepository</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -419,6 +473,32 @@ e opcionalmente em arquivo.
 
 </dd>
 
+          <dt id="setConsoleOverlaySize" class="callable">
+  <span class="name"><a href="../log_custom_printer/setConsoleOverlaySize.html">setConsoleOverlaySize</a></span><span class="signature">(<wbr><span class="parameter" id="setConsoleOverlaySize-param-size"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">size</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+          <dt id="showConsoleOverlay" class="callable">
+  <span class="name"><a href="../log_custom_printer/showConsoleOverlay.html">showConsoleOverlay</a></span><span class="signature">(<wbr><span class="parameter" id="showConsoleOverlay-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span><span class="parameter" id="showConsoleOverlay-param-messageRepository"><span class="type-annotation">MessageRepository</span> <span class="parameter-name">messageRepository</span>, </span><span class="parameter" id="showConsoleOverlay-param-loggerCacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></span> <span class="parameter-name">loggerCacheRepository</span>, </span><span class="parameter" id="showConsoleOverlay-param-size"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">size</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
       </dl>
     </section>
 
@@ -444,6 +524,7 @@ e opcionalmente em arquivo.
         <li><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="../topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="../topics/Utilities-topic.html">Utilitários</a></li>
+        <li><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
       <li><a href="../main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>

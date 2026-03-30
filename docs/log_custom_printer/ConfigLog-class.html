@@ -48,7 +48,7 @@
     data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
     data-below-sidebar="log_custom_printer&#47;ConfigLog-class-sidebar.html">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L37"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L39"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-class">ConfigLog</span> class 
  
     <span class="category configuração cp-3 linked" title="This is part of the Configuração topic."><a href="../topics/Configuration-topic.html">Configuração</a></span>
@@ -58,9 +58,11 @@
 <section class="desc markdown">
   <p>Configuração para controle de logs na biblioteca.</p>
 <p>Esta classe define as regras de habilitação e filtragem dos logs.
-Por padrão, os logs estão desabilitados e todos os tipos de log são permitidos.</p>
+Por padrão, os logs estão desabilitados (<a href="../log_custom_printer/ConfigLog/enableLog.html">enableLog</a> <code>false</code>) e <a href="../log_custom_printer/ConfigLog/onlyClasses.html">onlyClasses</a>
+inclui <a href="../log_custom_printer/DebugLog-class.html">DebugLog</a>, <a href="../log_custom_printer/WarningLog-class.html">WarningLog</a> e <a href="../log_custom_printer/InfoLog-class.html">InfoLog</a> (veja também o comportamento de
+<a href="../log_custom_printer/ErrorLog-class.html">ErrorLog</a> em <a href="../log_custom_printer/ConfigLog/onlyClasses.html">onlyClasses</a> abaixo).</p>
 <p>Exemplo de uso básico:</p>
-<pre class="language-dart"><code class="language-dart">final config = ConfigLog(); // Padrões: logs desabilitados, todos os tipos
+<pre class="language-dart"><code class="language-dart">final config = ConfigLog(); // Padrões: logs desabilitados; onlyClasses padrão
 </code></pre>
 <p>Exemplo com configuração customizada:</p>
 <pre class="language-dart"><code class="language-dart">final config = ConfigLog(

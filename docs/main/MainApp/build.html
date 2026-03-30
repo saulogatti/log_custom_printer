@@ -49,7 +49,7 @@
     data-above-sidebar="main&#47;MainApp-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/main.dart#L17"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/main.dart#L20"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">build</span> method 
 </h1></div>
 
@@ -110,12 +110,17 @@ and</li>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  return MaterialApp(
-    themeMode: ThemeMode.dark,
-    darkTheme: ThemeData.dark(),
-    home: ConsoleProvider(
-      messageRepository: appGetIt&lt;MessageRepository&gt;(),
-      optionsRepository: appGetIt&lt;IOptionsRepository&gt;(),
+  return BlocProvider(
+    create: (context) =&gt;
+        OptionsBloc(optionsRepository: appGetIt&lt;IOptionsRepository&gt;()),
+    child: MaterialApp(
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData.dark(),
+      home: ConsoleProvider(
+        messageRepository: appGetIt&lt;MessageRepository&gt;(),
+        optionsRepository: appGetIt&lt;IOptionsRepository&gt;(),
+        loggerCacheRepository: appGetIt&lt;ILoggerCacheRepository&gt;(),
+      ),
     ),
   );
 }</code></pre>

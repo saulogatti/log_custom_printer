@@ -49,13 +49,13 @@
     data-above-sidebar="log_custom_printer&#47;LoggerPersistenceService-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_persistence_service.dart#L89"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_persistence_service.dart#L86"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">exportLogs</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>&gt;</span></span>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">exportLogs</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="exportLogs-param-query"><span class="type-annotation"><a href="../../log_custom_printer/LogQuery-class.html">LogQuery</a></span> <span class="parameter-name">query</span>, </span></li>
 <li><span class="parameter" id="exportLogs-param-format"><span class="type-annotation"><a href="../../log_custom_printer/ExportFormat.html">ExportFormat</a></span> <span class="parameter-name">format</span></span></li>
 </ol>)
@@ -77,9 +77,14 @@ do conteúdo gerado fica a cargo da camada consumidora.</p>
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;String&gt; exportLogs(LogQuery query, ExportFormat format) async {
-  final logs = await queryLogs(query);
-  return _exportService.export(logs, format);
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; exportLogs(LogQuery query, ExportFormat format) async {
+  final listLogs = await queryLogs(query);
+
+  await _cacheRepository.exportLogs(listLogs, format);
+  if (logOutputHandler != null) {
+    final logs = await queryLogs(query);
+    logOutputHandler?.call(logs);
+  }
 }</code></pre>
 </section>
 

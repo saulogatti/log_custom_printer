@@ -64,12 +64,12 @@ como os logs serão formatados e exibidos.</p>
 <p>As implementações disponíveis são:</p>
 <ul>
 <li><a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a>: saída simples sem cores</li>
-<li><code>LogWithColorPrint</code>: saída com códigos ANSI coloridos</li>
+<li><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a>: saída com códigos ANSI coloridos</li>
 </ul>
 <p>Registre a implementação no startup da aplicação via <code>registerLogPrinter</code>:</p>
 <pre class="language-dart"><code class="language-dart">void main() {
   registerLogPrinter(
-    LogWithColorPrint(),
+    const LogWithColorPrint(),
     config: const ConfigLog(enableLog: true),
   );
   runApp(MyApp());
@@ -77,7 +77,7 @@ como os logs serão formatados e exibidos.</p>
 </code></pre>
 <p>Exemplo de implementação customizada:</p>
 <pre class="language-dart"><code class="language-dart">class MinhaImpressora extends LogPrinterBase {
-  const MinhaImpressora({super.config});
+  const MinhaImpressora();
 
   @override
   void printLog(LoggerObjectBase log) {
@@ -99,6 +99,7 @@ como os logs serão formatados e exibidos.</p>
           <dt>Implementers</dt>
           <dd><ul class="comma-separated clazz-relationships">
               <li><a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a></li>
+              <li><a href="../log_custom_printer/LogWithColorPrint-class.html">LogWithColorPrint</a></li>
           </ul></dd>
 
         

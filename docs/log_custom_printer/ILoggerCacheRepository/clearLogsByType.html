@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the export method from the LogExportService class, for the Dart programming language.">
-  <title>export method - LogExportService class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the clearLogsByType method from the ILoggerCacheRepository class, for the Dart programming language.">
+  <title>clearLogsByType method - ILoggerCacheRepository class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LogExportService-class.html">LogExportService</a></li>
-    <li class="self-crumb">export method</li>
+    <li><a href="../../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></li>
+    <li class="self-crumb">clearLogsByType abstract method</li>
   </ol>
-  <div class="self-name">export</div>
+  <div class="self-name">clearLogsByType</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,18 +46,17 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="log_custom_printer&#47;LogExportService-class-sidebar.html"
+    data-above-sidebar="log_custom_printer&#47;ILoggerCacheRepository-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_export_service.dart#L17"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-method">export</span> method 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/i_logger_cache_repository.dart#L37"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">clearLogsByType</span> abstract method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
-<span class="name ">export</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="export-param-logs"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span> <span class="parameter-name">logs</span>, </span></li>
-<li><span class="parameter" id="export-param-format"><span class="type-annotation"><a href="../../log_custom_printer/ExportFormat.html">ExportFormat</a></span> <span class="parameter-name">format</span></span></li>
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="name ">clearLogsByType</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="clearLogsByType-param-type"><span class="type-annotation"><a href="../../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span> <span class="parameter-name">type</span></span></li>
 </ol>)
 
       
@@ -65,21 +64,15 @@
     </section>
     
 <section class="desc markdown">
-  <p>Exporta <code>logs</code> no <code>format</code> especificado e retorna o conteúdo como string.</p>
+  <p>Remove entradas de log de um tipo específico.</p>
+<p><code>type</code> define a severidade alvo da remoção.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">String export(List&lt;LoggerObjectBase&gt; logs, ExportFormat format) {
-  switch (format) {
-    case ExportFormat.json:
-      return _exportJson(logs);
-    case ExportFormat.txt:
-      return _exportTxt(logs);
-  }
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; clearLogsByType(EnumLoggerType type);</code></pre>
 </section>
 
 
@@ -94,11 +87,11 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LogExportService-class.html">LogExportService</a></li>
-    <li class="self-crumb">export method</li>
+    <li><a href="../../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></li>
+    <li class="self-crumb">clearLogsByType abstract method</li>
 </ol>
 
-    <h5>LogExportService class</h5>
+    <h5>ILoggerCacheRepository class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">

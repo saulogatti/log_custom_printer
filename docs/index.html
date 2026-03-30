@@ -59,6 +59,7 @@
 <li>🏗️ <strong>Injeção de Dependência</strong>: Configuração via <code>registerLogPrinter</code>, <code>registerLogPrinterColor</code> ou <code>registerLogPrinterSimple</code> (get_it)</li>
 <li>🎭 <strong>Mixin utilities</strong>: <code>LoggerClassMixin</code> para integração fácil em classes</li>
 <li>🔍 <strong>Rastreabilidade</strong>: Identificação automática da classe de origem</li>
+<li>🖥️ <strong>Console Visual</strong>: Overlay Flutter para visualização e filtragem de logs em tempo real (<code>ConsoleOverlayManager</code>)</li>
 </ul>
 <h2 id="-instalao">🚀 Instalação</h2>
 <p>Adicione no <code>pubspec.yaml</code>:</p>
@@ -207,6 +208,24 @@ final logRecriado = DebugLog.fromJson(json);
 <li><strong><code>LogWithColorPrint</code></strong> — Saída colorida via <code>dart:developer.log()</code> com separadores ANSI</li>
 </ul>
 <p>Use <code>registerLogPrinterColor()</code> ou <code>registerLogPrinterSimple()</code> para configuração rápida; ou <code>registerLogPrinter(LogPrinterBase)</code> para impressoras customizadas.</p>
+<h3 id="console-visual-de-logs">Console Visual de Logs</h3>
+<p>O pacote inclui um overlay Flutter para visualização dos logs em tempo real durante o desenvolvimento.</p>
+<pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
+
+void main() {
+  initAppInjection(); // registra dependências do console visual
+  runApp(MyApp());
+}
+
+// Em qualquer widget com acesso ao BuildContext:
+ConsoleOverlayManager.toggle(
+  context,
+  appGetIt&lt;MessageRepository&gt;(),
+  appGetIt&lt;ILoggerCacheRepository&gt;(),
+);
+</code></pre>
+<p>Para documentação completa do console visual, consulte <a href="ConsoleView.md">ConsoleView.md</a>.</p>
 <h2 id="-desenvolvimento">🛠️ Desenvolvimento</h2>
 <h3 id="dependncias-de-desenvolvimento">Dependências de Desenvolvimento</h3>
 <pre class="language-bash"><code class="language-bash"># Instalar dependências
@@ -243,7 +262,7 @@ dart doc               # Gera documentação em doc/api
 <h3 id="gerao-de-documentao">Geração de Documentação</h3>
 <p>O projeto está configurado para gerar documentação usando <code>dartdoc</code>. A configuração está definida em <code>dartdoc_options.yaml</code> com:</p>
 <ul>
-<li>Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities)</li>
+<li>Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities, Console View)</li>
 <li>Links para o código fonte no GitHub</li>
 <li>Exclusão automática de arquivos gerados (*.g.dart, *.freezed.dart)</li>
 <li>Saída em <code>doc/api</code></li>
@@ -292,6 +311,49 @@ class CustomLog extends LoggerObjectBase {
   Map&lt;String, dynamic&gt; toJson() =&gt; _$CustomLogToJson(this);
 }
 </code></pre>
+<h2 id="-documentao">📚 Documentação</h2>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Conteúdo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="README.md">README.md</a></td>
+<td>Visão geral, instalação e uso básico</td>
+</tr>
+<tr>
+<td><a href="Core.md">Core.md</a></td>
+<td>Núcleo da biblioteca e injeção de dependência</td>
+</tr>
+<tr>
+<td><a href="LogTypes.md">LogTypes.md</a></td>
+<td>Tipos de log disponíveis</td>
+</tr>
+<tr>
+<td><a href="Printers.md">Printers.md</a></td>
+<td>Estratégias de impressão</td>
+</tr>
+<tr>
+<td><a href="Configuration.md">Configuration.md</a></td>
+<td>Configuração e filtros</td>
+</tr>
+<tr>
+<td><a href="Utilities.md">Utilities.md</a></td>
+<td>Utilitários, cache e extensões</td>
+</tr>
+<tr>
+<td><a href="ConsoleView.md">ConsoleView.md</a></td>
+<td>Console visual de logs (overlay Flutter)</td>
+</tr>
+<tr>
+<td><a href="DOCUMENTATION.md">DOCUMENTATION.md</a></td>
+<td>Documentação arquitetural expandida</td>
+</tr>
+</tbody>
+</table>
 <h2 id="-contribuies">🤝 Contribuições</h2>
 <p>Contribuições são bem-vindas! Por favor:</p>
 <ol>
@@ -347,6 +409,7 @@ class CustomLog extends LoggerObjectBase {
         <li><a href="topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="topics/Utilities-topic.html">Utilitários</a></li>
+        <li><a href="topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
       <li><a href="main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>

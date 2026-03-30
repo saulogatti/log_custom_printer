@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="Console Visual de Logs topic docs, for the Dart programming language.">
+  <title>Console Visual de Logs topic - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">log_custom_printer</a></li>
+    <li class="self-crumb">Console Visual de Logs topic</li>
+  </ol>
+  <div class="self-name">Console Visual de Logs</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div id="dartdoc-main-content" class="main-content">
+  <h1><span class="kind-category">Console Visual de Logs</span> topic</h1>
+  
+<section class="desc markdown">
+  <h1 id="console-visual-de-logs">Console Visual de Logs</h1>
+<p>O módulo <code>console_view</code> fornece uma interface gráfica Flutter para visualização,
+filtragem e exportação dos logs registrados pelo sistema <code>log_custom_printer</code>.</p>
+<hr>
+<h2 id="viso-geral">Visão Geral</h2>
+<p>O console visual exibe os logs em tempo real como um overlay flutuante sobre a
+aplicação, sem bloquear a UI principal. Suporta filtragem por tipo de log,
+filtro temporal por intervalo de data/hora e limpeza da lista.</p>
+<p>A arquitetura interna segue Clean Architecture com BLoC para estado e
+Repository para acesso a dados.</p>
+<hr>
+<h2 id="consoleoverlaymanager">ConsoleOverlayManager</h2>
+<p>Classe estática que gerencia a exibição do console como overlay Flutter.
+Dois modos de exibição estão disponíveis:</p>
+<h3 id="janela-arrastvel">Janela Arrastável</h3>
+<pre class="language-dart"><code class="language-dart">// Alternar (abrir/fechar) o console como janela arrastável
+ConsoleOverlayManager.toggle(
+  context,
+  messageRepository,
+  loggerCacheRepository,
+);
+
+// Exibir diretamente com tamanho customizado
+ConsoleOverlayManager.show(
+  context,
+  messageRepository,
+  loggerCacheRepository,
+  Size(400, 300),
+);
+
+// Fechar a janela arrastável
+ConsoleOverlayManager.hide();
+</code></pre>
+<h3 id="barra-inferior-fixa">Barra Inferior Fixa</h3>
+<pre class="language-dart"><code class="language-dart">// Exibir console na parte inferior da tela (altura 250 px)
+ConsoleOverlayManager.showOverlay(
+  context,
+  messageRepository,
+  loggerCacheRepository,
+);
+
+// Fechar a barra inferior
+ConsoleOverlayManager.hideConsoleOverlayManager();
+</code></pre>
+<hr>
+<h2 id="consoleview">ConsoleView</h2>
+<p>Widget principal que exibe a tela de console com:</p>
+<ul>
+<li>Lista de logs filtrados ([<a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_widget.dart#L13">console_widget.dart</a>])</li>
+<li>Barra de filtro por tipo de log ([<a href="https://api.flutter.dev/flutter/material/SegmentedButton-class.html">segmented_button.dart</a>) com opções: All, Debug, Info, Warning, Error)])</li>
+<li>Ações na AppBar: atualizar, limpar, exportar, configurações, abrir em overlay</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">// Uso direto (requer ConsoleBloc e OptionsBloc na árvore)
+const ConsoleView(onClose: myCloseCallback)
+
+// Uso com injeção automática de dependências
+ConsoleProvider(
+  messageRepository: myMessageRepository,
+  optionsRepository: myOptionsRepository,
+  loggerCacheRepository: myLoggerCacheRepository,
+)
+</code></pre>
+<h3 id="filtros-disponveis">Filtros disponíveis</h3>
+<table>
+<thead>
+<tr>
+<th>Filtro</th>
+<th>Como usar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Por tipo</td>
+<td>Botões segmentados na parte inferior: All, Debug, Info, Warning, Error</td>
+</tr>
+<tr>
+<td>Por texto</td>
+<td>Via <code>searchText</code> no <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_bloc.dart#L13">MessageRepository</a></td>
+</tr>
+<tr>
+<td>Por data/hora</td>
+<td>Ativado via ícone de filtro na AppBar; configurado em <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_options_widget.dart#L13">ConsoleOptionsWidget</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="consoleoptionswidget">ConsoleOptionsWidget</h2>
+<p>Tela de configurações do console, acessível pelo ícone ⚙️ da AppBar:</p>
+<ul>
+<li><strong>Filtro temporal</strong>: seleção de intervalo via <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/widgets/date_select_widget.dart#L13">DateTimeFilterWidget</a></li>
+<li><strong>Opções adicionais</strong>: lista selecionável de preferências via <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/widgets/select_option_widget.dart#L13">SelectOptionWidget</a></li>
+</ul>
+<hr>
+<h2 id="modelos-de-domnio">Modelos de Domínio</h2>
+<h3 id="logtype">LogType</h3>
+<p>Enum que representa o tipo/severidade de um log no contexto do console visual.</p>
+<pre class="language-dart"><code class="language-dart">enum LogType { info, warning, error, debug, all }
+</code></pre>
+<p>Cada valor possui:</p>
+<ul>
+<li><code>.icon</code> — ícone associado para exibição</li>
+<li><code>.color</code> — cor associada para exibição</li>
+<li><code>.toEnum()</code> — conversão para <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/domain/models/enum_logger_type.dart">EnumLoggerType</a> do sistema de cache</li>
+</ul>
+<h3 id="messagelog">MessageLog</h3>
+<p>Modelo de apresentação de um log, com:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Tipo</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>title</code></td>
+<td><code>String</code></td>
+<td>Cabeçalho (classe de origem)</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>String</code></td>
+<td>Corpo da mensagem formatada</td>
+</tr>
+<tr>
+<td><code>timestamp</code></td>
+<td><code>DateTime</code></td>
+<td>Data/hora de criação</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td><code>LogType</code></td>
+<td>Tipo/severidade do log</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="arquitetura-interna">Arquitetura Interna</h2>
+<pre class="language-dart"><code>ConsoleOverlayManager
+    └── ConsoleView (Stateful)
+            ├── ConsoleBloc  ←→  MessageRepository ←→ MessageLogDataSource ←→ LoggerPersistenceService
+            │       └── estados: ConsoleInitial / ConsoleLoading / ConsoleLoaded / ConsoleError
+            │
+            ├── OptionsBloc  ←→  IOptionsRepository ←→ OptionsConsoleDataSource (JSON local)
+            │       └── estados: InitialOptionsState / LoadedOptionsState / ErrorOptionsState
+            │
+            └── ConsoleWidget (lista de LogCardWidget)
+</code></pre>
+<h3 id="bloc--consolebloc">BLoC — ConsoleBloc</h3>
+<p>Gerencia o ciclo de vida dos logs exibidos:</p>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ConsoleLoad</code></td>
+<td>Carrega/recarrega todos os logs</td>
+</tr>
+<tr>
+<td><code>ConsoleClear</code></td>
+<td>Limpa os logs e recarrega</td>
+</tr>
+<tr>
+<td><code>ConsoleFilterByType</code></td>
+<td>Filtra por <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/domain/models/log_type.dart">LogType</a></td>
+</tr>
+<tr>
+<td><code>ConsoleUpdateDateTimeFilter</code></td>
+<td>Aplica/remove filtro temporal</td>
+</tr>
+<tr>
+<td><code>ConsoleExportLogs</code></td>
+<td>Exporta logs no formato especificado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bloc--optionsbloc-cubit">BLoC — OptionsBloc (Cubit)</h3>
+<p>Gerencia as preferências persistidas do console:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Ação</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>loadOptions()</code></td>
+<td>Lê opções do arquivo local</td>
+</tr>
+<tr>
+<td><code>selectDateTimeRange(range)</code></td>
+<td>Salva intervalo e ativa filtro temporal</td>
+</tr>
+<tr>
+<td><code>setDateTimeFilterEnabled(bool)</code></td>
+<td>Liga/desliga filtro sem alterar o intervalo</td>
+</tr>
+<tr>
+<td><code>selectOption(option)</code></td>
+<td>Persiste a opção selecionada</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="dependncias-e-injeo">Dependências e Injeção</h2>
+<p>Para usar o console visual, registre as dependências via <code>initAppInjection()</code>
+antes de abrir o overlay:</p>
+<pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
+
+void main() {
+  initAppInjection(); // registra MessageRepository, IOptionsRepository, ILoggerCacheRepository
+  runApp(MyApp());
+}
+</code></pre>
+<p>Ou forneça os repositórios diretamente ao <a href="https://github.com/saulogatti/log_custom_printer/blob/724acfcf0884c660e9bfff677919ebb93f3f79c5/lib/src/console_view/view/console/console_overlay_manager.dart">ConsoleOverlayManager</a>:</p>
+<pre class="language-dart"><code class="language-dart">ConsoleOverlayManager.toggle(
+  context,
+  appGetIt&lt;MessageRepository&gt;(),
+  appGetIt&lt;ILoggerCacheRepository&gt;(),
+);
+</code></pre>
+<hr>
+<h2 id="fluxo-de-dados">Fluxo de Dados</h2>
+<pre class="language-dart"><code>LoggerPersistenceService (cache)
+    ↓
+MessageLogDataSource (filtragem: tipo, texto, data)
+    ↓
+MessageRepositoryImpl
+    ↓
+ConsoleBloc
+    ↓
+ConsoleView → ConsoleWidget → LogCardWidget
+</code></pre>
+</section>
+
+
+
+  <section class="summary offset-anchor" id="classes">
+    <h2>Classes</h2>
+    <dl>
+      <dt id="ConsoleOverlayManager">
+  <span class="name "><a href="../log_custom_printer/ConsoleOverlayManager-class.html">ConsoleOverlayManager</a></span> 
+    <span class="category console-visual-de-logs cp-5 linked" title="This is part of the Console Visual de Logs topic."><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></span>
+
+</dt>
+<dd>
+  Gerenciador de overlay do console visual de logs.
+</dd>
+
+    </dl>
+  </section>
+
+
+
+
+
+
+
+
+</div> <!-- /.main-content -->
+<div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+  <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">log_custom_printer</a></li>
+    <li class="self-crumb">Console Visual de Logs topic</li>
+</ol>
+
+  <h5><span class="package-name">log_custom_printer</span> <span class="package-kind">package</span></h5>
+  <ol>
+      <li class="section-title">Topics</li>
+        <li><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></li>
+        <li><a href="../topics/Log Types-topic.html">Tipos&nbsp;de&nbsp;Log</a></li>
+        <li><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
+        <li><a href="../topics/Configuration-topic.html">Configuração</a></li>
+        <li><a href="../topics/Utilities-topic.html">Utilitários</a></li>
+        <li><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
+      <li class="section-title">Libraries</li>
+      <li><a href="../main/">main</a></li>
+      <li class="section-subtitle">Core - Sistema de Logging</li>
+        <li class="section-subitem"><a href="../log_custom_printer/">log_custom_printer</a></li>
+</ol>
+
+</div>
+<div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  <h5>Console Visual de Logs topic</h5>
+  <ol>
+
+    <li class="section-title"><a href="../topics/Console View-topic.html#classes">Classes</a></li>
+      <li><a href="../log_custom_printer/ConsoleOverlayManager-class.html">ConsoleOverlayManager</a></li>
+
+
+
+
+
+
+
+
+
+</ol>
+
+</div>
+<!--/sidebar-offcanvas-right-->
+</main>
+<footer>
+  <span class="no-break">
+    log_custom_printer
+      2.2.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the LogExportService.new constructor from Class LogExportService from the log_custom_printer library, for the Dart programming language.">
-  <title>LogExportService.new constructor - LogExportService - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the hideConsoleOverlayManager method from the ConsoleOverlayManager class, for the Dart programming language.">
+  <title>hideConsoleOverlayManager method - ConsoleOverlayManager class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LogExportService-class.html">LogExportService</a></li>
-    <li class="self-crumb">LogExportService.new const constructor</li>
+    <li><a href="../../log_custom_printer/ConsoleOverlayManager-class.html">ConsoleOverlayManager</a></li>
+    <li class="self-crumb">hideConsoleOverlayManager static method</li>
   </ol>
-  <div class="self-name">LogExportService.new</div>
+  <div class="self-name">hideConsoleOverlayManager</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -43,27 +43,38 @@
   </button>
 </header>
 <main>
-  <div
-      id="dartdoc-main-content"
-      class="main-content"
-      data-above-sidebar="log_custom_printer&#47;LogExportService-class-sidebar.html"
-      data-below-sidebar="">
-      <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_export_service.dart#L14"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-constructor">LogExportService</span> constructor 
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="log_custom_printer&#47;ConsoleOverlayManager-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/console_view/view/console/console_overlay.dart#L72"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">hideConsoleOverlayManager</span> static method 
 </h1></div>
 
     <section class="multi-line-signature">
-      const
-      <span class="name ">LogExportService</span>(<wbr>)
+      
+<span class="returntype">void</span>
+<span class="name ">hideConsoleOverlayManager</span>(<wbr>)
+
+      
+
     </section>
     
+<section class="desc markdown">
+  <p>Remove o overlay criado por <a href="../../log_custom_printer/ConsoleOverlayManager/showOverlay.html">showOverlay</a> (barra inferior com <code>ConsoleView</code>).</p>
+<p>Não afeta o overlay de <a href="../../log_custom_printer/ConsoleOverlayManager/show.html">show</a>; para esse use <a href="../../log_custom_printer/ConsoleOverlayManager/hide.html">hide</a>.</p>
+</section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">const LogExportService();</code></pre>
+  <pre class="language-dart"><code class="language-dart">static void hideConsoleOverlayManager() {
+  _overlayEntry?.remove();
+  _overlayEntry = null;
+}</code></pre>
 </section>
 
 
@@ -78,15 +89,15 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LogExportService-class.html">LogExportService</a></li>
-    <li class="self-crumb">LogExportService.new const constructor</li>
+    <li><a href="../../log_custom_printer/ConsoleOverlayManager-class.html">ConsoleOverlayManager</a></li>
+    <li class="self-crumb">hideConsoleOverlayManager static method</li>
 </ol>
 
-    <h5>LogExportService class</h5>
+    <h5>ConsoleOverlayManager class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
-  </div><!--/.sidebar-offcanvas-left-->
-  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
   </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
 </main>
 <footer>
   <span class="no-break">

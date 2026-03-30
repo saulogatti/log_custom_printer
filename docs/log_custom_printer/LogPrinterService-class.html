@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the LogExportService class from the log_custom_printer library, for the Dart programming language.">
-  <title>LogExportService class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the LogPrinterService class from the log_custom_printer library, for the Dart programming language.">
+  <title>LogPrinterService class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,9 +26,9 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../index.html">log_custom_printer</a></li>
     <li><a href="../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li class="self-crumb">LogExportService class</li>
+    <li class="self-crumb">LogPrinterService class</li>
   </ol>
-  <div class="self-name">LogExportService</div>
+  <div class="self-name">LogPrinterService</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,20 +46,23 @@
     id="dartdoc-main-content"
     class="main-content"
     data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
-    data-below-sidebar="log_custom_printer&#47;LogExportService-class-sidebar.html">
+    data-below-sidebar="log_custom_printer&#47;LogPrinterService-class-sidebar.html">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_export_service.dart#L13"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-class">LogExportService</span> class 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_service.dart#L17"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-class">LogPrinterService</span> class 
+    <a href="https://dart.dev/language/class-modifiers#final" class="feature feature-final" title="This class can neither be extended, implemented, nor mixed in.">final</a>
  
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Serializa uma lista de logs para os formatos <a href="../log_custom_printer/ExportFormat.html">ExportFormat.json</a> ou
-<a href="../log_custom_printer/ExportFormat.html">ExportFormat.txt</a> em memória (retorna uma <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>).</p>
-<p>Nenhum arquivo é escrito por esta classe; a decisão de persistência ou
-compartilhamento fica a cargo da camada consumidora.</p>
+  <p>Serviço central que coordena o processo de impressão e armazenamento de logs.</p>
+<p>Este serviço atua como uma fachada que centraliza a lógica de verificação
+de configurações antes de delegar a impressão real para um <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a>
+e o armazenamento para um <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a>.</p>
+<p>Centralizar esse processo evita redundância nos objetos de log e facilita
+a manutenção das regras de filtragem.</p>
 </section>
 
 
@@ -68,21 +71,44 @@ compartilhamento fica a cargo da camada consumidora.</p>
   <section class="summary offset-anchor" id="constructors">
     <h2>Constructors</h2>
     <dl class="constructor-summary-list">
-        <dt id="LogExportService.new" class="callable">
-          <span class="name"><a href="../log_custom_printer/LogExportService/LogExportService.html">LogExportService</a></span><span class="signature">()</span>
+        <dt id="LogPrinterService.new" class="callable">
+          <span class="name"><a href="../log_custom_printer/LogPrinterService/LogPrinterService.html">LogPrinterService</a></span><span class="signature">(<span class="parameter" id="-param-logPrinter"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">logPrinter</span>, {</span><span class="parameter" id="-param-configLog"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">configLog</span>, </span><span class="parameter" id="-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})</span>
         </dt>
         <dd>
-          
-            <div class="constructor-modifier features">const</div>
+          Cria uma nova instância do serviço de impressão.
         </dd>
     </dl>
   </section>
     
   <section
-      class="summary offset-anchor inherited"
+      class="summary offset-anchor"
       id="instance-properties">
     <h2>Properties</h2>
     <dl class="properties">
+        <dt id="cacheRepository" class="property">
+  <span class="name"><a href="../log_custom_printer/LogPrinterService/cacheRepository.html">cacheRepository</a></span>
+  <span class="signature">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
+  
+
+</dt>
+<dd>
+  Retorna o serviço de persistência associado a esta instância.
+  <div class="features"><span class="feature">no setter</span></div>
+
+</dd>
+
+        <dt id="configLog" class="property">
+  <span class="name"><a href="../log_custom_printer/LogPrinterService/configLog.html">configLog</a></span>
+  <span class="signature">&#8594; <a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span>
+  
+
+</dt>
+<dd>
+  Configuração global de habilitação e filtros de tipos de log.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
         <dt id="hashCode" class="property inherited">
   <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
   <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
@@ -92,6 +118,18 @@ compartilhamento fica a cargo da camada consumidora.</p>
 <dd class="inherited">
   The hash code for this object.
   <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="logPrinter" class="property">
+  <span class="name"><a href="../log_custom_printer/LogPrinterService/logPrinter.html">logPrinter</a></span>
+  <span class="signature">&#8594; <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span>
+  
+
+</dt>
+<dd>
+  A impressora configurada para formatar e exibir os logs.
+  <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
@@ -116,15 +154,15 @@ compartilhamento fica a cargo da camada consumidora.</p>
       id="instance-methods">
     <h2>Methods</h2>
     <dl class="callables">
-        <dt id="export" class="callable">
-  <span class="name"><a href="../log_custom_printer/LogExportService/export.html">export</a></span><span class="signature">(<wbr><span class="parameter" id="export-param-logs"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span> <span class="parameter-name">logs</span>, </span><span class="parameter" id="export-param-format"><span class="type-annotation"><a href="../log_custom_printer/ExportFormat.html">ExportFormat</a></span> <span class="parameter-name">format</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+        <dt id="executePrint" class="callable">
+  <span class="name"><a href="../log_custom_printer/LogPrinterService/executePrint.html">executePrint</a></span><span class="signature">(<wbr><span class="parameter" id="executePrint-param-log"><span class="type-annotation"><a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span> <span class="parameter-name">log</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
   </span>
   
 
 </dt>
 <dd>
-  Exporta <code>logs</code> no <code>format</code> especificado e retorna o conteúdo como string.
+  Executa o processo de log para um <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>.
   
 
 </dd>
@@ -193,7 +231,7 @@ compartilhamento fica a cargo da camada consumidora.</p>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../index.html">log_custom_printer</a></li>
     <li><a href="../log_custom_printer/">log_custom_printer</a></li>
-    <li class="self-crumb">LogExportService class</li>
+    <li class="self-crumb">LogPrinterService class</li>
 </ol>
 
     <h5>log_custom_printer library</h5>

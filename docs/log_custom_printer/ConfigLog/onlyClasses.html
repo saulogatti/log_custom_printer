@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;ConfigLog-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L63"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/config_log.dart#L66"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-property">onlyClasses</span> property 
 </h1></div>
 
@@ -67,9 +67,10 @@
 <p>Apenas objetos de log cujo <code>runtimeType</code> esteja neste conjunto
 serão processados. Permite filtrar seletivamente tipos de log
 (por exemplo, desabilitar apenas <a href="../../log_custom_printer/DebugLog-class.html">DebugLog</a> em certas situações).</p>
-<p>Por padrão inclui todos os tipos: <a href="../../log_custom_printer/DebugLog-class.html">DebugLog</a>, <a href="../../log_custom_printer/WarningLog-class.html">WarningLog</a>,
-<a href="../../log_custom_printer/InfoLog-class.html">InfoLog</a>.
-<a href="../../log_custom_printer/ErrorLog-class.html">ErrorLog</a> é sempre permitido para garantir que erros críticos sejam registrados.</p>
+<p>Por padrão inclui <a href="../../log_custom_printer/DebugLog-class.html">DebugLog</a>, <a href="../../log_custom_printer/WarningLog-class.html">WarningLog</a> e <a href="../../log_custom_printer/InfoLog-class.html">InfoLog</a> (não inclui
+<a href="../../log_custom_printer/ErrorLog-class.html">ErrorLog</a> neste conjunto). <a href="../../log_custom_printer/ErrorLog-class.html">ErrorLog</a> é na mesma processado quando
+<a href="../../log_custom_printer/ConfigLog/enableLog.html">enableLog</a> ou <code>alwaysPrint</code> aplicável em <a href="../../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> o permitirem,
+garantindo que erros críticos não fiquem só dependentes deste filtro.</p>
 </section>
 
       

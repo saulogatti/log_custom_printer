@@ -49,23 +49,22 @@
       data-above-sidebar="log_custom_printer&#47;LoggerPersistenceService-class-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_persistence_service.dart#L28"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_persistence_service.dart#L37"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-constructor">LoggerPersistenceService</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       
-      <span class="name ">LoggerPersistenceService</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-cacheRepository"><span class="type-annotation">ILoggerCacheRepository?</span> <span class="parameter-name">cacheRepository</span>, </span></li>
+      <span class="name ">LoggerPersistenceService</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-cacheRepository"><span class="type-annotation"><a href="../../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span>, </span></li>
 <li><span class="parameter" id="-param-filterEngine"><span class="type-annotation"><a href="../../log_custom_printer/LogFilterEngine-class.html">LogFilterEngine</a></span> <span class="parameter-name">filterEngine</span> = <span class="default-value">const LogFilterEngine()</span>, </span></li>
 <li><span class="parameter" id="-param-sortEngine"><span class="type-annotation"><a href="../../log_custom_printer/LogSortEngine-class.html">LogSortEngine</a></span> <span class="parameter-name">sortEngine</span> = <span class="default-value">const LogSortEngine()</span>, </span></li>
-<li><span class="parameter" id="-param-exportService"><span class="type-annotation"><a href="../../log_custom_printer/LogExportService-class.html">LogExportService</a></span> <span class="parameter-name">exportService</span> = <span class="default-value">const LogExportService()</span>, </span></li>
 </ol>})
     </section>
     
 <section class="desc markdown">
   <p>Cria o serviço com um <code>cacheRepository</code> customizado.</p>
 <p>Quando omitido, usa <a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a> como implementação padrão.</p>
-<p>Os parâmetros <code>filterEngine</code>, <code>sortEngine</code> e <code>exportService</code> são opcionais
+<p>Os parâmetros <code>filterEngine</code>, <code>sortEngine</code> são opcionais
 e permitem injetar implementações customizadas (útil em testes). Quando
 omitidos, usam as implementações padrão constantes da biblioteca.</p>
 </section>
@@ -78,11 +77,9 @@ omitidos, usam as implementações padrão constantes da biblioteca.</p>
   ILoggerCacheRepository? cacheRepository,
   LogFilterEngine filterEngine = const LogFilterEngine(),
   LogSortEngine sortEngine = const LogSortEngine(),
-  LogExportService exportService = const LogExportService(),
 }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl(),
      _filterEngine = filterEngine,
-     _sortEngine = sortEngine,
-     _exportService = exportService;</code></pre>
+     _sortEngine = sortEngine;</code></pre>
 </section>
 
 

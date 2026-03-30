@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the initialize method from the LoggerCacheRepositoryImpl class, for the Dart programming language.">
-  <title>initialize method - LoggerCacheRepositoryImpl class - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the LogPrinterService.new constructor from Class LogPrinterService from the log_custom_printer library, for the Dart programming language.">
+  <title>LogPrinterService.new constructor - LogPrinterService - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
-    <li class="self-crumb">initialize method</li>
+    <li><a href="../../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></li>
+    <li class="self-crumb">LogPrinterService.new constructor</li>
   </ol>
-  <div class="self-name">initialize</div>
+  <div class="self-name">LogPrinterService.new</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -43,46 +43,41 @@
   </button>
 </header>
 <main>
-<div
-    id="dartdoc-main-content"
-    class="main-content"
-    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
-    data-below-sidebar="">
-    <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L128"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-method">initialize</span> method 
+  <div
+      id="dartdoc-main-content"
+      class="main-content"
+      data-above-sidebar="log_custom_printer&#47;LogPrinterService-class-sidebar.html"
+      data-below-sidebar="">
+      <div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_service.dart#L24"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-constructor">LogPrinterService</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
-<span class="name ">initialize</span>(<wbr>)
-
-      
-
+      <span class="name ">LogPrinterService</span>(<wbr><ol class="parameter-list"> <li><span class="parameter" id="-param-logPrinter"><span class="type-annotation"><a href="../../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">logPrinter</span>, {</span></li>
+<li><span class="parameter" id="-param-configLog"><span>required</span> <span class="type-annotation"><a href="../../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">configLog</span>, </span></li>
+<li><span class="parameter" id="-param-cacheRepository"><span class="type-annotation"><a href="../../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span>, </span></li>
+</ol>})
     </section>
     
 <section class="desc markdown">
-  <p>Inicializa o repositório carregando logs persistidos anteriormente do disco.</p>
-<p>Quando houver dados válidos, o estado em memória é reconstruído para
-permitir consultas imediatas sem nova leitura dos arquivos.</p>
+  <p>Cria uma nova instância do serviço de impressão.</p>
+<p><a href="../../log_custom_printer/LogPrinterService/logPrinter.html">logPrinter</a>: a estratégia de impressão a ser utilizada.
+<code>cacheRepository</code>: repositório de cache (quando omitido, <a href="../../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a>
+usa a implementação padrão em memória).</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; initialize() async {
-  if (_loggerCache != null &amp;&amp;
-      !_loggerCache!.futureInitialization.isCompleted) {
-    await _loggerCache!.futureInitialization.future;
-    final allLogs = await _loggerCache!.readAllLogs();
-    if (allLogs != null) {
-      _loggerJsonList.clear();
-      _loggerJsonList.addAll(allLogs);
-    }
-  }
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">LogPrinterService(
+  this.logPrinter, {
+  required this.configLog, ILoggerCacheRepository? cacheRepository,
+}) : _loggerPersistenceService = LoggerPersistenceService(
+       cacheRepository: cacheRepository,
+     );</code></pre>
 </section>
 
 
@@ -97,15 +92,15 @@ permitir consultas imediatas sem nova leitura dos arquivos.</p>
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
-    <li class="self-crumb">initialize method</li>
+    <li><a href="../../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a></li>
+    <li class="self-crumb">LogPrinterService.new constructor</li>
 </ol>
 
-    <h5>LoggerCacheRepositoryImpl class</h5>
+    <h5>LogPrinterService class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
-  </div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-left-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
-</div><!--/.sidebar-offcanvas-->
+  </div><!--/.sidebar-offcanvas-->
 </main>
 <footer>
   <span class="no-break">
