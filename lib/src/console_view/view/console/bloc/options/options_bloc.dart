@@ -15,24 +15,38 @@ class OptionsBloc extends Cubit<OptionsState> {
     emit(LoadedOptionsState(options));
   }
 
-  Future<void> selectDate(DateTimeRange? dateRange) async {
-    await _optionsRepository.selectDate(
-      dateRange?.start.millisecondsSinceEpoch ?? 0,
-      dateRange?.end.millisecondsSinceEpoch ?? 0,
+  /// Atualiza o intervalo unificado de data/hora.
+  ///
+  /// Quando [dateTimeRange] é válido, o filtro temporal é habilitado
+  /// automaticamente.
+  Future<void> selectDateTimeRange(DateTimeRange? dateTimeRange) async {
+    if (dateTimeRange != null && !_isValidDateTimeRange(dateTimeRange)) {
+      return;
+    }
+
+    await _optionsRepository.selectDateTimeRange(
+      dateTimeRange?.start.millisecondsSinceEpoch ?? 0,
+      dateTimeRange?.end.millisecondsSinceEpoch ?? 0,
     );
-    loadOptions();
+
+    if (dateTimeRange != null) {
+      await _optionsRepository.setDateTimeFilterEnabled(true);
+    }
+
+    await loadOptions();
+  }
+
+  Future<void> setDateTimeFilterEnabled(bool enabled) async {
+    await _optionsRepository.setDateTimeFilterEnabled(enabled);
+    await loadOptions();
   }
 
   Future<void> selectOption(OptionItem option) async {
     await _optionsRepository.selectOption(option);
-    loadOptions();
+    await loadOptions();
   }
 
-  Future<void> selectTimeRange(DateTimeRange? timeRange) async {
-    await _optionsRepository.selectTimeRange(
-      timeRange?.start.millisecondsSinceEpoch ?? 0,
-      timeRange?.end.millisecondsSinceEpoch ?? 0,
-    );
-    loadOptions();
+  bool _isValidDateTimeRange(DateTimeRange range) {
+    return range.end.difference(range.start).inMilliseconds > 0;
   }
 }

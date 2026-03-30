@@ -60,6 +60,10 @@ class FileManager implements IFileManagerType {
   /// Lança [Exception] quando o arquivo não é encontrado.
   @override
   Future<String> readFile(String path) async {
+    print(
+      'Attempting to read file at: $path with expected type: ${fileType.name}'
+      "\n ${DateTime.now()}",
+    );
     _extensionIncludePath(path);
     final file = File(path);
     if (await file.exists()) {
@@ -67,7 +71,8 @@ class FileManager implements IFileManagerType {
         final bytes = await file.readAsBytes();
         return String.fromCharCodes(bytes);
       }
-      return file.readAsString();
+      final res = await file.readAsString();
+      return res;
     }
     throw Exception('File not found: $path');
   }

@@ -136,7 +136,8 @@ class _TimeRangePickerFullscreenState
   String? _endHelpText;
   late final List<String> _secondOptions;
 
-  bool get _isValidRange => !_endDateTime.isBefore(_startDateTime);
+  bool get _isValidRange =>
+      _endDateTime.difference(_startDateTime).inMilliseconds > 0;
 
   @override
   Widget build(BuildContext context) {
@@ -319,8 +320,7 @@ class _TimeRangePickerFullscreenState
   Future<void> _showInvalidEndFeedback({required bool reopenPicker}) async {
     if (!mounted) return;
 
-    const message =
-        'Horário final inválido. Ele deve ser maior ou igual ao inicial.';
+    const message = 'Horário final inválido. Ele deve ser maior que o inicial.';
 
     setState(() {
       _endHelpText = message;

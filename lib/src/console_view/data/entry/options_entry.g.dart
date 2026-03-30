@@ -18,23 +18,19 @@ Map<String, dynamic> _$DateRangeEpochEntryToJson(
 
 OptionsEntry _$OptionsEntryFromJson(Map<String, dynamic> json) => OptionsEntry(
   selectedOption: OptionItemEntry.fromJson(
-    json['option'] as Map<String, dynamic>,
+    json['selectedOption'] as Map<String, dynamic>,
   ),
-  selectedDate: json['selectedDate'] == null
+  selectedDateTimeRange: json['selectedDateTimeRange'] == null
       ? null
       : DateRangeEpochEntry.fromJson(
-          json['selectedDate'] as Map<String, dynamic>,
+          json['selectedDateTimeRange'] as Map<String, dynamic>,
         ),
-  selectedTimeRange: json['selectedTimeRange'] == null
-      ? null
-      : DateRangeEpochEntry.fromJson(
-          json['selectedTimeRange'] as Map<String, dynamic>,
-        ),
+  isDateTimeFilterEnabled: json['isDateTimeFilterEnabled'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$OptionsEntryToJson(OptionsEntry instance) =>
     <String, dynamic>{
-      'option': instance.selectedOption.toJson(),
-      'selectedDate': instance.selectedDate?.toJson(),
-      'selectedTimeRange': instance.selectedTimeRange?.toJson(),
+      'selectedOption': instance.selectedOption.toJson(),
+      'selectedDateTimeRange': instance.selectedDateTimeRange?.toJson(),
+      'isDateTimeFilterEnabled': instance.isDateTimeFilterEnabled,
     };

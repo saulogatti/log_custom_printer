@@ -6,6 +6,8 @@ import 'package:log_custom_printer/src/console_view/domain/models/console_option
 
 part 'options_entry.g.dart';
 
+const _copyWithNotSet = Object();
+
 /// Intervalo de datas/horas representado por epoch em milissegundos.
 @JsonSerializable(explicitToJson: true)
 class DateRangeEpochEntry {
@@ -47,18 +49,19 @@ class DateRangeEpochEntry {
 /// Representa o snapshot serializável de [ConsoleOptions].
 ///
 /// Regras de persistência:
-/// - [selectedDate] e [selectedTimeRange] usam pares de `int` (start/end)
+/// - [selectedDateTimeRange] usa pares de `int` (start/end)
 ///   para facilitar serialização JSON.
+/// - [isDateTimeFilterEnabled] define se o range salvo deve ser aplicado.
 @JsonSerializable(explicitToJson: true)
 class OptionsEntry {
   final OptionItemEntry selectedOption;
-  final DateRangeEpochEntry? selectedDate;
-  final DateRangeEpochEntry? selectedTimeRange;
+  final DateRangeEpochEntry? selectedDateTimeRange;
+  final bool isDateTimeFilterEnabled;
 
   const OptionsEntry({
     required this.selectedOption,
-    this.selectedDate,
-    this.selectedTimeRange,
+    this.selectedDateTimeRange,
+    this.isDateTimeFilterEnabled = false,
   });
 
   factory OptionsEntry.fromConsoleOptions(ConsoleOptions options) {
@@ -67,12 +70,10 @@ class OptionsEntry {
         title: options.option.title,
         description: options.option.description,
       ),
-      selectedDate: DateRangeEpochEntry.fromDateTimeRangeOrNull(
-        options.selectedDate,
+      selectedDateTimeRange: DateRangeEpochEntry.fromDateTimeRangeOrNull(
+        options.selectedDateTimeRange,
       ),
-      selectedTimeRange: DateRangeEpochEntry.fromDateTimeRangeOrNull(
-        options.selectedTimeRange,
-      ),
+      isDateTimeFilterEnabled: options.isDateTimeFilterEnabled,
     );
   }
 
@@ -81,13 +82,16 @@ class OptionsEntry {
 
   OptionsEntry copyWith({
     OptionItemEntry? selectedOption,
-    DateRangeEpochEntry? selectedDate,
-    DateRangeEpochEntry? selectedTimeRange,
+    Object? selectedDateTimeRange = _copyWithNotSet,
+    bool? isDateTimeFilterEnabled,
   }) {
     return OptionsEntry(
       selectedOption: selectedOption ?? this.selectedOption,
-      selectedDate: selectedDate ?? this.selectedDate,
-      selectedTimeRange: selectedTimeRange ?? this.selectedTimeRange,
+      selectedDateTimeRange: selectedDateTimeRange == _copyWithNotSet
+          ? this.selectedDateTimeRange
+          : selectedDateTimeRange as DateRangeEpochEntry?,
+      isDateTimeFilterEnabled:
+          isDateTimeFilterEnabled ?? this.isDateTimeFilterEnabled,
     );
   }
 
@@ -97,8 +101,8 @@ class OptionsEntry {
         title: selectedOption.title,
         description: selectedOption.description,
       ),
-      selectedDate: selectedDate?.toDateTimeRange(),
-      selectedTimeRange: selectedTimeRange?.toDateTimeRange(),
+      selectedDateTimeRange: selectedDateTimeRange?.toDateTimeRange(),
+      isDateTimeFilterEnabled: isDateTimeFilterEnabled,
     );
   }
 
@@ -108,8 +112,8 @@ class OptionsEntry {
   String toString() {
     return 'OptionsEntry('
         'option: $selectedOption, '
-        'selectedDate: $selectedDate, '
-        'selectedTimeRange: $selectedTimeRange'
+        'selectedDateTimeRange: $selectedDateTimeRange, '
+        'isDateTimeFilterEnabled: $isDateTimeFilterEnabled'
         ')';
   }
 }

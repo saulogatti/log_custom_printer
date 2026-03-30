@@ -7,6 +7,7 @@ import 'package:log_custom_printer/src/console_view/domain/repository/message_re
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
+import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
 
@@ -65,91 +66,142 @@ class _ConsoleViewState extends State<ConsoleView> {
 
   @override
   Widget build(BuildContext context) {
-    final consoleBloc = context.read<OptionsBloc>();
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      extendBody: true,
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const Text('Console'),
-        leading: widget.onClose != null
-            ? IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: widget.onClose,
-              )
-            : null,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              context.read<ConsoleBloc>().add(const ConsoleLoad());
-            },
+    final optionsBloc = context.read<OptionsBloc>();
+    final consoleBloc = context.read<ConsoleBloc>();
+
+    return BlocListener<OptionsBloc, OptionsState>(
+      listener: (context, state) {
+        if (state is! LoadedOptionsState) {
+          return;
+        }
+
+        consoleBloc.add(
+          ConsoleUpdateDateTimeFilter(
+            dateTimeRange: state.options.selectedDateTimeRange,
+            isDateTimeFilterEnabled: state.options.isDateTimeFilterEnabled,
           ),
-          IconButton(
-            onPressed: () {
-              context.read<ConsoleBloc>().add(const ConsoleClear());
-            },
-            icon: const Icon(Icons.clear_all),
-          ),
-          IconButton(
-            onPressed: () {
-              // TODO implementar exportação de logs em json ou txt
-              _sendLogsForTest();
-            },
-            icon: const Icon(Icons.share),
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute<void>(
-                  builder: (context) => BlocProvider.value(
-                    value: consoleBloc,
-                    child: const ConsoleOptionsWidget(),
+        );
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        extendBody: true,
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          title: const Text('Console'),
+          leading: widget.onClose != null
+              ? IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: widget.onClose,
+                )
+              : null,
+          actions: [
+            BlocBuilder<OptionsBloc, OptionsState>(
+              builder: (context, state) {
+                final enabled = state is LoadedOptionsState
+                    ? state.options.isDateTimeFilterEnabled
+                    : false;
+                final iconColor = enabled
+                    ? Theme.of(context).colorScheme.primary
+                    : Theme.of(context).iconTheme.color;
+
+                return IconButton(
+                  tooltip: enabled
+                      ? 'Desativar filtro de data e hora'
+                      : 'Ativar filtro de data e hora',
+                  icon: Icon(
+                    enabled ? Icons.filter_alt : Icons.filter_alt_off,
+                    color: iconColor,
                   ),
-                ),
-              );
-            },
-            icon: const Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: const SafeArea(
-        bottom: true,
-        minimum: EdgeInsets.only(bottom: 50),
-        child: ConsoleWidget(),
-      ),
-      bottomSheet: SegmentedButton(
-        expandedInsets: const EdgeInsets.all(8),
-        segments: [
-          ButtonSegment(
-            value: LogType.debug,
-            label: const Text('Debug'),
-            icon: Icon(LogType.debug.icon, color: LogType.debug.color),
-          ),
-          ButtonSegment(
-            value: LogType.info,
-            label: const Text('Info'),
-            icon: Icon(LogType.info.icon, color: LogType.info.color),
-          ),
-          ButtonSegment(
-            value: LogType.warning,
-            label: const Text('Warning'),
-            icon: Icon(LogType.warning.icon, color: LogType.warning.color),
-          ),
-          ButtonSegment(
-            value: LogType.error,
-            label: const Text('Error'),
-            icon: Icon(LogType.error.icon, color: LogType.error.color),
-          ),
-        ],
-        selected: {_selectedLogType},
-        onSelectionChanged: (value) {
-          context.read<ConsoleBloc>().add(ConsoleFilterByType(value.first));
-          _selectedLogType = value.first;
-          setState(() {});
-        },
+                  onPressed: () {
+                    context.read<OptionsBloc>().setDateTimeFilterEnabled(
+                      !enabled,
+                    );
+                  },
+                );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: () {
+                context.read<ConsoleBloc>().add(const ConsoleLoad());
+              },
+            ),
+            IconButton(
+              onPressed: () {
+                context.read<ConsoleBloc>().add(const ConsoleClear());
+              },
+              icon: const Icon(Icons.clear_all),
+            ),
+            IconButton(
+              onPressed: () {
+                // TODO implementar exportação de logs em json ou txt
+                _sendLogsForTest();
+              },
+              icon: const Icon(Icons.share),
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (context) => MultiBlocProvider(
+                      providers: [
+                        BlocProvider.value(value: optionsBloc),
+                        BlocProvider.value(value: consoleBloc),
+                      ],
+                      child: const ConsoleOptionsWidget(),
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.settings),
+            ),
+          ],
+        ),
+        body: const SafeArea(
+          bottom: true,
+          minimum: EdgeInsets.only(bottom: 50),
+          child: ConsoleWidget(),
+        ),
+        bottomSheet: SegmentedButton(
+          expandedInsets: const EdgeInsets.all(8),
+          segments: [
+            ButtonSegment(
+              value: LogType.debug,
+              label: const Text('Debug'),
+              icon: Icon(LogType.debug.icon, color: LogType.debug.color),
+            ),
+            ButtonSegment(
+              value: LogType.info,
+              label: const Text('Info'),
+              icon: Icon(LogType.info.icon, color: LogType.info.color),
+            ),
+            ButtonSegment(
+              value: LogType.warning,
+              label: const Text('Warning'),
+              icon: Icon(LogType.warning.icon, color: LogType.warning.color),
+            ),
+            ButtonSegment(
+              value: LogType.error,
+              label: const Text('Error'),
+              icon: Icon(LogType.error.icon, color: LogType.error.color),
+            ),
+          ],
+          selected: {_selectedLogType},
+          onSelectionChanged: (value) {
+            context.read<ConsoleBloc>().add(ConsoleFilterByType(value.first));
+            _selectedLogType = value.first;
+            setState(() {});
+          },
+        ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ConsoleBloc>().add(ConsoleFilterByType(_selectedLogType));
+    context.read<OptionsBloc>().loadOptions();
   }
 
   // TODO Remover método de teste

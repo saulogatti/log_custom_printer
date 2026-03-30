@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 
 abstract interface class MessageRepository {
@@ -5,6 +6,8 @@ abstract interface class MessageRepository {
   Future<List<MessageLog>> getFilterMessages({
     LogType? logType,
     String? searchText,
+    DateTimeRange? dateTimeRange,
+    bool isDateTimeFilterEnabled,
   });
   Future<List<MessageLog>> getMessages();
 }

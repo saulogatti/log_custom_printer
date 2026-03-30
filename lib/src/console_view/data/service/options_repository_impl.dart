@@ -23,11 +23,17 @@ class OptionsRepositoryImpl implements IOptionsRepository {
   }
 
   @override
-  Future<void> selectDate(int start, int end) async {
+  Future<void> selectDateTimeRange(int start, int end) async {
     OptionsEntry data = await _dataSource.getCurrentOptions();
+    final hasValidRange = start > 0 && end > 0;
     data = data.copyWith(
-      selectedDate: DateRangeEpochEntry(start: start, end: end),
+      selectedDateTimeRange: hasValidRange
+          ? DateRangeEpochEntry(start: start, end: end)
+          : null,
     );
+    if (hasValidRange) {
+      data = data.copyWith(isDateTimeFilterEnabled: true);
+    }
     _dataSource.saveOptions(data);
   }
 
@@ -44,11 +50,9 @@ class OptionsRepositoryImpl implements IOptionsRepository {
   }
 
   @override
-  Future<void> selectTimeRange(int start, int end) async {
+  Future<void> setDateTimeFilterEnabled(bool enabled) async {
     OptionsEntry data = await _dataSource.getCurrentOptions();
-    data = data.copyWith(
-      selectedTimeRange: DateRangeEpochEntry(start: start, end: end),
-    );
+    data = data.copyWith(isDateTimeFilterEnabled: enabled);
     _dataSource.saveOptions(data);
   }
 }
