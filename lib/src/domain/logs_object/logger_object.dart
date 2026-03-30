@@ -3,7 +3,6 @@ import 'package:meta/meta.dart';
 
 import '../../config_log.dart';
 import '../../log_printer_locator.dart';
-import '../../log_printer_service.dart';
 import '../../extensions/date_time_log_helper.dart';
 import '../../utils/logger_ansi_color.dart';
 
@@ -91,11 +90,11 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getMessage([bool withColor = true]) {
     final messageFormated = "${logCreationDate.logFullDateTime} $message";
-    final String messa = withColor
+    final String formattedLine = withColor
         ? getColor().call(messageFormated)
         : messageFormated;
 
-    return messa;
+    return formattedLine;
   }
 
   /// Retorna o cabeçalho do log (nome da classe/origem) formatado.

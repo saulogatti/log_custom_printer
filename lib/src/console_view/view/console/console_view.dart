@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
@@ -11,16 +10,21 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_st
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/console/console_overlay.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_class_mixin.dart';
 
 import 'console_widget.dart';
 
 class ConsoleProvider extends StatelessWidget {
   final MessageRepository messageRepository;
   final IOptionsRepository optionsRepository;
+  final ILoggerCacheRepository loggerCacheRepository;
   const ConsoleProvider({
     required this.messageRepository,
     required this.optionsRepository,
+    required this.loggerCacheRepository,
     super.key,
   });
 
@@ -29,8 +33,10 @@ class ConsoleProvider extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<ConsoleBloc>(
-          create: (context) =>
-              ConsoleBloc(messageRepository: messageRepository),
+          create: (context) => ConsoleBloc(
+            messageRepository: messageRepository,
+            loggerCacheRepository: loggerCacheRepository,
+          ),
         ),
         BlocProvider(
           create: (context) =>
@@ -58,7 +64,8 @@ class TesteLog with LoggerClassMixin {
       logDebug('Log $i');
       logWarning('Log de aviso $i');
       logInfo('Log de informação $i');
-      await Future.delayed(const Duration(seconds: 1), () {});
+
+      await Future.delayed(const Duration(milliseconds: 100), () {});
     }
   }
 }
@@ -151,8 +158,12 @@ class _ConsoleViewState extends State<ConsoleView> {
             ),
             IconButton(
               onPressed: () {
-                // TODO implementar exportação de logs em json ou txt
-                _sendLogsForTest();
+                consoleBloc.add(
+                  const ConsoleExportLogs(
+                    logType: LogType.debug,
+                    format: ExportFormat.json,
+                  ),
+                );
               },
               icon: const Icon(Icons.share),
             ),
@@ -174,25 +185,13 @@ class _ConsoleViewState extends State<ConsoleView> {
             ),
             IconButton(
               onPressed: () {
-                ConsoleOverlayManager.show(
+                ConsoleOverlayManager.toggle(
                   context,
                   appGetIt<MessageRepository>(),
-                  const Size(300, 250),
+                  appGetIt<ILoggerCacheRepository>(),
                 );
               },
               icon: const Icon(Icons.open_in_new),
-            ),
-            IconButton(
-              onPressed: () {
-                ConsoleOverlayManager.setSize(const Size(400, 260));
-              },
-              icon: const Icon(Icons.minimize),
-            ),
-            IconButton(
-              onPressed: () {
-                ConsoleOverlayManager.setSize(const Size(800, 520));
-              },
-              icon: const Icon(Icons.maximize),
             ),
           ],
         ),
@@ -207,6 +206,11 @@ class _ConsoleViewState extends State<ConsoleView> {
             return SegmentedButton(
               expandedInsets: const EdgeInsets.all(8),
               segments: [
+                const ButtonSegment(
+                  value: LogType.all,
+                  label: Text('All'),
+                  icon: Icon(Icons.all_inclusive, color: Colors.blue),
+                ),
                 ButtonSegment(
                   value: LogType.debug,
                   label: const Text('Debug'),
@@ -236,6 +240,9 @@ class _ConsoleViewState extends State<ConsoleView> {
                 context.read<ConsoleBloc>().add(
                   ConsoleFilterByType(value.first),
                 );
+                if (value.first == LogType.all) {
+                  _sendLogsForTest();
+                }
               },
             );
           },

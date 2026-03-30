@@ -6,13 +6,15 @@ import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 /// Configuração para controle de logs na biblioteca.
 ///
 /// Esta classe define as regras de habilitação e filtragem dos logs.
-/// Por padrão, os logs estão desabilitados e todos os tipos de log são permitidos.
+/// Por padrão, os logs estão desabilitados ([enableLog] `false`) e [onlyClasses]
+/// inclui [DebugLog], [WarningLog] e [InfoLog] (veja também o comportamento de
+/// [ErrorLog] em [onlyClasses] abaixo).
 ///
 /// {@category Configuration}
 ///
 /// Exemplo de uso básico:
 /// ```dart
-/// final config = ConfigLog(); // Padrões: logs desabilitados, todos os tipos
+/// final config = ConfigLog(); // Padrões: logs desabilitados; onlyClasses padrão
 /// ```
 ///
 /// Exemplo com configuração customizada:
@@ -57,8 +59,9 @@ class ConfigLog {
   /// serão processados. Permite filtrar seletivamente tipos de log
   /// (por exemplo, desabilitar apenas [DebugLog] em certas situações).
   ///
-  /// Por padrão inclui todos os tipos: [DebugLog], [WarningLog],
-  /// [InfoLog].
-  /// [ErrorLog] é sempre permitido para garantir que erros críticos sejam registrados.
+  /// Por padrão inclui [DebugLog], [WarningLog] e [InfoLog] (não inclui
+  /// [ErrorLog] neste conjunto). [ErrorLog] é na mesma processado quando
+  /// [enableLog] ou `alwaysPrint` aplicável em [LogPrinterService] o permitirem,
+  /// garantindo que erros críticos não fiquem só dependentes deste filtro.
   final Set<Type> onlyClasses;
 }

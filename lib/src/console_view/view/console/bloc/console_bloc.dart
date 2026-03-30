@@ -4,18 +4,23 @@ import 'package:log_custom_printer/src/console_view/domain/models/message_log.da
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_state.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 
 class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
   final MessageRepository _messageRepository;
+  final ILoggerCacheRepository _loggerCacheRepository;
   DateTimeRange? _dateTimeRange;
   bool _isDateTimeFilterEnabled = false;
 
   // Mantém fonte única de verdade para o filtro de tipo.
   LogType _selectedType = LogType.debug;
 
-  ConsoleBloc({required MessageRepository messageRepository})
-    : _messageRepository = messageRepository,
-      super(const ConsoleInitial(selectedLogType: LogType.debug)) {
+  ConsoleBloc({
+    required MessageRepository messageRepository,
+    required ILoggerCacheRepository loggerCacheRepository,
+  }) : _messageRepository = messageRepository,
+       _loggerCacheRepository = loggerCacheRepository,
+       super(const ConsoleInitial(selectedLogType: LogType.debug)) {
     on<ConsoleEvent>((event, emit) async {
       switch (event) {
         case ConsoleClear():
@@ -48,6 +53,12 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
           _isDateTimeFilterEnabled = event.isDateTimeFilterEnabled;
           emit(ConsoleLoading(selectedLogType: _selectedType));
           await _emitFilteredLogs(emit);
+        case ConsoleExportLogs():
+          final logs = event.logType == LogType.all
+              ? await _loggerCacheRepository.getAllLogs()
+              : await _loggerCacheRepository.getLogsByType(event.logType.toEnum());
+
+          await _loggerCacheRepository.exportLogs(logs, event.format);
       }
     });
   }

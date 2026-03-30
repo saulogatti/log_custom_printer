@@ -1,5 +1,8 @@
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/config_log.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 
 /// Serviço central que coordena o processo de impressão e armazenamento de logs.
 ///
@@ -16,7 +19,8 @@ final class LogPrinterService {
   /// Cria uma nova instância do serviço de impressão.
   ///
   /// [logPrinter]: a estratégia de impressão a ser utilizada.
-  /// [cacheRepository]: repositório de cache (padrão: [LoggerCacheRepositoryImpl]).
+  /// [cacheRepository]: repositório de cache (quando omitido, [LoggerPersistenceService]
+  /// usa a implementação padrão em memória).
   LogPrinterService(
     this.logPrinter, {
     required this.configLog, ILoggerCacheRepository? cacheRepository,

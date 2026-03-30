@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' show DateTimeRange;
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
+import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 
 class ConsoleClear extends ConsoleEvent {
   const ConsoleClear();
@@ -7,6 +8,13 @@ class ConsoleClear extends ConsoleEvent {
 
 sealed class ConsoleEvent {
   const ConsoleEvent();
+}
+
+class ConsoleExportLogs extends ConsoleEvent {
+  final LogType logType;
+  final ExportFormat format;
+
+  const ConsoleExportLogs({required this.logType, required this.format});
 }
 
 class ConsoleFilterByType extends ConsoleEvent {

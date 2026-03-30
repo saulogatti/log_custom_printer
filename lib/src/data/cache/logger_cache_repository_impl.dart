@@ -5,6 +5,7 @@ import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart'
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:share_plus/share_plus.dart';
 
 /// Implementação concreta de [ILoggerCacheRepository] usando armazenamento em memória
 /// e opcionalmente em arquivo.
@@ -15,6 +16,20 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 ///
 /// {@category Utilities}
 final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
+  /// Número máximo de entradas de log por tipo.
+  final int maxLogEntries;
+
+  /// Caminho base para salvar os arquivos de log (opcional).
+  final String? saveLogFilePath;
+
+  /// Gerenciador de persistência em arquivo.
+  LoggerCache? _loggerCache;
+
+  /// Mapa que armazena as listas de logs em memória por tipo.
+  final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
+
+  /// Future que rastreia a inicialização do cache persistente.
+  Future<void>? _futureInitialization;
 
   /// Cria uma nova instância da implementação de cache.
   ///
@@ -31,23 +46,9 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
         saveLogFilePath!,
         fileManagerType: FileManager(fileType: fileType),
       );
-      _futureInitialization = initialize();
+      _futureInitialization = _initialize();
     }
   }
-  /// Número máximo de entradas de log por tipo.
-  final int maxLogEntries;
-
-  /// Caminho base para salvar os arquivos de log (opcional).
-  final String? saveLogFilePath;
-
-  /// Gerenciador de persistência em arquivo.
-  LoggerCache? _loggerCache;
-
-  /// Mapa que armazena as listas de logs em memória por tipo.
-  final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
-
-  /// Future que rastreia a inicialização do cache persistente.
-  Future<void>? _futureInitialization;
 
   /// Adiciona [log] ao cache em memória e, quando configurado,
   /// persiste o estado atualizado em arquivo.
@@ -94,10 +95,29 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     await _loggerCache?.clearLogByType(type.name);
   }
 
-  /// Retorna todos os logs atualmente carregados em memória.
-  ///
-  /// Esta operação não força leitura do disco; retorna o estado já
-  /// materializado no repositório.
+  @override
+  Future<void> exportLogs(
+    List<LoggerObjectBase> logs,
+    ExportFormat format,
+  ) async {
+    final (data, pathFile) = await _loggerCache!.exportLogs(logs, format);
+    //C:\Users\saulo\AppData\Roaming\com.example\log_custom_printer_example\loggerApp\logs\share.json
+    if (pathFile != null) {
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [
+            XFile(
+              Uri.file(pathFile).toFilePath(),
+              length: data?.length ?? 0,
+              mimeType: 'application/json',
+              name: 'share.json',
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
   @override
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final List<LoggerObjectBase> allLogs = [];
@@ -121,11 +141,16 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     return [];
   }
 
+  @override
+  Future<void> importLogs(String content, ExportFormat format) {
+    throw UnimplementedError();
+  }
+
   /// Inicializa o repositório carregando logs persistidos anteriormente do disco.
   ///
   /// Quando houver dados válidos, o estado em memória é reconstruído para
   /// permitir consultas imediatas sem nova leitura dos arquivos.
-  Future<void> initialize() async {
+  Future<void> _initialize() async {
     if (_loggerCache != null &&
         !_loggerCache!.futureInitialization.isCompleted) {
       await _loggerCache!.futureInitialization.future;

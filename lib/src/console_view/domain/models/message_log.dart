@@ -1,10 +1,11 @@
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 
 enum LogType {
   info,
   warning,
   error,
-  debug;
+  debug,
+  all;
 
   EnumLoggerType toEnum() {
     switch (this) {
@@ -16,6 +17,8 @@ enum LogType {
         return EnumLoggerType.error;
       case LogType.debug:
         return EnumLoggerType.debug;
+      case LogType.all:
+        return EnumLoggerType.debug; // TODO: Implementar all
     }
   }
 }

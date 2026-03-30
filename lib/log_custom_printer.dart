@@ -15,7 +15,8 @@
 /// // Configuração inicial (obrigatório no startup)
 /// void main() {
 ///   registerLogPrinter(
-///     LogWithColorPrint(config: ConfigLog(enableLog: true)),
+///     const LogWithColorPrint(),
+///     config: const ConfigLog(enableLog: true),
 ///   );
 ///   runApp(MyApp());
 /// }
@@ -64,27 +65,25 @@ library;
 
 export 'src/config_log.dart';
 export 'src/console_view/view/console/console_overlay.dart';
-export 'src/data/cache/logger_cache_repository_impl.dart';
+export 'src/data/cache/logger_cache_repository_impl.dart'
+    show LoggerCacheRepositoryImpl;
 export 'src/data/cache/logger_persistence_service.dart'
     show LoggerPersistenceService;
+export 'src/domain/i_logger_cache_repository.dart';
 export 'src/domain/log_helpers/enum_logger_type.dart';
 export 'src/domain/log_helpers/logger_class_mixin.dart';
 export 'src/domain/log_printers/log_simple_print.dart';
+export 'src/domain/log_printers/log_with_color_print.dart';
 export 'src/domain/logs_object/debug_log.dart';
 export 'src/domain/logs_object/error_log.dart';
 export 'src/domain/logs_object/info_log.dart';
 export 'src/domain/logs_object/logger_object.dart';
 export 'src/domain/logs_object/warning_log.dart';
-export 'src/domain/query/log_export_service.dart';
 export 'src/domain/query/log_filter_engine.dart';
 export 'src/domain/query/log_query.dart';
 export 'src/domain/query/log_sort_engine.dart';
 export 'src/extensions/date_time_log_helper.dart';
 export 'src/log_custom_printer_base.dart';
-export 'src/log_printer_locator.dart'
-    show
-        registerLogPrinter,
-        registerLogPrinterColor,
-        registerLogPrinterSimple,
-        FileType;
+export 'src/log_printer_locator.dart';
+export 'src/log_printer_service.dart' show LogPrinterService;
 export 'src/utils/logger_ansi_color.dart';

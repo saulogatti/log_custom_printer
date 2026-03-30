@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/info_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
+import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 
 class MessageEntry {
 
