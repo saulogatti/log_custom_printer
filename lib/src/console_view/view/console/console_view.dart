@@ -7,10 +7,10 @@ import 'package:log_custom_printer/src/console_view/domain/repository/i_options_
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_event.dart';
+import 'package:log_custom_printer/src/console_view/view/console/bloc/console_state.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
-import 'package:log_custom_printer/src/console_view/view/console/console_overlay.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
 
 import 'console_widget.dart';
@@ -64,13 +64,26 @@ class TesteLog with LoggerClassMixin {
 }
 
 class _ConsoleViewState extends State<ConsoleView> {
-  LogType _selectedLogType = LogType.debug;
   @override
   Widget build(BuildContext context) {
     final optionsBloc = context.read<OptionsBloc>();
     final consoleBloc = context.read<ConsoleBloc>();
 
     return BlocListener<OptionsBloc, OptionsState>(
+      listenWhen: (previous, current) {
+        if (current is! LoadedOptionsState) {
+          return false;
+        }
+
+        if (previous is! LoadedOptionsState) {
+          return true;
+        }
+
+        return previous.options.selectedDateTimeRange !=
+                current.options.selectedDateTimeRange ||
+            previous.options.isDateTimeFilterEnabled !=
+                current.options.isDateTimeFilterEnabled;
+      },
       listener: (context, state) {
         if (state is! LoadedOptionsState) {
           return;
@@ -96,11 +109,14 @@ class _ConsoleViewState extends State<ConsoleView> {
                 )
               : null,
           actions: [
-            BlocBuilder<OptionsBloc, OptionsState>(
-              builder: (context, state) {
-                final enabled = state is LoadedOptionsState
-                    ? state.options.isDateTimeFilterEnabled
-                    : false;
+            BlocSelector<OptionsBloc, OptionsState, bool>(
+              selector: (state) {
+                if (state is! LoadedOptionsState) {
+                  return false;
+                }
+                return state.options.isDateTimeFilterEnabled;
+              },
+              builder: (context, enabled) {
                 final iconColor = enabled
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context).iconTheme.color;
@@ -161,7 +177,7 @@ class _ConsoleViewState extends State<ConsoleView> {
                 ConsoleOverlayManager.show(
                   context,
                   appGetIt<MessageRepository>(),
-                  const Size(300, 200),
+                  const Size(300, 250),
                 );
               },
               icon: const Icon(Icons.open_in_new),
@@ -185,35 +201,43 @@ class _ConsoleViewState extends State<ConsoleView> {
           minimum: EdgeInsets.only(bottom: 50),
           child: ConsoleWidget(),
         ),
-        bottomSheet: SegmentedButton(
-          expandedInsets: const EdgeInsets.all(8),
-          segments: [
-            ButtonSegment(
-              value: LogType.debug,
-              label: const Text('Debug'),
-              icon: Icon(LogType.debug.icon, color: LogType.debug.color),
-            ),
-            ButtonSegment(
-              value: LogType.info,
-              label: const Text('Info'),
-              icon: Icon(LogType.info.icon, color: LogType.info.color),
-            ),
-            ButtonSegment(
-              value: LogType.warning,
-              label: const Text('Warning'),
-              icon: Icon(LogType.warning.icon, color: LogType.warning.color),
-            ),
-            ButtonSegment(
-              value: LogType.error,
-              label: const Text('Error'),
-              icon: Icon(LogType.error.icon, color: LogType.error.color),
-            ),
-          ],
-          selected: {_selectedLogType},
-          onSelectionChanged: (value) {
-            context.read<ConsoleBloc>().add(ConsoleFilterByType(value.first));
-            _selectedLogType = value.first;
-            setState(() {});
+        bottomSheet: BlocSelector<ConsoleBloc, ConsoleState, LogType>(
+          selector: (state) => state.selectedLogType,
+          builder: (context, selectedLogType) {
+            return SegmentedButton(
+              expandedInsets: const EdgeInsets.all(8),
+              segments: [
+                ButtonSegment(
+                  value: LogType.debug,
+                  label: const Text('Debug'),
+                  icon: Icon(LogType.debug.icon, color: LogType.debug.color),
+                ),
+                ButtonSegment(
+                  value: LogType.info,
+                  label: const Text('Info'),
+                  icon: Icon(LogType.info.icon, color: LogType.info.color),
+                ),
+                ButtonSegment(
+                  value: LogType.warning,
+                  label: const Text('Warning'),
+                  icon: Icon(
+                    LogType.warning.icon,
+                    color: LogType.warning.color,
+                  ),
+                ),
+                ButtonSegment(
+                  value: LogType.error,
+                  label: const Text('Error'),
+                  icon: Icon(LogType.error.icon, color: LogType.error.color),
+                ),
+              ],
+              selected: {selectedLogType},
+              onSelectionChanged: (value) {
+                context.read<ConsoleBloc>().add(
+                  ConsoleFilterByType(value.first),
+                );
+              },
+            );
           },
         ),
       ),
@@ -223,7 +247,7 @@ class _ConsoleViewState extends State<ConsoleView> {
   @override
   void initState() {
     super.initState();
-    context.read<ConsoleBloc>().add(ConsoleFilterByType(_selectedLogType));
+    context.read<ConsoleBloc>().add(const ConsoleLoad());
     context.read<OptionsBloc>().loadOptions();
   }
 

@@ -10,30 +10,43 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
   DateTimeRange? _dateTimeRange;
   bool _isDateTimeFilterEnabled = false;
 
-  // Por compatibilidade com o comportamento atual, iniciamos com Debug.
-  // A tela pode alterar via ConsoleFilterByType.
-  LogType? _selectedType;
+  // Mantém fonte única de verdade para o filtro de tipo.
+  LogType _selectedType = LogType.debug;
 
   ConsoleBloc({required MessageRepository messageRepository})
     : _messageRepository = messageRepository,
-      super(const ConsoleInitial()) {
+      super(const ConsoleInitial(selectedLogType: LogType.debug)) {
     on<ConsoleEvent>((event, emit) async {
-      emit(const ConsoleLoading());
       switch (event) {
         case ConsoleClear():
+          emit(ConsoleLoading(selectedLogType: _selectedType));
           _messageRepository.clearMessages();
           await _emitFilteredLogs(emit);
           break;
         case ConsoleLoad():
+          emit(ConsoleLoading(selectedLogType: _selectedType));
           await _emitFilteredLogs(emit);
           break;
         case ConsoleFilterByType():
+          if (_selectedType == event.type) {
+            return;
+          }
           _selectedType = event.type;
+          emit(ConsoleLoading(selectedLogType: _selectedType));
           await _emitFilteredLogs(emit);
           break;
         case ConsoleUpdateDateTimeFilter():
+          final hasDateFilterChanged = _dateTimeRange != event.dateTimeRange;
+          final hasEnabledChanged =
+              _isDateTimeFilterEnabled != event.isDateTimeFilterEnabled;
+
+          if (!hasDateFilterChanged && !hasEnabledChanged) {
+            return;
+          }
+
           _dateTimeRange = event.dateTimeRange;
           _isDateTimeFilterEnabled = event.isDateTimeFilterEnabled;
+          emit(ConsoleLoading(selectedLogType: _selectedType));
           await _emitFilteredLogs(emit);
       }
     });
@@ -46,9 +59,14 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
         dateTimeRange: _dateTimeRange,
         isDateTimeFilterEnabled: _isDateTimeFilterEnabled,
       );
-      emit(ConsoleLoaded(logs: logs));
+      emit(ConsoleLoaded(logs: logs, selectedLogType: _selectedType));
     } on Exception catch (e) {
-      emit(ConsoleError(message: 'Erro ao carregar logs: $e'));
+      emit(
+        ConsoleError(
+          message: 'Erro ao carregar logs: $e',
+          selectedLogType: _selectedType,
+        ),
+      );
     }
   }
 }
