@@ -10,8 +10,19 @@ import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.d
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/log_printer_locator.dart';
 
+/// Instância global do container de injeção de dependência.
+///
+/// Utilizada pelo console visual para resolver [MessageRepository],
+/// [IOptionsRepository] e [ILoggerCacheRepository].
 final appGetIt = GetIt.instance;
 
+/// Registra as dependências necessárias para o funcionamento do console visual.
+///
+/// Deve ser chamada no startup da aplicação antes de usar qualquer componente
+/// da [ConsoleView]. Registra:
+/// - [MessageRepository] via [MessageRepositoryImpl]
+/// - [IOptionsRepository] via [OptionsRepositoryImpl]
+/// - [ILoggerCacheRepository] via [LoggerCacheRepositoryImpl]
 void initAppInjection() {
   appGetIt.registerLazySingleton<MessageRepository>(
     () => MessageRepositoryImpl(

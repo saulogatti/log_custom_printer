@@ -7,11 +7,19 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 
+/// Conversor entre [LoggerObjectBase] (domínio do logging) e [MessageLog]
+/// (modelo de apresentação do console visual).
+///
+/// Responsável por mapear o tipo concreto do log para o [LogType]
+/// correspondente e formatar o título/mensagem para exibição.
 class MessageEntry {
-
-  MessageEntry({required this.loggerObjectBase});
+  /// Log de domínio a ser convertido.
   final LoggerObjectBase loggerObjectBase;
 
+  /// Cria uma entrada de conversão para o [loggerObjectBase] fornecido.
+  MessageEntry({required this.loggerObjectBase});
+
+  /// Converte [loggerObjectBase] em um [MessageLog] pronto para exibição.
   MessageLog fromLoggerObjectBase() {
     final LogType level = getLogType(loggerObjectBase);
 
@@ -23,6 +31,7 @@ class MessageEntry {
     );
   }
 
+  /// Mapeia o tipo concreto do [loggerObjectBase] para o [LogType] correspondente.
   LogType getLogType(LoggerObjectBase loggerObjectBase) {
     switch (loggerObjectBase) {
       case InfoLog():

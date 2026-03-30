@@ -1,8 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/option_item.dart';
 
+/// Widget de lista selecionável de opções.
+///
+/// Exibe cada [OptionItem] de [options] como um [ListTile]. Ao tocar em
+/// um item, [onOptionSelected] é chamado com a opção correspondente.
 class SelectOptionWidget extends StatelessWidget {
+  /// Lista de opções a exibir.
   final List<OptionItem> options;
+
+  /// Callback invocado quando o usuário seleciona uma opção.
   final void Function(OptionItem) onOptionSelected;
   const SelectOptionWidget({
     required this.options,

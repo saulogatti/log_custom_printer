@@ -5,9 +5,16 @@ import 'package:log_custom_printer/src/console_view/data/entry/options_entry.dar
 import 'package:log_custom_printer/src/console_view/domain/models/console_options.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
 
+/// Implementação de [IOptionsRepository] que persiste as opções do console
+/// via [OptionsConsoleDataSource].
+///
+/// Converte entre os modelos de domínio ([ConsoleOptions], [OptionItem]) e
+/// os DTOs serializáveis ([OptionsEntry], [OptionItemEntry]) para leitura e
+/// gravação em arquivo.
 class OptionsRepositoryImpl implements IOptionsRepository {
   final OptionsConsoleDataSource _dataSource;
 
+  /// Cria o repositório com a [_dataSource] fornecida.
   OptionsRepositoryImpl(this._dataSource);
 
   @override

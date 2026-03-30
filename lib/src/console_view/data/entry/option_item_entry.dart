@@ -3,6 +3,8 @@ import 'package:log_custom_printer/src/console_view/domain/models/console_option
 
 part 'option_item_entry.g.dart';
 
+/// DTO serializável para [OptionItem], usado na persistência JSON das opções
+/// do console ([OptionsEntry]).
 @JsonSerializable()
 class OptionItemEntry extends OptionItem {
   OptionItemEntry({required super.title, required super.description});

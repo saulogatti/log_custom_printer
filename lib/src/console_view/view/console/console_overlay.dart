@@ -6,6 +6,32 @@ import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 
 import 'console_view.dart';
 
+/// Gerenciador de overlay do console visual de logs.
+///
+/// Fornece dois modos de exibição do [ConsoleView] como overlay Flutter:
+///
+/// - **Janela arrastável** ([show] / [toggle] / [hide]): exibe o console em
+///   uma janela posicionável que pode ser movida pelo usuário com gestos de
+///   arrastar. Ocupa toda a largura da tela por padrão.
+///
+/// - **Barra inferior** ([showOverlay] / [hideConsoleOverlayManager]): exibe
+///   o console fixo na parte inferior da tela com altura de 250 px. Suporta
+///   modo não-interativo (IgnorePointer) para não bloquear a UI principal.
+///
+/// ## Uso típico
+///
+/// ```dart
+/// // Exibir/ocultar o console como janela arrastável
+/// ConsoleOverlayManager.toggle(context, messageRepository, cacheRepository);
+///
+/// // Exibir como barra inferior fixa
+/// ConsoleOverlayManager.showOverlay(context, messageRepository, cacheRepository);
+///
+/// // Fechar a barra inferior
+/// ConsoleOverlayManager.hideConsoleOverlayManager();
+/// ```
+///
+/// {@category Console View}
 class ConsoleOverlayManager {
   static OverlayEntry? _overlayEntry;
 

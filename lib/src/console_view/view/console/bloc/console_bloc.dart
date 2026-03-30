@@ -6,6 +6,13 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_ev
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_state.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 
+/// BLoC responsável pelo estado da tela de console de logs.
+///
+/// Gerencia o ciclo de vida das mensagens exibidas no [ConsoleView]:
+/// carregamento, filtragem por tipo, filtragem temporal, limpeza e exportação.
+///
+/// Mantém internamente o [LogType] selecionado e o intervalo de data/hora
+/// como fontes únicas de verdade, evitando recarregamentos desnecessários.
 class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
   final MessageRepository _messageRepository;
   final ILoggerCacheRepository _loggerCacheRepository;
@@ -15,6 +22,7 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
   // Mantém fonte única de verdade para o filtro de tipo.
   LogType _selectedType = LogType.debug;
 
+  /// Cria um [ConsoleBloc] com os repositórios necessários.
   ConsoleBloc({
     required MessageRepository messageRepository,
     required ILoggerCacheRepository loggerCacheRepository,
