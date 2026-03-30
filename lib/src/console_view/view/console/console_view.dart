@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
@@ -9,6 +10,7 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_ev
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/console/console_overlay.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
 
 import 'console_widget.dart';
@@ -63,7 +65,6 @@ class TesteLog with LoggerClassMixin {
 
 class _ConsoleViewState extends State<ConsoleView> {
   LogType _selectedLogType = LogType.debug;
-
   @override
   Widget build(BuildContext context) {
     final optionsBloc = context.read<OptionsBloc>();
@@ -154,6 +155,28 @@ class _ConsoleViewState extends State<ConsoleView> {
                 );
               },
               icon: const Icon(Icons.settings),
+            ),
+            IconButton(
+              onPressed: () {
+                ConsoleOverlayManager.show(
+                  context,
+                  appGetIt<MessageRepository>(),
+                  const Size(300, 200),
+                );
+              },
+              icon: const Icon(Icons.open_in_new),
+            ),
+            IconButton(
+              onPressed: () {
+                ConsoleOverlayManager.setSize(const Size(400, 260));
+              },
+              icon: const Icon(Icons.minimize),
+            ),
+            IconButton(
+              onPressed: () {
+                ConsoleOverlayManager.setSize(const Size(800, 520));
+              },
+              icon: const Icon(Icons.maximize),
             ),
           ],
         ),

@@ -63,6 +63,7 @@
 library;
 
 export 'src/config_log.dart';
+export 'src/console_view/view/console/console_overlay.dart';
 export 'src/data/cache/logger_cache_repository_impl.dart';
 export 'src/data/cache/logger_persistence_service.dart'
     show LoggerPersistenceService;
@@ -78,6 +79,7 @@ export 'src/domain/query/log_export_service.dart';
 export 'src/domain/query/log_filter_engine.dart';
 export 'src/domain/query/log_query.dart';
 export 'src/domain/query/log_sort_engine.dart';
+export 'src/extensions/date_time_log_helper.dart';
 export 'src/log_custom_printer_base.dart';
 export 'src/log_printer_locator.dart'
     show
@@ -85,5 +87,4 @@ export 'src/log_printer_locator.dart'
         registerLogPrinterColor,
         registerLogPrinterSimple,
         FileType;
-export 'src/extensions/date_time_log_helper.dart';
 export 'src/utils/logger_ansi_color.dart';

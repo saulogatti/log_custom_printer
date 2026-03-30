@@ -14,6 +14,9 @@ class ConsoleOverlayManager {
   static final ValueNotifier<Offset> _position = ValueNotifier(
     const Offset(100, 100),
   );
+  static final ValueNotifier<Size> _sizeListenable = ValueNotifier(
+    const Size(400, 260),
+  );
 
   static void hide() {
     _customOverlayEntry?.remove();
@@ -26,7 +29,17 @@ class ConsoleOverlayManager {
     _overlayEntry = null;
   }
 
-  static void show(BuildContext context, MessageRepository messageRepository) {
+  static void setSize(Size size) {
+    assert(size.width > 0 && size.height > 0, 'Size must be greater than 0');
+    _sizeListenable.value = size;
+  }
+
+  static void show(
+    BuildContext context,
+    MessageRepository messageRepository,
+    Size size,
+  ) {
+    setSize(size);
     // Evita abrir dois overlays e dar dor de cabeça
     if (_customOverlayEntry != null) return;
 
@@ -47,25 +60,30 @@ class ConsoleOverlayManager {
                 child: Material(
                   color: Colors.transparent,
                   elevation: 0,
-                  child: Container(
-                    width: 400,
-                    height: 260,
-                    decoration: const BoxDecoration(
-                      color: Colors.blueAccent,
-                      borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 8,
-                          offset: Offset(0, 4),
+                  child: ValueListenableBuilder(
+                    valueListenable: _sizeListenable,
+                    builder: (context, size, child) {
+                      return Container(
+                        width: size.width,
+                        height: size.height,
+                        decoration: const BoxDecoration(
+                          color: Colors.blueAccent,
+                          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 8,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: BlocProvider(
-                      create: (context) =>
-                          ConsoleBloc(messageRepository: messageRepository),
-                      child: const ConsoleView(onClose: hide),
-                    ),
+                        child: BlocProvider(
+                          create: (context) =>
+                              ConsoleBloc(messageRepository: messageRepository),
+                          child: const ConsoleView(onClose: hide),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
