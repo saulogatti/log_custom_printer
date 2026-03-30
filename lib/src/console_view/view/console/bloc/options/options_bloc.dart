@@ -48,9 +48,11 @@ class OptionsBloc extends Cubit<OptionsState> {
       );
       emit(LoadedOptionsState(updatedOptions));
     }
-    await _optionsRepository.selectTimeRange(
-      timeRange?.start.millisecondsSinceEpoch ?? 0,
-      timeRange?.end.millisecondsSinceEpoch ?? 0,
-    );
+    if (timeRange != null) {
+      await _optionsRepository.selectTimeRange(
+        timeRange.start.millisecondsSinceEpoch,
+        timeRange.end.millisecondsSinceEpoch,
+      );
+    }
   }
 }
