@@ -1,0 +1,55 @@
+{
+  "type": "InfoLog",
+  "loggerJson": [
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 9",
+      "logCreationDate": "2026-03-30T01:24:12.411836"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 8",
+      "logCreationDate": "2026-03-30T01:24:11.409549"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 7",
+      "logCreationDate": "2026-03-30T01:24:10.407514"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 6",
+      "logCreationDate": "2026-03-30T01:24:09.404924"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 5",
+      "logCreationDate": "2026-03-30T01:24:08.401972"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 4",
+      "logCreationDate": "2026-03-30T01:24:07.399668"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 3",
+      "logCreationDate": "2026-03-30T01:24:06.397539"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 2",
+      "logCreationDate": "2026-03-30T01:24:05.395910"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 1",
+      "logCreationDate": "2026-03-30T01:24:04.394962"
+    },
+    {
+      "className": "TesteLog",
+      "message": "Log de informação 0",
+      "logCreationDate": "2026-03-30T01:24:03.392409"
+    }
+  ]
+}

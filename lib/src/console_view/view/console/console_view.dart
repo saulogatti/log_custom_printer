@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/logger_class_mixin.dart';
 import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/console_view/domain/repository/i_options_repository.dart';
@@ -11,7 +10,9 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_st
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_bloc.dart';
 import 'package:log_custom_printer/src/console_view/view/console/bloc/options/options_state.dart';
 import 'package:log_custom_printer/src/console_view/view/console/console_options_widget.dart';
+import 'package:log_custom_printer/src/console_view/view/console/console_overlay.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_class_mixin.dart';
 
 import 'console_widget.dart';
 
