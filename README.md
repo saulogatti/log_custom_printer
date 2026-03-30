@@ -175,8 +175,8 @@ Use `registerLogPrinterColor()` ou `registerLogPrinterSimple()` para configuraç
 O pacote inclui um overlay Flutter para visualização dos logs em tempo real durante o desenvolvimento.
 
 ```dart
-import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
 
 void main() {
   initAppInjection(); // registra dependências do console visual

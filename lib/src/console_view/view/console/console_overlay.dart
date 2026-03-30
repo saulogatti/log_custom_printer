@@ -21,11 +21,24 @@ import 'console_view.dart';
 /// ## Uso típico
 ///
 /// ```dart
+/// import 'package:log_custom_printer/log_custom_printer.dart';
+/// import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
+/// import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
+/// import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
+///
 /// // Exibir/ocultar o console como janela arrastável
-/// ConsoleOverlayManager.toggle(context, messageRepository, cacheRepository);
+/// ConsoleOverlayManager.toggle(
+///   context,
+///   appGetIt<MessageRepository>(),
+///   appGetIt<ILoggerCacheRepository>(),
+/// );
 ///
 /// // Exibir como barra inferior fixa
-/// ConsoleOverlayManager.showOverlay(context, messageRepository, cacheRepository);
+/// ConsoleOverlayManager.showOverlay(
+///   context,
+///   appGetIt<MessageRepository>(),
+///   appGetIt<ILoggerCacheRepository>(),
+/// );
 ///
 /// // Fechar a barra inferior
 /// ConsoleOverlayManager.hideConsoleOverlayManager();

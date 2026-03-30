@@ -13,6 +13,16 @@ import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 ///
 /// Mantém internamente o [LogType] selecionado e o intervalo de data/hora
 /// como fontes únicas de verdade, evitando recarregamentos desnecessários.
+///
+/// ### Transições de estado
+///
+/// | Evento | Estado resultante |
+/// |--------|-------------------|
+/// | [ConsoleLoad] | [ConsoleLoading] → [ConsoleLoaded] ou [ConsoleError] |
+/// | [ConsoleClear] | [ConsoleLoading] → [ConsoleLoaded] ou [ConsoleError] |
+/// | [ConsoleFilterByType] | [ConsoleLoading] → [ConsoleLoaded] ou [ConsoleError] |
+/// | [ConsoleUpdateDateTimeFilter] | [ConsoleLoading] → [ConsoleLoaded] ou [ConsoleError] |
+/// | [ConsoleExportLogs] | (sem mudança de estado visível) |
 class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
   final MessageRepository _messageRepository;
   final ILoggerCacheRepository _loggerCacheRepository;
