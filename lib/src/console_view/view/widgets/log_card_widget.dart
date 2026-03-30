@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 
 /// Widget para exibir um log individual em um card.
+///
+/// Exibe o ícone e cor do tipo de log ([LogType]) na parte esquerda,
+/// o título como cabeçalho e a mensagem como subtítulo.
 class LogCardWidget extends StatelessWidget {
+  /// Mensagem de log a ser exibida.
   final MessageLog messageLog;
   const LogCardWidget({required this.messageLog, super.key});
 
@@ -28,7 +32,12 @@ class LogCardWidget extends StatelessWidget {
   }
 }
 
+/// Extensão que fornece cor e ícone para cada valor de [LogType].
+///
+/// Usado pelo [LogCardWidget] e pelo [ConsoleView] para colorir e
+/// identificar visualmente os diferentes tipos de log.
 extension LogTypeExtension on LogType {
+  /// Cor associada ao tipo de log.
   Color get color {
     switch (this) {
       case LogType.info:
@@ -44,6 +53,7 @@ extension LogTypeExtension on LogType {
     }
   }
 
+  /// Ícone associado ao tipo de log.
   IconData get icon {
     switch (this) {
       case LogType.info:

@@ -452,6 +452,49 @@ class MyLog extends LoggerObjectBase {
 }
 ```
 
+## Console Visual de Logs (`console_view`)
+
+O módulo `console_view` fornece uma interface Flutter para visualização, filtragem e
+exportação dos logs em tempo real, exibida como overlay sobre a aplicação.
+
+### Arquitetura
+
+```
+ConsoleOverlayManager
+    └── ConsoleView (StatefulWidget)
+            ├── ConsoleBloc  ←→  MessageRepository ←→ MessageLogDataSource
+            ├── OptionsBloc  ←→  IOptionsRepository ←→ OptionsConsoleDataSource
+            └── ConsoleWidget → LogCardWidget
+```
+
+### Modos de Exibição
+
+| Modo | API |
+|------|-----|
+| Janela arrastável | `ConsoleOverlayManager.show()` / `toggle()` / `hide()` |
+| Barra inferior fixa | `ConsoleOverlayManager.showOverlay()` / `hideConsoleOverlayManager()` |
+
+### Configuração
+
+Registre as dependências antes de abrir o console:
+
+```dart
+import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
+
+void main() {
+  initAppInjection();
+  runApp(MyApp());
+}
+```
+
+### Filtros Disponíveis
+
+- **Por tipo**: All, Debug, Info, Warning, Error (botões segmentados)
+- **Por texto**: campo de busca via `MessageRepository.getFilterMessages`
+- **Por data/hora**: configurado na tela de opções (ícone ⚙️)
+
+Para documentação detalhada, consulte [ConsoleView.md](ConsoleView.md).
+
 ## Troubleshooting
 
 ### Logs não aparecem

@@ -5,6 +5,13 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/options/op
 import 'package:log_custom_printer/src/console_view/view/widgets/date_time_filter_widget.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/select_option_widget.dart';
 
+/// Tela de configurações do console visual.
+///
+/// Exibe controles para:
+/// - Filtro temporal ([DateTimeFilterWidget]).
+/// - Seleção de opções adicionais ([SelectOptionWidget]).
+///
+/// Observa o [OptionsBloc] para renderizar o estado atual das preferências.
 class ConsoleOptionsWidget extends StatefulWidget {
   const ConsoleOptionsWidget({super.key});
 

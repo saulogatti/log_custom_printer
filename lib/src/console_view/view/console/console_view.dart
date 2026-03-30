@@ -17,10 +17,21 @@ import 'package:log_custom_printer/src/domain/log_helpers/logger_class_mixin.dar
 
 import 'console_widget.dart';
 
+/// Widget provedor que instancia [ConsoleBloc] e [OptionsBloc] e os injeta
+/// na árvore de widgets para uso pela [ConsoleView].
+///
+/// Use este widget quando precisar montar o console fora do overlay padrão
+/// do [ConsoleOverlayManager].
 class ConsoleProvider extends StatelessWidget {
+  /// Repositório de mensagens de log.
   final MessageRepository messageRepository;
+
+  /// Repositório de opções de configuração do console.
   final IOptionsRepository optionsRepository;
+
+  /// Repositório de cache do sistema de logging.
   final ILoggerCacheRepository loggerCacheRepository;
+
   const ConsoleProvider({
     required this.messageRepository,
     required this.optionsRepository,
@@ -48,8 +59,17 @@ class ConsoleProvider extends StatelessWidget {
   }
 }
 
-/// Tela de console para exibir logs usando o log_custom_printer.
+/// Tela de console para visualização e filtragem dos logs registrados
+/// pelo sistema [log_custom_printer].
+///
+/// Exibe os logs em lista, permite filtrar por tipo via [SegmentedButton]
+/// e navegar para as configurações ([ConsoleOptionsWidget]).
+/// Requer que [ConsoleBloc] e [OptionsBloc] estejam disponíveis na árvore.
+///
+/// O parâmetro [onClose] define o callback do botão de fechar (quando nulo,
+/// o botão não é exibido — útil ao usar dentro de [ConsoleOverlayManager]).
 class ConsoleView extends StatefulWidget {
+  /// Callback invocado ao pressionar o botão de fechar (opcional).
   final VoidCallback? onClose;
   const ConsoleView({super.key, this.onClose});
 

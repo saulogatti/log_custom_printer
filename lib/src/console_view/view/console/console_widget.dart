@@ -4,6 +4,12 @@ import 'package:log_custom_printer/src/console_view/view/console/bloc/console_bl
 import 'package:log_custom_printer/src/console_view/view/console/bloc/console_state.dart';
 import 'package:log_custom_printer/src/console_view/view/widgets/log_card_widget.dart';
 
+/// Widget que exibe a lista de mensagens de log do console.
+///
+/// Observa o [ConsoleBloc] e renderiza o estado atual:
+/// - Carregando: indicador circular.
+/// - Erro: mensagem de erro centralizada.
+/// - Carregado: lista rolável de [LogCardWidget] com total de logs.
 class ConsoleWidget extends StatelessWidget {
   const ConsoleWidget({super.key});
   @override
