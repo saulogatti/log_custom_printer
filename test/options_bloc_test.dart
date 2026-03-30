@@ -16,15 +16,20 @@ class MockOptionsRepository implements IOptionsRepository {
   }
 
   @override
-  Future<void> selectDate(int start, int end) async {}
+  Future<void> selectDate(int? start, int? end) async {
+    if (start == -1) throw Exception("Error");
+  }
 
   @override
   Future<void> selectOption(OptionItem option) async {
+    if (option.title == "Error") throw Exception("Error");
     currentOptions = currentOptions.copyWith(option: option);
   }
 
   @override
-  Future<void> selectTimeRange(int start, int end) async {}
+  Future<void> selectTimeRange(int? start, int? end) async {
+    if (start == -1) throw Exception("Error");
+  }
 }
 
 void main() {
@@ -36,9 +41,6 @@ void main() {
     optionsBloc = OptionsBloc(optionsRepository: mockOptionsRepository);
   });
 
-  tearDown(() async {
-    await optionsBloc.close();
-  });
   test('Initial state is InitialOptionsState', () {
     expect(optionsBloc.state, isA<InitialOptionsState>());
   });
@@ -123,5 +125,32 @@ void main() {
     // Clear it
     await optionsBloc.selectTimeRange(null);
     expect((optionsBloc.state as LoadedOptionsState).options.selectedTimeRange, isNull);
+  });
+
+  test('selectOption rolls back state on error', () async {
+    await optionsBloc.loadOptions();
+    final initialState = optionsBloc.state as LoadedOptionsState;
+    final initialOption = initialState.options.option;
+
+    final errorOption = OptionItem(title: 'Error', description: 'Desc');
+    await optionsBloc.selectOption(errorOption);
+
+    final finalState = optionsBloc.state as LoadedOptionsState;
+    expect(finalState.options.option, initialOption);
+  });
+
+  test('selectDate rolls back state on error', () async {
+    await optionsBloc.loadOptions();
+    final initialState = optionsBloc.state as LoadedOptionsState;
+    final initialDate = initialState.options.selectedDate;
+
+    final errorDateRange = DateTimeRange(
+      start: DateTime.fromMillisecondsSinceEpoch(-1),
+      end: DateTime(2023, 1, 2),
+    );
+    await optionsBloc.selectDate(errorDateRange);
+
+    final finalState = optionsBloc.state as LoadedOptionsState;
+    expect(finalState.options.selectedDate, initialDate);
   });
 }

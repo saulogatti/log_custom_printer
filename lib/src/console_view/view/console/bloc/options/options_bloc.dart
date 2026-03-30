@@ -23,11 +23,16 @@ class OptionsBloc extends Cubit<OptionsState> {
         clearSelectedDate: dateRange == null,
       );
       emit(LoadedOptionsState(updatedOptions));
+
+      try {
+        await _optionsRepository.selectDate(
+          dateRange?.start.millisecondsSinceEpoch,
+          dateRange?.end.millisecondsSinceEpoch,
+        );
+      } catch (e) {
+        emit(currentState);
+      }
     }
-    await _optionsRepository.selectDate(
-      dateRange?.start.millisecondsSinceEpoch ?? 0,
-      dateRange?.end.millisecondsSinceEpoch ?? 0,
-    );
   }
 
   Future<void> selectOption(OptionItem option) async {
@@ -35,8 +40,13 @@ class OptionsBloc extends Cubit<OptionsState> {
     if (currentState is LoadedOptionsState) {
       final updatedOptions = currentState.options.copyWith(option: option);
       emit(LoadedOptionsState(updatedOptions));
+
+      try {
+        await _optionsRepository.selectOption(option);
+      } catch (e) {
+        emit(currentState);
+      }
     }
-    await _optionsRepository.selectOption(option);
   }
 
   Future<void> selectTimeRange(DateTimeRange? timeRange) async {
@@ -47,12 +57,15 @@ class OptionsBloc extends Cubit<OptionsState> {
         clearSelectedTimeRange: timeRange == null,
       );
       emit(LoadedOptionsState(updatedOptions));
-    }
-    if (timeRange != null) {
-      await _optionsRepository.selectTimeRange(
-        timeRange.start.millisecondsSinceEpoch,
-        timeRange.end.millisecondsSinceEpoch,
-      );
+
+      try {
+        await _optionsRepository.selectTimeRange(
+          timeRange?.start.millisecondsSinceEpoch,
+          timeRange?.end.millisecondsSinceEpoch,
+        );
+      } catch (e) {
+        emit(currentState);
+      }
     }
   }
 }
