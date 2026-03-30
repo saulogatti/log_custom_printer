@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 /// Implementação de gerenciamento de arquivos tipado por [FileType].
@@ -10,17 +11,22 @@ class FileManager implements IFileManagerType {
   /// Tipo de arquivo permitido para esta instância.
   final FileType fileType;
 
+  /// Cadeia de execução por caminho para serializar operações concorrentes.
+  final Map<String, Future<void>> _pathLocks = {};
+
   /// Cria um gerenciador de arquivos para o [fileType] informado.
   FileManager({required this.fileType});
 
   @override
-  Future<bool> createDirectory(String path) async {
-    final directory = Directory(path);
-    if (await directory.exists()) {
-      return false;
-    }
-    await directory.create(recursive: true);
-    return true;
+  Future<bool> createDirectory(String path) {
+    return _runWithPathLock(path, () async {
+      final directory = Directory(path);
+      if (await directory.exists()) {
+        return false;
+      }
+      await directory.create(recursive: true);
+      return true;
+    });
   }
 
   /// Remove o diretório em [path] quando ele existir.
@@ -28,13 +34,15 @@ class FileManager implements IFileManagerType {
   /// Retorna `true` quando a remoção acontece e `false` quando o diretório não
   /// existe.
   @override
-  Future<bool> deleteDirectory(String path) async {
-    final directory = Directory(path);
-    if (await directory.exists()) {
-      await directory.delete(recursive: true);
-      return true;
-    }
-    return false;
+  Future<bool> deleteDirectory(String path) {
+    return _runWithPathLock(path, () async {
+      final directory = Directory(path);
+      if (await directory.exists()) {
+        await directory.delete(recursive: true);
+        return true;
+      }
+      return false;
+    });
   }
 
   /// Remove o arquivo em [path] quando ele existir.
@@ -42,14 +50,16 @@ class FileManager implements IFileManagerType {
   /// Retorna `true` quando a remoção acontece e `false` quando o arquivo não
   /// existe.
   @override
-  Future<bool> deleteFile(String path) async {
-    _extensionIncludePath(path);
-    final file = File(path);
-    if (await file.exists()) {
-      await file.delete();
-      return true;
-    }
-    return false;
+  Future<bool> deleteFile(String path) {
+    return _runWithPathLock(path, () async {
+      _extensionIncludePath(path);
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+        return true;
+      }
+      return false;
+    });
   }
 
   /// Lê e retorna o conteúdo do arquivo em [path].
@@ -59,22 +69,20 @@ class FileManager implements IFileManagerType {
   ///
   /// Lança [Exception] quando o arquivo não é encontrado.
   @override
-  Future<String> readFile(String path) async {
-    print(
-      'Attempting to read file at: $path with expected type: ${fileType.name}'
-      "\n ${DateTime.now()}",
-    );
-    _extensionIncludePath(path);
-    final file = File(path);
-    if (await file.exists()) {
-      if (fileType == FileType.log) {
-        final bytes = await file.readAsBytes();
-        return String.fromCharCodes(bytes);
+  Future<String> readFile(String path) {
+    return _runWithPathLock(path, () async {
+      _extensionIncludePath(path);
+      final file = File(path);
+      if (await file.exists()) {
+        if (fileType == FileType.log) {
+          final bytes = await file.readAsBytes();
+          return String.fromCharCodes(bytes);
+        }
+        final res = await file.readAsString();
+        return res;
       }
-      final res = await file.readAsString();
-      return res;
-    }
-    throw Exception('File not found: $path');
+      throw Exception('File not found: $path');
+    });
   }
 
   /// Escreve [content] no arquivo em [path].
@@ -84,18 +92,20 @@ class FileManager implements IFileManagerType {
   ///
   /// Retorna `true` após concluir a escrita.
   @override
-  Future<bool> writeFile(String path, String content) async {
-    _extensionIncludePath(path);
-    final file = File(path);
-    if (!await file.exists()) {
-      await file.create(recursive: true);
-    }
-    if (fileType == FileType.log) {
-      await file.writeAsBytes(content.codeUnits, mode: FileMode.append);
-    } else {
-      await file.writeAsString(content);
-    }
-    return true;
+  Future<bool> writeFile(String path, String content) {
+    return _runWithPathLock(path, () async {
+      _extensionIncludePath(path);
+      final file = File(path);
+      if (!await file.exists()) {
+        await file.create(recursive: true);
+      }
+      if (fileType == FileType.log) {
+        await file.writeAsBytes(content.codeUnits, mode: FileMode.append);
+      } else {
+        await file.writeAsString(content);
+      }
+      return true;
+    });
   }
 
   /// Valida se o [path] termina com a extensão suportada por [fileType].
@@ -107,6 +117,33 @@ class FileManager implements IFileManagerType {
     final extension = path.split('.').last;
     if (extension != fileType.name) {
       throw Exception('Invalid file extension: $extension');
+    }
+  }
+
+  /// Executa [operation] de forma serializada por [path].
+  ///
+  /// Operações em caminhos diferentes podem ocorrer em paralelo, mas no mesmo
+  /// caminho são executadas em sequência para evitar condições de corrida.
+  Future<T> _runWithPathLock<T>(
+    String path,
+    Future<T> Function() operation,
+  ) async {
+    final key = path.trim();
+    final previous = _pathLocks[key] ?? Future<void>.value();
+    final completer = Completer<void>();
+    final current = previous.then((_) => completer.future);
+    _pathLocks[key] = current;
+
+    await previous;
+    try {
+      return await operation();
+    } finally {
+      if (!completer.isCompleted) {
+        completer.complete();
+      }
+      if (identical(_pathLocks[key], current)) {
+        _pathLocks.remove(key);
+      }
     }
   }
 }
