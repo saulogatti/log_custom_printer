@@ -20,7 +20,7 @@ class MessageLogDataSource {
     bool isDateTimeFilterEnabled = false,
   }) async {
     // `LogType.all` significa "sem filtro por tipo".
-    final EnumLoggerType? typeLog;
+    EnumLoggerType? typeLog;
     if (logType == null || logType == LogType.all) {
       typeLog = null;
     } else {
