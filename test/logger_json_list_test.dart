@@ -4,9 +4,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
-import 'package:test/test.dart';
 
 void main() {
   setUp(() {
@@ -14,7 +14,7 @@ void main() {
   });
   group('logger_json_list', () {
     test('decodes JSON WarningLog', () {
-      File file = File('test/data_logs/warning.json');
+      final File file = File('test/data_logs/warning.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestWarning = jsonDecode(dataStr);
@@ -28,7 +28,7 @@ void main() {
       expect(loggerJsonList.loggerEntries.first, isA<WarningLog>());
     });
     test('decodes JSON DebugLog', () {
-      File file = File('test/data_logs/debug.json');
+      final File file = File('test/data_logs/debug.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestDebug = jsonDecode(dataStr);
@@ -42,7 +42,7 @@ void main() {
       expect(loggerJsonList.loggerEntries.first, isA<DebugLog>());
     });
     test('decodes JSON InfoLog', () {
-      File file = File('test/data_logs/info.json');
+      final File file = File('test/data_logs/info.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestInfo = jsonDecode(dataStr);
@@ -57,7 +57,7 @@ void main() {
       expect(loggerJsonList.loggerEntries.first, isA<InfoLog>());
     });
     test('decodes JSON ErrorLog', () {
-      File file = File('test/data_logs/error.json');
+      final File file = File('test/data_logs/error.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestError = jsonDecode(dataStr);

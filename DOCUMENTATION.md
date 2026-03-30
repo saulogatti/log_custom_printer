@@ -172,6 +172,17 @@ Cache persistente:
 - Cache em memória + disco
 - Inicialização assíncrona
 
+#### FileManager / FileType
+Componente interno de I/O para persistência em disco, com validação de extensão
+por tipo de arquivo (`FileType.txt`, `FileType.json`, `FileType.log`).
+
+Garantias de concorrência:
+- Operações no mesmo `path` são serializadas (path lock assíncrono)
+- Operações em paths diferentes permanecem paralelas
+
+Essas garantias reduzem risco de condição de corrida durante escrita/leitura/remoção
+de arquivos em cenários com múltiplas operações assíncronas concorrentes.
+
 #### LoggerJsonList
 Container serializável:
 - Armazena logs de um tipo específico
@@ -386,6 +397,7 @@ flutter test     # Com Flutter
 3. **Inicialização assíncrona**: cache/persistência com carregamento sob demanda
 4. **Filtragem Early**: ConfigLog verifica antes de processar
 5. **Limite de Logs**: LoggerJsonList mantém máximo de 100 entradas
+6. **I/O serializado por caminho**: evita disputas entre operações concorrentes no mesmo arquivo
 
 ### Debug Mode Only
 Por padrão, logs ficam desabilitados quando `ConfigLog(enableLog: false)`.

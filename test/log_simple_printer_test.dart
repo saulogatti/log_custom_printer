@@ -1,7 +1,7 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
-import 'package:test/test.dart';
 
 void main() {
   group("Testes registro print simples", () {
@@ -25,7 +25,7 @@ void main() {
       // Verificar se o log foi registrado no cache mesmo sem uma impressora personalizada registrada
       final cacheRepository =
           GetIt.instance<LogPrinterService>().cacheRepository;
-      expectLater(cacheRepository.getAllLogs(), completion(isNotEmpty));
+      await expectLater(cacheRepository.getAllLogs(), completion(isNotEmpty));
     });
   });
 }

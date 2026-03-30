@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 
@@ -13,7 +15,7 @@ void main() {
 #7   main (package:my_app/main.dart:5:1)
 ''';
   final stackTrace = StackTrace.fromString(stackTraceString);
-  final ansiColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
+  final ansiColor = const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
 
   const iterations = 1000;
 

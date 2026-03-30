@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
-import 'package:test/test.dart';
 
 void main() {
   late Directory tempDir;
@@ -24,7 +24,7 @@ void main() {
       () async {
         final list = LoggerJsonList(type: 'DebugLog');
         list.addLogger(DebugLog('Test message'));
-        await cache.writeLogToFile('debug', list.toJson());
+        await cache.writeLogToFile('debug', list);
 
         final expectedFile = File('${tempDir.path}/debug.json');
         expect(await expectedFile.exists(), isTrue);
@@ -34,7 +34,7 @@ void main() {
       // 1. Create and write a log list
       final list = LoggerJsonList(type: 'DebugLog');
       list.addLogger(DebugLog('Test message'));
-      await cache.writeLogToFile('debug', list.toJson());
+      await cache.writeLogToFile('debug', list);
 
       // 2. Read all logs
       final allLogs = await cache.readAllLogs();

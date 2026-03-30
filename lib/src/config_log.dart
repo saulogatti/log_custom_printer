@@ -35,6 +35,15 @@ import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 /// );
 /// ```
 class ConfigLog {
+  /// Cria uma configuração de log.
+  ///
+  /// [enableLog]: controla se logs são processados (padrão: `false`).
+  /// [onlyClasses]: tipos de log permitidos (padrão: [DebugLog], [WarningLog], [InfoLog]).
+  const ConfigLog({
+    this.enableLog = false,
+    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
+  });
+
   /// Se os logs devem ser enviados para saída.
   ///
   /// Quando `false`, todos os logs são ignorados independentemente
@@ -52,13 +61,4 @@ class ConfigLog {
   /// [InfoLog].
   /// [ErrorLog] é sempre permitido para garantir que erros críticos sejam registrados.
   final Set<Type> onlyClasses;
-
-  /// Cria uma configuração de log.
-  ///
-  /// [enableLog]: controla se logs são processados (padrão: `false`).
-  /// [onlyClasses]: tipos de log permitidos (padrão: [DebugLog], [WarningLog], [InfoLog]).
-  const ConfigLog({
-    this.enableLog = false,
-    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
-  });
 }

@@ -50,8 +50,7 @@ LogPrinterService fetchLogPrinterService() {
 /// {@category Core}
 LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
-  ILoggerCacheRepository? cacheRepository,
-  required ConfigLog config,
+  required ConfigLog config, ILoggerCacheRepository? cacheRepository,
 }) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {
@@ -94,7 +93,7 @@ LoggerPersistenceService registerLogPrinterColor({
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogWithColorPrint(),
+    const LogWithColorPrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
       saveLogFilePath: cacheFilePath,
@@ -129,7 +128,7 @@ LoggerPersistenceService registerLogPrinterSimple({
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
-    LogSimplePrint(),
+    const LogSimplePrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
       saveLogFilePath: cacheFilePath,

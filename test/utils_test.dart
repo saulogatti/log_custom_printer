@@ -1,8 +1,7 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
-import 'package:test/test.dart';
-
-import 'package:log_custom_printer/src/utils/string_extension.dart';
 
 void main() {
   group('DateTimeLogHelper', () {
@@ -17,7 +16,9 @@ void main() {
 
   group('LoggerAnsiColor', () {
     test('wraps messages with ANSI codes', () {
-      final ansiColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.green);
+      final ansiColor = const LoggerAnsiColor(
+        enumAnsiColors: EnumAnsiColors.green,
+      );
 
       final formatted = ansiColor('message');
       final expected =
@@ -37,13 +38,19 @@ void main() {
       final stackTrace = StackTrace.fromString(stackTraceString);
 
       final map = stackTrace.stackInMap(3);
-      expect(map, equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}));
+      expect(
+        map,
+        equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}),
+      );
 
       final formatted = stackTrace.formatStackTrace(
         const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
         3,
       );
-      expect(formatted, contains('MyClass.method (package:my_app/src/file.dart:10:3)'));
+      expect(
+        formatted,
+        contains('MyClass.method (package:my_app/src/file.dart:10:3)'),
+      );
       expect(formatted, isNot(contains('flutter/src/widgets/framework.dart')));
       expect(formatted, contains(LoggerAnsiColor.ansiEsc));
     });
@@ -87,7 +94,7 @@ void main() {
         'a/b\\c:d*e?f"g|h>i<j.k'.sanitizedFileName,
         equals('a_b_c_d_e_f_g_h_i_j.k'),
       );
-     
+
       expect('clean_name.txt'.sanitizedFileName, equals('clean_name.txt'));
       expect(''.sanitizedFileName, equals(''));
       expect('<>:"'.sanitizedFileName, equals('____'));

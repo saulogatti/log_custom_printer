@@ -1,14 +1,14 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
-import 'package:test/test.dart';
 
 void main() {
   setUp(() {
     final fakePrinter = _FakeLogPrinter();
     registerLogPrinter(
       fakePrinter,
-      config: ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
+      config: const ConfigLog(enableLog: true, onlyClasses: {InfoLog}),
     );
   });
 
@@ -54,7 +54,6 @@ void main() {
 
 class _FakeLogPrinter extends LogPrinterBase {
   final List<LoggerObjectBase> printed = [];
-
   _FakeLogPrinter();
 
   @override

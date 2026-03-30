@@ -286,3 +286,27 @@ class LoggerCache {
 Os arquivos são criados em `<directory>/loggerApp/logs/<tipo>.json`.
 Usado internamente por `LoggerCacheRepositoryImpl`; normalmente não é necessário interagir
 diretamente com esta classe.
+
+---
+
+## FileManager e FileType
+
+`FileManager` é o utilitário interno responsável pelas operações de I/O em arquivo
+(`createDirectory`, `deleteDirectory`, `readFile`, `writeFile`, `deleteFile`),
+respeitando a extensão esperada pelo `FileType`.
+
+`FileType` define as extensões suportadas:
+
+```dart
+enum FileType { txt, json, log }
+```
+
+### Segurança de concorrência
+
+As operações do `FileManager` são serializadas por caminho (path lock assíncrono):
+
+- operações no **mesmo caminho** executam em sequência;
+- operações em **caminhos diferentes** podem ocorrer em paralelo.
+
+Isso evita condições de corrida em leitura/escrita/remoção quando múltiplos
+futuros atuam sobre o mesmo arquivo ou diretório.

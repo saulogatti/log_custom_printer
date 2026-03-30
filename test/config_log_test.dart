@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('ConfigLog', () {
@@ -18,22 +18,20 @@ void main() {
     });
 
     test('should correctly set onlyClasses when provided', () {
-      const config = ConfigLog(
-        onlyClasses: {ErrorLog, WarningLog},
-      );
+      const config = ConfigLog(onlyClasses: {ErrorLog, WarningLog});
 
       expect(config.onlyClasses, containsAll([ErrorLog, WarningLog]));
       expect(config.onlyClasses.length, equals(2));
       expect(config.onlyClasses, isNot(contains(DebugLog)));
     });
 
-    test('should allow empty onlyClasses (though ErrorLog is usually handled separately)', () {
-      const config = ConfigLog(
-        enableLog: true,
-        onlyClasses: {},
-      );
+    test(
+      'should allow empty onlyClasses (though ErrorLog is usually handled separately)',
+      () {
+        const config = ConfigLog(enableLog: true, onlyClasses: {});
 
-      expect(config.onlyClasses, isEmpty);
-    });
+        expect(config.onlyClasses, isEmpty);
+      },
+    );
   });
 }

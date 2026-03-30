@@ -91,6 +91,12 @@ enum EnumAnsiColors {
 /// Para serialização/deserialização, utilize os métodos `toJson` e `fromJson`.
 @JsonSerializable()
 class LoggerAnsiColor {
+
+  /// Construtor da classe.
+  const LoggerAnsiColor({required this.enumAnsiColors});
+
+  /// Cria uma instância a partir de um JSON.
+  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) => _$LoggerAnsiColorFromJson(json);
   /// Sequência de controle ANSI para iniciar configurações no terminal.
   static const ansiEsc = '\x1B[';
 
@@ -99,12 +105,6 @@ class LoggerAnsiColor {
 
   /// Cor ANSI associada.
   final EnumAnsiColors enumAnsiColors;
-
-  /// Construtor da classe.
-  const LoggerAnsiColor({required this.enumAnsiColors});
-
-  /// Cria uma instância a partir de um JSON.
-  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) => _$LoggerAnsiColorFromJson(json);
 
   /// Aplica a cor ANSI à mensagem fornecida.
   ///

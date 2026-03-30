@@ -15,20 +15,6 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 ///
 /// {@category Utilities}
 final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
-  /// Número máximo de entradas de log por tipo.
-  final int maxLogEntries;
-
-  /// Caminho base para salvar os arquivos de log (opcional).
-  final String? saveLogFilePath;
-
-  /// Gerenciador de persistência em arquivo.
-  LoggerCache? _loggerCache;
-
-  /// Mapa que armazena as listas de logs em memória por tipo.
-  final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
-
-  /// Future que rastreia a inicialização do cache persistente.
-  Future<void>? _futureInitialization;
 
   /// Cria uma nova instância da implementação de cache.
   ///
@@ -48,6 +34,20 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
       _futureInitialization = initialize();
     }
   }
+  /// Número máximo de entradas de log por tipo.
+  final int maxLogEntries;
+
+  /// Caminho base para salvar os arquivos de log (opcional).
+  final String? saveLogFilePath;
+
+  /// Gerenciador de persistência em arquivo.
+  LoggerCache? _loggerCache;
+
+  /// Mapa que armazena as listas de logs em memória por tipo.
+  final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
+
+  /// Future que rastreia a inicialização do cache persistente.
+  Future<void>? _futureInitialization;
 
   /// Adiciona [log] ao cache em memória e, quando configurado,
   /// persiste o estado atualizado em arquivo.
