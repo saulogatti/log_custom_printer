@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
-import 'package:test/test.dart';
 
 void main() {
   group('FileManager concurrency safety', () {
