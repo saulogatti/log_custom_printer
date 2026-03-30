@@ -185,11 +185,10 @@ class _ConsoleViewState extends State<ConsoleView> {
             ),
             IconButton(
               onPressed: () {
-                ConsoleOverlayManager.show(
+                ConsoleOverlayManager.toggle(
                   context,
                   appGetIt<MessageRepository>(),
                   appGetIt<ILoggerCacheRepository>(),
-                  const Size(300, 250),
                 );
               },
               icon: const Icon(Icons.open_in_new),

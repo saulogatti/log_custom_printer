@@ -19,9 +19,30 @@ class MessageLogDataSource {
     DateTimeRange? dateTimeRange,
     bool isDateTimeFilterEnabled = false,
   }) async {
-    final typeLog = logType != null
-        ? EnumLoggerType.values.firstWhere((e) => e.name == logType.name)
-        : null;
+    // `LogType.all` significa "sem filtro por tipo".
+    final EnumLoggerType? typeLog;
+    if (logType == null || logType == LogType.all) {
+      typeLog = null;
+    } else {
+      switch (logType) {
+        case LogType.info:
+          typeLog = EnumLoggerType.info;
+          break;
+        case LogType.warning:
+          typeLog = EnumLoggerType.warning;
+          break;
+        case LogType.error:
+          typeLog = EnumLoggerType.error;
+          break;
+        case LogType.debug:
+          typeLog = EnumLoggerType.debug;
+          break;
+        case LogType.all:
+          // Mantido por exaustividade (já tratada no if acima).
+          typeLog = null;
+          break;
+      }
+    }
 
     final shouldApplyDateTimeFilter =
         isDateTimeFilterEnabled && _isValidDateTimeRange(dateTimeRange);

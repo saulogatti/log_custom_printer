@@ -54,10 +54,11 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
           emit(ConsoleLoading(selectedLogType: _selectedType));
           await _emitFilteredLogs(emit);
         case ConsoleExportLogs():
-          _loggerCacheRepository.exportLogs(
-            await _loggerCacheRepository.getLogsByType(event.logType.toEnum()),
-            event.format,
-          );
+          final logs = event.logType == LogType.all
+              ? await _loggerCacheRepository.getAllLogs()
+              : await _loggerCacheRepository.getLogsByType(event.logType.toEnum());
+
+          await _loggerCacheRepository.exportLogs(logs, event.format);
       }
     });
   }
