@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart' show DateTimeRange;
-import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/console_view/data/entry/message_entry.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 
 class MessageLogDataSource {
@@ -20,29 +20,13 @@ class MessageLogDataSource {
     bool isDateTimeFilterEnabled = false,
   }) async {
     // `LogType.all` significa "sem filtro por tipo".
-    EnumLoggerType? typeLog;
-    if (logType == null || logType == LogType.all) {
-      typeLog = null;
-    } else {
-      switch (logType) {
-        case LogType.info:
-          typeLog = EnumLoggerType.info;
-          break;
-        case LogType.warning:
-          typeLog = EnumLoggerType.warning;
-          break;
-        case LogType.error:
-          typeLog = EnumLoggerType.error;
-          break;
-        case LogType.debug:
-          typeLog = EnumLoggerType.debug;
-          break;
-        case LogType.all:
-          // Mantido por exaustividade (já tratada no if acima).
-          typeLog = null;
-          break;
-      }
-    }
+    final typeLog = switch (logType) {
+      LogType.info => EnumLoggerType.info,
+      LogType.warning => EnumLoggerType.warning,
+      LogType.error => EnumLoggerType.error,
+      LogType.debug => EnumLoggerType.debug,
+      LogType.all || null => null,
+    };
 
     final shouldApplyDateTimeFilter =
         isDateTimeFilterEnabled && _isValidDateTimeRange(dateTimeRange);
