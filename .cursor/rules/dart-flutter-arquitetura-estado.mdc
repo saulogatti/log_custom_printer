@@ -1,0 +1,36 @@
+---
+description: Clean Architecture gradual, camadas e BLoC/Cubit para telas complexas
+globs: "**/*.dart"
+alwaysApply: false
+---
+
+# Dart/Flutter — arquitetura e estado
+
+Biblioteca em refatoração incremental para Clean Architecture; siga também [`.github/copilot-instructions.md`](.github/copilot-instructions.md) para o domínio desta biblioteca.
+
+## Obrigatório
+
+- **Sem duplicação:** trecho repetido → extrair para método, função, utilitário ou widget reutilizável.
+- **Widgets pequenos:** se crescer demais, dividir; extrair widgets privados para simplificar `build()`.
+- **Reutilizável em outro fluxo** → ficheiro próprio.
+- **Evolução gradual:** ao tocar numa área, aproximar de Clean Architecture (sem refactor big-bang).
+- **Telas com lógica complexa** → **BLoC/Cubit**; UI só renderiza estado e dispara eventos/intenções (sem regra de negócio na view).
+
+## Camadas (quando aplicável)
+
+- **Presentation:** widgets/telas + bloc/cubit
+- **Domain:** regras, entidades, casos de uso
+- **Data:** repositórios, fontes, DTOs
+- **Core:** utilitários partilhados
+
+Separação de responsabilidades, baixo acoplamento, composição em vez de herança. Dependências para dentro: UI → Domain; Data → Domain.
+
+## Estado
+
+- Carregamento, vários estados, paginação, filtros, erros ou lógica não trivial → **BLoC/Cubit**.
+- Estados explícitos (ex.: initial / loading / success / error).
+- Casos locais simples podem ser leves, desde que não violem separação de responsabilidades.
+
+## Checklist rápido
+
+Duplicação extraída? Widget grande partido? Componente reutilizável em ficheiro próprio? Regra de negócio fora da UI? Fluxo complexo em BLoC/Cubit?
