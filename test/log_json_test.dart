@@ -1,5 +1,5 @@
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:test/test.dart';
 
 void main() {
   group("Teste de toJson dos objetos", () {

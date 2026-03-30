@@ -18,7 +18,7 @@ Map<String, dynamic> _$DateRangeEpochEntryToJson(
 
 OptionsEntry _$OptionsEntryFromJson(Map<String, dynamic> json) => OptionsEntry(
   selectedOption: OptionItemEntry.fromJson(
-    json['option'] as Map<String, dynamic>,
+    json['selectedOption'] as Map<String, dynamic>,
   ),
   selectedDate: json['selectedDate'] == null
       ? null
@@ -34,7 +34,7 @@ OptionsEntry _$OptionsEntryFromJson(Map<String, dynamic> json) => OptionsEntry(
 
 Map<String, dynamic> _$OptionsEntryToJson(OptionsEntry instance) =>
     <String, dynamic>{
-      'option': instance.selectedOption.toJson(),
+      'selectedOption': instance.selectedOption.toJson(),
       'selectedDate': instance.selectedDate?.toJson(),
       'selectedTimeRange': instance.selectedTimeRange?.toJson(),
     };

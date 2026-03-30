@@ -1,9 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
-import 'package:test/test.dart';
 
 void main() {
   late Directory tempDir;
