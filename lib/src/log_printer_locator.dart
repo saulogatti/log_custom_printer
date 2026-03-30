@@ -1,9 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/src/config_log.dart';
-import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
-import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart'
     show FileType;
+import 'package:log_custom_printer/src/console_view/data/datasource/message_log_data_source.dart';
+import 'package:log_custom_printer/src/console_view/data/service/message_repository_impl.dart';
+import 'package:log_custom_printer/src/console_view/view/console/console_overlay.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
@@ -24,9 +28,17 @@ export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart'
 LogPrinterService fetchLogPrinterService() {
   final getIt = GetIt.instance;
   if (!getIt.isRegistered<LogPrinterService>()) {
-    registerLogPrinterSimple();
+    throw StateError(
+      'LogPrinterService não está registrado. Chame registerLogPrinter, '
+      'registerLogPrinterColor ou registerLogPrinterSimple no startup '
+      'antes de enviar logs.',
+    );
   }
   return getIt<LogPrinterService>();
+}
+
+void hideConsoleOverlay() {
+  ConsoleOverlayManager.hide();
 }
 
 /// Registra o [LogPrinterBase] no get_it para injeção de dependência.
@@ -41,7 +53,8 @@ LogPrinterService fetchLogPrinterService() {
 /// ```dart
 /// void main() {
 ///   registerLogPrinter(
-///     LogWithColorPrint(config: ConfigLog(enableLog: true)),
+///     const LogWithColorPrint(),
+///     config: const ConfigLog(enableLog: true),
 ///   );
 ///   runApp(MyApp());
 /// }
@@ -50,7 +63,8 @@ LogPrinterService fetchLogPrinterService() {
 /// {@category Core}
 LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
-  required ConfigLog config, ILoggerCacheRepository? cacheRepository,
+  required ConfigLog config,
+  ILoggerCacheRepository? cacheRepository,
 }) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {
@@ -135,5 +149,19 @@ LoggerPersistenceService registerLogPrinterSimple({
       fileType: fileType,
     ),
     config: config ?? const ConfigLog(),
+  );
+}
+
+void setConsoleOverlaySize(Size size) {
+  ConsoleOverlayManager.setSize(size);
+}
+
+void showConsoleOverlay(BuildContext context, LoggerPersistenceService logger) {
+  ConsoleOverlayManager.show(
+    context,
+    MessageRepositoryImpl(
+      dataSource: MessageLogDataSource(loggerCacheRepositoryImpl: logger),
+    ),
+    const Size(300, 300),
   );
 }

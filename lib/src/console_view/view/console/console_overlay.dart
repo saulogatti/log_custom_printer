@@ -18,12 +18,17 @@ class ConsoleOverlayManager {
     const Size(400, 260),
   );
 
+  /// Remove o overlay criado por [show] (janela arrastável com [ConsoleView]).
+  ///
+  /// Não afeta o overlay de [showOverlay]; para esse use [hideConsoleOverlayManager].
   static void hide() {
     _customOverlayEntry?.remove();
     _customOverlayEntry = null;
   }
 
-  /// Oculta o overlay do console caso esteja em execução.
+  /// Remove o overlay criado por [showOverlay] (barra inferior com [ConsoleView]).
+  ///
+  /// Não afeta o overlay de [show]; para esse use [hide].
   static void hideConsoleOverlayManager() {
     _overlayEntry?.remove();
     _overlayEntry = null;

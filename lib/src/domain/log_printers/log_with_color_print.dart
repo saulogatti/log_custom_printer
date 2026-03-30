@@ -13,7 +13,10 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 ///
 /// Exemplo de uso:
 /// ```dart
-/// registerLogPrinter(LogWithColorPrint(config: ConfigLog(enableLog: true)));
+/// registerLogPrinter(
+///   const LogWithColorPrint(),
+///   config: const ConfigLog(enableLog: true),
+/// );
 /// ```
 class LogWithColorPrint extends LogPrinterBase {
   /// Construtor const para uso imutável/compilado.

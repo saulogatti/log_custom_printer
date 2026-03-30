@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart' show DateTimeRange;
-import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/console_view/data/entry/message_entry.dart';
 import 'package:log_custom_printer/src/console_view/domain/models/message_log.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';

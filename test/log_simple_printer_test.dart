@@ -1,10 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/log_printer_service.dart';
 
 void main() {
   group("Testes registro print simples", () {
+    tearDown(() async {
+      await GetIt.instance.reset();
+    });
+
     test("Teste register printer", () async {
       // Your test code here
       final teste = registerLogPrinterSimple(
@@ -19,13 +22,12 @@ void main() {
         expect(logs.first.message, "Teste de log simples");
       });
     });
-    test("Teste criando printer sem registro", () async {
+    test("sendLog sem registerLogPrinter* lança StateError", () {
       final logger = _FakeClassLog();
-      logger.testLog();
-      // Verificar se o log foi registrado no cache mesmo sem uma impressora personalizada registrada
-      final cacheRepository =
-          GetIt.instance<LogPrinterService>().cacheRepository;
-      await expectLater(cacheRepository.getAllLogs(), completion(isNotEmpty));
+      expect(
+        logger.testLog,
+        throwsStateError,
+      );
     });
   });
 }
