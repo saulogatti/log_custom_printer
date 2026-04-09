@@ -29,7 +29,7 @@ class TextValuesDropdownWidget extends StatelessWidget {
                     DropdownMenuItem<String>(value: value, child: Text(value)),
               )
               .toList(),
-          onChanged: (value) {
+          onChanged: (String? value) {
             if (value != null) onChanged(value);
           },
         ),

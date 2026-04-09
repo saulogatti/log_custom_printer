@@ -39,7 +39,7 @@ class ConsoleBloc extends Bloc<ConsoleEvent, ConsoleState> {
   }) : _messageRepository = messageRepository,
        _loggerCacheRepository = loggerCacheRepository,
        super(const ConsoleInitial(selectedLogType: LogType.debug)) {
-    on<ConsoleEvent>((event, emit) async {
+    on<ConsoleEvent>((ConsoleEvent event, Emitter<ConsoleState> emit) async {
       switch (event) {
         case ConsoleClear():
           emit(ConsoleLoading(selectedLogType: _selectedType));
