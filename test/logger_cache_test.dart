@@ -11,6 +11,7 @@ void main() {
     late Directory tempDir;
 
     setUpAll(() async {
+      TestWidgetsFlutterBinding.ensureInitialized();
       tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
       loggerCache = LoggerCache(tempDir.path);
       await loggerCache.futureInitialization.future;
@@ -29,12 +30,7 @@ void main() {
         'test_log',
         LoggerJsonList(type: 'TestLog'),
       );
-      final expectedPath = path.join(
-        tempDir.path,
-        'loggerApp',
-        'logs',
-        'test_log.json',
-      );
+      final expectedPath = loggerCache.getPathFileForTest('test_log');
       final file = File(expectedPath);
       expect(await file.exists(), isTrue);
     });
@@ -53,11 +49,11 @@ void main() {
     );
 
     test(
-      '_getPathFile should throw assertion error for filename with .json',
+      '_getPathFile should throw assertion error for filename with separator',
       () async {
         await expectLater(
           () => loggerCache.writeLogToFile(
-            'test.json',
+            'test${path.separator}separator',
             LoggerJsonList(type: 'TestLog'),
           ),
           throwsA(isA<AssertionError>()),

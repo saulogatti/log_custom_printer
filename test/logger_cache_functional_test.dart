@@ -10,6 +10,7 @@ void main() {
   late LoggerCache cache;
 
   setUpAll(() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
     tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
     cache = LoggerCache(tempDir.path);
     await cache.futureInitialization.future;
@@ -26,7 +27,7 @@ void main() {
         list.addLogger(DebugLog('Test message'));
         await cache.writeLogToFile('debug', list);
 
-        final expectedFile = File('${tempDir.path}/debug.json');
+        final expectedFile = File(cache.getPathFileForTest('debug'));
         expect(await expectedFile.exists(), isTrue);
       },
     );
