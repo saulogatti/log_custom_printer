@@ -1,9 +1,13 @@
 # Changelog
 
-## 2.2.1
-- Docs: atualizar `README.md`, `Utilities.md` e `DOCUMENTATION.md` com detalhes de persistência em arquivo e visualização local da documentação (`dart doc -o docs/`).
-- Docs: documentar `FileManager`/`FileType` e o comportamento de serialização de operações por caminho.
-- Fix: adicionar segurança de concorrência no `FileManager` para evitar condição de corrida em operações assíncronas no mesmo arquivo/diretório.
+## 3.0.0
+
+- Refactor: remover a dependência de flutter e substituir por dependências puras do Dart, tornando a biblioteca mais genérica e reutilizável em qualquer projeto Dart.
+- Refactor: remover a classe LogWithColorPrint e substituir por uma função de registro de impressora colorida, permitindo maior flexibilidade na implementação de diferentes estratégias de impressão.
+- Refactor: atualizar a documentação para refletir as mudanças nas estratégias de impressão e remover referências a classes específicas que foram removidas.
+- Fix: ajustar o caminho dos logs para ambiente de teste, garantindo que os logs sejam gravados corretamente durante os testes.
+- Adicionar printers customizados (colorido) para permitir que os usuários escolham entre diferentes estilos de impressão, incluindo uma opção colorida para melhor visualização dos logs.
+- Atualizar o changelog para refletir as mudanças significativas na versão 3.0.0, destacando as melhorias e correções implementadas.
 
 ## 2.2.0
 - Adicionar filtros avançados para os logs, permitindo que os usuários filtrem os logs por tipo, data e outros critérios personalizados, facilitando a análise e organização dos logs.

@@ -75,24 +75,6 @@ final class LoggerPersistenceService {
     }
   }
 
-  /// Exporta os logs para uma [String] no [format] especificado.
-  ///
-  /// A consulta aplica os filtros e a ordenação definidos em [query] antes de
-  /// serializar. Passe [LogQuery()] (sem parâmetros) para exportar todos os logs
-  /// sem filtro ou ordenação.
-  ///
-  /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
-  /// do conteúdo gerado fica a cargo da camada consumidora.
-  Future<void> exportLogs(LogQuery query, ExportFormat format) async {
-    final listLogs = await queryLogs(query);
-
-    await _cacheRepository.exportLogs(listLogs, format);
-    if (logOutputHandler != null) {
-      final logs = await queryLogs(query);
-      logOutputHandler?.call(logs);
-    }
-  }
-
   /// Recupera todas as entradas de log armazenadas.
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final logs = await _cacheRepository.getAllLogs();

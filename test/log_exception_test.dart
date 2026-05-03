@@ -1,5 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('LogException', () {

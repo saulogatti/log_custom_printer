@@ -1,9 +1,9 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/src/config_log.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_class_mixin.dart';
 import 'package:log_custom_printer/src/domain/query/log_query.dart';
 import 'package:log_custom_printer/src/log_printer_locator.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Testes registro print simples', () {

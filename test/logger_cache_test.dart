@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:path/path.dart' as path;
+import 'package:test/test.dart';
 
 void main() {
   group('LoggerCache', () {
@@ -11,7 +11,6 @@ void main() {
     late Directory tempDir;
 
     setUpAll(() async {
-      TestWidgetsFlutterBinding.ensureInitialized();
       tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
       loggerCache = LoggerCache(tempDir.path);
       await loggerCache.futureInitialization.future;
