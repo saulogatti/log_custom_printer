@@ -48,7 +48,7 @@ LogPrinterService fetchLogPrinterService() {
 ///     const LogWithColorPrint(),
 ///     config: const ConfigLog(enableLog: true),
 ///   );
-///   runApp(MyApp());
+///   // Em Flutter: runApp(const MyApp());
 /// }
 /// ```
 ///

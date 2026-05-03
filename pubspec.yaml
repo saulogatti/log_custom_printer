@@ -1,5 +1,5 @@
 name: log_custom_printer
-description: A custom log printer for Flutter applications.
+description: Custom logging for Dart with ANSI colors, JSON serialization, and get_it DI.
 version: 3.0.0
 repository: https://github.com/saulogatti/log_custom_printer
 

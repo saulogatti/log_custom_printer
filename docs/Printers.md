@@ -39,7 +39,7 @@ void main() {
     const MinhaImpressora(),
     config: const ConfigLog(enableLog: true),
   );
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 ```
 

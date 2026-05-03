@@ -1,4 +1,7 @@
-/// Biblioteca de logging customizada para Dart/Flutter.
+/// Biblioteca de logging para projetos Dart (CLI, servidor, scripts).
+///
+/// Pode ser usada também em apps Flutter; registe a impressora no `main`
+/// antes de emitir logs.
 ///
 /// Fornece um sistema completo de logging com:
 /// - Hierarquia tipada de logs (Debug, Info, Warning, Error)
@@ -18,7 +21,7 @@
 ///     const LogWithColorPrint(),
 ///     config: const ConfigLog(enableLog: true),
 ///   );
-///   runApp(MyApp());
+///   // Em Flutter: runApp(const MyApp());
 /// }
 ///
 /// // Usando o mixin (recomendado)

@@ -2,22 +2,22 @@ dartdoc:
   # Define categorias para melhor organização da documentação
   categories:
     "Core":
-      markdown: Core.md
+      markdown: docs/Core.md
       displayName: "Core - Sistema de Logging"
     "Log Types":
-      markdown: LogTypes.md
+      markdown: docs/LogTypes.md
       displayName: "Tipos de Log"
     "Printers":
-      markdown: Printers.md
+      markdown: docs/Printers.md
       displayName: "Impressoras de Log"
     "Utilities":
-      markdown: Utilities.md
+      markdown: docs/Utilities.md
       displayName: "Utilitários"
     "Configuration":
-      markdown: Configuration.md
+      markdown: docs/Configuration.md
       displayName: "Configuração"
     "Console View":
-      markdown: ConsoleView.md
+      markdown: docs/ConsoleView.md
       displayName: "Console Visual de Logs"
 
   # Ordem de exibição das categorias na documentação
@@ -40,7 +40,7 @@ dartdoc:
     - unresolved-export
 
   # Configurações de saída
-  output: doc/api
+  output: docs
 
   # Incluir código fonte nos links
   linkToSource:

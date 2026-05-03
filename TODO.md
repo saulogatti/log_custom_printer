@@ -17,4 +17,7 @@
 - Atualizar a documentação do README.md
 - Atualizar a documentação do DOCUMENTATION.md
 - Atualizar a documentação do ConsoleView.md (breakchanges)
+- Mover todos os arquivos MD para a pasta docs/ para melhor organização
+
+
 

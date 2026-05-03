@@ -2,12 +2,10 @@
 
 ## 3.0.0
 
-- Refactor: remover a dependência de flutter e substituir por dependências puras do Dart, tornando a biblioteca mais genérica e reutilizável em qualquer projeto Dart.
-- Refactor: remover a classe LogWithColorPrint e substituir por uma função de registro de impressora colorida, permitindo maior flexibilidade na implementação de diferentes estratégias de impressão.
-- Refactor: atualizar a documentação para refletir as mudanças nas estratégias de impressão e remover referências a classes específicas que foram removidas.
-- Fix: ajustar o caminho dos logs para ambiente de teste, garantindo que os logs sejam gravados corretamente durante os testes.
-- Adicionar printers customizados (colorido) para permitir que os usuários escolham entre diferentes estilos de impressão, incluindo uma opção colorida para melhor visualização dos logs.
-- Atualizar o changelog para refletir as mudanças significativas na versão 3.0.0, destacando as melhorias e correções implementadas.
+- **Breaking change:** remoção da dependência de **Flutter** e de todo o módulo de **consola visual** (`console_view`); a biblioteca passa a ser **Dart pura** e reutilizável em CLI, servidores e (com registo no `main`) em apps Flutter. A consola em overlay passa a ser fornecida por **pacote Flutter separado** (ver `docs/ConsoleView.md`).
+- A API de registo (`registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`) mantém-se; `registerLogPrinterColor` continua a usar `LogWithColorPrint` e `registerLogPrinterSimple` usa `LogSimplePrint`; impressoras próprias via `registerLogPrinter` com `LogPrinterBase`.
+- Documentação: comentários de API, `README`, guias em `docs/` e `dart doc` alinhados à v3; guias técnicos na pasta `docs/`.
+- Documentação gerada: texto do construtor de `LoggerPersistenceService` corrigido para o `dart doc`; exemplos na API sem obrigar `runApp` em projetos só Dart.
 
 ## 2.2.0
 - Adicionar filtros avançados para os logs, permitindo que os usuários filtrem os logs por tipo, data e outros critérios personalizados, facilitando a análise e organização dos logs.
