@@ -1,7 +1,7 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('DateTimeLogHelper', () {

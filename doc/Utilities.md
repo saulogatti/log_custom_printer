@@ -7,7 +7,7 @@ helpers de formatação, extensões e o sistema de cache de logs.
 
 ## LoggerClassMixin
 
-Mixin que fornece métodos de log prontos para uso em qualquer classe Dart/Flutter.
+Mixin que fornece métodos de log prontos para uso em qualquer classe Dart (incluindo apps Flutter).
 Preenche automaticamente `className` com o `runtimeType` da classe hospedeira.
 
 ```dart

@@ -69,6 +69,6 @@ void main() {
       onlyClasses: {DebugLog, ErrorLog},
     ),
   );
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 ```

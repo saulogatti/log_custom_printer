@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-O `log_custom_printer` é uma biblioteca Dart/Flutter completa para logging customizado, oferecendo recursos avançados de formatação, serialização e gerenciamento de logs.
+O `log_custom_printer` é uma biblioteca **Dart pura** para logging customizado (CLI, servidor, scripts e uso em Flutter após registo no `main`). Oferece formatação, serialização JSON e gestão de cache/persistência.
 
 ## Arquitetura do Sistema
 
@@ -96,21 +96,19 @@ Cada tipo:
 
 #### LogPrinterBase (abstract)
 Interface para estratégias de impressão:
-- `configLog`: Configuração de filtragem
-- `printLog()`: Método abstrato de impressão
+- `printLog(LoggerObjectBase log)`: método abstrato de saída
+
+A filtragem (`ConfigLog`) é aplicada em `LogPrinterService`, não na impressora.
 
 #### LogSimplePrint
 Estratégia simples:
-- Usa `debugPrint()`
-- Sem códigos ANSI
-- Formato: `[ClassName] timestamp message`
+- Saída sem códigos ANSI (mensagem via `getMessage(false)`)
+- Formato típico: `[ClassName] …`
 
 #### LogWithColorPrint
-Estratégia avançada:
-- Usa `dart:developer.log()`
-- Códigos ANSI para cores
-- Formatação elaborada com separadores
-- Nome do log colorizado
+Estratégia com cores:
+- Códigos ANSI para realçar tipo e mensagem
+- Adequada para terminais com suporte ANSI
 
 ### Configuration (Configuração)
 
@@ -190,7 +188,7 @@ Container serializável:
 - Serialização/deserialização automática
 - Logs mais recentes primeiro
 
-> Nota: componentes de UI/notificação reativa em Flutter não fazem parte da API core atual da biblioteca.
+> Nota: a UI de consola Flutter foi extraída para um pacote à parte na v3. A categoria **Console View** na documentação gerada (`dart doc`) descreve essa integração opcional, não código neste repositório. Ver [ConsoleView.md](ConsoleView.md).
 
 ## Fluxo de Dados
 
@@ -284,11 +282,11 @@ Formato ANSI: `\x1B[CODIGOm TEXTO \x1B[0m`
 ```dart
 void main() {
   registerLogPrinterColor(config: ConfigLog(enableLog: true));
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 ```
 - Logs coloridos
-- Saída visual no console
+- Saída visual no terminal
 
 ### Produção
 ```dart
@@ -299,7 +297,7 @@ void main() {
       onlyClasses: {ErrorLog}, // Apenas erros
     ),
   );
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 ```
 - Logs desabilitados (exceto erros)
@@ -310,15 +308,14 @@ void main() {
 ```dart
 setUp(() {
   registerLogPrinter(
-    LogSimplePrint(
-      config: ConfigLog(
-        enableLog: true,
-        onlyClasses: {DebugLog, ErrorLog},
-      ),
+    const LogSimplePrint(),
+    config: ConfigLog(
+      enableLog: true,
+      onlyClasses: {DebugLog, ErrorLog},
     ),
   );
 });
-tearDown(() async => await GetIt.instance.reset());
+tearDown(() async => GetIt.instance.reset());
 ```
 - Logs simples sem cores
 - Debug e Erro habilitados
@@ -326,8 +323,7 @@ tearDown(() async => await GetIt.instance.reset());
 
 ## Integração com Flutter
 
-### Error Handling Global
-Você pode integrar tratamento global de erros manualmente no app e enviar via `ErrorLog(...).sendLog()`.
+Não há dependência de Flutter neste pacote. Num app Flutter, chame `registerLogPrinter*` no `main` antes de `runApp` e use `ErrorLog(...).sendLog()` por exemplo em `FlutterError.onError` ou zonas, se desejar relatório centralizado.
 
 ## Geração de Documentação
 
@@ -335,14 +331,11 @@ Você pode integrar tratamento global de erros manualmente no app e enviar via `
 
 O projeto está completamente configurado para gerar documentação profissional:
 
-#### Categorias Organizadas
-- **Core**: Sistema de logging principal
-- **Log Types**: Tipos de log (Debug, Info, Warning, Error)
-- **Printers**: Estratégias de impressão
-- **Configuration**: Sistema de configuração
-- **Utilities**: Ferramentas auxiliares
+#### Categorias organizadas
+- **Core**, **Log Types**, **Printers**, **Configuration**, **Utilities**
+- **Console View**: texto de categoria aponta para [ConsoleView.md](ConsoleView.md) (integração opcional com pacote Flutter externo, não classes exportadas por `log_custom_printer`)
 
-#### Features
+#### Funcionalidades do dartdoc
 - Links para código fonte no GitHub
 - Exclusão de arquivos gerados (*.g.dart)
 - Saída em `doc/api`
@@ -372,21 +365,27 @@ Configurado em `analysis_options.yaml`:
 
 ## Testing
 
-### Estrutura de Testes
+### Estrutura de testes (exemplo)
 ```
 test/
 ├── data_logs/
-│   └── jsons_test.dart
+│   └── jsons_mocks.dart
+├── file_manager_type_concurrency_test.dart
+├── log_custom_printer_test.dart
+├── log_exception_test.dart
+├── log_json_test.dart
+├── log_query_test.dart
+├── log_simple_printer_test.dart
+├── logger_cache_test.dart
+├── logger_cache_functional_test.dart
 ├── logger_json_list_test.dart
 ├── logger_object_test.dart
-├── log_custom_printer_test.dart
 └── utils_test.dart
 ```
 
-### Executar Testes
+### Executar testes
 ```bash
-dart test        # Dart puro
-flutter test     # Com Flutter
+dart test
 ```
 
 ## Performance
@@ -452,48 +451,9 @@ class MyLog extends LoggerObjectBase {
 }
 ```
 
-## Console Visual de Logs (`console_view`)
+## Console visual (Flutter)
 
-O módulo `console_view` fornece uma interface Flutter para visualização, filtragem e
-exportação dos logs em tempo real, exibida como overlay sobre a aplicação.
-
-### Arquitetura
-
-```
-ConsoleOverlayManager
-    └── ConsoleView (StatefulWidget)
-            ├── ConsoleBloc  ←→  MessageRepository ←→ MessageLogDataSource
-            ├── OptionsBloc  ←→  IOptionsRepository ←→ OptionsConsoleDataSource
-            └── ConsoleWidget → LogCardWidget
-```
-
-### Modos de Exibição
-
-| Modo | API |
-|------|-----|
-| Janela arrastável | `ConsoleOverlayManager.show()` / `toggle()` / `hide()` |
-| Barra inferior fixa | `ConsoleOverlayManager.showOverlay()` / `hideConsoleOverlayManager()` |
-
-### Configuração
-
-Registre as dependências antes de abrir o console:
-
-```dart
-import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
-
-void main() {
-  initAppInjection();
-  runApp(MyApp());
-}
-```
-
-### Filtros Disponíveis
-
-- **Por tipo**: All, Debug, Info, Warning, Error (botões segmentados)
-- **Por texto**: campo de busca via `MessageRepository.getFilterMessages`
-- **Por data/hora**: configurado na tela de opções (ícone ⚙️)
-
-Para documentação detalhada, consulte [ConsoleView.md](ConsoleView.md).
+Na versão 3.x o overlay de consola **não faz parte** deste pacote. Para migração a partir da v2 e integração com o pacote Flutter à parte, consulte [ConsoleView.md](ConsoleView.md).
 
 ## Troubleshooting
 

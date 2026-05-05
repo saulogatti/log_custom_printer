@@ -9,6 +9,7 @@ import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart'
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/extensions/string_extension.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 
@@ -74,6 +75,11 @@ final class LoggerCache {
     final objEncode = jsonEncode(logs);
 
     return (objEncode.codeUnits, pathFile);
+  }
+
+  @visibleForTesting
+  String getPathFileForTest(String fileName) {
+    return _getPathFile(fileName);
   }
 
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
@@ -157,13 +163,14 @@ final class LoggerCache {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-      _future.complete();
     } on Exception catch (e, stack) {
       if (onError != null) {
         onError!(e, stack);
       } else {
         dev.log('Erro ao inicializar LoggerCache: $e', stackTrace: stack);
       }
+    } finally {
+      _future.complete();
     }
   }
 }

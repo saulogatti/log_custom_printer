@@ -1,9 +1,11 @@
 # Changelog
 
-## 2.2.1
-- Docs: atualizar `README.md`, `Utilities.md` e `DOCUMENTATION.md` com detalhes de persistência em arquivo e visualização local da documentação (`dart doc -o docs/`).
-- Docs: documentar `FileManager`/`FileType` e o comportamento de serialização de operações por caminho.
-- Fix: adicionar segurança de concorrência no `FileManager` para evitar condição de corrida em operações assíncronas no mesmo arquivo/diretório.
+## 3.0.0
+
+- **Breaking change:** remoção da dependência de **Flutter** e de todo o módulo de **consola visual** (`console_view`); a biblioteca passa a ser **Dart pura** e reutilizável em CLI, servidores e (com registo no `main`) em apps Flutter. A consola em overlay passa a ser fornecida por **pacote Flutter separado** (ver `docs/ConsoleView.md`).
+- A API de registo (`registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`) mantém-se; `registerLogPrinterColor` continua a usar `LogWithColorPrint` e `registerLogPrinterSimple` usa `LogSimplePrint`; impressoras próprias via `registerLogPrinter` com `LogPrinterBase`.
+- Documentação: comentários de API, `README`, guias em `docs/` e `dart doc` alinhados à v3; guias técnicos na pasta `docs/`.
+- Documentação gerada: texto do construtor de `LoggerPersistenceService` corrigido para o `dart doc`; exemplos na API sem obrigar `runApp` em projetos só Dart.
 
 ## 2.2.0
 - Adicionar filtros avançados para os logs, permitindo que os usuários filtrem os logs por tipo, data e outros critérios personalizados, facilitando a análise e organização dos logs.
