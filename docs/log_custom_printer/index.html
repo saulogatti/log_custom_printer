@@ -62,7 +62,9 @@
 
     
 <section class="desc markdown">
-  <p>Biblioteca de logging customizada para Dart/Flutter.</p>
+  <p>Biblioteca de logging para projetos Dart (CLI, servidor, scripts).</p>
+<p>Pode ser usada também em apps Flutter; registe a impressora no <code>main</code>
+antes de emitir logs.</p>
 <p>Fornece um sistema completo de logging com:</p>
 <ul>
 <li>Hierarquia tipada de logs (Debug, Info, Warning, Error)</li>
@@ -80,7 +82,7 @@ void main() {
     const LogWithColorPrint(),
     config: const ConfigLog(enableLog: true),
   );
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 
 // Usando o mixin (recomendado)
@@ -132,15 +134,6 @@ class MinhaClasse with LoggerClassMixin {
   Configuração para controle de logs na biblioteca.
 </dd>
 
-          <dt id="ConsoleOverlayManager">
-  <span class="name "><a href="../log_custom_printer/ConsoleOverlayManager-class.html">ConsoleOverlayManager</a></span> 
-    <span class="category console-visual-de-logs cp-5 linked" title="This is part of the Console Visual de Logs topic."><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></span>
-
-</dt>
-<dd>
-  Gerenciador de overlay do console visual de logs.
-</dd>
-
           <dt id="DebugLog">
   <span class="name "><a href="../log_custom_printer/DebugLog-class.html">DebugLog</a></span> 
     <span class="category tipos-de-log cp-1 linked" title="This is part of the Tipos de Log topic."><a href="../topics/Log Types-topic.html">Tipos&nbsp;de&nbsp;Log</a></span>
@@ -157,6 +150,24 @@ class MinhaClasse with LoggerClassMixin {
 </dt>
 <dd>
   Log de erro com formatação vermelha e stack trace.
+</dd>
+
+          <dt id="FileManager">
+  <span class="name "><a href="../log_custom_printer/FileManager-class.html">FileManager</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Implementação de gerenciamento de arquivos tipado por <a href="../log_custom_printer/FileType.html">FileType</a>.
+</dd>
+
+          <dt id="IFileManagerType">
+  <span class="name "><a href="../log_custom_printer/IFileManagerType-class.html">IFileManagerType</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Contrato para operações de leitura, escrita e remoção de arquivos.
 </dd>
 
           <dt id="ILoggerCacheRepository">
@@ -179,7 +190,7 @@ class MinhaClasse with LoggerClassMixin {
 
           <dt id="LogFilterEngine">
   <span class="name "><a href="../log_custom_printer/LogFilterEngine-class.html">LogFilterEngine</a></span> 
-    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -252,7 +263,7 @@ e opcionalmente em arquivo.
 
           <dt id="LogQuery">
   <span class="name "><a href="../log_custom_printer/LogQuery-class.html">LogQuery</a></span> 
-    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -270,7 +281,7 @@ e opcionalmente em arquivo.
 
           <dt id="LogSortEngine">
   <span class="name "><a href="../log_custom_printer/LogSortEngine-class.html">LogSortEngine</a></span> 
-    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -292,7 +303,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Conversor JSON para serialização de <a href="https://api.flutter.dev/flutter/dart-core/StackTrace-class.html">StackTrace</a>.
+  Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.11.5/dart-core/StackTrace-class.html">StackTrace</a>.
 </dd>
 
           <dt id="WarningLog">
@@ -342,12 +353,12 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Tipos de arquivo suportados pelo <code>FileManager</code>.
+  Tipos de arquivo suportados pelo <a href="../log_custom_printer/FileManager-class.html">FileManager</a>.
 </dd>
 
           <dt id="LogSortField">
   <span class="name "><a href="../log_custom_printer/LogSortField.html">LogSortField</a></span> 
-    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -356,7 +367,7 @@ e opcionalmente em arquivo.
 
           <dt id="SortDirection">
   <span class="name "><a href="../log_custom_printer/SortDirection.html">SortDirection</a></span> 
-    <span class="category query cp-6" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
@@ -387,13 +398,24 @@ e opcionalmente em arquivo.
       <dl>
           <dt id="DateTimeLoggingExtensions">
   <span class="name "><a href="../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></span>
-  on <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>
+  on <a href="https://api.dart.dev/stable/3.11.5/dart-core/DateTime-class.html">DateTime</a>
   
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
   Extension para formatação de data/hora em logs.
+</dd>
+
+          <dt id="LoggerEnum">
+  <span class="name "><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></span>
+  on <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>
+  
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Extensão para mapear objetos de log para o enum <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>.
 </dd>
 
       </dl>
@@ -418,19 +440,6 @@ e opcionalmente em arquivo.
 
 </dd>
 
-          <dt id="hideConsoleOverlay" class="callable">
-  <span class="name"><a href="../log_custom_printer/hideConsoleOverlay.html">hideConsoleOverlay</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; void</span>
-  </span>
-  
-
-</dt>
-<dd>
-  
-  
-
-</dd>
-
           <dt id="registerLogPrinter" class="callable">
   <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
@@ -446,7 +455,7 @@ e opcionalmente em arquivo.
 </dd>
 
           <dt id="registerLogPrinterColor" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -460,7 +469,7 @@ e opcionalmente em arquivo.
 </dd>
 
           <dt id="registerLogPrinterSimple" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -469,32 +478,6 @@ e opcionalmente em arquivo.
 </dt>
 <dd>
   Registra uma impressora simples (sem cores).
-  
-
-</dd>
-
-          <dt id="setConsoleOverlaySize" class="callable">
-  <span class="name"><a href="../log_custom_printer/setConsoleOverlaySize.html">setConsoleOverlaySize</a></span><span class="signature">(<wbr><span class="parameter" id="setConsoleOverlaySize-param-size"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">size</span></span>)
-    <span class="returntype parameter">&#8594; void</span>
-  </span>
-  
-
-</dt>
-<dd>
-  
-  
-
-</dd>
-
-          <dt id="showConsoleOverlay" class="callable">
-  <span class="name"><a href="../log_custom_printer/showConsoleOverlay.html">showConsoleOverlay</a></span><span class="signature">(<wbr><span class="parameter" id="showConsoleOverlay-param-context"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/widgets/BuildContext-class.html">BuildContext</a></span> <span class="parameter-name">context</span>, </span><span class="parameter" id="showConsoleOverlay-param-messageRepository"><span class="type-annotation">MessageRepository</span> <span class="parameter-name">messageRepository</span>, </span><span class="parameter" id="showConsoleOverlay-param-loggerCacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a></span> <span class="parameter-name">loggerCacheRepository</span>, </span><span class="parameter" id="showConsoleOverlay-param-size"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-ui/Size-class.html">Size</a></span> <span class="parameter-name">size</span></span>)
-    <span class="returntype parameter">&#8594; void</span>
-  </span>
-  
-
-</dt>
-<dd>
-  
   
 
 </dd>
@@ -524,9 +507,7 @@ e opcionalmente em arquivo.
         <li><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="../topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="../topics/Utilities-topic.html">Utilitários</a></li>
-        <li><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
-      <li><a href="../main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>
         <li class="section-subitem"><a href="../log_custom_printer/">log_custom_printer</a></li>
 </ol>
@@ -539,7 +520,7 @@ e opcionalmente em arquivo.
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.2.0
+      3.0.0
   </span>
   
 </footer>

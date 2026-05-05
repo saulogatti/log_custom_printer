@@ -36,9 +36,6 @@ abstract interface class ILoggerCacheRepository {
   /// [type] define a severidade alvo da remoção.
   Future<void> clearLogsByType(EnumLoggerType type);
 
-  /// Exporta todas as entradas de log armazenadas.
-  Future<void> exportLogs(List<LoggerObjectBase> logs, ExportFormat format);
-
   /// Recupera todas as entradas de log armazenadas.
   Future<List<LoggerObjectBase>> getAllLogs();
 

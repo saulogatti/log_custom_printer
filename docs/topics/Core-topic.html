@@ -174,7 +174,7 @@ LoggerPersistenceService registerLogPrinterSimple({
   //   cacheFilePath: '/caminho/para/logs',
   // );
 
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 </code></pre>
 <h3 id="exemplo-em-testes">Exemplo em testes</h3>
@@ -198,7 +198,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
 
 </dt>
-<dd>Biblioteca de logging customizada para Dart/Flutter.
+<dd>Biblioteca de logging para projetos Dart (CLI, servidor, scripts).
 </dd>
 
     </dl>
@@ -282,7 +282,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 </dd>
 
       <dt id="registerLogPrinterColor" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -296,7 +296,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 </dd>
 
       <dt id="registerLogPrinterSimple" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -349,9 +349,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
         <li><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="../topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="../topics/Utilities-topic.html">Utilitários</a></li>
-        <li><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
-      <li><a href="../main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>
         <li class="section-subitem"><a href="../log_custom_printer/">log_custom_printer</a></li>
 </ol>
@@ -392,7 +390,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.2.0
+      3.0.0
   </span>
   
 </footer>

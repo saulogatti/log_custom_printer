@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:path/path.dart' as path;
+import 'package:test/test.dart';
 
 void main() {
   group('LoggerCache', () {
@@ -29,12 +29,7 @@ void main() {
         'test_log',
         LoggerJsonList(type: 'TestLog'),
       );
-      final expectedPath = path.join(
-        tempDir.path,
-        'loggerApp',
-        'logs',
-        'test_log.json',
-      );
+      final expectedPath = loggerCache.getPathFileForTest('test_log');
       final file = File(expectedPath);
       expect(await file.exists(), isTrue);
     });
@@ -53,11 +48,11 @@ void main() {
     );
 
     test(
-      '_getPathFile should throw assertion error for filename with .json',
+      '_getPathFile should throw assertion error for filename with separator',
       () async {
         await expectLater(
           () => loggerCache.writeLogToFile(
-            'test.json',
+            'test${path.separator}separator',
             LoggerJsonList(type: 'TestLog'),
           ),
           throwsA(isA<AssertionError>()),

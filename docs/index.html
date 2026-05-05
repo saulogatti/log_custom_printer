@@ -44,133 +44,107 @@
       
 <section class="desc markdown">
   <h1 id="log_custom_printer">log_custom_printer</h1>
-<p>Biblioteca Dart/Flutter para logging customizado com serialização JSON, formatação colorida ANSI e injeção de dependência (get_it). Ideal para aplicações que necessitam de logs estruturados, rastreáveis e visualmente organizados.</p>
+<p>Biblioteca Dart para logging customizado com serialização JSON, formatação colorida ANSI e injeção de dependência (<code>get_it</code>). Adequada para CLI, servidores e scripts; também utilizável em apps Flutter após registar a impressora no arranque.</p>
 <blockquote>
-<p><strong>v2.0.0</strong> — Refatoração da API de registro: <code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam <code>LoggerPersistenceService</code> e incluem cache integrado por padrão. Impressoras customizadas via <code>registerLogPrinter(LogPrinterBase, cacheRepository: ...)</code>.</p>
+<p><strong>v3.0.0</strong> — Biblioteca <strong>Dart pura</strong> (sem dependência de Flutter). A API de registro (<code>registerLogPrinter</code>, <code>registerLogPrinterColor</code>, <code>registerLogPrinterSimple</code>) continua a devolver <code>LoggerPersistenceService</code> com cache integrado. O <strong>console visual Flutter</strong> deixou de fazer parte deste pacote; ver <a href="./docs/ConsoleView.md">ConsoleView.md</a>.</p>
 </blockquote>
-<h2 id="-funcionalidades">✨ Funcionalidades</h2>
+<h2 id="funcionalidades">Funcionalidades</h2>
 <ul>
-<li>🎯 <strong>Hierarquia de logs tipada</strong>: <code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code></li>
-<li>🎨 <strong>Formatação colorida</strong>: Códigos ANSI para logs visuais no terminal</li>
-<li>📦 <strong>Serialização JSON</strong>: Auto-geração com <code>json_serializable</code></li>
-<li>🔧 <strong>Configuração flexível</strong>: Filtragem por tipos e controle de habilitação</li>
-<li>💾 <strong>Sistema de Cache</strong>: Armazenamento de logs em memória e persistência em arquivo JSON</li>
-<li>🔒 <strong>I/O seguro em concorrência</strong>: Operações de arquivo serializadas por caminho no <code>FileManager</code></li>
-<li>🏗️ <strong>Injeção de Dependência</strong>: Configuração via <code>registerLogPrinter</code>, <code>registerLogPrinterColor</code> ou <code>registerLogPrinterSimple</code> (get_it)</li>
-<li>🎭 <strong>Mixin utilities</strong>: <code>LoggerClassMixin</code> para integração fácil em classes</li>
-<li>🔍 <strong>Rastreabilidade</strong>: Identificação automática da classe de origem</li>
-<li>🖥️ <strong>Console Visual</strong>: Overlay Flutter para visualização e filtragem de logs em tempo real (<code>ConsoleOverlayManager</code>)</li>
+<li><strong>Hierarquia de logs tipada</strong>: <code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code></li>
+<li><strong>Formatação colorida</strong>: códigos ANSI no terminal</li>
+<li><strong>Serialização JSON</strong>: com <code>json_serializable</code></li>
+<li><strong>Configuração flexível</strong>: filtragem por tipos e habilitação</li>
+<li><strong>Cache</strong>: memória e persistência opcional em ficheiro JSON</li>
+<li><strong>I/O seguro em concorrência</strong>: serialização por caminho no <code>FileManager</code></li>
+<li><strong>Injeção de dependência</strong>: <code>registerLogPrinter</code>, <code>registerLogPrinterColor</code>, <code>registerLogPrinterSimple</code></li>
+<li><strong>Mixin</strong>: <code>LoggerClassMixin</code> para integração em classes</li>
+<li><strong>Rastreabilidade</strong>: origem via <code>className</code> / <code>runtimeType</code></li>
 </ul>
-<h2 id="-instalao">🚀 Instalação</h2>
+<h2 id="instalao">Instalação</h2>
 <p>Adicione no <code>pubspec.yaml</code>:</p>
 <pre class="language-yaml"><code class="language-yaml">dependencies:
   log_custom_printer:
     git:
       url: https://github.com/saulogatti/log_custom_printer.git
-    # ou use path local para desenvolvimento:
+    # ou path local:
     # path: ../log_custom_printer
 </code></pre>
-<p>Execute:</p>
-<pre class="language-bash"><code class="language-bash">dart pub get     # Projetos Dart puro
-flutter pub get  # Projetos Flutter
+<pre class="language-bash"><code class="language-bash">dart pub get
 </code></pre>
 <p><strong>Requisitos:</strong> Dart SDK ^3.11.0</p>
-<h2 id="-uso-bsico">📖 Uso Básico</h2>
-<h3 id="configurao-inicial-obrigatrio-no-startup">Configuração Inicial (obrigatório no startup)</h3>
+<h2 id="uso-bsico">Uso básico</h2>
+<h3 id="configurao-inicial-obrigatrio-antes-de-emitir-logs">Configuração inicial (obrigatório antes de emitir logs)</h3>
 <pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/log_custom_printer.dart';
 
 void main() {
-  // Configuração com cores (recomendado para desenvolvimento)
-  // Retorna LoggerPersistenceService para acesso ao cache de logs
   final persistenceService = registerLogPrinterColor(
     config: ConfigLog(enableLog: true),
-    maxLogsInCache: 100, // Opcional: limite de logs em memória por tipo (padrão: 100)
-    cacheFilePath: '/caminho/para/salvar/logs', // Opcional: persistência em arquivo JSON
+    maxLogsInCache: 100,
+    cacheFilePath: '/caminho/para/salvar/logs', // opcional
   );
 
-  // Ou configuração simples sem cores
-  // final persistenceService = registerLogPrinterSimple(config: ConfigLog(enableLog: true));
-
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 </code></pre>
-<h3 id="sistema-de-cache">Sistema de Cache</h3>
-<p><code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam um <code>LoggerPersistenceService</code> que expõe operações de leitura/limpeza de logs e usa um repositório de cache internamente (em memória e, opcionalmente, em arquivo via <code>cacheFilePath</code>).</p>
-<p>Quando a persistência em arquivo está habilitada, o <code>FileManager</code> interno aplica serialização assíncrona por caminho (path lock). Isso evita condições de corrida em cenários com múltiplas operações concorrentes sobre o mesmo arquivo/diretório.</p>
-<pre class="language-dart"><code class="language-dart">// Recuperar todos os logs
-final allLogs = await persistenceService.getAllLogs();
-
-// Recuperar logs por tipo
+<h3 id="sistema-de-cache">Sistema de cache</h3>
+<p><code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> devolvem um <code>LoggerPersistenceService</code> para leitura, consulta e limpeza. Com <code>cacheFilePath</code>, o <code>FileManager</code> serializa escrita por caminho para evitar condições de corrida.</p>
+<pre class="language-dart"><code class="language-dart">final allLogs = await persistenceService.getAllLogs();
 final errorLogs = await persistenceService.getLogsByType(EnumLoggerType.error);
-
-// Limpar logs
 await persistenceService.clearLogs();
 await persistenceService.clearLogsByType(EnumLoggerType.debug);
 </code></pre>
-<p>Para implementar storage customizado (banco local, SharedPreferences etc.), implemente <code>ILoggerCacheRepository</code> e passe via <code>registerLogPrinter(printer, cacheRepository: seuRepository, config: ...)</code>.</p>
-<h3 id="usando-o-mixin-recomendado">Usando o Mixin (Recomendado)</h3>
+<p>Para armazenamento personalizado, implemente <code>ILoggerCacheRepository</code> e passe em <code>registerLogPrinter(printer, cacheRepository: ..., config: ...)</code>.</p>
+<h3 id="mixin-recomendado">Mixin (recomendado)</h3>
 <pre class="language-dart"><code class="language-dart">class MinhaClasse with LoggerClassMixin {
   void minhaFuncao() {
     logDebug('Iniciando função');
     logInfo('Processando dados...');
-
     try {
-      // código da função
-      logInfo('Função executada com sucesso');
+      logInfo('Sucesso');
     } catch (error, stackTrace) {
-      logError('Erro na função: $error', stackTrace);
+      logError('Erro: $error', stackTrace);
     }
   }
 }
 </code></pre>
-<h3 id="uso-direto-dos-objetos-de-log">Uso Direto dos Objetos de Log</h3>
-<pre class="language-dart"><code class="language-dart">// Criando logs específicos
-final debugLog = DebugLog('Mensagem de debug', typeClass: runtimeType);
+<h3 id="objetos-de-log-e-json">Objetos de log e JSON</h3>
+<pre class="language-dart"><code class="language-dart">final debugLog = DebugLog('Mensagem de debug', typeClass: runtimeType);
 debugLog.sendLog();
 
-final errorLog = ErrorLog('Algo deu errado', StackTrace.current, typeClass: runtimeType);
+final errorLog = ErrorLog('Falha', StackTrace.current, typeClass: runtimeType);
 errorLog.sendLog();
 
-// Serialização JSON
 final json = debugLog.toJson();
-final logRecriado = DebugLog.fromJson(json);
+final restaurado = DebugLog.fromJson(json);
 </code></pre>
-<h3 id="configurao-avanada">Configuração Avançada</h3>
+<h3 id="configurao-avanada">Configuração avançada</h3>
 <pre class="language-dart"><code class="language-dart">void main() {
-  // Configuração customizada - apenas logs de erro e debug
   registerLogPrinterColor(
     config: ConfigLog(
       enableLog: true,
-      onlyClasses: {DebugLog, ErrorLog}, // Filtra apenas estes tipos
+      onlyClasses: {DebugLog, ErrorLog},
     ),
   );
-
-  // Ou para produção - logs desabilitados
-  // registerLogPrinterSimple(config: ConfigLog(enableLog: false));
-
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 </code></pre>
-<h3 id="regras-de-entrega-de-logs">Regras de Entrega de Logs</h3>
+<h3 id="regras-de-entrega">Regras de entrega</h3>
 <ul>
-<li><code>ConfigLog.enableLog</code>: quando <code>false</code>, todos os logs são ignorados <strong>exceto</strong> aqueles com <code>alwaysPrint</code> (ex: <code>ErrorLog</code>).</li>
-<li><code>ConfigLog.onlyClasses</code>: filtra quais tipos são aceitos; se não estiver vazio e o tipo não estiver no conjunto, o log é descartado.</li>
-<li><code>LoggerClassMixin</code>: preenche automaticamente <code>className</code> com o <code>runtimeType</code> da classe que está emitindo o log.</li>
-<li><code>LoggerJsonList</code>: mantém no máximo <code>maxLogEntries</code> (padrão 100) por tipo, inserindo o mais novo no topo e descartando o mais antigo.</li>
+<li><code>ConfigLog.enableLog == false</code>: descarta a maioria dos logs; <code>ErrorLog</code> continua via <code>alwaysPrint</code>.</li>
+<li><code>ConfigLog.onlyClasses</code>: se não vazio, só tipos listados são aceites.</li>
+<li><code>LoggerClassMixin</code>: preenche <code>className</code> com o <code>runtimeType</code> da classe emissora.</li>
+<li>Repositório de cache: mantém até <code>maxLogEntries</code> por tipo (comportamento conforme implementação do repositório).</li>
 </ul>
-<h2 id="-arquitetura">🏗️ Arquitetura</h2>
-<h3 id="componentes-principais">Componentes Principais</h3>
+<h2 id="arquitetura-resumo">Arquitetura (resumo)</h2>
 <ul>
-<li><strong><code>LoggerObject</code></strong> (sealed class) — Hierarquia base para tipos de log</li>
-<li><strong><code>LoggerObjectBase</code></strong> — Classe abstrata com funcionalidades comuns</li>
-<li><strong><code>LogPrinterService</code></strong> — Serviço central que coordena impressão e cache (resolvido via get_it)</li>
-<li><strong><code>registerLogPrinter</code></strong> / <strong><code>registerLogPrinterColor</code></strong> / <strong><code>registerLogPrinterSimple</code></strong> — Injeção de dependência via get_it</li>
-<li><strong><code>ConfigLog</code></strong> — Configuração de habilitação e filtragem (padrão: <code>enableLog: false</code>, <code>onlyClasses: {DebugLog, WarningLog, InfoLog}</code>)</li>
-<li><strong><code>LoggerPersistenceService</code></strong> — Serviço retornado pelos <code>register*</code> para acesso ao cache/persistência</li>
-<li><strong><code>ILoggerCacheRepository</code></strong> — Interface para implementação customizada de armazenamento de logs</li>
-<li><strong><code>LoggerClassMixin</code></strong> — Mixin para integração fácil em classes</li>
+<li><strong><code>LoggerObject</code></strong> / <strong><code>LoggerObjectBase</code></strong> — hierarquia e envio de logs</li>
+<li><strong><code>LogPrinterService</code></strong> — impressão e cache (via <code>get_it</code>)</li>
+<li><strong><code>registerLogPrinter</code></strong> / <strong><code>registerLogPrinterColor</code></strong> / <strong><code>registerLogPrinterSimple</code></strong></li>
+<li><strong><code>ConfigLog</code></strong> — filtros e <code>enableLog</code></li>
+<li><strong><code>LoggerPersistenceService</code></strong> — consulta ao cache após registo</li>
+<li><strong><code>ILoggerCacheRepository</code></strong> — persistência customizável</li>
 </ul>
-<h3 id="tipos-de-log-disponveis">Tipos de Log Disponíveis</h3>
+<h3 id="tipos-de-log">Tipos de log</h3>
 <table>
 <thead>
 <tr>
@@ -182,201 +156,114 @@ final logRecriado = DebugLog.fromJson(json);
 <tbody>
 <tr>
 <td><code>DebugLog</code></td>
-<td>🟡 Amarelo</td>
-<td>Informações de debug/desenvolvimento</td>
+<td>Amarelo</td>
+<td>Depuração</td>
 </tr>
 <tr>
 <td><code>InfoLog</code></td>
-<td>⚪ Branco</td>
-<td>Informações gerais</td>
+<td>Branco</td>
+<td>Informação</td>
 </tr>
 <tr>
 <td><code>WarningLog</code></td>
-<td>🟢 Verde</td>
-<td>Avisos e alertas</td>
+<td>Verde</td>
+<td>Avisos</td>
 </tr>
 <tr>
 <td><code>ErrorLog</code></td>
-<td>🔴 Vermelho</td>
-<td>Erros e exceções (sempre processado via <code>alwaysPrint</code>)</td>
+<td>Vermelho</td>
+<td>Erros (<code>alwaysPrint</code>)</td>
 </tr>
 </tbody>
 </table>
-<h3 id="impressoras-de-log">Impressoras de Log</h3>
+<h3 id="impressoras">Impressoras</h3>
 <ul>
-<li><strong><code>LogSimplePrint</code></strong> — Saída simples via <code>print()</code> (sem cores)</li>
-<li><strong><code>LogWithColorPrint</code></strong> — Saída colorida via <code>dart:developer.log()</code> com separadores ANSI</li>
+<li><strong><code>LogSimplePrint</code></strong> — saída simples (sem cores ANSI na estratégia padrão)</li>
+<li><strong><code>LogWithColorPrint</code></strong> — saída com cores ANSI</li>
 </ul>
-<p>Use <code>registerLogPrinterColor()</code> ou <code>registerLogPrinterSimple()</code> para configuração rápida; ou <code>registerLogPrinter(LogPrinterBase)</code> para impressoras customizadas.</p>
-<h3 id="console-visual-de-logs">Console Visual de Logs</h3>
-<p>O pacote inclui um overlay Flutter para visualização dos logs em tempo real durante o desenvolvimento.</p>
-<pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/console_view/application/application_injection.dart';
-
-void main() {
-  initAppInjection(); // registra dependências do console visual
-  runApp(MyApp());
-}
-
-// Em qualquer widget com acesso ao BuildContext:
-ConsoleOverlayManager.toggle(
-  context,
-  appGetIt&lt;MessageRepository&gt;(),
-  appGetIt&lt;ILoggerCacheRepository&gt;(),
-);
-</code></pre>
-<p>Para documentação completa do console visual, consulte <a href="ConsoleView.md">ConsoleView.md</a>.</p>
-<h2 id="-desenvolvimento">🛠️ Desenvolvimento</h2>
-<h3 id="dependncias-de-desenvolvimento">Dependências de Desenvolvimento</h3>
-<pre class="language-bash"><code class="language-bash"># Instalar dependências
-dart pub get
-# ou: flutter pub get
-
-# Code generation (OBRIGATÓRIO após mudanças em classes @JsonSerializable)
+<p>Atalhos: <code>registerLogPrinterColor</code> / <code>registerLogPrinterSimple</code>; impressora própria: <code>registerLogPrinter(LogPrinterBase(), config: ...)</code>.</p>
+<h3 id="console-visual-flutter">Console visual (Flutter)</h3>
+<p>A UI de consola em tempo real <strong>não está neste repositório</strong> na v3. Para migrar a partir da v2 ou integrar um pacote à parte, consulte <a href="docs/ConsoleView.md">docs/ConsoleView.md</a>.</p>
+<h2 id="desenvolvimento">Desenvolvimento</h2>
+<pre class="language-bash"><code class="language-bash">dart pub get
 dart run build_runner build --delete-conflicting-outputs
-
-# Ou use o script de automação
-./ci.sh -build
+# ou: ./ci.sh -build
 </code></pre>
-<h3 id="comandos-teis">Comandos Úteis</h3>
-<pre class="language-bash"><code class="language-bash"># Análise estática
-dart analyze
-
-# Testes
-dart test              # Dart puro
-flutter test          # Flutter
-
-# Documentação
-dart doc               # Gera documentação em doc/api
-
-# Atualização de dependências
-./ci.sh -upgrade
+<pre class="language-bash"><code class="language-bash">dart analyze
+dart test
+dart doc
 </code></pre>
-<p>Cobertura atual de testes automatizados:</p>
-<ul>
-<li>Serialização e truncamento de <code>LoggerJsonList</code> mantendo ordem mais recente → mais antiga</li>
-<li>Filtragem de logs via <code>ConfigLog.onlyClasses</code> e priorização de <code>ErrorLog</code> (via <code>alwaysPrint</code>) mesmo com <code>enableLog = false</code></li>
-<li><code>LoggerClassMixin</code> preenchendo <code>className</code> com o <code>runtimeType</code> da classe hospedeira</li>
-<li>Utilitários: formatação de data/hora, aplicação de códigos ANSI e limpeza de stack trace</li>
-</ul>
-<h3 id="gerao-de-documentao">Geração de Documentação</h3>
-<p>O projeto está configurado para gerar documentação usando <code>dartdoc</code>. A configuração está definida em <code>dartdoc_options.yaml</code> com:</p>
-<ul>
-<li>Categorização automática por funcionalidade (Core, Log Types, Printers, Configuration, Utilities, Console View)</li>
-<li>Links para o código fonte no GitHub</li>
-<li>Exclusão automática de arquivos gerados (*.g.dart, *.freezed.dart)</li>
-<li>Saída em <code>doc/api</code></li>
-</ul>
-<p>Para gerar a documentação:</p>
-<pre class="language-bash"><code class="language-bash">dart doc
-</code></pre>
-<p>Para gerar no diretório <code>docs/</code> (útil para servir localmente):</p>
-<pre class="language-bash"><code class="language-bash">dart doc -o docs/
-</code></pre>
-<p>Visualização local (exemplo):</p>
-<pre class="language-bash"><code class="language-bash"># em qualquer servidor estático, apontando para docs/
-# exemplo com Python:
-python -m http.server 8080 -d docs
-</code></pre>
-<p>A documentação gerada incluirá:</p>
-<ul>
-<li>Documentação completa de todas as classes públicas</li>
-<li>Exemplos de uso para cada componente</li>
-<li>Referências cruzadas entre tipos relacionados</li>
-<li>Categorias organizadas para fácil navegação</li>
-</ul>
-<h3 id="adicionando-novos-tipos-de-log">Adicionando Novos Tipos de Log</h3>
+<p>A documentação API gerada por omissão fica em <code>doc/api</code>. Não utilize o diretório <code>docs/</code> como saída do <code>dart doc</code> — essa pasta contém guias em Markdown do projeto.</p>
+<h3 id="novos-tipos-de-log">Novos tipos de log</h3>
 <ol>
-<li>Estenda <code>LoggerObjectBase</code></li>
-<li>Adicione <code>@JsonSerializable()</code> e importe <code>.g.dart</code></li>
-<li>Implemente <code>getColor()</code> com cor específica</li>
-<li>Adicione factory <code>fromJson()</code> e override <code>toJson()</code></li>
-<li>Execute <code>dart run build_runner build</code> ou <code>./ci.sh -build</code></li>
+<li>Estender <code>LoggerObjectBase</code></li>
+<li><code>@JsonSerializable()</code> e <code>part</code> gerado</li>
+<li><code>getColor()</code>, <code>fromJson</code>, <code>toJson</code></li>
+<li>Registar em <code>logger_json_list.dart</code> se aplicável ao projeto</li>
+<li>Exportar na API pública e correr <code>build_runner</code></li>
 </ol>
-<p>Exemplo:</p>
-<pre class="language-dart"><code class="language-dart">import 'package:json_annotation/json_annotation.dart';
-part 'custom_log.g.dart';
-
-@JsonSerializable()
-class CustomLog extends LoggerObjectBase {
-  CustomLog(super.message, {super.typeClass});
-
-  factory CustomLog.fromJson(Map&lt;String, dynamic&gt; json) =&gt;
-      _$CustomLogFromJson(json);
-
-  @override
-  LoggerAnsiColor getColor() =&gt; LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.magenta);
-
-  @override
-  Map&lt;String, dynamic&gt; toJson() =&gt; _$CustomLogToJson(this);
-}
-</code></pre>
-<h2 id="-documentao">📚 Documentação</h2>
+<h2 id="documentao">Documentação</h2>
 <table>
 <thead>
 <tr>
-<th>Arquivo</th>
+<th>Ficheiro</th>
 <th>Conteúdo</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><a href="README.md">README.md</a></td>
-<td>Visão geral, instalação e uso básico</td>
+<td>Visão geral (esta página)</td>
 </tr>
 <tr>
-<td><a href="Core.md">Core.md</a></td>
-<td>Núcleo da biblioteca e injeção de dependência</td>
+<td><a href="CHANGELOG.md">CHANGELOG.md</a></td>
+<td>Histórico de versões</td>
 </tr>
 <tr>
-<td><a href="LogTypes.md">LogTypes.md</a></td>
-<td>Tipos de log disponíveis</td>
+<td><a href="docs/Core.md">docs/Core.md</a></td>
+<td>Núcleo e injeção de dependência</td>
 </tr>
 <tr>
-<td><a href="Printers.md">Printers.md</a></td>
+<td><a href="docs/LogTypes.md">docs/LogTypes.md</a></td>
+<td>Tipos de log</td>
+</tr>
+<tr>
+<td><a href="docs/Printers.md">docs/Printers.md</a></td>
 <td>Estratégias de impressão</td>
 </tr>
 <tr>
-<td><a href="Configuration.md">Configuration.md</a></td>
+<td><a href="docs/Configuration.md">docs/Configuration.md</a></td>
 <td>Configuração e filtros</td>
 </tr>
 <tr>
-<td><a href="Utilities.md">Utilities.md</a></td>
-<td>Utilitários, cache e extensões</td>
+<td><a href="docs/Utilities.md">docs/Utilities.md</a></td>
+<td>Utilitários e cache</td>
 </tr>
 <tr>
-<td><a href="ConsoleView.md">ConsoleView.md</a></td>
-<td>Console visual de logs (overlay Flutter)</td>
+<td><a href="docs/ConsoleView.md">docs/ConsoleView.md</a></td>
+<td>Migração / consola Flutter à parte</td>
 </tr>
 <tr>
-<td><a href="DOCUMENTATION.md">DOCUMENTATION.md</a></td>
-<td>Documentação arquitetural expandida</td>
+<td><a href="docs/DOCUMENTATION.md">docs/DOCUMENTATION.md</a></td>
+<td>Arquitetura expandida</td>
 </tr>
 </tbody>
 </table>
-<h2 id="-contribuies">🤝 Contribuições</h2>
-<p>Contribuições são bem-vindas! Por favor:</p>
+<h2 id="contribuies">Contribuições</h2>
 <ol>
-<li>Mantenha a API pública estável</li>
-<li>Documente mudanças importantes no <code>CHANGELOG.md</code></li>
-<li>Execute testes antes de enviar PRs</li>
-<li>Siga as convenções do <a href="https://dart.dev/guides/language/effective-dart">Effective Dart</a></li>
+<li>Manter a API pública estável</li>
+<li>Registar alterações relevantes no <code>CHANGELOG.md</code></li>
+<li>Correr testes antes de PRs</li>
+<li>Seguir <a href="https://dart.dev/guides/language/effective-dart">Effective Dart</a></li>
 </ol>
-<h2 id="-licena">📄 Licença</h2>
-<p>Este projeto está licenciado sob os termos definidos no arquivo LICENSE do repositório.</p>
+<h2 id="licena">Licença</h2>
+<p>Termos no ficheiro <code>LICENSE</code> do repositório.</p>
 </section>
 
 
       <section class="summary">
           <h2>Libraries</h2>
         <dl>
-          <dt id="main">
-  <span class="name"><a href="main/">main</a></span> 
-
-</dt>
-<dd>
-</dd>
-
           <h3>Core - Sistema de Logging</h3>
           <p>Core — Sistema de Logging</p>
             <dt id="log_custom_printer">
@@ -384,7 +271,7 @@ class CustomLog extends LoggerObjectBase {
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
 
 </dt>
-<dd>Biblioteca de logging customizada para Dart/Flutter.
+<dd>Biblioteca de logging para projetos Dart (CLI, servidor, scripts).
 </dd>
 
         </dl>
@@ -409,9 +296,7 @@ class CustomLog extends LoggerObjectBase {
         <li><a href="topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="topics/Utilities-topic.html">Utilitários</a></li>
-        <li><a href="topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
-      <li><a href="main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>
         <li class="section-subitem"><a href="log_custom_printer/">log_custom_printer</a></li>
 </ol>
@@ -423,7 +308,7 @@ class CustomLog extends LoggerObjectBase {
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.2.0
+      3.0.0
   </span>
   
 </footer>

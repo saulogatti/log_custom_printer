@@ -5,7 +5,6 @@ import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart'
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
-import 'package:share_plus/share_plus.dart';
 
 /// Implementação concreta de [ILoggerCacheRepository] usando armazenamento em memória
 /// e opcionalmente em arquivo.
@@ -93,29 +92,6 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     _loggerJsonList.remove(type);
     await _futureInitialization;
     await _loggerCache?.clearLogByType(type.name);
-  }
-
-  @override
-  Future<void> exportLogs(
-    List<LoggerObjectBase> logs,
-    ExportFormat format,
-  ) async {
-    final (data, pathFile) = await _loggerCache!.exportLogs(logs, format);
-    //C:\Users\saulo\AppData\Roaming\com.example\log_custom_printer_example\loggerApp\logs\share.json
-    if (pathFile != null) {
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [
-            XFile(
-              Uri.file(pathFile).toFilePath(),
-              length: data?.length ?? 0,
-              mimeType: 'application/json',
-              name: 'share.json',
-            ),
-          ],
-        ),
-      );
-    }
   }
 
   @override

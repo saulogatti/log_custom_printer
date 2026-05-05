@@ -50,7 +50,7 @@
 helpers de formatação, extensões e o sistema de cache de logs.</p>
 <hr>
 <h2 id="loggerclassmixin">LoggerClassMixin</h2>
-<p>Mixin que fornece métodos de log prontos para uso em qualquer classe Dart/Flutter.
+<p>Mixin que fornece métodos de log prontos para uso em qualquer classe Dart (incluindo apps Flutter).
 Preenche automaticamente <code>className</code> com o <code>runtimeType</code> da classe hospedeira.</p>
 <pre class="language-dart"><code class="language-dart">mixin LoggerClassMixin {
   Type get logClassType =&gt; runtimeType;
@@ -278,6 +278,24 @@ futuros atuam sobre o mesmo arquivo ou diretório.</p>
   <section class="summary offset-anchor" id="classes">
     <h2>Classes</h2>
     <dl>
+      <dt id="FileManager">
+  <span class="name "><a href="../log_custom_printer/FileManager-class.html">FileManager</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Implementação de gerenciamento de arquivos tipado por <a href="../log_custom_printer/FileType.html">FileType</a>.
+</dd>
+
+      <dt id="IFileManagerType">
+  <span class="name "><a href="../log_custom_printer/IFileManagerType-class.html">IFileManagerType</a></span> 
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Contrato para operações de leitura, escrita e remoção de arquivos.
+</dd>
+
       <dt id="LoggerAnsiColor">
   <span class="name "><a href="../log_custom_printer/LoggerAnsiColor-class.html">LoggerAnsiColor</a></span> 
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
@@ -312,7 +330,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Conversor JSON para serialização de <a href="https://api.flutter.dev/flutter/dart-core/StackTrace-class.html">StackTrace</a>.
+  Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.11.5/dart-core/StackTrace-class.html">StackTrace</a>.
 </dd>
 
     </dl>
@@ -338,13 +356,24 @@ e opcionalmente em arquivo.
     <dl>
       <dt id="DateTimeLoggingExtensions">
   <span class="name "><a href="../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></span>
-  on <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>
+  on <a href="https://api.dart.dev/stable/3.11.5/dart-core/DateTime-class.html">DateTime</a>
   
     <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
   Extension para formatação de data/hora em logs.
+</dd>
+
+      <dt id="LoggerEnum">
+  <span class="name "><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></span>
+  on <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>
+  
+    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+
+</dt>
+<dd>
+  Extensão para mapear objetos de log para o enum <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>.
 </dd>
 
     </dl>
@@ -371,7 +400,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Tipos de arquivo suportados pelo <code>FileManager</code>.
+  Tipos de arquivo suportados pelo <a href="../log_custom_printer/FileManager-class.html">FileManager</a>.
 </dd>
 
     </dl>
@@ -399,9 +428,7 @@ e opcionalmente em arquivo.
         <li><a href="../topics/Printers-topic.html">Impressoras&nbsp;de&nbsp;Log</a></li>
         <li><a href="../topics/Configuration-topic.html">Configuração</a></li>
         <li><a href="../topics/Utilities-topic.html">Utilitários</a></li>
-        <li><a href="../topics/Console View-topic.html">Console&nbsp;Visual&nbsp;de&nbsp;Logs</a></li>
       <li class="section-title">Libraries</li>
-      <li><a href="../main/">main</a></li>
       <li class="section-subtitle">Core - Sistema de Logging</li>
         <li class="section-subitem"><a href="../log_custom_printer/">log_custom_printer</a></li>
 </ol>
@@ -412,6 +439,8 @@ e opcionalmente em arquivo.
   <ol>
 
     <li class="section-title"><a href="../topics/Utilities-topic.html#classes">Classes</a></li>
+      <li><a href="../log_custom_printer/FileManager-class.html">FileManager</a></li>
+      <li><a href="../log_custom_printer/IFileManagerType-class.html">IFileManagerType</a></li>
       <li><a href="../log_custom_printer/LoggerAnsiColor-class.html">LoggerAnsiColor</a></li>
       <li><a href="../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
       <li><a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></li>
@@ -432,6 +461,7 @@ e opcionalmente em arquivo.
 
   <li class="section-title"><a href="../topics/Utilities-topic.html#extensions">Extensions</a></li>
   <li><a href="../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></li>
+  <li><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></li>
 </ol>
 
 </div>
@@ -440,7 +470,7 @@ e opcionalmente em arquivo.
 <footer>
   <span class="no-break">
     log_custom_printer
-      2.2.0
+      3.0.0
   </span>
   
 </footer>

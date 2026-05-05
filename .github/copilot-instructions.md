@@ -37,10 +37,11 @@
 - Em testes que tocam DI/logging, registre impressora no `setUp` e faça `GetIt.instance.reset()` no `tearDown`.
 
 ## Reference Docs (link, don’t embed)
-- Visão geral e setup: `README.md`
-- Núcleo e DI: `Core.md`
-- Tipos de log: `LogTypes.md`
-- Estratégias de impressão: `Printers.md`
-- Configuração/filtros: `Configuration.md`
-- Utilitários e cache: `Utilities.md`
-- Documentação expandida: `DOCUMENTATION.md`
+- Visão geral e setup: `README.md`, histórico: `CHANGELOG.md`
+- Núcleo e DI: `docs/Core.md`
+- Tipos de log: `docs/LogTypes.md`
+- Estratégias de impressão: `docs/Printers.md`
+- Configuração/filtros: `docs/Configuration.md`
+- Utilitários e cache: `docs/Utilities.md`
+- Documentação expandida: `docs/DOCUMENTATION.md`
+- Migração consola Flutter (pacote à parte): `docs/ConsoleView.md`
