@@ -138,13 +138,23 @@ final class LoggerCache {
   /// Gera o caminho completo para um arquivo de log, garantindo a extensão .json
   /// e a sanitização do nome do arquivo.
   String _getPathFile(String fileName) {
-    assert(fileName.isNotEmpty, 'O nome do arquivo não pode ser vazio');
-    assert(
-      !fileName.contains(path.separator),
-      'O nome do arquivo não deve conter separadores de caminho',
-    );
+    if (fileName.isEmpty) {
+      throw ArgumentError('O nome do arquivo não pode ser vazio');
+    }
 
-    final sanitizedFileName = fileName.sanitizedFileName.formattedName;
+    // Extrai apenas o nome base para evitar qualquer tentativa de path traversal
+    final baseName = path.basename(fileName);
+
+    if (baseName == '.' || baseName == '..') {
+      throw ArgumentError('Nome de arquivo inválido: $baseName');
+    }
+
+    final sanitizedFileName = baseName.sanitizedFileName.formattedName;
+
+    if (sanitizedFileName.isEmpty) {
+      throw ArgumentError('O nome do arquivo após sanitização ficou vazio');
+    }
+
     final fileJson = path.setExtension(sanitizedFileName, '.json');
     final pathLog = path.join(_directoryPath, fileJson);
 
