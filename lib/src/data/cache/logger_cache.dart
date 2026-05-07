@@ -11,7 +11,6 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 
 /// Gerenciador de cache para persistência de arquivos de log em disco.
 ///
@@ -157,8 +156,11 @@ final class LoggerCache {
   /// Completa [futureInitialization] após criar (ou validar) o diretório.
   Future<void> _init(String directory) async {
     try {
-      final Directory directoryFDP = await getApplicationSupportDirectory();
-      final directoryPath = Directory('${directoryFDP.path}/loggerApp/logs');
+      assert(
+        directory.isNotEmpty,
+        'O diretório base para os logs não pode ser vazio',
+      );
+      final directoryPath = Directory('$directory/loggerApp/logs');
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
