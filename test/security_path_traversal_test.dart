@@ -1,8 +1,9 @@
 import 'dart:io';
-import 'package:flutter_test/flutter_test.dart';
+
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:path/path.dart' as path;
+import 'package:test/test.dart';
 
 void main() {
   group('LoggerCache Security Tests', () {
@@ -10,7 +11,9 @@ void main() {
     late Directory tempDir;
 
     setUpAll(() async {
-      tempDir = await Directory.systemTemp.createTemp('logger_cache_security_test');
+      tempDir = await Directory.systemTemp.createTemp(
+        'logger_cache_security_test',
+      );
       loggerCache = LoggerCache(tempDir.path);
       await loggerCache.futureInitialization.future;
     });
@@ -34,7 +37,11 @@ void main() {
       );
 
       final file = File(expectedPath);
-      expect(await file.exists(), isTrue, reason: 'Should have saved as passwd.json in the logs directory');
+      expect(
+        await file.exists(),
+        isTrue,
+        reason: 'Should have saved as passwd.json in the logs directory',
+      );
 
       // Verify no file was created outside
       final outsideFile = File(path.join(tempDir.path, 'etc', 'passwd.json'));
@@ -51,7 +58,8 @@ void main() {
         throwsArgumentError,
       );
       expect(
-        () => loggerCache.writeLogToFile('   ', LoggerJsonList(type: 'TestLog')),
+        () =>
+            loggerCache.writeLogToFile('   ', LoggerJsonList(type: 'TestLog')),
         throwsArgumentError,
       );
     });

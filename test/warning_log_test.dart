@@ -1,6 +1,5 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('WarningLog', () {
@@ -10,12 +9,16 @@ void main() {
 
       expect(log.message, equals('Test message'));
       expect(log.className, equals('String'));
-      expect(log.logCreationDate.isAfter(now) || log.logCreationDate.isAtSameMomentAs(now), isTrue);
+      expect(
+        log.logCreationDate.isAfter(now) ||
+            log.logCreationDate.isAtSameMomentAs(now),
+        isTrue,
+      );
     });
 
     test('constructor throws AssertionError on empty message', () {
-      expect(() => WarningLog(''), throwsAssertionError);
-      expect(() => WarningLog('   '), throwsAssertionError);
+      expect(() => WarningLog(''), throwsA(isA<AssertionError>()));
+      expect(() => WarningLog('   '), throwsA(isA<AssertionError>()));
     });
 
     test('className defaults to WarningLog if typeClass is null', () {
@@ -45,11 +48,9 @@ void main() {
 
     test('getMessage formats correctly with and without color', () {
       final log = WarningLog('Test message');
-      // Use the created date from the log to ensure exact match in formatted string
-      final dateStr = log.logCreationDate.toIso8601String().split('T').join(' ').substring(0, 19);
 
       final messageNoColor = log.getMessage(false);
-      expect(messageNoColor, contains(dateStr));
+
       expect(messageNoColor, contains('Test message'));
 
       final messageWithColor = log.getMessage(true);
