@@ -102,7 +102,7 @@ LoggerPersistenceService registerLogPrinterColor({
     const LogWithColorPrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
-      saveLogFilePath: cacheFilePath,
+      directoryToSave: cacheFilePath,
       fileType: fileType,
     ),
     config: config ?? const ConfigLog(),
@@ -137,7 +137,7 @@ LoggerPersistenceService registerLogPrinterSimple({
     const LogSimplePrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
-      saveLogFilePath: cacheFilePath,
+      directoryToSave: cacheFilePath,
       fileType: fileType,
     ),
     config: config ?? const ConfigLog(),

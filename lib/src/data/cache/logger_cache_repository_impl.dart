@@ -10,7 +10,7 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 /// e opcionalmente em arquivo.
 ///
 /// Mantém os logs organizados por tipo em memória usando [LoggerJsonList].
-/// Se um [saveLogFilePath] for fornecido, também persiste os logs em disco
+/// Se um [directoryToSave] for fornecido, também persiste os logs em disco
 /// através da classe [LoggerCache].
 ///
 /// {@category Utilities}
@@ -19,7 +19,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   final int maxLogEntries;
 
   /// Caminho base para salvar os arquivos de log (opcional).
-  final String? saveLogFilePath;
+  final String? directoryToSave;
 
   /// Gerenciador de persistência em arquivo.
   LoggerCache? _loggerCache;
@@ -33,16 +33,16 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// Cria uma nova instância da implementação de cache.
   ///
   /// [maxLogEntries]: limite de logs mantidos em memória por tipo (padrão: 1000).
-  /// [saveLogFilePath]: diretório base para persistência (se omitido, não salva em disco).
+  /// [directoryToSave]: diretório base para persistência (se omitido, não salva em disco).
   /// [fileType]: tipo de arquivo para persistência (padrão: [FileType.json]).
   LoggerCacheRepositoryImpl({
     this.maxLogEntries = 1000,
-    this.saveLogFilePath,
+    this.directoryToSave,
     FileType fileType = FileType.json,
   }) {
-    if (saveLogFilePath != null) {
+    if (directoryToSave != null) {
       _loggerCache = LoggerCache(
-        saveLogFilePath!,
+        directoryToSave!,
         fileManagerType: FileManager(fileType: fileType),
       );
       _futureInitialization = _initialize();

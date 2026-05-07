@@ -34,8 +34,7 @@ final class LoggerCache {
   ///
   /// [directory]: o diretório base onde os logs serão armazenados.
   LoggerCache(String directory, {IFileManagerType? fileManagerType})
-    : _fileManagerType =
-          fileManagerType ?? FileManager(fileType: FileType.json) {
+    : _fileManagerType = fileManagerType ?? FileManager(fileType: FileType.json) {
     _future = Completer<void>();
     _init(directory);
   }
@@ -65,10 +64,7 @@ final class LoggerCache {
     await _fileManagerType.deleteFile(fileName);
   }
 
-  Future<(List<int>?, String?)> exportLogs(
-    List<LoggerObjectBase> logs,
-    ExportFormat format,
-  ) async {
+  Future<(List<int>?, String?)> exportLogs(List<LoggerObjectBase> logs, ExportFormat format) async {
     await writeLogToFile("share.json", logs);
     final pathFile = _getPathFile("share.json");
     final objEncode = jsonEncode(logs);
@@ -90,11 +86,7 @@ final class LoggerCache {
       await futureInitialization.future;
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
-        final files = await directory
-            .list()
-            .where((entity) => entity is File)
-            .cast<File>()
-            .toList();
+        final files = await directory.list().where((entity) => entity is File).cast<File>().toList();
         final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
         for (final file in files) {
           if (file.path.endsWith('.json')) {
@@ -165,11 +157,11 @@ final class LoggerCache {
   ///
   /// Completa [futureInitialization] após criar (ou validar) o diretório.
   Future<void> _init(String directory) async {
+    assert(directory.isNotEmpty, 'O diretório base para os logs não pode ser vazio');
+    if (directory.endsWith('/')) {
+      throw AssertionError('O diretório base para os logs deve terminar com /');
+    }
     try {
-      assert(
-        directory.isNotEmpty,
-        'O diretório base para os logs não pode ser vazio',
-      );
       final directoryPath = Directory('$directory/loggerApp/logs');
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
