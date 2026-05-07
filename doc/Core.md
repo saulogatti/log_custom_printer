@@ -141,7 +141,7 @@ void main() {
   //   cacheFilePath: '/caminho/para/logs',
   // );
 
-  runApp(MyApp());
+  // Em Flutter: runApp(const MyApp());
 }
 ```
 

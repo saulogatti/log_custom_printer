@@ -9,8 +9,8 @@ import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart'
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/extensions/string_extension.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart';
 
 /// Gerenciador de cache para persistência de arquivos de log em disco.
 ///
@@ -74,6 +74,11 @@ final class LoggerCache {
     final objEncode = jsonEncode(logs);
 
     return (objEncode.codeUnits, pathFile);
+  }
+
+  @visibleForTesting
+  String getPathFileForTest(String fileName) {
+    return _getPathFile(fileName);
   }
 
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
@@ -151,19 +156,23 @@ final class LoggerCache {
   /// Completa [futureInitialization] após criar (ou validar) o diretório.
   Future<void> _init(String directory) async {
     try {
-      final Directory directoryFDP = await getApplicationSupportDirectory();
-      final directoryPath = Directory('${directoryFDP.path}/loggerApp/logs');
+      assert(
+        directory.isNotEmpty,
+        'O diretório base para os logs não pode ser vazio',
+      );
+      final directoryPath = Directory('$directory/loggerApp/logs');
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-      _future.complete();
     } on Exception catch (e, stack) {
       if (onError != null) {
         onError!(e, stack);
       } else {
         dev.log('Erro ao inicializar LoggerCache: $e', stackTrace: stack);
       }
+    } finally {
+      _future.complete();
     }
   }
 }
