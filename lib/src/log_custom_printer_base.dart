@@ -21,7 +21,7 @@ import 'domain/logs_object/logger_object.dart';
 ///     const LogWithColorPrint(),
 ///     config: const ConfigLog(enableLog: true),
 ///   );
-///   runApp(MyApp());
+///   // Em Flutter: runApp(const MyApp());
 /// }
 /// ```
 ///
