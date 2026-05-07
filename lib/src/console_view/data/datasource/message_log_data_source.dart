@@ -75,7 +75,7 @@ class MessageLogDataSource {
 
           return true;
         })
-        .map((e) => MessageEntry(loggerObjectBase: e).fromLoggerObjectBase());
+        .map(MessageEntry.fromLoggerObjectBase);
 
     return filteredLogs.toList();
   }
@@ -83,9 +83,7 @@ class MessageLogDataSource {
   /// Retorna todos os logs sem aplicar filtros.
   Future<List<MessageLog>> getMessages() async {
     final logs = await loggerCacheRepositoryImpl.getAllLogs();
-    return logs
-        .map((e) => MessageEntry(loggerObjectBase: e).fromLoggerObjectBase())
-        .toList();
+    return logs.map(MessageEntry.fromLoggerObjectBase).toList();
   }
 
   bool _isValidDateTimeRange(DateTimeRange? range) {

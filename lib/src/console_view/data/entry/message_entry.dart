@@ -13,14 +13,8 @@ import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 /// Responsável por mapear o tipo concreto do log para o [LogType]
 /// correspondente e formatar o título/mensagem para exibição.
 class MessageEntry {
-  /// Log de domínio a ser convertido.
-  final LoggerObjectBase loggerObjectBase;
-
-  /// Cria uma entrada de conversão para o [loggerObjectBase] fornecido.
-  MessageEntry({required this.loggerObjectBase});
-
   /// Converte [loggerObjectBase] em um [MessageLog] pronto para exibição.
-  MessageLog fromLoggerObjectBase() {
+  static MessageLog fromLoggerObjectBase(LoggerObjectBase loggerObjectBase) {
     final LogType level = getLogType(loggerObjectBase);
 
     return MessageLog(
@@ -32,7 +26,7 @@ class MessageEntry {
   }
 
   /// Mapeia o tipo concreto do [loggerObjectBase] para o [LogType] correspondente.
-  LogType getLogType(LoggerObjectBase loggerObjectBase) {
+  static LogType getLogType(LoggerObjectBase loggerObjectBase) {
     switch (loggerObjectBase) {
       case InfoLog():
         return LogType.info;
