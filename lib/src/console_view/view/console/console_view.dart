@@ -97,31 +97,22 @@ class _ConsoleViewState extends State<ConsoleView> {
     final consoleBloc = context.read<ConsoleBloc>();
 
     return BlocListener<OptionsBloc, OptionsState>(
-      listenWhen: (previous, current) {
-        if (current is! LoadedOptionsState) {
-          return false;
-        }
-
-        if (previous is! LoadedOptionsState) {
-          return true;
-        }
-
-        return previous.options.selectedDateTimeRange !=
-                current.options.selectedDateTimeRange ||
-            previous.options.isDateTimeFilterEnabled !=
-                current.options.isDateTimeFilterEnabled;
-      },
+      listenWhen: (previous, current) =>
+          current is LoadedOptionsState &&
+          (previous is! LoadedOptionsState ||
+              previous.options.selectedDateTimeRange !=
+                  current.options.selectedDateTimeRange ||
+              previous.options.isDateTimeFilterEnabled !=
+                  current.options.isDateTimeFilterEnabled),
       listener: (context, state) {
-        if (state is! LoadedOptionsState) {
-          return;
+        if (state is LoadedOptionsState) {
+          consoleBloc.add(
+            ConsoleUpdateDateTimeFilter(
+              dateTimeRange: state.options.selectedDateTimeRange,
+              isDateTimeFilterEnabled: state.options.isDateTimeFilterEnabled,
+            ),
+          );
         }
-
-        consoleBloc.add(
-          ConsoleUpdateDateTimeFilter(
-            dateTimeRange: state.options.selectedDateTimeRange,
-            isDateTimeFilterEnabled: state.options.isDateTimeFilterEnabled,
-          ),
-        );
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -137,12 +128,9 @@ class _ConsoleViewState extends State<ConsoleView> {
               : null,
           actions: [
             BlocSelector<OptionsBloc, OptionsState, bool>(
-              selector: (state) {
-                if (state is! LoadedOptionsState) {
-                  return false;
-                }
-                return state.options.isDateTimeFilterEnabled;
-              },
+              selector: (state) =>
+                  state is LoadedOptionsState &&
+                  state.options.isDateTimeFilterEnabled,
               builder: (context, enabled) {
                 final iconColor = enabled
                     ? Theme.of(context).colorScheme.primary
