@@ -8,6 +8,13 @@ import 'enum_logger_type.dart';
 ///
 /// {@category Utilities}
 extension LoggerEnum on LoggerObjectBase {
+  /// Retorna o [EnumLoggerType] correspondente ao tipo concreto desta instância.
+  ///
+  /// Mapeia:
+  /// - [ErrorLog] → [EnumLoggerType.error]
+  /// - [WarningLog] → [EnumLoggerType.warning]
+  /// - [InfoLog] → [EnumLoggerType.info]
+  /// - Outros ([DebugLog]) → [EnumLoggerType.debug]
   EnumLoggerType get enumLoggerType {
     if (this is ErrorLog) return EnumLoggerType.error;
     if (this is WarningLog) return EnumLoggerType.warning;

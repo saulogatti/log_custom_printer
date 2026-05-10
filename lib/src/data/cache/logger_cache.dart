@@ -66,6 +66,10 @@ final class LoggerCache {
     await _fileManagerType.deleteFile(fileName);
   }
 
+  /// Exporta uma lista de logs para um arquivo e retorna os dados em bytes e o caminho do arquivo.
+  ///
+  /// [logs]: lista de objetos de log para exportar.
+  /// [format]: formato de exportação desejado.
   Future<(List<int>?, String?)> exportLogs(List<LoggerObjectBase> logs, ExportFormat format) async {
     await writeLogToFile("share.json", logs);
     final pathFile = _getPathFile("share.json");
@@ -74,6 +78,7 @@ final class LoggerCache {
     return (objEncode.codeUnits, pathFile);
   }
 
+  /// Retorna o caminho completo de um arquivo de log para fins de teste.
   @visibleForTesting
   String getPathFileForTest(String fileName) {
     return _getPathFile(fileName);
