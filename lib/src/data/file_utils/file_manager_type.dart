@@ -11,7 +11,7 @@ class FileManager implements IFileManagerType {
   /// Cadeia de execução por caminho para serializar operações concorrentes.
   final Map<String, Future<void>> _pathLocks = {};
 
-  /// Cria um gerenciador de arquivos para o [fileType] informado.
+  /// Cria um gerenciador de arquivos.
   FileManager();
 
   @override
