@@ -10,7 +10,10 @@ void main() {
   late LoggerCache cache;
 
   setUpAll(() async {
-    tempDir = await Directory.systemTemp.createTemp('logger_cache_test');
+    tempDir = Directory('${Directory.current.path}/logger_cache_test2');
+    if (!await tempDir.exists()) {
+      await tempDir.create(recursive: true);
+    }
     cache = LoggerCache(tempDir.path);
     await cache.futureInitialization.future;
   });
@@ -19,17 +22,6 @@ void main() {
     await tempDir.delete(recursive: true);
   });
   group("Teste tipo arquivos", () {
-    test(
-      'writeLogToFile should create a file with the correct extension',
-      () async {
-        final list = LoggerJsonList(type: 'DebugLog');
-        list.addLogger(DebugLog('Test message'));
-        await cache.writeLogToFile('debug', list);
-
-        final expectedFile = File(cache.getPathFileForTest('debug'));
-        expect(await expectedFile.exists(), isTrue);
-      },
-    );
     test('readAllLogs should return all persisted logs', () async {
       // 1. Create and write a log list
       final list = LoggerJsonList(type: 'DebugLog');
@@ -43,10 +35,15 @@ void main() {
       expect(allLogs, isNotNull);
       expect(allLogs!.length, equals(1));
       expect(allLogs.values.first!.loggerEntries.length, equals(1));
-      expect(
-        (allLogs.values.first!.loggerEntries.first as DebugLog).message,
-        equals('Test message'),
-      );
+      expect((allLogs.values.first!.loggerEntries.first as DebugLog).message, equals('Test message'));
+    });
+    test('writeLogToFile should create a file with the correct extension', () async {
+      final list = LoggerJsonList(type: 'DebugLog');
+      list.addLogger(DebugLog('Test message'));
+      await cache.writeLogToFile('debug', list);
+
+      final expectedFile = File(cache.getPathFileForTest('debug'));
+      expect(await expectedFile.exists(), isTrue);
     });
   });
 }

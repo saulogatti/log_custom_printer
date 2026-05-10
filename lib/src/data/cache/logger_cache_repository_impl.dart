@@ -38,12 +38,12 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   LoggerCacheRepositoryImpl({
     this.maxLogEntries = 1000,
     this.directoryToSave,
-    FileType fileType = FileType.json,
+
   }) {
     if (directoryToSave != null) {
       _loggerCache = LoggerCache(
         directoryToSave!,
-        fileManagerType: FileManager(fileType: fileType),
+        fileManagerType: FileManager(),
       );
       _futureInitialization = _initialize();
     }
