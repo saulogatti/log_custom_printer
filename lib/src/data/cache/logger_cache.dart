@@ -30,11 +30,13 @@ final class LoggerCache {
   /// Callback opcional para lidar com erros durante a inicialização ou escrita.
   void Function(Object error, StackTrace stackTrace)? onError;
 
+  final String _extension = '.json';
+
   /// Cria um gerenciador de cache.
   ///
   /// [directory]: o diretório base onde os logs serão armazenados.
   LoggerCache(String directory, {IFileManagerType? fileManagerType})
-    : _fileManagerType = fileManagerType ?? FileManager(fileType: FileType.json) {
+    : _fileManagerType = fileManagerType ?? FileManager() {
     _future = Completer<void>();
     _init(directory);
   }
@@ -89,7 +91,7 @@ final class LoggerCache {
         final files = await directory.list().where((entity) => entity is File).cast<File>().toList();
         final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
         for (final file in files) {
-          if (file.path.endsWith('.json')) {
+          if (file.path.endsWith(_extension)) {
             final data = await _fileManagerType.readFile(file.path);
             final mapJ = jsonDecode(data);
             if (mapJ is Map) {
@@ -147,7 +149,7 @@ final class LoggerCache {
       throw ArgumentError('O nome do arquivo após sanitização ficou vazio');
     }
 
-    final fileJson = path.setExtension(sanitizedFileName, '.json');
+    final fileJson = path.setExtension(sanitizedFileName, _extension);
     final pathLog = path.join(_directoryPath, fileJson);
 
     return pathLog;

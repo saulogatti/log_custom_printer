@@ -1,21 +1,18 @@
 import 'dart:async';
 import 'dart:io';
 
-/// Implementação de gerenciamento de arquivos tipado por [FileType].
+/// Implementação de gerenciamento de arquivos.
 ///
-/// A extensão do [path] é validada em todas as operações para garantir que
-/// o tipo de arquivo manipulado seja compatível com [fileType].
+/// Fornece funcionalidades para criar, ler, escrever e deletar arquivos e diretórios.
+/// Todas as operações são serializadas por caminho para evitar condições de corrida.
 ///
 /// {@category Utilities}
 class FileManager implements IFileManagerType {
-  /// Tipo de arquivo permitido para esta instância.
-  final FileType fileType;
-
   /// Cadeia de execução por caminho para serializar operações concorrentes.
   final Map<String, Future<void>> _pathLocks = {};
 
   /// Cria um gerenciador de arquivos para o [fileType] informado.
-  FileManager({required this.fileType});
+  FileManager();
 
   @override
   Future<bool> createDirectory(String path) {
@@ -64,9 +61,6 @@ class FileManager implements IFileManagerType {
 
   /// Lê e retorna o conteúdo do arquivo em [path].
   ///
-  /// Para [FileType.log], o arquivo é lido como bytes e convertido para
-  /// `String`. Para os demais tipos, a leitura é feita como texto.
-  ///
   /// Lança [Exception] quando o arquivo não é encontrado.
   @override
   Future<String> readFile(String path) {
@@ -74,10 +68,6 @@ class FileManager implements IFileManagerType {
       _extensionIncludePath(path);
       final file = File(path);
       if (await file.exists()) {
-        if (fileType == FileType.log) {
-          final bytes = await file.readAsBytes();
-          return String.fromCharCodes(bytes);
-        }
         final res = await file.readAsString();
         return res;
       }
@@ -86,9 +76,6 @@ class FileManager implements IFileManagerType {
   }
 
   /// Escreve [content] no arquivo em [path].
-  ///
-  /// Para [FileType.log], o conteúdo é anexado ao arquivo usando
-  /// [FileMode.append]. Para os demais tipos, o conteúdo sobrescreve o arquivo.
   ///
   /// Retorna `true` após concluir a escrita.
   @override
@@ -99,24 +86,19 @@ class FileManager implements IFileManagerType {
       if (!await file.exists()) {
         await file.create(recursive: true);
       }
-      if (fileType == FileType.log) {
-        await file.writeAsBytes(content.codeUnits, mode: FileMode.append);
-      } else {
-        await file.writeAsString(content);
-      }
+
+      await file.writeAsString(content, mode: FileMode.append);
+
       return true;
     });
   }
 
-  /// Valida se o [path] termina com a extensão suportada por [fileType].
+  /// Valida se o [path] é válido.
   ///
-  /// Lança [Exception] quando a extensão não corresponde.
+  /// Lança [Exception] quando o caminho é inválido.
   void _extensionIncludePath(String path) {
-    assert(path.isNotEmpty, 'O caminho do arquivo não pode ser vazio.');
-
-    final extension = path.split('.').last;
-    if (extension != fileType.name) {
-      throw Exception('Invalid file extension: $extension');
+    if (path.isEmpty) {
+      throw Exception('Invalid  path: Path cannot be empty');
     }
   }
 
@@ -124,10 +106,7 @@ class FileManager implements IFileManagerType {
   ///
   /// Operações em caminhos diferentes podem ocorrer em paralelo, mas no mesmo
   /// caminho são executadas em sequência para evitar condições de corrida.
-  Future<T> _runWithPathLock<T>(
-    String path,
-    Future<T> Function() operation,
-  ) async {
+  Future<T> _runWithPathLock<T>(String path, Future<T> Function() operation) async {
     final key = path.trim();
     final previous = _pathLocks[key] ?? Future<void>.value();
     final completer = Completer<void>();
