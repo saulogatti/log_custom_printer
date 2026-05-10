@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 3.0.2
+
+- Fix: corrigir o caminho dos logs para ambiente de teste, garantindo que os logs sejam gravados corretamente durante os testes.
+
 ## 3.0.1
 
 - Fix: retirando dependência de `path_provider` que usa flutter. Quando path não é fornecido, não é usado o sistema de salvar em arquivos.
