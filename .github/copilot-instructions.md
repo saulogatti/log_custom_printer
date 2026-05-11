@@ -22,8 +22,7 @@
 - Não use comandos Flutter neste repositório, exceto ao documentar integração em apps consumidores.
 - Testes:
   - suíte completa: `dart test`
-  - ficheiro único: `dart test test\logger_json_list_test.dart`
-  - teste único por nome: `dart test test\logger_json_list_test.dart -n "keeps the newest entries first and trims when capacity is exceeded"`
+  - ficheiro único: `dart test test/logger_json_list_test.dart`\n  - teste único por nome: `dart test test/logger_json_list_test.dart -n "keeps the newest entries first and trims when capacity is exceeded"`
 - Análise estática: `dart analyze`.
 - Geração de código (obrigatória após mudanças em `@JsonSerializable`):
   - `dart run build_runner build --delete-conflicting-outputs`
