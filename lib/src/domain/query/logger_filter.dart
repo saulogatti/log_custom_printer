@@ -9,6 +9,8 @@ import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 /// Delega ao engine apropriado conforme os critérios presentes na query:
 /// - Se [LogQuery.types] não estiver vazio, aplica filtragem por tipo.
 /// - Caso contrário, aplica ordenação conforme [LogQuery.sortDirection].
+///
+/// {@category Query}
 class LoggerFilter {
   /// Query com os critérios de filtragem e/ou ordenação.
   LogQuery query;
@@ -19,7 +21,11 @@ class LoggerFilter {
   /// Aplica filtragem e/ou ordenação a [logs] conforme a [query].
   ///
   /// Retorna os [logs] sem modificação se nenhum critério estiver definido.
+  ///
+  /// Observação: Atualmente, se [LogQuery.types] estiver presente, apenas a
+  /// filtragem é aplicada. Caso contrário, a ordenação é aplicada.
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs) {
+
     if (query.types != null && query.types!.isNotEmpty) {
       return const LogFilterEngine().apply(logs, query);
     } else if (query.sortDirection == SortDirection.asc) {
