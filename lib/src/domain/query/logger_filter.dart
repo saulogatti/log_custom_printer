@@ -22,7 +22,7 @@ class LoggerFilter {
   ///
   /// Retorna os [logs] sem modificação se nenhum critério estiver definido.
   ///
-  /// Observação: Atualmente, se [LogQuery.types] estiver presente, apenas a
+  /// #67 Observação: Atualmente, se [LogQuery.types] estiver presente, apenas a
   /// filtragem é aplicada. Caso contrário, a ordenação é aplicada.
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs) {
 

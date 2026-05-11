@@ -69,7 +69,7 @@ final class LoggerCache {
   /// Exporta uma lista de logs para um arquivo e retorna os dados em bytes e o caminho do arquivo.
   ///
   /// [logs]: lista de objetos de log para exportar.
-  /// [format]: formato de exportação desejado.
+  /// #66 - O arquivo é salvo como "share.json" no diretório de logs.
   Future<(List<int>?, String?)> exportLogs(List<LoggerObjectBase> logs, ExportFormat format) async {
     await writeLogToFile("share.json", logs);
     final pathFile = _getPathFile("share.json");
