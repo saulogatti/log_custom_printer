@@ -23,17 +23,19 @@ final class LoggerPersistenceService {
   /// Recebe a lista de logs atual após operações de escrita/limpeza.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
 
+  /// Mecanismo de filtragem de logs.
   final LogFilterEngine _filterEngine;
 
+  /// Mecanismo de ordenação de logs.
   final LogSortEngine _sortEngine;
 
   /// Cria o serviço com um [cacheRepository] customizado.
   ///
   /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
   ///
-  /// Os parâmetros [filterEngine], [sortEngine] e [exportService] são opcionais
-  /// e permitem injetar implementações customizadas (útil em testes). Quando
-  /// omitidos, usam as implementações padrão constantes da biblioteca.
+  /// Os parâmetros [filterEngine] e [sortEngine] são opcionais e permitem
+  /// injetar implementações customizadas (útil em testes). Quando omitidos,
+  /// usam as implementações padrão constantes da biblioteca.
   LoggerPersistenceService({
     ILoggerCacheRepository? cacheRepository,
     LogFilterEngine filterEngine = const LogFilterEngine(),
@@ -71,24 +73,6 @@ final class LoggerPersistenceService {
     await _cacheRepository.clearLogsByType(type);
     if (logOutputHandler != null) {
       final logs = await _cacheRepository.getAllLogs();
-      logOutputHandler?.call(logs);
-    }
-  }
-
-  /// Exporta os logs para uma [String] no [format] especificado.
-  ///
-  /// A consulta aplica os filtros e a ordenação definidos em [query] antes de
-  /// serializar. Passe [LogQuery()] (sem parâmetros) para exportar todos os logs
-  /// sem filtro ou ordenação.
-  ///
-  /// **Atenção:** esta operação é em memória. Persistência ou compartilhamento
-  /// do conteúdo gerado fica a cargo da camada consumidora.
-  Future<void> exportLogs(LogQuery query, ExportFormat format) async {
-    final listLogs = await queryLogs(query);
-
-    await _cacheRepository.exportLogs(listLogs, format);
-    if (logOutputHandler != null) {
-      final logs = await queryLogs(query);
       logOutputHandler?.call(logs);
     }
   }

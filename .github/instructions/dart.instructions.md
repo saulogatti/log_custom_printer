@@ -1,8 +1,9 @@
-# Instruções de IA — Dart/Flutter (focadas no projeto)
+# Instruções de IA — Dart (biblioteca `log_custom_printer`)
 
-Este projeto é uma biblioteca Dart/Flutter e está em refatoração incremental
-para Clean Architecture. As regras abaixo priorizam manutenibilidade,
-testabilidade e consistência com o domínio atual.
+Este repositório é uma **biblioteca Dart** (sem dependência de Flutter no `pubspec`).
+A consola gráfica Flutter foi movida para **outro pacote**; as regras de UI abaixo
+aplicam-se a **apps ou pacotes Flutter** que consumam esta biblioteca, não ao núcleo
+em `lib/`. As regras abaixo priorizam manutenibilidade, testabilidade e domínio de logging.
 
 > Importante: siga também `.github/copilot-instructions.md`.
 
