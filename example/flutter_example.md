@@ -58,20 +58,20 @@ Você pode usar o `ErrorLog` para capturar exceções globais do Flutter:
 
 ```dart
 void main() {
-  registerLogPrinterColor(config: const ConfigLog(enableLog: true));
+  final persistenceService = registerLogPrinterColor(config: const ConfigLog(enableLog: true));
 
   FlutterError.onError = (details) {
     ErrorLog(
       details.exceptionAsString(),
       details.stack ?? StackTrace.current,
-      typeClass: details.library?.runtimeType,
+      typeClass: details.exception.runtimeType,
     ).sendLog();
   };
 
-  runApp(const MyApp());
+  runApp(MyApp(persistenceService: persistenceService));
 }
 ```
 
 ## 4. Próximos Passos
 
-Para detalhes específicos sobre a integração com a interface gráfica, consulte o guia de migração em [docs/ConsoleView.md](../doc/ConsoleView.md) e a documentação do pacote de console visual quando este for publicado.
+Para detalhes específicos sobre a integração com a interface gráfica, consulte o guia de migração em [doc/ConsoleView.md](../doc/ConsoleView.md) e a documentação do pacote de console visual quando este for publicado.
