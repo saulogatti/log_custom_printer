@@ -1,6 +1,6 @@
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/domain/query/logger_filter.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('LoggerFilter', () {
@@ -11,7 +11,7 @@ void main() {
     final allLogs = <LoggerObjectBase>[debug1, info1, error1];
 
     test('delegates to LogFilterEngine when types is not empty', () {
-      final query = LogQuery(
+      final query = const LogQuery(
         types: {EnumLoggerType.error},
         sortDirection: SortDirection.asc, // Should be ignored if types is present
       );
@@ -24,11 +24,7 @@ void main() {
     });
 
     test('delegates to LogSortEngine when types is empty and sortDirection is asc', () {
-      final query = const LogQuery(
-        types: {},
-        sortField: LogSortField.date,
-        sortDirection: SortDirection.asc,
-      );
+      final query = const LogQuery(types: {}, sortField: LogSortField.date, sortDirection: SortDirection.asc);
       final filter = LoggerFilter(query: query);
 
       final result = filter.apply(allLogs);
