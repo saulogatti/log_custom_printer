@@ -19,6 +19,10 @@ extension DateTimeLoggingExtensions on DateTime {
   /// "dd/MM/yyyy HH:mm:ss.SSS", ideal para timestamps de log.
   String get logFullDateTime => '${onlyDate()} ${onlyTime()}';
 
+  /// Cria uma cópia deste DateTime com componentes de tempo alterados.
+  ///
+  /// [hour], [minute] e [second] permitem sobrescrever partes específicas do
+  /// horário. Mantém os mesmos valores de ano, mês e dia da instância original.
   DateTime copyWithTime({int? hour, int? minute, int? second}) {
     return DateTime(
       year,
@@ -54,10 +58,12 @@ extension DateTimeLoggingExtensions on DateTime {
     return '$h:$min:$sec.$ms';
   }
 
+  /// Formata um número com 3 dígitos (preenche com zeros à esquerda).
   String threeDigits(int n) {
     return n.toString().padLeft(3, '0');
   }
 
+  /// Formata um número com 2 dígitos (preenche com zeros à esquerda).
   String twoDigits(int n) {
     return n.toString().padLeft(2, '0');
   }

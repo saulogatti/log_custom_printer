@@ -2,7 +2,8 @@
 
 ## Code Style
 - Siga `analysis_options.yaml` e `Effective Dart`.
-- Preserve API pública estável em `lib/log_custom_printer.dart` (exports são parte do contrato).
+- Preserve API pública estável em `lib/log_custom_printer.dart`; qualquer mudança nos `export`s é mudança de contrato.
+- Só adicione um novo `export` em `lib/log_custom_printer.dart` quando o tipo realmente fizer parte da API pública; caso contrário, mantenha-o interno em `lib/src/`.
 - Não editar arquivos gerados (`*.g.dart`).
 
 ## Architecture
@@ -17,8 +18,11 @@
   - integração recomendada em classes de uso via `LoggerClassMixin`.
 
 ## Build and Test
-- Dependências: `dart pub get` (ou `flutter pub get`).
-- Testes: `dart test` (pacote Dart) e `flutter test` quando necessário.
+- Este pacote é **Dart puro**; use `dart pub get`, `dart analyze` e `dart test` por padrão.
+- Não use comandos Flutter neste repositório, exceto ao documentar integração em apps consumidores.
+- Testes:
+  - suíte completa: `dart test`
+  - ficheiro único: `dart test test/logger_json_list_test.dart`\n  - teste único por nome: `dart test test/logger_json_list_test.dart -n "keeps the newest entries first and trims when capacity is exceeded"`
 - Análise estática: `dart analyze`.
 - Geração de código (obrigatória após mudanças em `@JsonSerializable`):
   - `dart run build_runner build --delete-conflicting-outputs`
@@ -35,13 +39,14 @@
   6) rodar `build_runner`.
 - Evite `print` solto fora das estratégias de impressão da biblioteca.
 - Em testes que tocam DI/logging, registre impressora no `setUp` e faça `GetIt.instance.reset()` no `tearDown`.
+- Em testes que tocam cache/ficheiros, prefira `Directory.systemTemp.createTemp(...)` ou diretórios temporários dedicados e remova-os no `tearDown`/`tearDownAll`.
 
 ## Reference Docs (link, don’t embed)
 - Visão geral e setup: `README.md`, histórico: `CHANGELOG.md`
-- Núcleo e DI: `docs/Core.md`
-- Tipos de log: `docs/LogTypes.md`
-- Estratégias de impressão: `docs/Printers.md`
-- Configuração/filtros: `docs/Configuration.md`
-- Utilitários e cache: `docs/Utilities.md`
-- Documentação expandida: `docs/DOCUMENTATION.md`
-- Migração consola Flutter (pacote à parte): `docs/ConsoleView.md`
+- Núcleo e DI: `doc/Core.md`
+- Tipos de log: `doc/LogTypes.md`
+- Estratégias de impressão: `doc/Printers.md`
+- Configuração/filtros: `doc/Configuration.md`
+- Utilitários e cache: `doc/Utilities.md`
+- Documentação expandida: `doc/DOCUMENTATION.md`
+- Migração consola Flutter (pacote à parte): `doc/ConsoleView.md`

@@ -107,6 +107,9 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     return [];
   }
 
+  /// Importa logs de uma string no formato especificado.
+  ///
+  /// Atualmente não implementado.
   @override
   Future<void> importLogs(String content, ExportFormat format) {
     throw UnimplementedError();

@@ -23,8 +23,10 @@ final class LoggerPersistenceService {
   /// Recebe a lista de logs atual após operações de escrita/limpeza.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
 
+  /// Mecanismo de filtragem de logs.
   final LogFilterEngine _filterEngine;
 
+  /// Mecanismo de ordenação de logs.
   final LogSortEngine _sortEngine;
 
   /// Cria o serviço com um [cacheRepository] customizado.
