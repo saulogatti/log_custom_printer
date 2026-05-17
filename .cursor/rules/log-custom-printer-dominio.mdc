@@ -5,7 +5,7 @@ alwaysApply: true
 
 # `log_custom_printer` — domínio e convenções
 
-Fonte canónica detalhada: [`.github/copilot-instructions.md`](.github/copilot-instructions.md) e docs referenciados lá (`README.md`, `Core.md`, `LogTypes.md`, etc.).
+Fonte canónica detalhada: [`.github/copilot-instructions.md`](.github/copilot-instructions.md) e guias em `docs/` (`Core.md`, `LogTypes.md`, `DOCUMENTATION.md`, etc.), além do [`README.md`](README.md) na raiz do repositório.
 
 ## Estilo e API
 

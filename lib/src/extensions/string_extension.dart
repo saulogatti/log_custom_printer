@@ -1,5 +1,6 @@
 /// Conjunto de caracteres que não são permitidos em nomes de arquivos.
-final regexFileName = RegExp(r'[<>:"/\\|?*]');
+/// Inclui caracteres proibidos em Windows/Unix e caracteres de controle/nulos.
+final regexFileName = RegExp(r'[<>:"/\\|?*\x00-\x1F\x7F]');
 
 /// Extensões utilitárias para a classe [String].
 ///

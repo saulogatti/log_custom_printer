@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
+import 'package:test/test.dart';
 
 void main() {
   group('Security Encoding Tests', () {
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('FileManager (FileType.log) should use UTF-8 encoding for non-ASCII characters', () async {
-      final fileManager = FileManager(fileType: FileType.log);
+      final fileManager = FileManager();
       final filePath = '${tempDir.path}/test_encoding.log';
       const content = 'Log with emoji 🚀 and accents áéíóú';
 

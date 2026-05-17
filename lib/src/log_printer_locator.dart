@@ -1,19 +1,14 @@
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:log_custom_printer/src/config_log.dart';
-import 'package:log_custom_printer/src/console_view/domain/repository/message_repository.dart';
-import 'package:log_custom_printer/src/console_view/view/console/console_overlay.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
-import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart'
-    show FileType;
+import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' show FileType;
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
 import 'package:log_custom_printer/src/log_printer_service.dart';
 
-export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart'
-    show FileType;
+export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' show FileType;
 
 /// Resolve o [LogPrinterService] registrado no get_it.
 ///
@@ -36,10 +31,6 @@ LogPrinterService fetchLogPrinterService() {
   return getIt<LogPrinterService>();
 }
 
-void hideConsoleOverlay() {
-  ConsoleOverlayManager.hide();
-}
-
 /// Registra o [LogPrinterBase] no get_it para injeção de dependência.
 ///
 /// Deve ser chamado no startup da aplicação, antes de qualquer uso
@@ -55,7 +46,7 @@ void hideConsoleOverlay() {
 ///     const LogWithColorPrint(),
 ///     config: const ConfigLog(enableLog: true),
 ///   );
-///   runApp(MyApp());
+///   // Em Flutter: runApp(const MyApp());
 /// }
 /// ```
 ///
@@ -70,11 +61,7 @@ LoggerPersistenceService registerLogPrinter(
     locator.unregister<LogPrinterService>();
   }
   locator.registerSingleton<LogPrinterService>(
-    LogPrinterService(
-      printer,
-      cacheRepository: cacheRepository,
-      configLog: config,
-    ),
+    LogPrinterService(printer, cacheRepository: cacheRepository, configLog: config),
   );
   return locator<LogPrinterService>().cacheRepository;
 }
@@ -103,15 +90,14 @@ LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  @Deprecated(
+    'O parâmetro fileType não tem efeito e será removido em futuras versões. O tipo de arquivo é determinado internamente pelo LoggerCache.',
+  )
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
     const LogWithColorPrint(),
-    cacheRepository: LoggerCacheRepositoryImpl(
-      maxLogEntries: maxLogsInCache,
-      saveLogFilePath: cacheFilePath,
-      fileType: fileType,
-    ),
+    cacheRepository: LoggerCacheRepositoryImpl(maxLogEntries: maxLogsInCache, directoryToSave: cacheFilePath),
     config: config ?? const ConfigLog(),
   );
 }
@@ -134,37 +120,19 @@ LoggerPersistenceService registerLogPrinterColor({
 /// ```
 ///
 /// {@category Core}
+
 LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  @Deprecated(
+    'O parâmetro fileType não tem efeito e será removido em futuras versões. O tipo de arquivo é determinado internamente pelo LoggerCache.',
+  )
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
     const LogSimplePrint(),
-    cacheRepository: LoggerCacheRepositoryImpl(
-      maxLogEntries: maxLogsInCache,
-      saveLogFilePath: cacheFilePath,
-      fileType: fileType,
-    ),
+    cacheRepository: LoggerCacheRepositoryImpl(maxLogEntries: maxLogsInCache, directoryToSave: cacheFilePath),
     config: config ?? const ConfigLog(),
-  );
-}
-
-void setConsoleOverlaySize(Size size) {
-  ConsoleOverlayManager.setSize(size);
-}
-
-void showConsoleOverlay(
-  BuildContext context,
-  MessageRepository messageRepository,
-  ILoggerCacheRepository loggerCacheRepository,
-  Size size,
-) {
-  ConsoleOverlayManager.show(
-    context,
-    messageRepository,
-    loggerCacheRepository,
-    size,
   );
 }

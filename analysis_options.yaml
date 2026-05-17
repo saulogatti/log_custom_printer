@@ -1,4 +1,7 @@
-include: package:flutter_lints/flutter.yaml
+include: package:lints/recommended.yaml
+
+formatter: 
+  page_width: 110
 
 analyzer:
   errors:

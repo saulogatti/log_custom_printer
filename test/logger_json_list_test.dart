@@ -4,9 +4,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:test/test.dart';
 
 void main() {
   setUp(() {
