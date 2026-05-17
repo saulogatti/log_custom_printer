@@ -73,7 +73,7 @@ final class LoggerCache {
     final pathFile = _getPathFile("share.json");
     final objEncode = jsonEncode(logs);
 
-    return (objEncode.codeUnits, pathFile);
+    return (utf8.encode(objEncode), pathFile);
   }
 
   /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.

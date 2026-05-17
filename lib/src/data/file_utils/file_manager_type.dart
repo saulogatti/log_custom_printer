@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 /// Implementação de gerenciamento de arquivos tipado por [FileType].
@@ -76,7 +77,7 @@ class FileManager implements IFileManagerType {
       if (await file.exists()) {
         if (fileType == FileType.log) {
           final bytes = await file.readAsBytes();
-          return String.fromCharCodes(bytes);
+          return utf8.decode(bytes);
         }
         final res = await file.readAsString();
         return res;
@@ -100,7 +101,7 @@ class FileManager implements IFileManagerType {
         await file.create(recursive: true);
       }
       if (fileType == FileType.log) {
-        await file.writeAsBytes(content.codeUnits, mode: FileMode.append);
+        await file.writeAsBytes(utf8.encode(content), mode: FileMode.append);
       } else {
         await file.writeAsString(content);
       }
