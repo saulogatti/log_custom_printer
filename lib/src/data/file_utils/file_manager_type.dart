@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 /// Implementação de gerenciamento de arquivos.
@@ -68,7 +69,7 @@ class FileManager implements IFileManagerType {
       _extensionIncludePath(path);
       final file = File(path);
       if (await file.exists()) {
-        final res = await file.readAsString();
+        final res = await file.readAsString(encoding: utf8);
         return res;
       }
       throw Exception('File not found: $path');
@@ -86,9 +87,7 @@ class FileManager implements IFileManagerType {
       if (!await file.exists()) {
         await file.create(recursive: true);
       }
-
-      await file.writeAsString(content, mode: FileMode.append);
-
+      await file.writeAsBytes(utf8.encode(content), mode: FileMode.append);
       return true;
     });
   }

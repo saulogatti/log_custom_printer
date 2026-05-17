@@ -75,7 +75,7 @@ final class LoggerCache {
     final pathFile = _getPathFile("share.json");
     final objEncode = jsonEncode(logs);
 
-    return (objEncode.codeUnits, pathFile);
+    return (utf8.encode(objEncode), pathFile);
   }
 
   /// Retorna o caminho completo de um arquivo de log para fins de teste.
