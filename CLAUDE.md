@@ -12,8 +12,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 dart pub get                                              # Install dependencies
 dart analyze                                              # Static analysis
 dart test                                                 # Full test suite
-dart test test/<file>_test.dart                          # Single test file
-dart test test/<file>_test.dart -n "test name here"      # Single test by name
+dart test test/<file>_test.dart                           # Single test file
+dart test test/<file>_test.dart -n "test name here"       # Single test by name
 dart run build_runner build --delete-conflicting-outputs  # Regenerate *.g.dart files
 ./ci.sh -build                                            # Same as build_runner (shortcut)
 ./ci.sh -upgrade                                          # Upgrade deps to latest major versions
