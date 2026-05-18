@@ -66,7 +66,8 @@ All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
 
 ### File persistence concurrency
 
-`FileManager` (in `lib/src/data/file_utils/file_manager_type.dart`) serializes writes per path using a `Map<String, Future>` chain, avoiding race conditions when multiple logs write to the same file simultaneously.
+`FileManager` (in `lib/src/data/file_utils/file_manager_type.dart`) serializes writes per path using a
+`Map<String, Future>` chain, avoiding race conditions when multiple logs write to the same file simultaneously.
 
 ## Conventions
 
