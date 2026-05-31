@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.0
+
+- Fix: corrigir o caminho dos logs para ambiente de teste, garantindo que os logs sejam gravados corretamente durante os testes.
+- Refactor: atualizar a estrutura do projeto para melhorar a organização dos arquivos e facilitar a manutenção da biblioteca.
+- Refactor: atualizar a documentação para refletir as mudanças na estrutura do projeto e fornecer orientações claras sobre como utilizar a biblioteca de forma eficaz.
+- Fix: corrigir pequenos bugs e melhorar a estabilidade geral da biblioteca, garantindo uma experiência mais confiável para os usuários.
+
 
 ## 3.0.2
 
