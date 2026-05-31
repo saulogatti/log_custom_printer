@@ -5,10 +5,11 @@
 - Retirar o flutter para deixar a lib apenas com uso de dart
 - ConsoleView foi migrado para outro package.
 
-## 2. Criar um exemplo de uso da biblioteca (A fazer - Versão 3.0.0)
+## 2. Criar um exemplo de uso da biblioteca (Feito - Versão 3.0.0)
 
-- Criar um exemplo de uso da biblioteca sem o consoleview
-- Criar um exemplo de uso da biblioteca com o consoleview (depende da publicação do package do consoleview)
+- [x] Criar um exemplo de uso da biblioteca sem o consoleview
+- [/] Criar um exemplo de uso da biblioteca com o consoleview (depende da publicação do package do consoleview)
+  - Guia conceitual e template de integração adicionado em `example/flutter_example.md`.
 
 ## 3. Atualizar Documentação (A fazer - Versão 3.0.0)
 

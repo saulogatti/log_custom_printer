@@ -35,35 +35,45 @@ void main() {
     });
 
     test(
-      '_getPathFile should throw assertion error for filename with separator',
-      () {
-        expect(
-          () => loggerCache.writeLogToFile(
-            'path${path.separator}separator',
-            LoggerJsonList(type: 'TestLog'),
-          ),
-          throwsA(isA<AssertionError>()),
+      '_getPathFile should handle filename with separator by taking basename',
+      () async {
+        await loggerCache.writeLogToFile(
+          'path${path.separator}separator',
+          LoggerJsonList(type: 'TestLog'),
         );
+        final expectedPath = path.join(
+          tempDir.path,
+          'loggerApp',
+          'logs',
+          'separator.json',
+        );
+        final file = File(expectedPath);
+        expect(await file.exists(), isTrue);
       },
     );
 
     test(
-      '_getPathFile should throw assertion error for filename with separator',
+      '_getPathFile should NOT throw for filename with .json',
       () async {
-        await expectLater(
-          () => loggerCache.writeLogToFile(
-            'test${path.separator}separator',
-            LoggerJsonList(type: 'TestLog'),
-          ),
-          throwsA(isA<AssertionError>()),
+        await loggerCache.writeLogToFile(
+          'test.json',
+          LoggerJsonList(type: 'TestLog'),
         );
+        final expectedPath = path.join(
+          tempDir.path,
+          'loggerApp',
+          'logs',
+          'test.json',
+        );
+        final file = File(expectedPath);
+        expect(await file.exists(), isTrue);
       },
     );
 
-    test('_getPathFile should throw assertion error for empty filename', () {
+    test('_getPathFile should throw ArgumentError for empty filename', () {
       expect(
         () => loggerCache.writeLogToFile('', LoggerJsonList(type: 'TestLog')),
-        throwsA(isA<AssertionError>()),
+        throwsArgumentError,
       );
     });
   });
