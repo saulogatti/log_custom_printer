@@ -25,9 +25,10 @@ void main() {
         expect(logs.first.message, 'Teste de log simples');
       });
     });
-    test('sendLog sem registerLogPrinter* lança StateError', () {
+    test('sendLog sem registerLogPrinter não lança StateError', () {
       final logger = _FakeClassLog();
-      expect(logger.testLog, throwsStateError);
+      logger.testLog();
+      expect(logger.testLog, isNotNull);
     });
   });
 }

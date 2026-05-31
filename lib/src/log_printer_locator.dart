@@ -15,18 +15,14 @@ export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' s
 /// Usado internamente por [LoggerObjectBase.sendLog] para obter o
 /// serviço de impressão de logs configurado via injeção de dependência.
 ///
-/// Lança [StateError] se [LogPrinterService] não estiver registrado.
-/// Chame [registerLogPrinter] no startup da aplicação antes de usar logs.
+/// Se [LogPrinterService] não estiver registrado, registra uma impressora simples.
+/// Chame [registerLogPrinter] no startup da aplicação.
 ///
 /// {@category Core}
 LogPrinterService fetchLogPrinterService() {
   final getIt = GetIt.instance;
   if (!getIt.isRegistered<LogPrinterService>()) {
-    throw StateError(
-      'LogPrinterService não está registrado. Chame registerLogPrinter, '
-      'registerLogPrinterColor ou registerLogPrinterSimple no startup '
-      'antes de enviar logs.',
-    );
+    registerLogPrinter(const LogSimplePrint(), config: const ConfigLog(enableLog: true));
   }
   return getIt<LogPrinterService>();
 }
@@ -97,7 +93,10 @@ LoggerPersistenceService registerLogPrinterColor({
 }) {
   return registerLogPrinter(
     const LogWithColorPrint(),
-    cacheRepository: LoggerCacheRepositoryImpl(maxLogEntries: maxLogsInCache, directoryToSave: cacheFilePath),
+    cacheRepository: LoggerCacheRepositoryImpl(
+      maxLogEntries: maxLogsInCache,
+      directoryToSave: cacheFilePath,
+    ),
     config: config ?? const ConfigLog(),
   );
 }
@@ -132,7 +131,10 @@ LoggerPersistenceService registerLogPrinterSimple({
 }) {
   return registerLogPrinter(
     const LogSimplePrint(),
-    cacheRepository: LoggerCacheRepositoryImpl(maxLogEntries: maxLogsInCache, directoryToSave: cacheFilePath),
+    cacheRepository: LoggerCacheRepositoryImpl(
+      maxLogEntries: maxLogsInCache,
+      directoryToSave: cacheFilePath,
+    ),
     config: config ?? const ConfigLog(),
   );
 }

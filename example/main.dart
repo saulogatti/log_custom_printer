@@ -10,6 +10,8 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 /// 5. Serialização JSON
 void main() async {
   print('--- Iniciando Exemplo log_custom_printer ---\n');
+  final log = DebugLog('Esta é uma mensagem de debug ${StackTrace.current.toString()}');
+  log.sendLog();
 
   // 1. Configuração inicial
   // Registramos uma impressora colorida para o console.
