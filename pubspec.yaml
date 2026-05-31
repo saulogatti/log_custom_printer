@@ -1,6 +1,6 @@
 name: log_custom_printer
 description: Custom logging for Dart with ANSI colors, JSON serialization, and get_it DI.
-version: 3.0.2
+version: 3.1.0
 repository: https://github.com/saulogatti/log_custom_printer
 
 environment:
