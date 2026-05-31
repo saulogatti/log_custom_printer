@@ -2,8 +2,8 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:meta/meta.dart';
 
 import '../../config_log.dart';
-import '../../log_printer_locator.dart';
 import '../../extensions/date_time_log_helper.dart';
+import '../../log_printer_locator.dart';
 import '../../utils/logger_ansi_color.dart';
 
 /// Marca base para objetos de log.
@@ -24,26 +24,6 @@ sealed class LoggerObject {}
 ///
 /// {@category Core}
 abstract class LoggerObjectBase extends LoggerObject {
-
-  /// Cria um objeto de log.
-  ///
-  /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
-  /// em modo de desenvolvimento. [createdAt] permite controlar a data do
-  /// log (útil em testes).
-  LoggerObjectBase(
-    this.message, {
-    DateTime? createdAt,
-    Type? typeClass,
-    String? tag,
-  }) : tag = tag ?? "" {
-    assert(
-      message.isNotEmpty && message.trim().isNotEmpty,
-      "Mensagem não pode ser vazia ou apenas espaços em branco",
-    );
-
-    logCreationDate = createdAt ?? DateTime.now();
-    className = typeClass?.toString() ?? runtimeType.toString();
-  }
   /// Nome da classe/origem que emitiu o log.
   ///
   /// Inicializado no construtor a partir de `typeClass` (quando fornecido)
@@ -70,6 +50,22 @@ abstract class LoggerObjectBase extends LoggerObject {
   @JsonKey(name: "logCreationDate")
   DateTime logCreationDate = DateTime.now();
 
+  /// Cria um objeto de log.
+  ///
+  /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
+  /// em modo de desenvolvimento. [createdAt] permite controlar a data do
+  /// log (útil em testes).
+  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
+    : tag = tag ?? "" {
+    assert(
+      message.isNotEmpty && message.trim().isNotEmpty,
+      "Mensagem não pode ser vazia ou apenas espaços em branco",
+    );
+
+    logCreationDate = createdAt ?? DateTime.now();
+    className = typeClass?.toString() ?? runtimeType.toString();
+  }
+
   /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
   ///
   /// Útil para [ErrorLog], que deve sempre ser exibido. Padrão: `false`.
@@ -90,9 +86,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
   String getMessage([bool withColor = true]) {
     final messageFormated = "${logCreationDate.logFullDateTime} $message";
-    final String formattedLine = withColor
-        ? getColor().call(messageFormated)
-        : messageFormated;
+    final String formattedLine = withColor ? getColor().call(messageFormated) : messageFormated;
 
     return formattedLine;
   }

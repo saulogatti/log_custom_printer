@@ -33,16 +33,14 @@ final class LoggerPersistenceService {
   ///
   /// Quando omitido, usa [LoggerCacheRepositoryImpl] como implementação padrão.
   ///
-  /// Os parâmetros [filterEngine] e [sortEngine] são opcionais e permitem
+  /// Os parâmetros [_filterEngine] e [_sortEngine] são opcionais e permitem
   /// injetar implementações customizadas (útil em testes). Quando omitidos,
   /// usam as implementações padrão constantes da biblioteca.
   LoggerPersistenceService({
     ILoggerCacheRepository? cacheRepository,
-    LogFilterEngine filterEngine = const LogFilterEngine(),
-    LogSortEngine sortEngine = const LogSortEngine(),
-  }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl(),
-       _filterEngine = filterEngine,
-       _sortEngine = sortEngine;
+    this._filterEngine = const LogFilterEngine(),
+    this._sortEngine = const LogSortEngine(),
+  }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
 
   /// Adiciona uma entrada de log ao repositório.
   ///
@@ -111,11 +109,7 @@ final class LoggerPersistenceService {
   }) async {
     final allLogs = await _cacheRepository.getAllLogs();
     return allLogs
-        .where(
-          (log) =>
-              !log.logCreationDate.isBefore(start) &&
-              log.logCreationDate.isBefore(end),
-        )
+        .where((log) => !log.logCreationDate.isBefore(start) && log.logCreationDate.isBefore(end))
         .toList();
   }
 
@@ -123,9 +117,7 @@ final class LoggerPersistenceService {
   ///
   /// O filtro é aplicado ao campo `className` para retornar apenas entradas
   /// que correspondam exatamente ao [runtimeType] informado.
-  Future<List<LoggerObjectBase>> searchLogByRuntimeType(
-    String runtimeType,
-  ) async {
+  Future<List<LoggerObjectBase>> searchLogByRuntimeType(String runtimeType) async {
     final allLogs = await _cacheRepository.getAllLogs();
     return allLogs.where((log) => log.className == runtimeType).toList();
   }
