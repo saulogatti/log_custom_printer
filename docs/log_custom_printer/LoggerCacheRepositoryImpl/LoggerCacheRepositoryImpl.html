@@ -55,33 +55,24 @@
 
     <section class="multi-line-signature">
       
-      <span class="name ">LoggerCacheRepositoryImpl</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="-param-maxLogEntries"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogEntries</span> = <span class="default-value">1000</span>, </span></li>
-<li><span class="parameter" id="-param-saveLogFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">saveLogFilePath</span>, </span></li>
-<li><span class="parameter" id="-param-fileType"><span class="type-annotation"><a href="../../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span>, </span></li>
+      <span class="name ">LoggerCacheRepositoryImpl</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="param-maxLogEntries"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.12.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogEntries</span> = <span class="default-value">1000</span>, </span></li>
+<li><span class="parameter" id="param-directoryToSave"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.12.0/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">directoryToSave</span>, </span></li>
 </ol>})
     </section>
     
 <section class="desc markdown">
   <p>Cria uma nova instância da implementação de cache.</p>
 <p><a href="../../log_custom_printer/LoggerCacheRepositoryImpl/maxLogEntries.html">maxLogEntries</a>: limite de logs mantidos em memória por tipo (padrão: 1000).
-<a href="../../log_custom_printer/LoggerCacheRepositoryImpl/saveLogFilePath.html">saveLogFilePath</a>: diretório base para persistência (se omitido, não salva em disco).
-<code>fileType</code>: tipo de arquivo para persistência (padrão: <a href="../../log_custom_printer/FileType.html">FileType.json</a>).</p>
+<a href="../../log_custom_printer/LoggerCacheRepositoryImpl/directoryToSave.html">directoryToSave</a>: diretório base para persistência (se omitido, não salva em disco).</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">LoggerCacheRepositoryImpl({
-  this.maxLogEntries = 1000,
-  this.saveLogFilePath,
-  FileType fileType = FileType.json,
-}) {
-  if (saveLogFilePath != null) {
-    _loggerCache = LoggerCache(
-      saveLogFilePath!,
-      fileManagerType: FileManager(fileType: fileType),
-    );
+  <pre class="language-dart"><code class="language-dart">LoggerCacheRepositoryImpl({this.maxLogEntries = 1000, this.directoryToSave}) {
+  if (directoryToSave != null) {
+    _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
     _futureInitialization = _initialize();
   }
 }</code></pre>
@@ -112,7 +103,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.0.0
+      3.1.0
   </span>
   
 </footer>

@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L24"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L22"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">fetchLogPrinterService</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -67,8 +67,8 @@
   <p>Resolve o <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> registrado no get_it.</p>
 <p>Usado internamente por <a href="../log_custom_printer/LoggerObjectBase/sendLog.html">LoggerObjectBase.sendLog</a> para obter o
 serviço de impressão de logs configurado via injeção de dependência.</p>
-<p>Lança <a href="https://api.dart.dev/stable/3.11.5/dart-core/StateError-class.html">StateError</a> se <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> não estiver registrado.
-Chame <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> no startup da aplicação antes de usar logs.</p>
+<p>Se <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> não estiver registrado, registra uma impressora simples.
+Chame <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> no startup da aplicação.</p>
 </section>
 
 
@@ -78,11 +78,7 @@ Chame <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter
   <pre class="language-dart"><code class="language-dart">LogPrinterService fetchLogPrinterService() {
   final getIt = GetIt.instance;
   if (!getIt.isRegistered&lt;LogPrinterService&gt;()) {
-    throw StateError(
-      &#39;LogPrinterService não está registrado. Chame registerLogPrinter, &#39;
-      &#39;registerLogPrinterColor ou registerLogPrinterSimple no startup &#39;
-      &#39;antes de enviar logs.&#39;,
-    );
+    registerLogPrinter(const LogSimplePrint(), config: const ConfigLog(enableLog: true));
   }
   return getIt&lt;LogPrinterService&gt;();
 }</code></pre>
@@ -112,7 +108,7 @@ Chame <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.0.0
+      3.1.0
   </span>
   
 </footer>

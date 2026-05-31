@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;FileManager-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/file_utils/file_manager_type.dart#L95"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/file_utils/file_manager_type.dart#L83"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">writeFile</span> method 
 </h1></div>
 
@@ -57,12 +57,12 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.11.5/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.12.0/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://api.dart.dev/stable/3.11.5/dart-core/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.11.5/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
-<span class="name ">writeFile</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="writeFile-param-path"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span></li>
-<li><span class="parameter" id="writeFile-param-content"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a></span> <span class="parameter-name">content</span></span></li>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.12.0/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.12.0/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
+<span class="name ">writeFile</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="writeFile-param-path"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.12.0/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span></li>
+<li><span class="parameter" id="writeFile-param-content"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.12.0/dart-core/String-class.html">String</a></span> <span class="parameter-name">content</span></span></li>
 </ol>)
 
       <div class="features"><span class="feature">override</span></div>
@@ -71,8 +71,6 @@
     
 <section class="desc markdown">
   <p>Escreve <code>content</code> no arquivo em <code>path</code>.</p>
-<p>Para <a href="../../log_custom_printer/FileType.html">FileType.log</a>, o conteúdo é anexado ao arquivo usando
-<a href="https://api.dart.dev/stable/3.11.5/dart-io/FileMode/append-constant.html">FileMode.append</a>. Para os demais tipos, o conteúdo sobrescreve o arquivo.</p>
 <p>Retorna <code>true</code> após concluir a escrita.</p>
 </section>
 
@@ -88,11 +86,7 @@ Future&lt;bool&gt; writeFile(String path, String content) {
     if (!await file.exists()) {
       await file.create(recursive: true);
     }
-    if (fileType == FileType.log) {
-      await file.writeAsBytes(content.codeUnits, mode: FileMode.append);
-    } else {
-      await file.writeAsString(content);
-    }
+    await file.writeAsBytes(utf8.encode(content), mode: FileMode.append);
     return true;
   });
 }</code></pre>
@@ -123,7 +117,7 @@ Future&lt;bool&gt; writeFile(String path, String content) {
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.0.0
+      3.1.0
   </span>
   
 </footer>

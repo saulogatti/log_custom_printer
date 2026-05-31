@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L130"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L123"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">registerLogPrinterSimple</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -58,9 +58,9 @@
         
 <span class="returntype"><a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
 <span class="name ">registerLogPrinterSimple</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.11.5/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.12.0/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.12.0/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span>@<a href="https://api.dart.dev/stable/3.12.0/dart-core/Deprecated/Deprecated.html">Deprecated</a>(&#39;O parâmetro fileType não tem efeito e será removido em futuras versões. O tipo de arquivo é determinado internamente pelo LoggerCache.&#39;)</span> <span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span>, </span></li>
 </ol>})
 
         
@@ -90,14 +90,16 @@
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
+  @Deprecated(
+    &#39;O parâmetro fileType não tem efeito e será removido em futuras versões. O tipo de arquivo é determinado internamente pelo LoggerCache.&#39;,
+  )
   FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
     const LogSimplePrint(),
     cacheRepository: LoggerCacheRepositoryImpl(
       maxLogEntries: maxLogsInCache,
-      saveLogFilePath: cacheFilePath,
-      fileType: fileType,
+      directoryToSave: cacheFilePath,
     ),
     config: config ?? const ConfigLog(),
   );
@@ -128,7 +130,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.0.0
+      3.1.0
   </span>
   
 </footer>

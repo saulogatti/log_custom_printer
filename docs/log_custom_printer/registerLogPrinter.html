@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L56"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L50"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">registerLogPrinter</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -97,11 +97,7 @@ de logs (sendLog, LoggerClassMixin, etc.).</p>
     locator.unregister&lt;LogPrinterService&gt;();
   }
   locator.registerSingleton&lt;LogPrinterService&gt;(
-    LogPrinterService(
-      printer,
-      cacheRepository: cacheRepository,
-      configLog: config,
-    ),
+    LogPrinterService(printer, cacheRepository: cacheRepository, configLog: config),
   );
   return locator&lt;LogPrinterService&gt;().cacheRepository;
 }</code></pre>
@@ -131,7 +127,7 @@ de logs (sendLog, LoggerClassMixin, etc.).</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.0.0
+      3.1.0
   </span>
   
 </footer>
