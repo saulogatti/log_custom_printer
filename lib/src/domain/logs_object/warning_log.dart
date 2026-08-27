@@ -34,11 +34,10 @@ class WarningLog extends LoggerObjectBase {
   ///
   /// [message] é o texto descritivo do aviso.
   /// [typeClass] identifica a classe de origem (opcional).
-  WarningLog(super.message, {super.typeClass}) : super();
+  WarningLog(super.message, {super.createdAt, super.typeClass});
 
   /// Cria uma instância a partir de JSON.
-  factory WarningLog.fromJson(Map<String, dynamic> json) =>
-      _$WarningLogFromJson(json);
+  factory WarningLog.fromJson(Map<String, dynamic> json) => _$WarningLogFromJson(json);
 
   @override
   LoggerAnsiColor getColor() {
