@@ -93,18 +93,27 @@ final class LoggerCache {
       await futureInitialization.future;
       final directory = Directory(_directoryPath);
       if (await directory.exists()) {
-        final files = await directory.list().where((entity) => entity is File).cast<File>().toList();
+        final files = await directory
+            .list()
+            .where((entity) => entity is File)
+            .cast<File>()
+            .toList();
         final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
         for (final file in files) {
           if (file.path.endsWith(_extension)) {
-            final data = await _fileManagerType.readFile(file.path);
-            final mapJ = jsonDecode(data);
-            if (mapJ is Map) {
-              final loggerList = LoggerJsonList.fromJson(Map.from(mapJ));
-              final typeLog = loggerList.enumLoggerType;
-              if (typeLog != null) {
-                allLogs[typeLog] = loggerList;
+            try {
+              final data = await _fileManagerType.readFile(file.path);
+              final mapJ = jsonDecode(data);
+              if (mapJ is Map) {
+                final loggerList = LoggerJsonList.fromJson(Map.from(mapJ));
+                final typeLog = loggerList.enumLoggerType;
+                if (typeLog != null) {
+                  allLogs[typeLog] = loggerList;
+                }
               }
+            } catch (e, stack) {
+              dev.log('Erro ao ler o arquivo de log: $e', stackTrace: stack);
+              await file.delete(recursive: true);
             }
           }
         }

@@ -87,7 +87,7 @@ class FileManager implements IFileManagerType {
       if (!await file.exists()) {
         await file.create(recursive: true);
       }
-      await file.writeAsBytes(utf8.encode(content), mode: FileMode.append);
+      await file.writeAsBytes(utf8.encode(content), mode: FileMode.write);
       return true;
     });
   }
