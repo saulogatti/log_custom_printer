@@ -28,7 +28,7 @@ Fonte canónica detalhada: [`.github/copilot-instructions.md`](.github/copilot-i
 ## Build, análise e testes
 
 - `dart pub get` / `flutter pub get`; `dart analyze`; `dart test` / `flutter test` conforme o pacote.
-- Após mudanças em `@JsonSerializable`: `dart run build_runner build --delete-conflicting-outputs` ou `./ci.sh -build`; upgrades: `./ci.sh -upgrade`.
+- Após mudanças em `@JsonSerializable`: `dart run build_runner build ` ou `./ci.sh -build`; upgrades: `./ci.sh -upgrade`.
 
 ## Novo tipo de log
 

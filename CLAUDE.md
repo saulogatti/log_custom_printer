@@ -14,7 +14,7 @@ dart analyze                                              # Static analysis
 dart test                                                 # Full test suite
 dart test test/<file>_test.dart                           # Single test file
 dart test test/<file>_test.dart -n "test name here"       # Single test by name
-dart run build_runner build --delete-conflicting-outputs  # Regenerate *.g.dart files
+dart run build_runner build   # Regenerate *.g.dart files
 ./ci.sh -build                                            # Same as build_runner (shortcut)
 ./ci.sh -upgrade                                          # Upgrade deps to latest major versions
 dart doc                                                  # Generate API docs → doc/api/
@@ -78,7 +78,7 @@ All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
 3. Implement `getColor()`, `fromJson()`, `toJson()`.
 4. Register the constructor in `LoggerJsonList._typeConstructors` (`logger_json_list.dart`).
 5. Export the new type in `lib/log_custom_printer.dart`.
-6. Run `dart run build_runner build --delete-conflicting-outputs`.
+6. Run `dart run build_runner build `.
 
 ### Generated files
 

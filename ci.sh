@@ -21,7 +21,7 @@ run_build_runner() {
   for file in $pubspec_files; do
     dir=$(dirname "$file")
     echo "Executando em: $dir"
-    (cd "$dir" && dart run build_runner build --delete-conflicting-outputs)
+    (cd "$dir" && dart run build_runner build )
   done
 }
 

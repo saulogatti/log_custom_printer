@@ -67,10 +67,8 @@
 library;
 
 export 'src/config_log.dart';
-export 'src/data/cache/logger_cache_repository_impl.dart'
-    show LoggerCacheRepositoryImpl;
-export 'src/data/cache/logger_persistence_service.dart'
-    show LoggerPersistenceService;
+export 'src/data/cache/logger_cache_repository_impl.dart' show LoggerCacheRepositoryImpl;
+export 'src/data/cache/logger_persistence_service.dart' show LoggerPersistenceService;
 export 'src/data/file_utils/file_manager_type.dart';
 export 'src/domain/i_logger_cache_repository.dart';
 export 'src/domain/log_helpers/enum_logger_type.dart';
