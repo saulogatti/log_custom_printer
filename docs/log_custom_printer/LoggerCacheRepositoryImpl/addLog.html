@@ -81,6 +81,7 @@ garantindo que o diretório de destino exista.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 Future&lt;void&gt; addLog(LoggerObjectBase log) async {
+  await _futureInitialization;
   LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
   if (loggerList == null) {
     loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
@@ -120,7 +121,7 @@ Future&lt;void&gt; addLog(LoggerObjectBase log) async {
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.0
+      3.1.1
   </span>
   
 </footer>

@@ -62,8 +62,9 @@
   </div>
 <span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.13.2/dart-core/bool-class.html">bool</a></span>&gt;</span></span>
 <span class="name ">writeFile</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="writeFile-param-path"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">path</span>, </span></li>
-<li><span class="parameter" id="writeFile-param-content"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">content</span></span></li>
-</ol>)
+<li><span class="parameter" id="writeFile-param-content"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">content</span>, [</span></li>
+<li><span class="parameter" id="writeFile-param-mode"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-io/FileMode-class.html">FileMode</a></span> <span class="parameter-name">mode</span> = <span class="default-value">FileMode.write</span></span></li>
+</ol>])
 
       <div class="features"><span class="feature">override</span></div>
 
@@ -79,14 +80,14 @@
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-Future&lt;bool&gt; writeFile(String path, String content) {
+Future&lt;bool&gt; writeFile(String path, String content, [FileMode mode = FileMode.write]) {
   return _runWithPathLock(path, () async {
     _extensionIncludePath(path);
     final file = File(path);
     if (!await file.exists()) {
       await file.create(recursive: true);
     }
-    await file.writeAsBytes(utf8.encode(content), mode: FileMode.append);
+    await file.writeAsBytes(utf8.encode(content), mode: mode);
     return true;
   });
 }</code></pre>
@@ -117,7 +118,7 @@ Future&lt;bool&gt; writeFile(String path, String content) {
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.0
+      3.1.1
   </span>
   
 </footer>
