@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:log_custom_printer/log_custom_printer.dart';
 
 /// Exemplo de uso da biblioteca log_custom_printer em um ambiente Dart puro.

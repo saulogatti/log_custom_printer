@@ -251,7 +251,7 @@ targets:
 Para cada classe com `@JsonSerializable()`:
 - Arquivo `.g.dart` gerado automaticamente
 - Funções `_$ClassFromJson()` e `_$ClassToJson()`
-- Executar: `dart run build_runner build --delete-conflicting-outputs`
+- Executar: `dart run build_runner build `
 
 ## Cores ANSI
 
@@ -266,7 +266,7 @@ enum EnumAnsiColors {
 Funcionalidades:
 - `getBgColor()`: Código ANSI para fundo
 - `getFgColor()`: Código ANSI para texto
- 
+
 ### LoggerAnsiColor
 ```dart
 class LoggerAnsiColor {
@@ -421,7 +421,7 @@ Por padrão, logs ficam desabilitados quando `ConfigLog(enableLog: false)`.
 ```bash
 ./ci.sh -build
 # ou
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ## Recursos Avançados
@@ -466,7 +466,7 @@ Na versão 3.x o overlay de consola **não faz parte** deste pacote. Para migra�
 ```bash
 # Limpar e reconstruir
 dart run build_runner clean
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 ```
 
 ### Performance em produção
