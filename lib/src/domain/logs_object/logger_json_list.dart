@@ -22,8 +22,7 @@ part 'logger_json_list.g.dart';
 @JsonSerializable(createFactory: false)
 class LoggerJsonList {
   /// Mapa de construtores para desserialização baseada no nome do tipo.
-  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)>
-  _typeConstructors = {
+  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _typeConstructors = {
     "ErrorLog": ErrorLog.fromJson,
     "DebugLog": DebugLog.fromJson,
     "WarningLog": WarningLog.fromJson,
@@ -76,8 +75,7 @@ class LoggerJsonList {
   ///
   /// O nome do campo no JSON é `loggerJson` por compatibilidade.
   @JsonKey(name: "loggerJson")
-  List<LoggerObjectBase> get loggerEntries =>
-      List<LoggerObjectBase>.from(_loggerEntries);
+  List<LoggerObjectBase> get loggerEntries => List<LoggerObjectBase>.from(_loggerEntries);
 
   /// Adiciona um novo objeto de log à lista.
   ///

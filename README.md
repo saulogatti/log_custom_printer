@@ -149,7 +149,7 @@ A UI de consola em tempo real **não está neste repositório** na v3. Para migr
 
 ```bash
 dart pub get
-dart run build_runner build --delete-conflicting-outputs
+dart run build_runner build
 # ou: ./ci.sh -build
 ```
 

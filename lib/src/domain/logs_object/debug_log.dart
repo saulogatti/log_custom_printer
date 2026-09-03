@@ -39,11 +39,10 @@ class DebugLog extends LoggerObjectBase {
   ///
   /// [message] é o texto descritivo do evento de debug.
   /// [typeClass] identifica a classe de origem (opcional).
-  DebugLog(super.message, {super.typeClass});
+  DebugLog(super.message, {super.createdAt, super.typeClass});
 
   /// Cria uma instância a partir de JSON.
-  factory DebugLog.fromJson(Map<String, dynamic> json) =>
-      _$DebugLogFromJson(json);
+  factory DebugLog.fromJson(Map<String, dynamic> json) => _$DebugLogFromJson(json);
 
   @override
   LoggerAnsiColor getColor() {
