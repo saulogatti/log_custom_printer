@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.1
+
+- Fix: corrigir a inicialização do cache de logs, garantindo que os logs salvos sejam recuperados corretamente.
+- Refactor: atualizando o exemplo de uso da biblioteca, para melhorar a clareza e a facilidade de compreensão.
+
 ## 3.1.0
 
 - Fix: corrigir o caminho dos logs para ambiente de teste, garantindo que os logs sejam gravados corretamente durante os testes.
