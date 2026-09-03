@@ -25,7 +25,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   LoggerCache? _loggerCache;
 
   /// Mapa que armazena as listas de logs em memória por tipo.
-  final Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
+  Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
 
   /// Future que rastreia a inicialização do cache persistente.
   Future<void>? _futureInitialization;
@@ -49,6 +49,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// garantindo que o diretório de destino exista.
   @override
   Future<void> addLog(LoggerObjectBase log) async {
+    await _futureInitialization;
     LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
     if (loggerList == null) {
       loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
@@ -68,8 +69,9 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// arquivos físicos após a inicialização do cache.
   @override
   Future<void> clearLogs() async {
-    _loggerJsonList.clear();
     await _futureInitialization;
+    _loggerJsonList.clear();
+
     await _loggerCache?.clearAll();
   }
 
@@ -79,13 +81,15 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// quando habilitado.
   @override
   Future<void> clearLogsByType(EnumLoggerType type) async {
-    _loggerJsonList.remove(type);
     await _futureInitialization;
+    _loggerJsonList.remove(type);
+
     await _loggerCache?.clearLogByType(type.name);
   }
 
   @override
   Future<List<LoggerObjectBase>> getAllLogs() async {
+    await _futureInitialization;
     final List<LoggerObjectBase> allLogs = [];
     for (final loggerList in _loggerJsonList.values) {
       if (loggerList != null) {
@@ -100,6 +104,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// Retorna lista vazia quando não houver entradas desse tipo.
   @override
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
+    await _futureInitialization;
     final loggerList = _loggerJsonList[type];
     if (loggerList != null) {
       return (loggerList.loggerEntries);
@@ -124,8 +129,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
       await _loggerCache!.futureInitialization.future;
       final allLogs = await _loggerCache!.readAllLogs();
       if (allLogs != null) {
-        _loggerJsonList.clear();
-        _loggerJsonList.addAll(allLogs);
+        _loggerJsonList = allLogs;
       }
     }
   }
