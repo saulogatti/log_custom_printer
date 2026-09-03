@@ -21,7 +21,7 @@ void main() {
       final fileManager = FileManager();
       final filePath = '${tempDir.path}${Platform.pathSeparator}events.log';
 
-      final writes = List.generate(200, (index) => fileManager.writeFile(filePath, 'entry-$index\n'));
+      final writes = List.generate(200, (index) => fileManager.writeFile(filePath, 'entry-$index\n', FileMode.append));
 
       await Future.wait(writes);
 

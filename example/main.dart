@@ -11,70 +11,36 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 /// 4. Consulta e gerenciamento de logs via LoggerPersistenceService
 /// 5. Serialização JSON
 void main() async {
-  print('--- Iniciando Exemplo log_custom_printer ---\n');
-  final log = DebugLog('Esta é uma mensagem de debug ${StackTrace.current.toString()}');
-  log.sendLog();
-
   // 1. Configuração inicial
   // Registramos uma impressora colorida para o console.
   // O LoggerPersistenceService retornado permite gerenciar o cache de logs.
-  final persistenceService = registerLogPrinterColor(
+  print('1. Configuração inicial:');
+  persistenceService = registerLogPrinterColor(
     config: const ConfigLog(
       enableLog: true, // Habilita o processamento de logs
+      onlyClasses: {DebugLog, InfoLog, WarningLog, ErrorLog},
     ),
+    cacheFilePath: 'cache_logs',
     maxLogsInCache: 50, // Limite de logs no cache por tipo
   );
+  // await persistenceService.getAllLogs();
+  print('Configuração inicial concluída');
 
-  // 2. Emissão de logs manual
-  print('2. Emitindo logs manualmente:');
-  DebugLog('Esta é uma mensagem de debug').sendLog();
-  InfoLog('Informação importante do sistema').sendLog();
-  WarningLog('Atenção: recurso atingindo limite').sendLog();
-
-  try {
-    throw Exception('Falha crítica na operação');
-  } catch (e, stack) {
-    ErrorLog('Erro detectado: $e', stack).sendLog();
-  }
-  print('');
-
-  // 3. Uso com Mixin (Recomendado para classes da aplicação)
-  print('3. Usando LoggerClassMixin:');
+  // 2. Uso com Mixin (Recomendado para classes da aplicação)
+  print('2. Usando LoggerClassMixin:');
   final app = MinhaApp();
   app.processarDados();
-  print('');
+  print('Uso com Mixin concluído');
 
   // 4. Consulta ao cache de logs
-  print('4. Consultando o cache de logs:');
+  print('3. Consultando o cache de logs:');
   final allLogs = await persistenceService.getAllLogs();
   print('Total de logs capturados: ${allLogs.length}');
 
-  final errors = await persistenceService.getLogsByType(EnumLoggerType.error);
-  print('Total de erros: ${errors.length}');
-
-  if (errors.isNotEmpty) {
-    print('Último erro capturado: ${errors.first.message}');
-  }
-  print('');
-
-  // 5. Serialização JSON
-  print('5. Demonstração de JSON:');
-  final logParaJson = InfoLog('Log para exportação');
-  final json = logParaJson.toJson();
-  print('Log em JSON: $json');
-
-  final logRestaurado = InfoLog.fromJson(json);
-  print('Log restaurado da mensagem: ${logRestaurado.message}');
-  print('');
-
-  // 6. Limpeza de logs
-  print('6. Limpando logs:');
-  await persistenceService.clearLogsByType(EnumLoggerType.debug);
-  final logsRestantes = await persistenceService.getAllLogs();
-  print('Logs após limpar debug: ${logsRestantes.length}');
-
-  print('\n--- Exemplo concluído ---');
+  print('Exemplo concluído');
 }
+
+late LoggerPersistenceService persistenceService;
 
 /// Exemplo de classe utilizando o mixin de logging
 class MinhaApp with LoggerClassMixin {
@@ -85,5 +51,20 @@ class MinhaApp with LoggerClassMixin {
     logInfo('Dados validados com sucesso.');
 
     logWarning('O processamento demorou mais que o esperado.');
+    print('--- Iniciando Exemplo log_custom_printer ---\n');
+    logDebug('Esta é uma mensagem de debug ${StackTrace.current.toString()}');
+
+    // 2. Emissão de logs manual
+    print('2. Emitindo logs manualmente:');
+    logDebug('Esta é uma mensagem de debug');
+    logInfo('Informação importante do sistema');
+    logWarning('Atenção: recurso atingindo limite');
+
+    try {
+      throw Exception('Falha crítica na operação');
+    } catch (e, stack) {
+      logError('Erro detectado: $e', stack);
+    }
+    print('');
   }
 }
