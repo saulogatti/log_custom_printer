@@ -80,14 +80,14 @@ class FileManager implements IFileManagerType {
   ///
   /// Retorna `true` após concluir a escrita.
   @override
-  Future<bool> writeFile(String path, String content) {
+  Future<bool> writeFile(String path, String content, [FileMode mode = FileMode.write]) {
     return _runWithPathLock(path, () async {
       _extensionIncludePath(path);
       final file = File(path);
       if (!await file.exists()) {
         await file.create(recursive: true);
       }
-      await file.writeAsBytes(utf8.encode(content), mode: FileMode.write);
+      await file.writeAsBytes(utf8.encode(content), mode: mode);
       return true;
     });
   }
@@ -172,5 +172,5 @@ abstract interface class IFileManagerType {
   /// Escreve [content] no arquivo em [path].
   ///
   /// Retorna `true` quando a operação é concluída com sucesso.
-  Future<bool> writeFile(String path, String content);
+  Future<bool> writeFile(String path, String content, [FileMode mode = FileMode.write]);
 }
