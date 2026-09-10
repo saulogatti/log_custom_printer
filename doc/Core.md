@@ -75,7 +75,7 @@ Internal function that resolves the registered `LogPrinterService` from `get_it`
 LogPrinterService fetchLogPrinterService();
 ```
 
-Throws `StateError` when `registerLogPrinter` was not called before first log usage.
+If no service is registered yet, it automatically registers a default `LogSimplePrint` with `ConfigLog(enableLog: true)` and returns it.
 
 ## registerLogPrinter
 

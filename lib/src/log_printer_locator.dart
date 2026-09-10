@@ -15,7 +15,7 @@ export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' s
 /// Used internally by [LoggerObjectBase.sendLog] to obtain the configured log service.
 ///
 /// If [LogPrinterService] is not registered yet, a default simple printer is registered.
-/// Prefer calling [registerLogPrinter] at app startup.
+/// You should still call [registerLogPrinter] at app startup to keep behavior explicit and predictable.
 ///
 /// {@category Core}
 LogPrinterService fetchLogPrinterService() {
