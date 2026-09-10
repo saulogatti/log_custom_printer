@@ -1,70 +1,46 @@
 import '../log_helpers/enum_logger_type.dart';
 
-/// Parâmetros de consulta para filtro, ordenação e exportação de logs.
-///
-/// Todos os campos são opcionais. Quando omitidos, nenhum filtro ou ordenação
-/// é aplicado ao conjunto de resultados.
-///
-/// Exemplo:
-/// ```dart
-/// final query = LogQuery(
-///   types: {EnumLoggerType.error, EnumLoggerType.warning},
-///   start: DateTime(2024, 1, 1),
-///   end: DateTime(2024, 2, 1),
-///   sortField: LogSortField.date,
-///   sortDirection: SortDirection.desc,
-/// );
-/// ```
+/// Query parameters for log filtering and sorting.
 ///
 /// {@category Query}
 class LogQuery {
-  /// Conjunto de tipos de log para filtrar. `null` ou vazio retorna todos os tipos.
+  /// Optional set of log types to include.
   final Set<EnumLoggerType>? types;
 
-  /// Limite inferior do intervalo de data (inclusivo). `null` = sem limite inferior.
+  /// Inclusive start date filter.
   final DateTime? start;
 
-  /// Limite superior do intervalo de data (exclusivo). `null` = sem limite superior.
+  /// Exclusive end date filter.
   final DateTime? end;
 
-  /// Campo pelo qual os resultados serão ordenados. `null` = sem ordenação.
+  /// Optional sort field.
   final LogSortField? sortField;
 
-  /// Direção de ordenação. Ignorado quando [sortField] é `null`.
-  ///
-  /// Padrão: [SortDirection.asc].
+  /// Optional sort direction.
   final SortDirection? sortDirection;
 
-  /// Cria um objeto de consulta com filtros e ordenação opcionais.
-  const LogQuery({
-    this.types,
-    this.start,
-    this.end,
-    this.sortField,
-    this.sortDirection,
-  });
+  /// Creates a query with optional filter/sort criteria.
+  const LogQuery({this.types, this.start, this.end, this.sortField, this.sortDirection});
 }
 
-/// Campo de ordenação de logs.
+/// Sort field options.
 ///
 /// {@category Query}
 enum LogSortField {
-  /// Ordena pela data de criação do log.
+  /// Sort by creation date.
   date,
 
-  /// Ordena pela severidade do tipo do log.
-  ///
-  /// Ordem crescente de severidade: `debug < info < warning < error`.
+  /// Sort by severity type (`debug < info < warning < error`).
   type,
 }
 
-/// Direção de ordenação.
+/// Sort direction.
 ///
 /// {@category Query}
 enum SortDirection {
-  /// Ordenação crescente (menor → maior / mais antigo → mais recente).
+  /// Ascending order.
   asc,
 
-  /// Ordenação decrescente (maior → menor / mais recente → mais antigo).
+  /// Descending order.
   desc,
 }

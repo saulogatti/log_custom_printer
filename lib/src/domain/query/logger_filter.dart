@@ -3,29 +3,18 @@ import 'package:log_custom_printer/src/domain/query/log_filter_engine.dart';
 import 'package:log_custom_printer/src/domain/query/log_query.dart';
 import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 
-/// Fachada que aplica filtros e ordenação a uma lista de logs usando
-/// [LogFilterEngine] e [LogSortEngine] com base em uma [LogQuery].
-///
-/// Delega ao engine apropriado conforme os critérios presentes na query:
-/// - Se [LogQuery.types] não estiver vazio, aplica filtragem por tipo.
-/// - Caso contrário, aplica ordenação conforme [LogQuery.sortDirection].
+/// Facade that applies filter/sort to log collections using [LogQuery].
 ///
 /// {@category Query}
 class LoggerFilter {
-  /// Query com os critérios de filtragem e/ou ordenação.
+  /// Query criteria.
   LogQuery query;
 
-  /// Cria o filtro com a [query] fornecida.
+  /// Creates a filter with [query].
   LoggerFilter({required this.query});
 
-  /// Aplica filtragem e/ou ordenação a [logs] conforme a [query].
-  ///
-  /// Retorna os [logs] sem modificação se nenhum critério estiver definido.
-  ///
-  /// #67 Observação: Atualmente, se [LogQuery.types] estiver presente, apenas a
-  /// filtragem é aplicada. Caso contrário, a ordenação é aplicada.
+  /// Applies filtering/sorting to [logs].
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs) {
-
     if (query.types != null && query.types!.isNotEmpty) {
       return const LogFilterEngine().apply(logs, query);
     } else if (query.sortDirection == SortDirection.asc) {

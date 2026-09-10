@@ -1,28 +1,11 @@
-/// Extension para formatação de data/hora em logs.
-///
-/// Fornece métodos utilitários para formatar timestamps de forma consistente
-/// nos logs gerados pela biblioteca.
+/// Date/time formatting extension for log timestamps.
 ///
 /// {@category Utilities}
-///
-/// Exemplo de uso:
-/// ```dart
-/// final agora = DateTime.now();
-/// print(agora.onlyTime());      // "14:30:25.123"
-/// print(agora.onlyDate());      // "18/11/2025"
-/// print(agora.logFullDateTime); // "18/11/2025 14:30:25.123"
-/// ```
 extension DateTimeLoggingExtensions on DateTime {
-  /// Retorna a data e hora completas no formato usado nos logs.
-  ///
-  /// Combina [onlyDate] e [onlyTime] para produzir uma string no formato
-  /// "dd/MM/yyyy HH:mm:ss.SSS", ideal para timestamps de log.
+  /// Full timestamp in log format: `dd/MM/yyyy HH:mm:ss.SSS`.
   String get logFullDateTime => '${onlyDate()} ${onlyTime()}';
 
-  /// Cria uma cópia deste DateTime com componentes de tempo alterados.
-  ///
-  /// [hour], [minute] e [second] permitem sobrescrever partes específicas do
-  /// horário. Mantém os mesmos valores de ano, mês e dia da instância original.
+  /// Returns a copy with optional time-component overrides.
   DateTime copyWithTime({int? hour, int? minute, int? second}) {
     return DateTime(
       year,
@@ -34,9 +17,7 @@ extension DateTimeLoggingExtensions on DateTime {
     );
   }
 
-  /// Formata apenas a data no formato dd/MM/yyyy.
-  ///
-  /// Retorna a data atual com dia, mês e ano no formato "dd/MM/yyyy".
+  /// Formats date as `dd/MM/yyyy`.
   String onlyDate() {
     final now = this;
     final day = twoDigits(now.day);
@@ -45,10 +26,7 @@ extension DateTimeLoggingExtensions on DateTime {
     return '$day/$month/$year';
   }
 
-  /// Formata apenas a hora no formato HH:mm:ss.SSS.
-  ///
-  /// Retorna a hora atual com horas, minutos, segundos e milissegundos
-  /// no formato "HH:mm:ss.SSS".
+  /// Formats time as `HH:mm:ss.SSS`.
   String onlyTime() {
     final now = this;
     final h = twoDigits(now.hour);
@@ -58,12 +36,12 @@ extension DateTimeLoggingExtensions on DateTime {
     return '$h:$min:$sec.$ms';
   }
 
-  /// Formata um número com 3 dígitos (preenche com zeros à esquerda).
+  /// Formats a number to 3 digits with left zero padding.
   String threeDigits(int n) {
     return n.toString().padLeft(3, '0');
   }
 
-  /// Formata um número com 2 dígitos (preenche com zeros à esquerda).
+  /// Formats a number to 2 digits with left zero padding.
   String twoDigits(int n) {
     return n.toString().padLeft(2, '0');
   }

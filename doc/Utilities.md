@@ -1,14 +1,10 @@
-# Utilitários
+# Utilities
 
-Este módulo reúne as ferramentas auxiliares da biblioteca: mixin de integração, enums,
-helpers de formatação, extensões e o sistema de cache de logs.
-
----
+This module groups support tools from the library: integration mixin, enums, formatting helpers, extensions, and cache services.
 
 ## LoggerClassMixin
 
-Mixin que fornece métodos de log prontos para uso em qualquer classe Dart (incluindo apps Flutter).
-Preenche automaticamente `className` com o `runtimeType` da classe hospedeira.
+Provides ready-to-use logging methods for any Dart class. It automatically fills `className` with host class `runtimeType`.
 
 ```dart
 mixin LoggerClassMixin {
@@ -21,292 +17,69 @@ mixin LoggerClassMixin {
 }
 ```
 
-**Exemplo de uso:**
-
-```dart
-class MinhaClasse with LoggerClassMixin {
-  void processarDados() {
-    logDebug('Iniciando processamento');
-
-    try {
-      // lógica de processamento
-      logInfo('Processamento concluído com sucesso');
-    } catch (error, stackTrace) {
-      logError('Falha no processamento: $error', stackTrace);
-    }
-  }
-}
-```
-
-Cada método cria o objeto de log correspondente e chama `sendLog()` internamente.
-Não é necessário criar os objetos de log manualmente.
-
----
-
 ## EnumLoggerType
 
-Enum que representa os tipos de severidade de log disponíveis.
-
-```dart
-enum EnumLoggerType {
-  error,
-  debug,
-  warning,
-  info,
-}
-```
-
-Usado principalmente pelo sistema de cache para organizar logs por tipo:
-
-```dart
-// Recuperar apenas logs de erro
-final erros = await cacheRepository.getLogsByType(EnumLoggerType.error);
-
-// Limpar apenas logs de debug
-await cacheRepository.clearLogsByType(EnumLoggerType.debug);
-```
-
----
+Enum for available log severity types: `error`, `debug`, `warning`, `info`.
 
 ## LoggerJsonList
 
-Container serializável que armazena uma lista de objetos de log de um único tipo,
-mantendo um limite configurável de entradas.
+Serializable container for logs of a single type with configurable capacity.
 
-```dart
-@JsonSerializable(createFactory: false)
-class LoggerJsonList {
-  String type;
-  int maxLogEntries; // padrão: 100
-  List<LoggerObjectBase> get loggerEntries;
+- New logs are inserted at index 0 (newest first)
+- When capacity is reached, the oldest log is dropped
+- Supports `DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog` deserialization
 
-  void addLogger(LoggerObjectBase logger);
-  factory LoggerJsonList.fromJson(Map<String, dynamic> json);
-  Map<String, dynamic> toJson();
-}
-```
+## ANSI helpers
 
-**Comportamento de inserção:**
-- Novos logs são inseridos no início da lista (`índice 0`), mantendo ordem **mais recente → mais antigo**.
-- Ao atingir `maxLogEntries`, o log mais antigo (último) é descartado automaticamente.
-
-**Tipos suportados para desserialização:** `DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog`.
-
----
-
-## EnumAnsiColors e LoggerAnsiColor
-
-Utilitários para aplicação de cores ANSI em mensagens de texto no terminal.
-
-### EnumAnsiColors
-
-```dart
-enum EnumAnsiColors {
-  black, red, green, yellow,
-  blue, magenta, cyan, white;
-
-  int getBgColor(); // Código ANSI de fundo
-  int getFgColor(); // Código ANSI de texto
-}
-```
-
-### LoggerAnsiColor
-
-```dart
-@JsonSerializable()
-class LoggerAnsiColor {
-  final EnumAnsiColors enumAnsiColors;
-
-  const LoggerAnsiColor({required this.enumAnsiColors});
-
-  // Aplica a cor à mensagem: retorna '\x1B[CODIGOm mensagem \x1B[0m'
-  String call(String msg);
-
-  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json);
-  Map<String, dynamic> toJson();
-}
-```
-
-**Exemplo de uso:**
-
-```dart
-final cor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
-print(cor('Mensagem em vermelho'));
-```
-
-Usado internamente pelos tipos de log em `getColor()` e pelas impressoras para formatação visual.
-
----
+- `EnumAnsiColors`: foreground/background ANSI code mapping
+- `LoggerAnsiColor`: callable formatter for colored strings
 
 ## DateTimeLogHelper
 
-Extension em `DateTime` para formatação de timestamps nos logs.
-
-```dart
-extension DateTimeLogHelper on DateTime {
-  String get logFullDateTime; // "dd/MM/yyyy HH:mm:ss.SSS"
-  String onlyDate();          // "dd/MM/yyyy"
-  String onlyTime();          // "HH:mm:ss.SSS"
-}
-```
-
-**Exemplo:**
-
-```dart
-final agora = DateTime.now();
-print(agora.logFullDateTime); // "23/02/2026 11:02:32.399"
-print(agora.onlyDate());      // "23/02/2026"
-print(agora.onlyTime());      // "11:02:32.399"
-```
-
-Usado por `LoggerObjectBase.getMessage()` para formatar o timestamp da mensagem.
-
----
+Date formatting extension used by log rendering:
+- `logFullDateTime` → `dd/MM/yyyy HH:mm:ss.SSS`
+- `onlyDate()`
+- `onlyTime()`
 
 ## StackTraceSdk
 
-Extension em `StackTrace` para formatação e filtragem de stack traces.
-Remove automaticamente linhas de framework interno (Flutter, Dart SDK) para exibir
-apenas o código da aplicação.
+Stack trace formatting/filtering extension.
 
-```dart
-extension StackTraceSdk on StackTrace {
-  // Formata com cor opcional, limitando o número de linhas
-  String formatStackTrace(LoggerAnsiColor? color, int linesCount);
-
-  // Converte para Map<String, String> com chaves '#0', '#1', etc.
-  Map<String, dynamic> stackInMap([int linesCount = 8]);
-}
-```
-
-**Exemplo:**
-
-```dart
-try {
-  // código que pode falhar
-} catch (error, stackTrace) {
-  final mapa = stackTrace.stackInMap(5);
-  // {'#0': 'MinhaClasse.meuMetodo (...:42:5)', '#1': ..., ...}
-}
-```
-
-Usado por `ErrorLog.getMessage()` para incluir o stack trace formatado na saída.
-
----
+- `formatStackTrace(LoggerAnsiColor? color, int linesCount)`
+- `stackInMap([int linesCount = 8])`
 
 ## ILoggerCacheRepository
 
-Interface que define as operações de cache de logs. Implemente esta interface para
-customizar o armazenamento (ex: banco de dados local, `SharedPreferences`, servidor remoto).
-
-```dart
-abstract interface class ILoggerCacheRepository {
-  Future<void> addLog(LoggerObjectBase log);
-  Future<void> clearLogs();
-  Future<void> clearLogsByType(EnumLoggerType type);
-  Future<List<LoggerObjectBase>> getAllLogs();
-  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
-}
-```
-
-Essa interface é usada para customizar o armazenamento quando você chama
-`registerLogPrinter(..., cacheRepository: seuRepositorio, config: ...)`.
-
-As funções `registerLogPrinterColor` e `registerLogPrinterSimple` retornam
-um `LoggerPersistenceService`, que expõe os métodos de consulta e limpeza.
-
-**Exemplo de uso do repositório:**
-
-```dart
-final cache = registerLogPrinterColor(config: ConfigLog(enableLog: true));
-
-// Recuperar todos os logs
-final todos = await cache.getAllLogs();
-
-// Recuperar apenas erros
-final erros = await cache.getLogsByType(EnumLoggerType.error);
-
-// Limpar todos os logs
-await cache.clearLogs();
-```
-
----
+Cache abstraction contract for custom storage implementations.
 
 ## LoggerCacheRepositoryImpl
 
-Implementação padrão de `ILoggerCacheRepository`. Armazena logs em memória usando
-`LoggerJsonList` e, opcionalmente, persiste em disco via `LoggerCache`.
-
-```dart
-final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
-  final int maxLogEntries;    // padrão: 1000
-  final String? saveLogFilePath; // se fornecido, persiste em disco
-}
-```
-
-- Logs em memória são organizados por `EnumLoggerType`.
-- Se `saveLogFilePath` for fornecido, os logs são gravados em arquivos JSON em
-  `<saveLogFilePath>/loggerApp/logs/<tipo>.json`.
-- Na inicialização com caminho de arquivo, carrega os logs previamente persistidos.
+Default `ILoggerCacheRepository` implementation:
+- In-memory lists grouped by `EnumLoggerType`
+- Optional disk persistence under `<saveLogFilePath>/loggerApp/logs/<type>.json`
+- Loads persisted logs during initialization when path is provided
 
 ## LoggerPersistenceService
 
-Serviço de alto nível retornado pelos `registerLogPrinter*`. Encapsula o
-`ILoggerCacheRepository` e fornece API simples para uso na aplicação.
-
-```dart
-final class LoggerPersistenceService {
-  Future<void> addLog(LoggerObjectBase log);
-  Future<void> clearLogs();
-  Future<void> clearLogsByType(EnumLoggerType type);
-  Future<List<LoggerObjectBase>> getAllLogs();
-  Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
-}
-```
-
----
+High-level service returned by `registerLogPrinter*` exposing:
+- `addLog`
+- `getAllLogs`
+- `getLogsByType`
+- `clearLogs`
+- `clearLogsByType`
 
 ## LoggerCache
 
-Gerenciador de baixo nível para persistência de arquivos de log em disco.
+Low-level disk persistence manager used by `LoggerCacheRepositoryImpl`.
 
-```dart
-class LoggerCache {
-  LoggerCache(String directory);
+## FileManager and FileType
 
-  Future<void> get futureInitialization;
-
-  Future<void> writeLogToFile(String fileName, Object loggerList);
-  Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs();
-  Future<void> clearAll();
-  Future<void> clearLogByType(String name);
-}
-```
-
-Os arquivos são criados em `<directory>/loggerApp/logs/<tipo>.json`.
-Usado internamente por `LoggerCacheRepositoryImpl`; normalmente não é necessário interagir
-diretamente com esta classe.
-
----
-
-## FileManager e FileType
-
-`FileManager` é o utilitário interno responsável pelas operações de I/O em arquivo
-(`createDirectory`, `deleteDirectory`, `readFile`, `writeFile`, `deleteFile`),
-respeitando a extensão esperada pelo `FileType`.
-
-`FileType` define as extensões suportadas:
+Internal file I/O utility with extension validation:
 
 ```dart
 enum FileType { txt, json, log }
 ```
 
-### Segurança de concorrência
-
-As operações do `FileManager` são serializadas por caminho (path lock assíncrono):
-
-- operações no **mesmo caminho** executam em sequência;
-- operações em **caminhos diferentes** podem ocorrer em paralelo.
-
-Isso evita condições de corrida em leitura/escrita/remoção quando múltiplos
-futuros atuam sobre o mesmo arquivo ou diretório.
+Concurrency guarantees:
+- Same path operations are serialized
+- Different path operations may run in parallel

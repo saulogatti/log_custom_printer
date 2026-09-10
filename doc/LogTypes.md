@@ -1,214 +1,52 @@
-# Tipos de Log
+# Log Types
 
-Este módulo define os tipos concretos de log disponíveis na biblioteca. Todos estendem
-`LoggerObjectBase` e fazem parte da hierarquia selada `LoggerObject`.
+This module defines the concrete log types available in the library. All of them extend `LoggerObjectBase` and belong to the sealed `LoggerObject` hierarchy.
 
 ```
 LoggerObject (sealed)
     └── LoggerObjectBase (abstract)
-            ├── DebugLog    (amarelo)
-            ├── InfoLog     (branco)
-            ├── WarningLog  (verde)
-            └── ErrorLog    (vermelho + stack trace)
+            ├── DebugLog    (yellow)
+            ├── InfoLog     (white)
+            ├── WarningLog  (green)
+            └── ErrorLog    (red + stack trace)
 ```
 
-Cada tipo define sua própria cor via `getColor()`, suporta serialização JSON via
-`@JsonSerializable()` e pode ser criado diretamente ou via `LoggerClassMixin`.
-
----
+Each type defines its own `getColor()`, supports JSON serialization via `@JsonSerializable()`, and can be instantiated directly or through `LoggerClassMixin`.
 
 ## DebugLog
 
-Log de depuração, exibido em **amarelo**.
+Debug message log, displayed in **yellow**.
 
-Indicado para mensagens de desenvolvimento: valores de variáveis, fluxo de execução,
-diagnósticos que não devem aparecer em produção.
-
-```dart
-@JsonSerializable()
-class DebugLog extends LoggerObjectBase {
-  DebugLog(super.message, {super.typeClass});
-
-  factory DebugLog.fromJson(Map<String, dynamic> json);
-
-  @override
-  LoggerAnsiColor getColor(); // EnumAnsiColors.yellow
-
-  @override
-  Map<String, dynamic> toJson();
-}
-```
-
-**Exemplo de uso direto:**
-
-```dart
-DebugLog('Valor de retorno: $resultado', typeClass: runtimeType).sendLog();
-```
-
-**Via mixin:**
-
-```dart
-class MinhaClasse with LoggerClassMixin {
-  void processar() {
-    logDebug('Iniciando processamento');
-  }
-}
-```
-
----
+Use it for development messages: variable values, execution flow, and diagnostics that usually should not appear in production.
 
 ## InfoLog
 
-Log informativo, exibido em **branco**.
+Informational log, displayed in **white**.
 
-Indicado para registrar eventos relevantes do fluxo normal da aplicação: operações concluídas,
-marcos de execução, mudanças de estado.
-
-```dart
-@JsonSerializable()
-class InfoLog extends LoggerObjectBase {
-  InfoLog(super.message, {super.typeClass});
-
-  factory InfoLog.fromJson(Map<String, dynamic> json);
-
-  @override
-  LoggerAnsiColor getColor(); // EnumAnsiColors.white
-
-  @override
-  Map<String, dynamic> toJson();
-}
-```
-
-**Exemplo de uso direto:**
-
-```dart
-InfoLog('Usuário autenticado com sucesso', typeClass: runtimeType).sendLog();
-```
-
-**Via mixin:**
-
-```dart
-class AuthService with LoggerClassMixin {
-  void login() {
-    logInfo('Login realizado');
-  }
-}
-```
-
----
+Use it for relevant events in normal application flow: completed operations, execution milestones, and state changes.
 
 ## WarningLog
 
-Log de aviso, exibido em **verde**.
+Warning log, displayed in **green**.
 
-Indicado para situações que merecem atenção mas não impedem o funcionamento da aplicação:
-uso elevado de recursos, comportamento inesperado não crítico, deprecações.
-
-```dart
-@JsonSerializable()
-class WarningLog extends LoggerObjectBase {
-  WarningLog(super.message, {super.typeClass});
-
-  factory WarningLog.fromJson(Map<String, dynamic> json);
-
-  @override
-  LoggerAnsiColor getColor(); // EnumAnsiColors.green
-
-  @override
-  Map<String, dynamic> toJson();
-}
-```
-
-**Exemplo de uso direto:**
-
-```dart
-WarningLog('Cache próximo do limite: ${usado}/${limite}', typeClass: runtimeType).sendLog();
-```
-
-**Via mixin:**
-
-```dart
-class CacheService with LoggerClassMixin {
-  void verificar(int usado, int limite) {
-    if (usado > limite * 0.8) {
-      logWarning('Cache acima de 80% da capacidade');
-    }
-  }
-}
-```
-
----
+Use it for situations that need attention but do not stop application behavior: high resource usage, non-critical unexpected behavior, deprecations.
 
 ## ErrorLog
 
-Log de erro, exibido em **vermelho**. Inclui o `stackTrace` associado ao erro.
+Error log, displayed in **red**, including `stackTrace`.
 
-Este é o único tipo com `alwaysPrint = true`, o que significa que ele **sempre é processado**
-independentemente de `ConfigLog.enableLog` ou `ConfigLog.onlyClasses`. Isso garante que erros
-críticos sejam sempre registrados em produção.
+This is the only type with `alwaysPrint = true`, so it is always processed regardless of `ConfigLog.enableLog` or `ConfigLog.onlyClasses`.
 
-```dart
-@JsonSerializable()
-class ErrorLog extends LoggerObjectBase {
-  @StackTraceConverter()
-  final StackTrace stackTrace;
+`ErrorLog.getMessage()` also appends formatted stack trace lines to output for direct console debugging.
 
-  ErrorLog(super.message, this.stackTrace, {super.typeClass});
+## JSON serialization
 
-  @override
-  bool get alwaysPrint => true; // Sempre processado
-
-  factory ErrorLog.fromJson(Map<String, dynamic> json);
-
-  @override
-  LoggerAnsiColor getColor(); // EnumAnsiColors.red
-
-  @override
-  String getMessage([bool withColor]);
-
-  @override
-  Map<String, dynamic> toJson();
-}
-```
-
-O método `getMessage` do `ErrorLog` também inclui as linhas do stack trace na saída,
-formatadas e coloridas, facilitando a depuração diretamente no console.
-
-**Exemplo de uso direto:**
+All log types support JSON serialization/deserialization:
 
 ```dart
-try {
-  await processarDados();
-} catch (e, st) {
-  ErrorLog('Falha ao processar dados: $e', st, typeClass: runtimeType).sendLog();
-}
-```
-
-**Via mixin:**
-
-```dart
-class DataService with LoggerClassMixin {
-  Future<void> carregar() async {
-    try {
-      // operação arriscada
-    } catch (e, st) {
-      logError('Erro ao carregar: $e', st);
-    }
-  }
-}
-```
-
-### Serialização JSON
-
-Todos os tipos de log suportam serialização e desserialização JSON:
-
-```dart
-// Serializar
-final log = DebugLog('Mensagem de teste');
+final log = DebugLog('Test message');
 final json = log.toJson();
-
-// Desserializar
-final logRecuperado = DebugLog.fromJson(json);
+final restored = DebugLog.fromJson(json);
 ```
 
-`StackTrace` em `ErrorLog` é serializado como `String` via `StackTraceConverter`.
+In `ErrorLog`, `StackTrace` is serialized as `String` through `StackTraceConverter`.

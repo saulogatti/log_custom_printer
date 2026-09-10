@@ -1,36 +1,35 @@
 ---
-description: Clean Architecture gradual, camadas e BLoC/Cubit para telas complexas
+description: Gradual Clean Architecture, layering, and BLoC/Cubit for complex screens
 globs: "**/*.dart"
 alwaysApply: false
 ---
 
-# Dart/Flutter — arquitetura e estado
+# Dart/Flutter — architecture and state
 
-Biblioteca em refatoração incremental para Clean Architecture; siga também [`.github/copilot-instructions.md`](.github/copilot-instructions.md) para o domínio desta biblioteca.
+This library evolves incrementally toward Clean Architecture. Also follow [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for repository domain rules.
 
-## Obrigatório
+## Required
 
-- **Sem duplicação:** trecho repetido → extrair para método, função, utilitário ou widget reutilizável.
-- **Widgets pequenos:** se crescer demais, dividir; extrair widgets privados para simplificar `build()`.
-- **Reutilizável em outro fluxo** → ficheiro próprio.
-- **Evolução gradual:** ao tocar numa área, aproximar de Clean Architecture (sem refactor big-bang).
-- **Telas com lógica complexa** → **BLoC/Cubit**; UI só renderiza estado e dispara eventos/intenções (sem regra de negócio na view).
+- **No duplication:** repeated logic must be extracted.
+- **Small widgets:** split oversized widgets and extract private widgets to simplify `build()`.
+- **Reusable components:** move to dedicated files.
+- **Gradual evolution:** improve architecture in touched areas (no big-bang rewrite).
+- **Complex screen logic:** use **BLoC/Cubit**; UI should render state and emit intents only.
 
-## Camadas (quando aplicável)
+## Layers (when applicable)
 
-- **Presentation:** widgets/telas + bloc/cubit
-- **Domain:** regras, entidades, casos de uso
-- **Data:** repositórios, fontes, DTOs
-- **Core:** utilitários partilhados
+- **Presentation:** widgets/screens + bloc/cubit
+- **Domain:** rules, entities, use cases
+- **Data:** repositories, data sources, DTOs
+- **Core:** shared utilities
 
-Separação de responsabilidades, baixo acoplamento, composição em vez de herança. Dependências para dentro: UI → Domain; Data → Domain.
+Maintain clear responsibilities, low coupling, and composition over inheritance.
 
-## Estado
+## State
 
-- Carregamento, vários estados, paginação, filtros, erros ou lógica não trivial → **BLoC/Cubit**.
-- Estados explícitos (ex.: initial / loading / success / error).
-- Casos locais simples podem ser leves, desde que não violem separação de responsabilidades.
+- Use **BLoC/Cubit** for loading, multi-state, pagination, filtering, errors, or non-trivial logic.
+- Keep explicit states (`initial`, `loading`, `success`, `error`).
 
-## Checklist rápido
+## Quick checklist
 
-Duplicação extraída? Widget grande partido? Componente reutilizável em ficheiro próprio? Regra de negócio fora da UI? Fluxo complexo em BLoC/Cubit?
+Duplication removed? Large widgets split? Reusable components extracted? Business logic out of UI? Complex flow handled by BLoC/Cubit?
