@@ -2,11 +2,11 @@
 ///
 /// {@category Utilities}
 class LogException implements Exception {
-  /// Creates a new exception with [message].
-  LogException(this.message);
-
   /// Failure description.
   final String message;
+
+  /// Creates a new exception with [message].
+  LogException(this.message);
 
   @override
   /// Human-readable exception string.

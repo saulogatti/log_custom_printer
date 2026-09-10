@@ -10,9 +10,7 @@ class LogFilterEngine {
 
   /// Returns logs matching [query] criteria.
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {
-    final filterTypes = query.types != null && query.types!.isNotEmpty
-        ? query.types
-        : null;
+    final filterTypes = query.types != null && query.types!.isNotEmpty ? query.types : null;
     final start = query.start;
     final end = query.end;
 

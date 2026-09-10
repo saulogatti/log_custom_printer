@@ -1,5 +1,9 @@
 # Changelog
 
+## 3.1.2
+
+- Fix: Rewrote documentation in English (English documentation).
+
 ## 3.1.1
 
 - Fix: corrected log cache initialization so persisted logs are restored correctly.

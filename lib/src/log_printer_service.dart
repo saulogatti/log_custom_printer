@@ -11,15 +11,6 @@ import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 ///
 /// {@category Core}
 final class LogPrinterService {
-  /// Creates a service instance.
-  LogPrinterService(
-    this.logPrinter, {
-    required this.configLog,
-    ILoggerCacheRepository? cacheRepository,
-  }) : _loggerPersistenceService = LoggerPersistenceService(
-         cacheRepository: cacheRepository,
-       );
-
   /// Configured printer strategy.
   final LogPrinterBase logPrinter;
 
@@ -28,6 +19,13 @@ final class LogPrinterService {
 
   /// Internal cache/persistence service.
   final LoggerPersistenceService _loggerPersistenceService;
+
+  /// Creates a service instance.
+  LogPrinterService(
+    this.logPrinter, {
+    required this.configLog,
+    ILoggerCacheRepository? cacheRepository,
+  }) : _loggerPersistenceService = LoggerPersistenceService(cacheRepository: cacheRepository);
 
   /// Exposes the persistence service linked to this instance.
   LoggerPersistenceService get cacheRepository => _loggerPersistenceService;
@@ -38,8 +36,7 @@ final class LogPrinterService {
   /// Logs with `alwaysPrint` bypass normal filtering.
   void executePrint(LoggerObjectBase log) {
     if (configLog.enableLog &&
-        (configLog.onlyClasses.isEmpty ||
-            configLog.onlyClasses.contains(log.runtimeType))) {
+        (configLog.onlyClasses.isEmpty || configLog.onlyClasses.contains(log.runtimeType))) {
       _loggerPersistenceService.addLog(log);
       logPrinter.printLog(log);
     } else if (log.alwaysPrint) {

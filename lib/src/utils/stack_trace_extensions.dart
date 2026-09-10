@@ -52,7 +52,9 @@ extension StackTraceSdk on StackTrace {
       return false;
     }
     final segment = match.group(1)!;
-    if (segment.startsWith('package:logger') || segment.startsWith('dart:') || !segment.startsWith("#")) {
+    if (segment.startsWith('package:logger') ||
+        segment.startsWith('dart:') ||
+        !segment.startsWith("#")) {
       return true;
     }
     return false;
@@ -89,7 +91,9 @@ extension StackTraceSdk on StackTrace {
 
   List<String> _getLines() {
     return toString().split('\n').where((line) {
-      return line.isNotEmpty && !_discardDeviceStacktraceLine(line) && !_discardBrowserStacktraceLine(line);
+      return line.isNotEmpty &&
+          !_discardDeviceStacktraceLine(line) &&
+          !_discardBrowserStacktraceLine(line);
     }).toList();
   }
 }

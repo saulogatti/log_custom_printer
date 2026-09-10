@@ -20,13 +20,7 @@ class LogQuery {
   final SortDirection? sortDirection;
 
   /// Creates a query with optional filter/sort criteria.
-  const LogQuery({
-    this.types,
-    this.start,
-    this.end,
-    this.sortField,
-    this.sortDirection,
-  });
+  const LogQuery({this.types, this.start, this.end, this.sortField, this.sortDirection});
 }
 
 /// Sort field options.

@@ -31,7 +31,8 @@ abstract class LoggerObjectBase extends LoggerObject {
   DateTime logCreationDate = DateTime.now();
 
   /// Creates a log object.
-  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag}) : tag = tag ?? '' {
+  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
+    : tag = tag ?? '' {
     assert(
       message.isNotEmpty && message.trim().isNotEmpty,
       'Message cannot be empty or whitespace only',
