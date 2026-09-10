@@ -1,49 +1,36 @@
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
-/// Formato de exportação de logs.
+/// Log export format.
 ///
 /// {@category Core}
 enum ExportFormat {
-  /// Exporta como JSON (array de objetos).
+  /// JSON array output.
   json,
 
-  /// Exporta como texto legível (uma linha por log).
+  /// Plain text output (one log per line).
   txt,
 }
 
-/// Contrato para persistência e consulta de logs.
-///
-/// Define as operações mínimas para armazenar, recuperar e limpar
-/// objetos de log no cache da biblioteca.
-///
-/// Implementações podem usar apenas memória, arquivo local, banco de dados
-/// ou qualquer outro backend, desde que respeitem as assinaturas e o
-/// comportamento assíncrono descrito aqui.
+/// Contract for log persistence and query operations.
 ///
 /// {@category Core}
 abstract interface class ILoggerCacheRepository {
-  /// Adiciona uma entrada de log ao repositório.
-  ///
-  /// [log] é o objeto que será persistido.
+  /// Adds a log entry.
   Future<void> addLog(LoggerObjectBase log);
 
-  /// Remove todas as entradas de log do repositório.
+  /// Removes all logs.
   Future<void> clearLogs();
 
-  /// Remove entradas de log de um tipo específico.
-  ///
-  /// [type] define a severidade alvo da remoção.
+  /// Removes logs by severity type.
   Future<void> clearLogsByType(EnumLoggerType type);
 
-  /// Recupera todas as entradas de log armazenadas.
+  /// Returns all stored logs.
   Future<List<LoggerObjectBase>> getAllLogs();
 
-  /// Recupera entradas de log filtradas por tipo.
-  ///
-  /// [type] define a severidade usada no filtro.
+  /// Returns logs filtered by severity type.
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
 
-  /// Importa todas as entradas de log armazenadas.
+  /// Imports log entries from raw [content] and [format].
   Future<void> importLogs(String content, ExportFormat format);
 }

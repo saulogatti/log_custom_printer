@@ -1,13 +1,10 @@
-# Impressoras de Log
+# Log Printers
 
-Este módulo implementa o padrão *Strategy* para a saída de logs. Cada impressora define
-como os logs serão formatados e enviados para o destino final (console, terminal, etc.).
-
----
+This module uses the *Strategy* pattern for log output. Each printer defines how logs are formatted and sent to the final destination (console, terminal, etc.).
 
 ## LogPrinterBase
 
-Classe abstrata que define o contrato para todas as impressoras de log.
+Abstract contract for all log printers.
 
 ```dart
 abstract class LogPrinterBase {
@@ -17,121 +14,39 @@ abstract class LogPrinterBase {
 }
 ```
 
-Para criar uma impressora customizada, estenda `LogPrinterBase` e implemente `printLog`:
-
-```dart
-class MinhaImpressora extends LogPrinterBase {
-  const MinhaImpressora();
-
-  @override
-  void printLog(LoggerObjectBase log) {
-    // Enviar para um serviço remoto, banco de dados, etc.
-    myRemoteService.send(log.toJson());
-  }
-}
-```
-
-Registre-a no startup:
-
-```dart
-void main() {
-  registerLogPrinter(
-    const MinhaImpressora(),
-    config: const ConfigLog(enableLog: true),
-  );
-  // Em Flutter: runApp(const MyApp());
-}
-```
-
----
+To create a custom printer, extend `LogPrinterBase` and implement `printLog`.
 
 ## LogSimplePrint
 
-Impressora simples sem formatação colorida. Usa `print()` para escrever a saída.
+Simple printer without color formatting. Uses `print()`.
+
+Typical output:
+
+```
+[ClassName] dd/MM/yyyy HH:mm:ss.SSS Log message
+```
+
+Recommended for:
+- Environments without ANSI support (basic terminals, CI/CD, external log pipelines)
+- Automated tests requiring clean output
+- Production file-oriented logging
+
+Shortcut:
 
 ```dart
-class LogSimplePrint extends LogPrinterBase {
-  const LogSimplePrint();
-
-  @override
-  void printLog(LoggerObjectBase log);
-}
+registerLogPrinterSimple(config: ConfigLog(enableLog: true));
 ```
-
-**Formato de saída:**
-
-```
-[NomeDaClasse] dd/MM/yyyy HH:mm:ss.SSS Mensagem do log
-```
-
-**Quando usar:**
-- Ambientes sem suporte a ANSI (terminais básicos, CI/CD, serviços de log externos)
-- Testes automatizados onde a leitura precisa ser limpa
-- Produção com logs em arquivo
-
-**Exemplo:**
-
-```dart
-registerLogPrinter(
-  const LogSimplePrint(),
-  config: const ConfigLog(
-    enableLog: true,
-    onlyClasses: {DebugLog, ErrorLog},
-  ),
-);
-```
-
-Atalho equivalente:
-
-```dart
-registerLogPrinterSimple(
-  config: ConfigLog(enableLog: true),
-);
-```
-
----
 
 ## LogWithColorPrint
 
-Impressora avançada com formatação colorida usando códigos ANSI. Usa `dart:developer.log()`
-para enviar blocos formatados.
+ANSI color printer using `dart:developer.log()`.
 
-```dart
-class LogWithColorPrint extends LogPrinterBase {
-  const LogWithColorPrint();
+Recommended for:
+- Local development
+- Visual debugging with log color differentiation
+- Environments with ANSI and `dart:developer` support
 
-  @override
-  void printLog(LoggerObjectBase log);
-}
-```
-
-**Formato de saída:**
-
-```
- 
-=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-   ← separador colorido
-dd/MM/yyyy HH:mm:ss.SSS Mensagem do log               ← mensagem com cor
-=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-   ← separador colorido
-```
-
-O `name` do log enviado ao `dart:developer.log` é a `className` em maiúsculas com a cor
-do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de log.
-
-**Quando usar:**
-- Desenvolvimento local (IDEs como VS Code e Android Studio preservam ANSI)
-- Depuração visual com diferenciação por cores
-- Ambientes que suportam `dart:developer`
-
-**Exemplo:**
-
-```dart
-registerLogPrinter(
-  const LogWithColorPrint(),
-  config: const ConfigLog(enableLog: true),
-);
-```
-
-Atalho equivalente:
+Shortcut:
 
 ```dart
 registerLogPrinterColor(
@@ -140,11 +55,9 @@ registerLogPrinterColor(
 );
 ```
 
----
+## Comparison
 
-## Comparativo
-
-| Impressora | Saída | ANSI | Uso recomendado |
-|------------|-------|------|-----------------|
-| `LogSimplePrint` | `print()` | ❌ | Testes, CI/CD, produção |
-| `LogWithColorPrint` | `dart:developer.log()` | ✅ | Desenvolvimento local |
+| Printer | Output | ANSI | Recommended use |
+|--------|--------|------|-----------------|
+| `LogSimplePrint` | `print()` | ❌ | Tests, CI/CD, production |
+| `LogWithColorPrint` | `dart:developer.log()` | ✅ | Local development |

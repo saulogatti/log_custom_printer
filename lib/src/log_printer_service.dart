@@ -4,65 +4,45 @@ import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 
-/// Serviço central que coordena o processo de impressão e armazenamento de logs.
+/// Central service responsible for log output and storage flow.
 ///
-/// Este serviço atua como uma fachada que centraliza a lógica de verificação
-/// de configurações antes de delegar a impressão real para um [LogPrinterBase]
-/// e o armazenamento para um [LoggerPersistenceService].
-///
-/// Centralizar esse processo evita redundância nos objetos de log e facilita
-/// a manutenção das regras de filtragem.
+/// Applies configuration rules and delegates to [LogPrinterBase] and
+/// [LoggerPersistenceService].
 ///
 /// {@category Core}
 final class LogPrinterService {
-
-  /// Cria uma nova instância do serviço de impressão.
-  ///
-  /// [logPrinter]: a estratégia de impressão a ser utilizada.
-  /// [cacheRepository]: repositório de cache (quando omitido, [LoggerPersistenceService]
-  /// usa a implementação padrão em memória).
+  /// Creates a service instance.
   LogPrinterService(
     this.logPrinter, {
-    required this.configLog, ILoggerCacheRepository? cacheRepository,
+    required this.configLog,
+    ILoggerCacheRepository? cacheRepository,
   }) : _loggerPersistenceService = LoggerPersistenceService(
          cacheRepository: cacheRepository,
        );
-  /// A impressora configurada para formatar e exibir os logs.
+
+  /// Configured printer strategy.
   final LogPrinterBase logPrinter;
 
-  /// Configuração global de habilitação e filtros de tipos de log.
+  /// Global enable/filter configuration.
   final ConfigLog configLog;
 
-  /// O repositório responsável pelo cache e persistência dos logs.
+  /// Internal cache/persistence service.
   final LoggerPersistenceService _loggerPersistenceService;
 
-  /// Retorna o serviço de persistência associado a esta instância.
-  ///
-  /// O retorno permite consultar e filtrar logs já armazenados,
-  /// além de registrar callbacks de atualização via
-  /// [LoggerPersistenceService.logOutputHandler].
+  /// Exposes the persistence service linked to this instance.
   LoggerPersistenceService get cacheRepository => _loggerPersistenceService;
 
-  /// Executa o processo de log para um [LoggerObjectBase].
+  /// Executes log processing.
   ///
-  /// Verifica se o log deve ser impresso com base na configuração global
-  /// em [configLog]. Se habilitado ou se o log possuir
-  /// `alwaysPrint = true`, ele será:
-  /// 1. Adicionado ao cache via [_loggerPersistenceService].
-  /// 2. Impresso via [logPrinter].
-  ///
-  /// Observação: a persistência é assíncrona e não é aguardada neste método.
-  /// Assim, `executePrint` mantém fluxo síncrono para o chamador, enquanto
-  /// o armazenamento ocorre em segundo plano.
+  /// If config allows it, the log is cached and printed.
+  /// Logs with `alwaysPrint` bypass normal filtering.
   void executePrint(LoggerObjectBase log) {
     if (configLog.enableLog &&
         (configLog.onlyClasses.isEmpty ||
             configLog.onlyClasses.contains(log.runtimeType))) {
-      // O log pode ser impresso, então adicionamos ao cache e imprimimos
       _loggerPersistenceService.addLog(log);
       logPrinter.printLog(log);
     } else if (log.alwaysPrint) {
-      // O log não pode ser impresso normalmente, mas tem alwaysPrint, então imprimimos mesmo assim
       _loggerPersistenceService.addLog(log);
       logPrinter.printLog(log);
     }

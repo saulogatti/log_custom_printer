@@ -6,95 +6,61 @@ import '../../extensions/date_time_log_helper.dart';
 import '../../log_printer_locator.dart';
 import '../../utils/logger_ansi_color.dart';
 
-/// Marca base para objetos de log.
-///
-/// Usado como tipo selado para distinguir objetos que representam logs
-/// dentro do pacote. Atualmente não tem membros — existe para permitir
-/// uma hierarquia de tipos clara para os diferentes logs (debug, info,
-/// warning, error).
+/// Base marker for log objects.
 ///
 /// {@category Core}
 sealed class LoggerObject {}
 
-/// Contrato base para objetos de log que podem ser impressos/serializados.
-///
-/// Implementações concretas devem fornecer a cor do log via [getColor]
-/// e a representação JSON via [toJson]. O construtor já valida a mensagem
-/// e inicializa campos auxiliares como [logCreationDate] e [className].
+/// Base contract for log objects that can be printed and serialized.
 ///
 /// {@category Core}
 abstract class LoggerObjectBase extends LoggerObject {
-  /// Nome da classe/origem que emitiu o log.
-  ///
-  /// Inicializado no construtor a partir de `typeClass` (quando fornecido)
-  /// ou do `runtimeType` da instância.
+  /// Class/source that emitted the log.
   late String className;
 
-  /// Tags associadas ao log.
-  ///
-  /// Permite categorizar e filtrar logs com base em tags.
-  @JsonKey(name: "tagLog")
+  /// Tags attached to the log.
+  @JsonKey(name: 'tagLog')
   final String tag;
 
-  /// Mensagem principal do log.
-  ///
-  /// É anotado com `@JsonKey(name: 'message')` para manter o campo com
-  /// o nome esperado na serialização.
-  @JsonKey(name: "message")
+  /// Main log message.
+  @JsonKey(name: 'message')
   final String message;
 
-  /// Data/hora em que o log foi criado.
-  ///
-  /// Quando não é informado via [createdAt], o construtor define para
-  /// `DateTime.now()`; caso contrário usa o valor fornecido.
-  @JsonKey(name: "logCreationDate")
+  /// Creation time of this log.
+  @JsonKey(name: 'logCreationDate')
   DateTime logCreationDate = DateTime.now();
 
-  /// Cria um objeto de log.
-  ///
-  /// [message] deve ser não vazio — caso contrário uma `assert` é lançada
-  /// em modo de desenvolvimento. [createdAt] permite controlar a data do
-  /// log (útil em testes).
-  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
-    : tag = tag ?? "" {
+  /// Creates a log object.
+  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag}) : tag = tag ?? '' {
     assert(
       message.isNotEmpty && message.trim().isNotEmpty,
-      "Mensagem não pode ser vazia ou apenas espaços em branco",
+      'Message cannot be empty or whitespace only',
     );
 
     logCreationDate = createdAt ?? DateTime.now();
     className = typeClass?.toString() ?? runtimeType.toString();
   }
 
-  /// Se `true`, este log será impresso mesmo com [ConfigLog.enableLog] desabilitado.
-  ///
-  /// Útil para [ErrorLog], que deve sempre ser exibido. Padrão: `false`.
+  /// When `true`, this log is processed even if [ConfigLog.enableLog] is `false`.
   bool get alwaysPrint => false;
 
-  /// Cabeçalho formatado do log (nome da classe/origem).
+  /// Formatted log header (runtime type + source class).
   String get _logHeader =>
       runtimeType.toString().toUpperCase() +
-      (className.isNotEmpty ? " - $className".toUpperCase() : "");
+      (className.isNotEmpty ? ' - $className'.toUpperCase() : '');
 
-  /// Retorna a cor/estilo ANSI que será aplicada à mensagem quando
-  /// [getMessage] for chamada com `withColor = true`.
+  /// ANSI color/style for this log type.
   LoggerAnsiColor getColor();
 
-  /// Formata a mensagem incluindo timestamp e aplicando cor opcional.
-  ///
-  /// [withColor]: quando `true` aplica a transformação de cor retornada
-  /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
+  /// Returns formatted message with optional ANSI color.
   String getMessage([bool withColor = true]) {
-    final messageFormated = "${logCreationDate.logFullDateTime} $message";
+    final messageFormated = '${logCreationDate.logFullDateTime} $message';
     final String formattedLine = withColor ? getColor().call(messageFormated) : messageFormated;
 
     return formattedLine;
   }
 
-  /// Retorna o cabeçalho do log (nome da classe/origem) formatado.
-  ///
-  /// [withColor]: quando `true` aplica a transformação de cor retornada
-  /// por [getColor]; quando `false` retorna texto sem códigos ANSI.
+  /// Returns formatted log header with optional ANSI color.
   String getStartLog([bool withColor = true]) {
     if (withColor) {
       return getColor().call(_logHeader);
@@ -102,16 +68,7 @@ abstract class LoggerObjectBase extends LoggerObject {
     return _logHeader;
   }
 
-  /// Envia (imprime) o log usando o [LogPrinterBase] configurado no
-  /// pacote.
-  ///
-  /// Checa se o log está habilitado via configuração antes de imprimir.
-  /// Se o log não puder ser impresso e não for um `ErrorLog` (ou outro com `alwaysPrint`),
-  /// ele não será enviado para a saída nem para o cache.
-  ///
-  /// Implementação padrão obtém o [LogPrinterService] via [fetchLogPrinterService]
-  /// (get_it) e delega a impressão. Requer que [registerLogPrinter] tenha
-  /// sido chamado no startup.
+  /// Sends the log using the configured service from [fetchLogPrinterService].
   @mustCallSuper
   void sendLog() {
     final logPrinterService = fetchLogPrinterService();
@@ -119,7 +76,7 @@ abstract class LoggerObjectBase extends LoggerObject {
     logPrinterService.executePrint(this);
   }
 
-  /// Serializa o objeto de log para JSON.
+  /// Serializes the log object into JSON.
   Map<String, dynamic> toJson();
 
   @override

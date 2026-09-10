@@ -1,12 +1,10 @@
-# Configuração
+# Configuration
 
-Este módulo contém as classes responsáveis por controlar o comportamento do sistema de logging.
-
----
+This module contains classes that control logging behavior.
 
 ## ConfigLog
 
-Classe de configuração central do sistema de logging. Define quais logs devem ser processados e quais devem ser ignorados.
+Central logging configuration class. It defines which logs should be processed and which should be ignored.
 
 ```dart
 class ConfigLog {
@@ -15,35 +13,35 @@ class ConfigLog {
 }
 ```
 
-### Parâmetros
+### Parameters
 
-| Campo | Tipo | Padrão | Descrição |
-|-------|------|--------|-----------|
-| `enableLog` | `bool` | `false` | Habilita ou desabilita o processamento de logs globalmente |
-| `onlyClasses` | `Set<Type>` | `{DebugLog, WarningLog, InfoLog}` | Conjunto de tipos de log permitidos |
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `enableLog` | `bool` | `false` | Enables/disables log processing globally |
+| `onlyClasses` | `Set<Type>` | `{DebugLog, WarningLog, InfoLog}` | Set of allowed log types |
 
-### Comportamento
+### Behavior
 
-- Quando `enableLog` é `false`, todos os logs são ignorados **exceto** `ErrorLog`, que possui `alwaysPrint = true` e sempre é processado.
-- `onlyClasses` filtra logs por tipo: apenas objetos cujo `runtimeType` esteja no conjunto serão processados.
-- `ErrorLog` não precisa ser incluído em `onlyClasses` para ser processado — ele sempre passa.
+- When `enableLog` is `false`, all logs are ignored **except** `ErrorLog` (`alwaysPrint = true`).
+- `onlyClasses` filters by runtime type.
+- `ErrorLog` does not need to be listed in `onlyClasses` to be processed.
 
-### Exemplos de uso
+### Usage examples
 
-**Configuração padrão (logs desabilitados):**
+Default config (logs disabled):
 
 ```dart
 final config = ConfigLog();
 // enableLog: false, onlyClasses: {DebugLog, WarningLog, InfoLog}
 ```
 
-**Habilitar todos os logs em desenvolvimento:**
+Enable logs in development:
 
 ```dart
 final config = ConfigLog(enableLog: true);
 ```
 
-**Filtrar apenas erros e warnings:**
+Only errors and warnings:
 
 ```dart
 final config = ConfigLog(
@@ -52,14 +50,13 @@ final config = ConfigLog(
 );
 ```
 
-**Produção — logs desabilitados, apenas erros críticos são sempre registrados:**
+Production-style config (only critical errors always pass):
 
 ```dart
 final config = ConfigLog(enableLog: false);
-// ErrorLog ainda é processado por ter alwaysPrint = true
 ```
 
-**Integração com registro da impressora:**
+Integration with printer registration:
 
 ```dart
 void main() {
@@ -69,6 +66,5 @@ void main() {
       onlyClasses: {DebugLog, ErrorLog},
     ),
   );
-  // Em Flutter: runApp(const MyApp());
 }
 ```

@@ -1,39 +1,39 @@
 ---
-description: Effective Dart, UI, testes, logging, codegen e dependências
+description: Effective Dart, UI, tests, logging, codegen, and dependencies
 globs: "**/*.dart"
 alwaysApply: false
 ---
 
-# Dart/Flutter — práticas, testes e tooling
+# Dart/Flutter — practices, tests, and tooling
 
 ## Dart
 
-- Effective Dart e `analysis_options.yaml`; nomes claros; responsabilidade única.
-- Erros tratados explicitamente; null safety sólido; evitar `!` sem garantia.
-- Documentar APIs públicas com `///` quando fizer sentido.
+- Follow Effective Dart and `analysis_options.yaml`; use clear naming and single responsibility.
+- Handle errors explicitly; keep strong null safety; avoid unchecked `!`.
+- Document public APIs with `///` when useful.
 
 ## Flutter / UI
 
-- Widgets coesos e focados em renderização; `const` quando possível.
-- Listas longas: `ListView.builder`, `SliverList`; nada de trabalho pesado em `build()`.
+- Keep widgets cohesive and render-focused; use `const` when possible.
+- For long lists, use `ListView.builder` or `SliverList`; avoid heavy work inside `build()`.
 
-## Testes
+## Tests
 
-- Arrange–Act–Assert; priorizar domínio e bloc/cubit para regras críticas.
-- UI: validar por estado; preferir fakes/stubs a mocks quando viável.
+- Use Arrange-Act-Assert; prioritize domain and bloc/cubit tests for critical rules.
+- For UI tests, validate behavior per state; prefer fakes/stubs when practical.
 
 ## Logging
 
-- Não usar `print` solto; usar a estratégia de logging do projeto; preferir logging estruturado quando aplicável.
+- Do not use loose `print`; use the project logging strategy.
 
 ## Codegen
 
-- Não editar `*.g.dart` manualmente; após `@JsonSerializable`, regenerar com `build_runner` (ver [`.github/copilot-instructions.md`](.github/copilot-instructions.md)).
+- Never edit `*.g.dart` manually; after `@JsonSerializable` changes, regenerate with `build_runner`.
 
-## Dependências
+## Dependencies
 
-- Novo pacote só com ganho claro e justificação técnica; preferir o que o projeto já usa.
+- Add new packages only with clear value and technical justification.
 
-## Checklist final
+## Final checklist
 
-Compatível com instruções de domínio ([`.github/copilot-instructions.md`](.github/copilot-instructions.md))? Duplicação, tamanho de widgets, separação UI/lógica e BLoC revisados?
+Compatible with domain instructions in [`.github/copilot-instructions.md`](.github/copilot-instructions.md)? Duplications removed, widget size controlled, UI/business separation, and BLoC usage reviewed?

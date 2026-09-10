@@ -2,48 +2,21 @@ import 'domain/log_printers/log_simple_print.dart';
 import 'domain/log_printers/log_with_color_print.dart';
 import 'domain/logs_object/logger_object.dart';
 
-/// Classe base abstrata para impressoras de logs.
+/// Base abstract class for log printers.
 ///
-/// Define o contrato para implementações de impressoras de log.
-/// Cada impressora deve implementar o método [printLog] para definir
-/// como os logs serão formatados e exibidos.
+/// Defines the contract implemented by each printer strategy.
 ///
 /// {@category Printers}
 ///
-/// As implementações disponíveis são:
-/// - [LogSimplePrint]: saída simples sem cores
-/// - [LogWithColorPrint]: saída com códigos ANSI coloridos
-///
-/// Registre a implementação no startup da aplicação via `registerLogPrinter`:
-/// ```dart
-/// void main() {
-///   registerLogPrinter(
-///     const LogWithColorPrint(),
-///     config: const ConfigLog(enableLog: true),
-///   );
-///   // Em Flutter: runApp(const MyApp());
-/// }
-/// ```
-///
-/// Exemplo de implementação customizada:
-/// ```dart
-/// class MinhaImpressora extends LogPrinterBase {
-///   const MinhaImpressora();
-///
-///   @override
-///   void printLog(LoggerObjectBase log) {
-///     // Implementação customizada
-///     print('MEU LOG: ${log.message}');
-///   }
-/// }
-/// ```
+/// Available implementations:
+/// - [LogSimplePrint]: simple non-colored output
+/// - [LogWithColorPrint]: ANSI-colored output
 abstract class LogPrinterBase {
-  /// Construtor const para permitir uso como constante.
+  /// Const constructor for immutable printer instances.
   const LogPrinterBase();
 
-  /// Imprime/processa o log fornecido.
+  /// Prints/processes a log entry.
   ///
-  /// Implementações devem definir como o log será formatado e enviado
-  /// para a saída (console, arquivo, serviço remoto, etc.).
+  /// Implementations define how log data is formatted and emitted.
   void printLog(LoggerObjectBase log);
 }

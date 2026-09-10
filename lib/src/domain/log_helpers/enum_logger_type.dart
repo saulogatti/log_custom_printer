@@ -1,18 +1,16 @@
-/// Define os tipos de mensagens de log que podem ser manipulados.
-///
-/// Cada valor representa uma severidade ou categoria diferente de entrada de log.
+/// Supported log message types.
 ///
 /// {@category Utilities}
 enum EnumLoggerType {
-  /// Representa uma mensagem de log de erro.
+  /// Error log message.
   error,
 
-  /// Representa uma mensagem de log de depuração.
+  /// Debug log message.
   debug,
 
-  /// Representa uma mensagem de log de aviso.
+  /// Warning log message.
   warning,
 
-  /// Representa uma mensagem de log informativa.
+  /// Informational log message.
   info,
 }

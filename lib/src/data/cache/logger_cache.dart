@@ -12,82 +12,65 @@ import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 
-/// Gerenciador de cache para persistência de arquivos de log em disco.
-///
-/// Fornece funcionalidades para salvar, ler e limpar logs no sistema de arquivos.
-/// Os logs são armazenados em formato JSON dentro de uma subpasta `loggerApp/logs`
-/// a partir do diretório base fornecido.
+/// Cache manager for log file persistence on disk.
 ///
 /// {@category Utilities}
 final class LoggerCache {
-  /// O caminho para o diretório de logs.
+  /// Path to logs directory.
   String _directoryPath = 'logger';
   final IFileManagerType _fileManagerType;
 
-  /// Future para rastrear o estado de inicialização do diretório.
+  /// Tracks initialization completion.
   late Completer<void> _future;
 
-  /// Callback opcional para lidar com erros durante a inicialização ou escrita.
+  /// Optional callback for initialization/write errors.
   void Function(Object error, StackTrace stackTrace)? onError;
 
   final String _extension = '.json';
 
-  /// Cria um gerenciador de cache.
-  ///
-  /// [directory]: o diretório base onde os logs serão armazenados.
+  /// Creates a cache manager.
   LoggerCache(String directory, {IFileManagerType? fileManagerType})
     : _fileManagerType = fileManagerType ?? FileManager() {
     _future = Completer<void>();
     _init(directory);
   }
 
-  /// Um [Future] que completa quando a inicialização do diretório termina.
+  /// Completes when cache directory initialization finishes.
   Completer<void> get futureInitialization => _future;
 
-  /// Limpa todos os arquivos de log do diretório.
-  ///
-  /// A operação aguarda a inicialização do diretório e ignora falhas,
-  /// registrando o erro via `dart:developer.log`.
+  /// Removes all log files.
   Future<void> clearAll() async {
     try {
       await futureInitialization.future;
       await _fileManagerType.deleteDirectory(_directoryPath);
     } on Exception catch (e, stack) {
-      dev.log('Erro ao limpar os arquivos de log: $e', stackTrace: stack);
+      dev.log('Failed to clear log files: $e', stackTrace: stack);
     }
   }
 
-  /// Limpa os logs de um tipo específico (baseado no nome do arquivo).
-  ///
-  /// [name] corresponde ao identificador usado no nome do arquivo de log.
+  /// Removes log file by [name] type.
   Future<void> clearLogByType(String name) async {
     await futureInitialization.future;
     final fileName = _getPathFile(name);
     await _fileManagerType.deleteFile(fileName);
   }
 
-  /// Exporta uma lista de logs para um arquivo e retorna os dados em bytes e o caminho do arquivo.
-  ///
-  /// [logs]: lista de objetos de log para exportar.
-  /// #66 - O arquivo é salvo como "share.json" no diretório de logs.
+  /// Exports [logs] to a file and returns bytes + file path.
   Future<(List<int>?, String?)> exportLogs(List<LoggerObjectBase> logs, ExportFormat format) async {
-    await writeLogToFile("share.json", logs);
-    final pathFile = _getPathFile("share.json");
+    await writeLogToFile('share.json', logs);
+    final pathFile = _getPathFile('share.json');
     final objEncode = jsonEncode(logs);
 
     return (utf8.encode(objEncode), pathFile);
   }
 
-  /// Retorna o caminho completo de um arquivo de log para fins de teste.
+  /// Full file path helper for tests.
   @visibleForTesting
   String getPathFileForTest(String fileName) {
     return _getPathFile(fileName);
   }
 
-  /// Lê todos os arquivos de log presentes no diretório e os organiza por tipo.
-  ///
-  /// Retorna `null` quando o diretório não existe, está vazio ou ocorre erro
-  /// de leitura/parsing.
+  /// Reads all log files and groups them by type.
   Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs() async {
     try {
       await futureInitialization.future;
@@ -112,7 +95,7 @@ final class LoggerCache {
                 }
               }
             } catch (e, stack) {
-              dev.log('Erro ao ler o arquivo de log: $e', stackTrace: stack);
+              dev.log('Failed to read log file: $e', stackTrace: stack);
               await file.delete(recursive: true);
             }
           }
@@ -120,15 +103,12 @@ final class LoggerCache {
         return allLogs;
       }
     } on Exception catch (e, stack) {
-      dev.log('Erro ao ler os arquivos de log: $e', stackTrace: stack);
+      dev.log('Failed to read log files: $e', stackTrace: stack);
     }
     return null;
   }
 
-  /// Escreve uma lista de logs ([loggerList]) em um arquivo identificado por [fileName].
-  ///
-  /// O conteúdo é serializado como JSON formatado antes da escrita.
-  /// Erros de I/O acionam [onError] quando definido.
+  /// Writes [loggerList] to [fileName] as formatted JSON.
   Future<void> writeLogToFile(String fileName, Object loggerList) async {
     try {
       await futureInitialization.future;
@@ -139,28 +119,26 @@ final class LoggerCache {
       await _fileManagerType.writeFile(path, objEncode);
     } on Exception catch (e, stack) {
       onError?.call(e, stack);
-      dev.log('Erro ao escrever o arquivo de log: $e', stackTrace: stack);
+      dev.log('Failed to write log file: $e', stackTrace: stack);
     }
   }
 
-  /// Gera o caminho completo para um arquivo de log, garantindo a extensão .json
-  /// e a sanitização do nome do arquivo.
+  /// Builds full path for a log file, forcing `.json` extension.
   String _getPathFile(String fileName) {
     if (fileName.isEmpty) {
-      throw ArgumentError('O nome do arquivo não pode ser vazio');
+      throw ArgumentError('File name cannot be empty');
     }
 
-    // Extrai apenas o nome base para evitar qualquer tentativa de path traversal
     final baseName = path.basename(fileName);
 
     if (baseName == '.' || baseName == '..') {
-      throw ArgumentError('Nome de arquivo inválido: $baseName');
+      throw ArgumentError('Invalid file name: $baseName');
     }
 
     final sanitizedFileName = baseName.sanitizedFileName.formattedName;
 
     if (sanitizedFileName.isEmpty) {
-      throw ArgumentError('O nome do arquivo após sanitização ficou vazio');
+      throw ArgumentError('File name became empty after sanitization');
     }
 
     final fileJson = path.setExtension(sanitizedFileName, _extension);
@@ -169,13 +147,11 @@ final class LoggerCache {
     return pathLog;
   }
 
-  /// Inicializa a estrutura de diretórios (`loggerApp/logs`) no caminho fornecido.
-  ///
-  /// Completa [futureInitialization] após criar (ou validar) o diretório.
+  /// Initializes `loggerApp/logs` directory in the provided base path.
   Future<void> _init(String directory) async {
-    assert(directory.isNotEmpty, 'O diretório base para os logs não pode ser vazio');
+    assert(directory.isNotEmpty, 'Base directory for logs cannot be empty');
     if (directory.endsWith('/')) {
-      throw AssertionError('O diretório base para os logs deve terminar com /');
+      throw AssertionError('Base directory for logs must not end with /');
     }
     try {
       final directoryPath = Directory('$directory/loggerApp/logs');
@@ -187,7 +163,7 @@ final class LoggerCache {
       if (onError != null) {
         onError!(e, stack);
       } else {
-        dev.log('Erro ao inicializar LoggerCache: $e', stackTrace: stack);
+        dev.log('Failed to initialize LoggerCache: $e', stackTrace: stack);
       }
     } finally {
       _future.complete();

@@ -1,54 +1,52 @@
-/// Biblioteca de logging para projetos Dart (CLI, servidor, scripts).
+/// Logging library for Dart projects (CLI, server, scripts).
 ///
-/// Pode ser usada também em apps Flutter; registe a impressora no `main`
-/// antes de emitir logs.
+/// It can also be used in Flutter apps; register a printer in `main`
+/// before emitting logs.
 ///
-/// Fornece um sistema completo de logging com:
-/// - Hierarquia tipada de logs (Debug, Info, Warning, Error)
-/// - Formatação colorida com códigos ANSI
-/// - Serialização JSON automática
-/// - Injeção de dependência via get_it
-/// - Mixins utilitários para integração fácil
+/// Provides a complete logging system with:
+/// - Typed log hierarchy (Debug, Info, Warning, Error)
+/// - ANSI color formatting
+/// - Automatic JSON serialization
+/// - Dependency injection via get_it
+/// - Utility mixins for easy integration
 ///
-/// ## Uso Rápido
+/// ## Quick start
 ///
 /// ```dart
 /// import 'package:log_custom_printer/log_custom_printer.dart';
 ///
-/// // Configuração inicial (obrigatório no startup)
 /// void main() {
 ///   registerLogPrinter(
 ///     const LogWithColorPrint(),
 ///     config: const ConfigLog(enableLog: true),
 ///   );
-///   // Em Flutter: runApp(const MyApp());
+///   // Flutter apps: runApp(const MyApp());
 /// }
 ///
-/// // Usando o mixin (recomendado)
-/// class MinhaClasse with LoggerClassMixin {
-///   void executar() {
-///     logDebug('Iniciando processo');
-///     logInfo('Processo em andamento');
+/// class MyClass with LoggerClassMixin {
+///   void execute() {
+///     logDebug('Starting process');
+///     logInfo('Process running');
 ///
 ///     try {
-///       // código da aplicação
+///       // app code
 ///     } catch (error, stackTrace) {
-///       logError('Erro: $error', stackTrace);
+///       logError('Error: $error', stackTrace);
 ///     }
 ///   }
 /// }
 /// ```
 ///
-/// ## Tipos de Log
+/// ## Log types
 ///
-/// - [DebugLog]: Mensagens de depuração (amarelo)
-/// - [InfoLog]: Informações gerais (branco)
-/// - [WarningLog]: Avisos e alertas (verde)
-/// - [ErrorLog]: Erros e exceções (vermelho)
+/// - [DebugLog]: Debug messages (yellow)
+/// - [InfoLog]: General information (white)
+/// - [WarningLog]: Warnings and alerts (green)
+/// - [ErrorLog]: Errors and exceptions (red)
 ///
-/// ## Configuração
+/// ## Configuration
 ///
-/// Configure o comportamento dos logs através de [ConfigLog]:
+/// Configure logging behavior with [ConfigLog]:
 ///
 /// ```dart
 /// final config = ConfigLog(
@@ -57,11 +55,11 @@
 /// );
 /// ```
 ///
-/// ## Impressoras
+/// ## Printers
 ///
-/// Escolha entre diferentes estratégias de impressão:
-/// - [registerLogPrinterSimple]: Saída simples sem cores
-/// - [registerLogPrinterColor]: Saída com formatação colorida ANSI
+/// Choose output strategy:
+/// - [registerLogPrinterSimple]: Simple output without colors
+/// - [registerLogPrinterColor]: ANSI color output
 ///
 /// {@category Core}
 library;

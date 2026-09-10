@@ -5,55 +5,21 @@ import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 
 part 'error_log.g.dart';
 
-/// Log de erro com formatação vermelha e stack trace.
+/// Error log with red formatting and stack trace support.
 ///
-/// Usado para registrar erros e exceções da aplicação. Este tipo de log
-/// inclui informações de stack trace para facilitar a depuração. Sempre
-/// é processado independentemente da configuração [ConfigLog.enableLog],
-/// garantindo que erros críticos sejam sempre registrados. Exibido com
-/// cor vermelha em terminais que suportam códigos ANSI.
+/// Always processed regardless of [ConfigLog.enableLog].
 ///
 /// {@category Log Types}
-///
-/// Exemplo de uso:
-/// ```dart
-/// try {
-///   // código que pode lançar exceção
-/// } catch (error, stackTrace) {
-///   final log = ErrorLog('Falha ao processar dados: $error', stackTrace);
-///   log.sendLog();
-/// }
-/// ```
-///
-/// Com mixin:
-/// ```dart
-/// class MinhaClasse with LoggerClassMixin {
-///   void metodoComTratamento() {
-///     try {
-///       // operação arriscada
-///     } catch (error, stackTrace) {
-///       logError('Erro na operação: $error', stackTrace);
-///     }
-///   }
-/// }
-/// ```
 @JsonSerializable()
 class ErrorLog extends LoggerObjectBase {
-  /// Stack trace associado ao erro.
-  ///
-  /// Captura a pilha de execução no momento do erro para facilitar
-  /// a depuração e identificação da origem do problema.
+  /// Stack trace associated with the error.
   @StackTraceConverter()
   final StackTrace stackTrace;
 
-  /// Cria um log de erro.
-  ///
-  /// [message] é a descrição do erro.
-  /// [stackTrace] é a pilha de execução capturada.
-  /// [typeClass] identifica a classe de origem (opcional).
+  /// Creates an error log.
   ErrorLog(super.message, this.stackTrace, {super.createdAt, super.typeClass});
 
-  /// Cria uma instância a partir de JSON.
+  /// Creates an instance from JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) => _$ErrorLogFromJson(json);
 
   @override
@@ -70,46 +36,40 @@ class ErrorLog extends LoggerObjectBase {
     final color = getColor();
     final strMessage = super
         .getMessage(withColor)
-        .split("\n")
+        .split('\n')
         .map((e) => withColor ? color.call(e) : e)
         .toList();
 
     for (final entry in str.entries) {
       if (withColor) {
-        strMessage.add(color.call("${entry.key} = ${entry.value}"));
+        strMessage.add(color.call('${entry.key} = ${entry.value}'));
       } else {
-        strMessage.add("${entry.key} = ${entry.value}");
+        strMessage.add('${entry.key} = ${entry.value}');
       }
     }
 
-    return strMessage.join("\n\t");
+    return strMessage.join('\n\t');
   }
 
   @override
   Map<String, dynamic> toJson() => _$ErrorLogToJson(this);
 }
 
-/// Conversor JSON para serialização de [StackTrace].
-///
-/// Converte [StackTrace] para `String` durante o `toJson` e reconstrói o
-/// objeto via [StackTrace.fromString] no `fromJson`.
-///
-/// Usado por [ErrorLog] para suportar `json_serializable` em campos de
-/// stack trace.
+/// JSON converter for [StackTrace] values.
 ///
 /// {@category Utilities}
 class StackTraceConverter implements JsonConverter<StackTrace, String> {
-  /// Cria um conversor constante para campos de stack trace.
+  /// Creates a const converter instance.
   const StackTraceConverter();
 
   @override
-  /// Reconstrói [StackTrace] a partir da representação textual [json].
+  /// Rebuilds a [StackTrace] from [json] text.
   StackTrace fromJson(String json) {
     return StackTrace.fromString(json);
   }
 
   @override
-  /// Serializa [object] para `String` no payload JSON.
+  /// Serializes [object] to string JSON value.
   String toJson(StackTrace object) {
     return object.toString();
   }

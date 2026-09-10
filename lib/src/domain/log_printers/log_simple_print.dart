@@ -3,31 +3,16 @@ import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 
 export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 
-/// Impressora simples de logs.
+/// Simple log printer.
 ///
-/// Implementação mínima de `LogPrinterBase` que imprime mensagens sem
-/// códigos ANSI (sem cor) usando `debugPrint`. É útil para ambientes onde
-/// a saída colorida não é desejada (por exemplo logs em consoles que não
-/// suportam ANSI).
+/// Prints logs without ANSI color codes.
 ///
 /// {@category Printers}
-///
-/// Exemplo de uso:
-/// ```dart
-/// registerLogPrinter(
-///   const LogSimplePrint(),
-///   config: const ConfigLog(enableLog: true),
-/// );
-/// ```
 class LogSimplePrint extends LogPrinterBase {
-  /// Construtor const para permitir uso como constante quando configurado.
+  /// Const constructor.
   const LogSimplePrint();
 
-  /// Imprime o log em formato simples.
-  ///
-  /// Recebe um [LoggerObjectBase] e escreve uma linha via `debugPrint` no
-  /// formato: `[ClassName] <timestamp> <message>` (o timestamp e a mensagem
-  /// são obtidos por [LoggerObjectBase.getMessage] com `withColor = false`).
+  /// Prints the log as `[ClassName] <timestamp> <message>`.
   @override
   void printLog(LoggerObjectBase log) {
     final className = log.className;

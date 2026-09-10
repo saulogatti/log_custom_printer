@@ -1,20 +1,19 @@
-# Uso com Flutter e ConsoleView
+# Usage with Flutter and ConsoleView
 
-Desde a versão 3.0.0, a interface gráfica de console (`ConsoleView`) foi movida para um pacote separado para manter esta biblioteca como **Dart pura**.
+Since version 3.0.0, the visual console UI (`ConsoleView`) was moved to a separate package so this library remains **pure Dart**.
 
-Para usar o console visual em seu aplicativo Flutter, você precisará integrar este pacote com o novo pacote de interface (quando disponível).
+To use a visual console in your Flutter app, integrate this package with the dedicated UI package.
 
-## 1. Configuração Inicial
+## 1. Initial setup
 
-No seu arquivo `main.dart`, registre a impressora antes de iniciar o aplicativo:
+Register a printer in `main.dart` before `runApp`:
 
 ```dart
 import 'package:flutter/material.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
-// import 'package:log_custom_printer_console_view/log_custom_printer_console_view.dart'; // Exemplo de import futuro
+// import 'package:log_custom_printer_console_view/log_custom_printer_console_view.dart';
 
 void main() {
-  // Configura o core de logging
   final persistenceService = registerLogPrinterColor(
     config: const ConfigLog(enableLog: true),
   );
@@ -23,9 +22,9 @@ void main() {
 }
 ```
 
-## 2. Integrando o ConsoleView (Conceitual)
+## 2. Visual console integration (conceptual)
 
-O pacote de console visual geralmente fornecerá um widget ou um gerenciador de overlay.
+The visual package will usually expose a widget or overlay manager.
 
 ```dart
 class MyApp extends StatelessWidget {
@@ -37,11 +36,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: const Text('Exemplo Flutter')),
-        body: const Center(child: Text('Toque no botão para abrir o console')),
+        appBar: AppBar(title: const Text('Flutter Example')),
+        body: const Center(child: Text('Tap the button to open console')),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // Exemplo conceitual de abertura do console
+            // Conceptual example:
             // ConsoleOverlayManager.show(context, persistenceService);
           },
           child: const Icon(Icons.terminal),
@@ -52,9 +51,9 @@ class MyApp extends StatelessWidget {
 }
 ```
 
-## 3. Capturando Erros do Flutter
+## 3. Capturing Flutter errors
 
-Você pode usar o `ErrorLog` para capturar exceções globais do Flutter:
+Use `ErrorLog` for global error capture:
 
 ```dart
 void main() {
@@ -72,6 +71,6 @@ void main() {
 }
 ```
 
-## 4. Próximos Passos
+## 4. Next steps
 
-Para detalhes específicos sobre a integração com a interface gráfica, consulte o guia de migração em [doc/ConsoleView.md](../doc/ConsoleView.md) e a documentação do pacote de console visual quando este for publicado.
+For concrete integration details, see [doc/ConsoleView.md](../doc/ConsoleView.md) and the visual console package README.

@@ -1,24 +1,22 @@
+## Standard commit message
+- Format: `<type>: <concise description>`
+- Common types:
+  - `feat`: New feature
+  - `fix`: Bug fix
+  - `docs`: Documentation update
+  - `style`: Formatting/style only (no logic change)
+  - `refactor`: Refactor (no behavior change)
+  - `test`: Add or update tests
+- Keep message clear and in English.
+- Example: `fix: correct menu navigation state handling`
+- Avoid generic commit messages.
 
-
-## Commit message padrão
-- Formato: `<tipo>: <descrição concisa>`
-- Tipos comuns:
-  - `feat`: Nova funcionalidade
-  - `fix`: Correção de bug
-  - `docs`: Atualização de documentação
-  - `style`: Formatação/correção de estilo (sem alteração de lógica)
-  - `refactor`: Refatoração de código (sem alteração de funcionalidade)
-  - `test`: Adição ou correção de testes
-- Mensagem clara e em português.
-- Exemplo: `fix: Corrigir bug na navegação do menu`
-- Não faça mensagens genericas
-
-## Pull request padrão
-- Título: `<tipo>: <descrição concisa>` (mesmo formato do commit)
-- Descrição:
-  - Resumo das mudanças.
-  - Motivação para as mudanças.
-  - Instruções para testar as mudanças.
-- Link para issues relacionadas, se aplicável.
-- Use checklist para itens importantes (ex: testes, documentação).
-- Responda sempre a comentários de revisão e em português.
+## Standard pull request
+- Title: `<type>: <concise description>` (same format as commit)
+- Description should include:
+  - Summary of changes
+  - Motivation
+  - Testing instructions
+- Link related issues when applicable.
+- Use a checklist for important items (tests, docs, etc.).
+- Reply to review comments in English.

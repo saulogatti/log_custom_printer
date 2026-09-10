@@ -1,17 +1,14 @@
-/// Exceção customizada para falhas relacionadas ao sistema de logs.
-///
-/// Usada para representar erros de domínio da biblioteca com mensagens
-/// semânticas e fáceis de rastrear.
+/// Custom exception for log-domain failures.
 ///
 /// {@category Utilities}
 class LogException implements Exception {
-
-  /// Cria uma nova exceção de log com [message].
+  /// Creates a new exception with [message].
   LogException(this.message);
-  /// Mensagem descritiva da falha.
+
+  /// Failure description.
   final String message;
 
   @override
-  /// Retorna uma representação legível da exceção.
+  /// Human-readable exception string.
   String toString() => 'LogException: $message';
 }
