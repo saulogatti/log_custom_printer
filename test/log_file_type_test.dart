@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
-import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:test/test.dart';
 
 import 'data_logs/jsons_mocks.dart';
@@ -22,7 +22,7 @@ void main() {
   });
   group('Salvando arquivos de logs', () {
     test(' DebugLog ', () async {
-      final list = LoggerJsonList.fromJson(jsonTestDebug);
+      final list = LoggerJsonListType.fromJson(jsonTestDebug);
 
       await loggerCache.writeLogToFile('testDebug', list);
       final expectedPath = loggerCache.getPathFileForTest('testDebug');
@@ -32,7 +32,7 @@ void main() {
       expect(content?.length, greaterThan(0));
     });
     test(' InfoLog ', () async {
-      final list = LoggerJsonList.fromJson(jsonTestInfo);
+      final list = LoggerJsonListType.fromJson(jsonTestInfo);
 
       await loggerCache.writeLogToFile('testInfo', list);
       final expectedPath = loggerCache.getPathFileForTest('testInfo');
@@ -42,7 +42,7 @@ void main() {
       expect(content?.length, greaterThan(0));
     });
     test(' WarningLog ', () async {
-      final list = LoggerJsonList.fromJson(jsonTestWarning);
+      final list = LoggerJsonListType.fromJson(jsonTestWarning);
 
       await loggerCache.writeLogToFile('testWarning', list);
       final expectedPath = loggerCache.getPathFileForTest('testWarning');
@@ -52,7 +52,7 @@ void main() {
       expect(content?.length, greaterThan(0));
     });
     test(' ErrorLog ', () async {
-      final list = LoggerJsonList.fromJson(jsonTestError);
+      final list = LoggerJsonListType.fromJson(jsonTestError);
 
       await loggerCache.writeLogToFile('testError', list);
       final expectedPath = loggerCache.getPathFileForTest('testError');
