@@ -14,7 +14,7 @@ void main() {
   });
   group('logger_json_list', () {
     test('decodes JSON WarningLog', () {
-      final File file = File('test/data_logs/warning.json');
+      final file = File('test/data_logs/warning.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestWarning = jsonDecode(dataStr);
@@ -28,7 +28,7 @@ void main() {
       expect(loggerJsonList.loggerEntries.first, isA<WarningLog>());
     });
     test('decodes JSON DebugLog', () {
-      final File file = File('test/data_logs/debug.json');
+      final file = File('test/data_logs/debug.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestDebug = jsonDecode(dataStr);
@@ -42,7 +42,7 @@ void main() {
       expect(loggerJsonList.loggerEntries.first, isA<DebugLog>());
     });
     test('decodes JSON InfoLog', () {
-      final File file = File('test/data_logs/info.json');
+      final file = File('test/data_logs/info.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestInfo = jsonDecode(dataStr);
@@ -57,7 +57,7 @@ void main() {
       expect(loggerJsonList.loggerEntries.first, isA<InfoLog>());
     });
     test('decodes JSON ErrorLog', () {
-      final File file = File('test/data_logs/error.json');
+      final file = File('test/data_logs/error.json');
       expect(file.existsSync(), isTrue);
       final dataStr = file.readAsStringSync();
       final jsonTestError = jsonDecode(dataStr);
@@ -77,7 +77,7 @@ void main() {
       () {
         final loggerJsonList = LoggerJsonList(type: 'DebugLog');
 
-        for (int i = 0; i < 105; i++) {
+        for (var i = 0; i < 105; i++) {
           loggerJsonList.addLogger(DebugLog('log-$i'));
         }
 

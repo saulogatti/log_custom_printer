@@ -1,6 +1,6 @@
-import 'domain/log_printers/log_simple_print.dart';
-import 'domain/log_printers/log_with_color_print.dart';
-import 'domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
+import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
 /// Base abstract class for log printers.
 ///

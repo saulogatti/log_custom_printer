@@ -16,11 +16,11 @@ class LogWithColorPrint extends LogPrinterBase {
     final separator = log.getColor().call('=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-');
 
     final start = log.getStartLog();
-    final List<String> messageLog = [' ', separator];
+    final messageLog = <String>[' ', separator];
     messageLog.add(log.getMessage());
     messageLog.add(separator);
 
-    final String logFormated = messageLog.join('\n');
+    final logFormated = messageLog.join('\n');
 
     dev.log(logFormated, name: start);
   }

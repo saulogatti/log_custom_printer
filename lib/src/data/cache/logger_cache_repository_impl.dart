@@ -37,7 +37,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   @override
   Future<void> addLog(LoggerObjectBase log) async {
     await _futureInitialization;
-    LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
+    var loggerList = _loggerJsonList[log.enumLoggerType];
     if (loggerList == null) {
       loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
       _loggerJsonList[log.enumLoggerType] = loggerList;
@@ -70,7 +70,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   @override
   Future<List<LoggerObjectBase>> getAllLogs() async {
     await _futureInitialization;
-    final List<LoggerObjectBase> allLogs = [];
+    final allLogs = <LoggerObjectBase>[];
     for (final loggerList in _loggerJsonList.values) {
       if (loggerList != null) {
         allLogs.addAll(loggerList.loggerEntries);
@@ -85,7 +85,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     await _futureInitialization;
     final loggerList = _loggerJsonList[type];
     if (loggerList != null) {
-      return (loggerList.loggerEntries);
+      return loggerList.loggerEntries;
     }
     return [];
   }

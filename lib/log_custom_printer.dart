@@ -36,7 +36,7 @@
 ///   }
 /// }
 /// ```
-///
+/// 
 /// ## Log types
 ///
 /// - [DebugLog]: Debug messages (yellow)
@@ -63,6 +63,8 @@
 ///
 /// {@category Core}
 library;
+
+import 'package:log_custom_printer/log_custom_printer.dart';
 
 export 'src/config_log.dart';
 export 'src/data/cache/logger_cache_repository_impl.dart' show LoggerCacheRepositoryImpl;

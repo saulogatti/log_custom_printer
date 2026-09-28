@@ -1,8 +1,8 @@
-import '../logs_object/error_log.dart';
-import '../logs_object/info_log.dart';
-import '../logs_object/logger_object.dart';
-import '../logs_object/warning_log.dart';
-import 'enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/logs_object/error_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/info_log.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 
 /// Maps log objects to [EnumLoggerType].
 ///

@@ -61,7 +61,7 @@ class FileManager implements IFileManagerType {
       _extensionIncludePath(path);
       final file = File(path);
       if (await file.exists()) {
-        final res = await file.readAsString(encoding: utf8);
+        final res = await file.readAsString();
         return res;
       }
       throw Exception('File not found: $path');
@@ -105,7 +105,7 @@ class FileManager implements IFileManagerType {
         completer.complete();
       }
       if (identical(_pathLocks[key], current)) {
-        _pathLocks.remove(key);
+        await _pathLocks.remove(key);
       }
     }
   }

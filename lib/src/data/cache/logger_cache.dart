@@ -81,7 +81,7 @@ final class LoggerCache {
             .where((entity) => entity is File)
             .cast<File>()
             .toList();
-        final Map<EnumLoggerType, LoggerJsonList?> allLogs = {};
+        final allLogs = <EnumLoggerType, LoggerJsonList?>{};
         for (final file in files) {
           if (file.path.endsWith(_extension)) {
             try {

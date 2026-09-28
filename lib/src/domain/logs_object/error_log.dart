@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:log_custom_printer/log_custom_printer.dart' show ConfigLog;
+import 'package:log_custom_printer/src/config_log.dart' show ConfigLog;
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
@@ -31,11 +33,11 @@ class ErrorLog extends LoggerObjectBase {
   }
 
   @override
-  String getMessage([bool withColor = true]) {
+  String getMessage({bool withColor = true}) {
     final str = stackTrace.stackInMap(100);
     final color = getColor();
     final strMessage = super
-        .getMessage(withColor)
+        .getMessage(withColor: withColor)
         .split('\n')
         .map((e) => withColor ? color.call(e) : e)
         .toList();
