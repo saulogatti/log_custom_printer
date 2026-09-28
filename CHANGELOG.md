@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.1.3
+
+- Fix: corrected log path behavior in test environments to ensure proper file writes.
+- Refactor: improved project structure for better maintainability.
+- Refactor: updated documentation to reflect structural changes and usage guidance.
+- Fix: small bug fixes and stability improvements.
+
 ## 3.1.2
 
 - Fix: Rewrote documentation in English (English documentation).
