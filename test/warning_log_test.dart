@@ -9,11 +9,7 @@ void main() {
 
       expect(log.message, equals('Test message'));
       expect(log.className, equals('String'));
-      expect(
-        log.logCreationDate.isAfter(now) ||
-            log.logCreationDate.isAtSameMomentAs(now),
-        isTrue,
-      );
+      expect(log.logCreationDate.isAfter(now) || log.logCreationDate.isAtSameMomentAs(now), isTrue);
     });
 
     test('constructor throws AssertionError on empty message', () {
@@ -49,11 +45,11 @@ void main() {
     test('getMessage formats correctly with and without color', () {
       final log = WarningLog('Test message');
 
-      final messageNoColor = log.getMessage(false);
+      final messageNoColor = log.getMessage(withColor: false);
 
       expect(messageNoColor, contains('Test message'));
 
-      final messageWithColor = log.getMessage(true);
+      final messageWithColor = log.getMessage();
       expect(messageWithColor, startsWith('\x1B[32m')); // Green FG
       expect(messageWithColor, endsWith('\x1B[0m')); // Reset
     });
@@ -61,10 +57,10 @@ void main() {
     test('getStartLog formats correctly with and without color', () {
       final log = WarningLog('Test message', typeClass: String);
 
-      final startNoColor = log.getStartLog(false);
+      final startNoColor = log.getStartLog(withColor: false);
       expect(startNoColor, equals('WARNINGLOG - STRING'));
 
-      final startWithColor = log.getStartLog(true);
+      final startWithColor = log.getStartLog();
       expect(startWithColor, startsWith('\x1B[32m'));
       expect(startWithColor, contains('WARNINGLOG - STRING'));
       expect(startWithColor, endsWith('\x1B[0m'));
@@ -72,7 +68,7 @@ void main() {
 
     test('toString returns formatted message with color', () {
       final log = WarningLog('Test message');
-      expect(log.toString(), equals(log.getMessage(true)));
+      expect(log.toString(), equals(log.getMessage()));
     });
   });
 }

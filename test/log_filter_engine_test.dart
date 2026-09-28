@@ -12,10 +12,10 @@ void main() {
   late LogFilterEngine engine;
   late List<LoggerObjectBase> logs;
 
-  final date1 = DateTime(2023, 10, 1, 10, 0);
-  final date2 = DateTime(2023, 10, 2, 11, 0);
-  final date3 = DateTime(2023, 10, 3, 12, 0);
-  final date4 = DateTime(2023, 10, 4, 13, 0);
+  final date1 = DateTime(2023, 10, 1, 10);
+  final date2 = DateTime(2023, 10, 2, 11);
+  final date3 = DateTime(2023, 10, 3, 12);
+  final date4 = DateTime(2023, 10, 4, 13);
 
   setUp(() {
     engine = const LogFilterEngine();

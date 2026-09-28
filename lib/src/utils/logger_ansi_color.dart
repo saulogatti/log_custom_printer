@@ -92,7 +92,7 @@ class LoggerAnsiColor {
   /// Returns ANSI text color sequence.
   @override
   String toString() {
-    final int fg = enumAnsiColors.getFgColor();
+    final fg = enumAnsiColors.getFgColor();
     return '$ansiEsc${fg}m';
   }
 }

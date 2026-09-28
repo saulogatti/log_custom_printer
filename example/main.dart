@@ -52,7 +52,7 @@ class MinhaApp with LoggerClassMixin {
 
     logWarning('O processamento demorou mais que o esperado.');
     print('--- Iniciando Exemplo log_custom_printer ---\n');
-    logDebug('Esta é uma mensagem de debug ${StackTrace.current.toString()}');
+    logDebug('Esta é uma mensagem de debug ${StackTrace.current}');
 
     // 2. Emissão de logs manual
     print('2. Emitindo logs manualmente:');

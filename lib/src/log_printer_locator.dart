@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:log_custom_printer/log_custom_printer.dart' show LoggerObjectBase;
 import 'package:log_custom_printer/src/config_log.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
@@ -6,6 +7,7 @@ import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' s
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart' show LoggerObjectBase;
 import 'package:log_custom_printer/src/log_printer_service.dart';
 
 export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' show FileType;

@@ -1,4 +1,4 @@
-import '../log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 
 /// Query parameters for log filtering and sorting.
 ///

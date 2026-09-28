@@ -41,8 +41,8 @@ class LoggerJsonList {
     if (json['type'] == null || json['type'] is! String) {
       throw LogException('Logger type not found');
     }
-    final String type = json['type'] as String;
-    final LoggerJsonList loggerJsonList = LoggerJsonList(type: type);
+    final type = json['type'] as String;
+    final loggerJsonList = LoggerJsonList(type: type);
     final list = json['loggerJson'] as List? ?? [];
     for (final element in list) {
       if (element is Map<String, dynamic>) {

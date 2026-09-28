@@ -16,7 +16,7 @@ class LogSimplePrint extends LogPrinterBase {
   @override
   void printLog(LoggerObjectBase log) {
     final className = log.className;
-    final message = log.getMessage(false);
+    final message = log.getMessage(withColor: false);
 
     // ignore: avoid_print
     print('[$className] $message');

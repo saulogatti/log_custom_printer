@@ -15,10 +15,10 @@ final _stackTraceLineRegex = RegExp(r'#\d+\s+');
 extension StackTraceSdk on StackTrace {
   /// Formats stack trace lines with optional color and max line count.
   String formatStackTrace(LoggerAnsiColor? sdkLevel, int linesCount) {
-    final List<String> lines = _getCleanedLines(linesCount);
-    final List<String> formatted = [];
+    final lines = _getCleanedLines(linesCount);
+    final formatted = <String>[];
 
-    for (int count = 0; count < lines.length; count++) {
+    for (var count = 0; count < lines.length; count++) {
       final line = lines[count];
       if (sdkLevel != null) {
         formatted.add(sdkLevel.call('#$count $line'));
@@ -36,10 +36,10 @@ extension StackTraceSdk on StackTrace {
 
   /// Converts stack trace to a map (`#0`, `#1`, ...).
   Map<String, dynamic> stackInMap([int linesCount = 8]) {
-    final Map<String, String> map = {};
-    final List<String> lines = _getCleanedLines(linesCount);
+    final map = <String, String>{};
+    final lines = _getCleanedLines(linesCount);
 
-    for (int count = 0; count < lines.length; count++) {
+    for (var count = 0; count < lines.length; count++) {
       final line = lines[count];
       map['#$count'] = line;
     }
@@ -54,7 +54,7 @@ extension StackTraceSdk on StackTrace {
     final segment = match.group(1)!;
     if (segment.startsWith('package:logger') ||
         segment.startsWith('dart:') ||
-        !segment.startsWith("#")) {
+        !segment.startsWith('#')) {
       return true;
     }
     return false;
@@ -76,14 +76,14 @@ extension StackTraceSdk on StackTrace {
   }
 
   List<String> _getCleanedLines(int linesCount) {
-    final List<String> lines = _getLines();
-    int stackTraceLength = lines.length;
+    final lines = _getLines();
+    var stackTraceLength = lines.length;
     if (stackTraceLength > linesCount) {
       stackTraceLength = linesCount;
     }
 
-    final List<String> cleanedLines = [];
-    for (int count = 0; count < stackTraceLength; count++) {
+    final cleanedLines = <String>[];
+    for (var count = 0; count < stackTraceLength; count++) {
       cleanedLines.add(lines[count].replaceFirst(_stackTraceLineRegex, ''));
     }
     return cleanedLines;

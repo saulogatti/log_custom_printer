@@ -1,7 +1,7 @@
-import '../log_helpers/enum_logger_type.dart';
-import '../log_helpers/logger_enum.dart';
-import '../logs_object/logger_object.dart';
-import 'log_query.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/query/log_query.dart';
 
 /// Sorts logs using [LogQuery] parameters.
 ///

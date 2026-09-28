@@ -9,10 +9,10 @@ import 'data_logs/jsons_mocks.dart';
 
 void main() {
   late LoggerCache loggerCache;
-  String tempDir = Directory.current.path;
+  var tempDir = Directory.current.path;
 
   setUpAll(() async {
-    tempDir += "/test/data_logs";
+    tempDir += '/test/data_logs';
     loggerCache = LoggerCache(tempDir, fileManagerType: FileManager());
     await loggerCache.futureInitialization.future;
   });
@@ -20,8 +20,8 @@ void main() {
   tearDownAll(() async {
     await loggerCache.clearAll();
   });
-  group("Salvando arquivos de logs", () {
-    test(" DebugLog ", () async {
+  group('Salvando arquivos de logs', () {
+    test(' DebugLog ', () async {
       final list = LoggerJsonList.fromJson(jsonTestDebug);
 
       await loggerCache.writeLogToFile('testDebug', list);
@@ -31,7 +31,7 @@ void main() {
       final content = await loggerCache.readAllLogs();
       expect(content?.length, greaterThan(0));
     });
-    test(" InfoLog ", () async {
+    test(' InfoLog ', () async {
       final list = LoggerJsonList.fromJson(jsonTestInfo);
 
       await loggerCache.writeLogToFile('testInfo', list);
@@ -41,7 +41,7 @@ void main() {
       final content = await loggerCache.readAllLogs();
       expect(content?.length, greaterThan(0));
     });
-    test(" WarningLog ", () async {
+    test(' WarningLog ', () async {
       final list = LoggerJsonList.fromJson(jsonTestWarning);
 
       await loggerCache.writeLogToFile('testWarning', list);
@@ -51,7 +51,7 @@ void main() {
       final content = await loggerCache.readAllLogs();
       expect(content?.length, greaterThan(0));
     });
-    test(" ErrorLog ", () async {
+    test(' ErrorLog ', () async {
       final list = LoggerJsonList.fromJson(jsonTestError);
 
       await loggerCache.writeLogToFile('testError', list);

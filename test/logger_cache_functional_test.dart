@@ -21,7 +21,7 @@ void main() {
   tearDownAll(() async {
     await tempDir.delete(recursive: true);
   });
-  group("Teste tipo arquivos", () {
+  group('Teste tipo arquivos', () {
     test('readAllLogs should return all persisted logs', () async {
       // 1. Create and write a log list
       final list = LoggerJsonList(type: 'DebugLog');

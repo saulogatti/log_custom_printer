@@ -1,6 +1,8 @@
+import 'package:log_custom_printer/log_custom_printer.dart' show LogPrinterService;
 import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
 import 'package:log_custom_printer/src/domain/logs_object/info_log.dart';
 import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
+import 'package:log_custom_printer/src/log_printer_service.dart' show LogPrinterService;
 
 /// Configuration object for controlling logging behavior.
 ///

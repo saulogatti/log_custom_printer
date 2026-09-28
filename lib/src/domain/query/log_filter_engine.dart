@@ -1,6 +1,6 @@
-import '../log_helpers/logger_enum.dart';
-import '../logs_object/logger_object.dart';
-import 'log_query.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/query/log_query.dart';
 
 /// Applies type/date filters to log collections.
 ///

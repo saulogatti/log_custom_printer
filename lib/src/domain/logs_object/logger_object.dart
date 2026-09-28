@@ -1,10 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:log_custom_printer/src/config_log.dart';
+import 'package:log_custom_printer/src/extensions/date_time_log_helper.dart';
+import 'package:log_custom_printer/src/log_printer_locator.dart';
+import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:meta/meta.dart';
-
-import '../../config_log.dart';
-import '../../extensions/date_time_log_helper.dart';
-import '../../log_printer_locator.dart';
-import '../../utils/logger_ansi_color.dart';
 
 /// Base marker for log objects.
 ///
@@ -32,12 +31,11 @@ abstract class LoggerObjectBase extends LoggerObject {
 
   /// Creates a log object.
   LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
-    : tag = tag ?? '' {
-    assert(
-      message.isNotEmpty && message.trim().isNotEmpty,
-      'Message cannot be empty or whitespace only',
-    );
-
+    : tag = tag ?? '',
+      assert(
+        message.isNotEmpty && message.trim().isNotEmpty,
+        'Message cannot be empty or whitespace only',
+      ) {
     logCreationDate = createdAt ?? DateTime.now();
     className = typeClass?.toString() ?? runtimeType.toString();
   }
@@ -54,15 +52,15 @@ abstract class LoggerObjectBase extends LoggerObject {
   LoggerAnsiColor getColor();
 
   /// Returns formatted message with optional ANSI color.
-  String getMessage([bool withColor = true]) {
+  String getMessage({bool withColor = true}) {
     final messageFormated = '${logCreationDate.logFullDateTime} $message';
-    final String formattedLine = withColor ? getColor().call(messageFormated) : messageFormated;
+    final formattedLine = withColor ? getColor().call(messageFormated) : messageFormated;
 
     return formattedLine;
   }
 
   /// Returns formatted log header with optional ANSI color.
-  String getStartLog([bool withColor = true]) {
+  String getStartLog({bool withColor = true}) {
     if (withColor) {
       return getColor().call(_logHeader);
     }

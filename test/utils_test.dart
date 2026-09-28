@@ -16,7 +16,7 @@ void main() {
 
   group('LoggerAnsiColor', () {
     test('wraps messages with ANSI codes', () {
-      final ansiColor = const LoggerAnsiColor(
+      const ansiColor = LoggerAnsiColor(
         enumAnsiColors: EnumAnsiColors.green,
       );
 
@@ -91,7 +91,7 @@ void main() {
     test('sanitizedFileName replaces invalid characters', () {
       expect('file<name>.log'.sanitizedFileName, equals('file_name_.log'));
       expect(
-        'a/b\\c:d*e?f"g|h>i<j.k'.sanitizedFileName,
+        r'a/b\c:d*e?f"g|h>i<j.k'.sanitizedFileName,
         equals('a_b_c_d_e_f_g_h_i_j.k'),
       );
 
