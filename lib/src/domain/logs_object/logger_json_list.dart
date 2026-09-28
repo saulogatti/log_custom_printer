@@ -43,6 +43,7 @@ class LoggerJsonList {
       throw LogException('Logger type not found');
     }
     final type = json['type'] as String;
+    // ignore: deprecated_member_use_from_same_package
     final loggerJsonList = LoggerJsonList(type: type);
     final list = json['loggerJson'] as List? ?? [];
     for (final element in list) {
