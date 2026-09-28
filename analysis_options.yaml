@@ -50,7 +50,7 @@ analyzer:
     avoid_returning_null: error
     avoid_null_checks_in_equality_operators: error
     new_constructor_dot_name: error
-
+    deprecated_member_use_from_same_package: warning
 linter:
   rules:
     - always_declare_return_types

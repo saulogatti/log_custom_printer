@@ -1,49 +1,39 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
-import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
-import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
-import 'package:log_custom_printer/src/domain/logs_object/error_log.dart';
-import 'package:log_custom_printer/src/domain/logs_object/info_log.dart';
-import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
-import 'package:log_custom_printer/src/domain/logs_object/warning_log.dart';
 
-part 'logger_json_list.g.dart';
+part 'logger_json_list_type.g.dart';
 
-/// Serializable list of logs for a single concrete log type.
-///
-/// {@category Utilities}
 @JsonSerializable(createFactory: false)
-class LoggerJsonList {
+class LoggerJsonListType {
   /// Constructor map for type-name-based deserialization.
-  static final Map<String, LoggerObjectBase Function(Map<String, dynamic>)> _typeConstructors = {
-    'ErrorLog': ErrorLog.fromJson,
-    'DebugLog': DebugLog.fromJson,
-    'WarningLog': WarningLog.fromJson,
-    'InfoLog': InfoLog.fromJson,
+  static final Map<EnumLoggerType, LoggerObjectBase Function(Map<String, dynamic>)>
+  _typeConstructors = {
+    EnumLoggerType.error: ErrorLog.fromJson,
+    EnumLoggerType.debug: DebugLog.fromJson,
+    EnumLoggerType.warning: WarningLog.fromJson,
+    EnumLoggerType.info: InfoLog.fromJson,
   };
 
   /// Stored log type name.
-  String type;
+  EnumLoggerType type;
+
+  /// Max number of stored entries.
+
+  int maxLogEntries = 100;
 
   /// Internal entries list.
   final List<LoggerObjectBase> _loggerEntries = [];
 
-  /// Max number of stored entries.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  int maxLogEntries = 100;
-
-  /// Creates a list for [type].
-  @Deprecated('Use LoggerJsonListType instead')
-  LoggerJsonList({required this.type, this.maxLogEntries = 100});
+  LoggerJsonListType({required this.type});
 
   /// Creates an instance from JSON data.
-  factory LoggerJsonList.fromJson(Map<String, dynamic> json) {
+  factory LoggerJsonListType.fromJson(Map<String, dynamic> json) {
     if (json['type'] == null || json['type'] is! String) {
       throw LogException('Logger type not found');
     }
-    final type = json['type'] as String;
-    final loggerJsonList = LoggerJsonList(type: type);
+    final type = EnumLoggerTypeExtension.fromString(json['type'] as String);
+    final loggerJsonList = LoggerJsonListType(type: type);
     final list = json['loggerJson'] as List? ?? [];
     for (final element in list) {
       if (element is Map<String, dynamic>) {
@@ -76,6 +66,27 @@ class LoggerJsonList {
     _loggerEntries.insert(0, logger);
   }
 
+  /// Adds a list of log entries at the beginning of the list.
+  void addLoggerList(List<LoggerObjectBase> logger) {
+    _loggerEntries.addAll(logger);
+  }
+
   /// Converts the instance to JSON map.
-  Map<String, dynamic> toJson() => _$LoggerJsonListToJson(this);
+  Map<String, dynamic> toJson() => _$LoggerJsonListTypeToJson(this);
+}
+
+extension EnumLoggerTypeExtension on EnumLoggerType {
+  static EnumLoggerType fromString(String type) {
+    if (type == 'ErrorLog') {
+      return EnumLoggerType.error;
+    } else if (type == 'DebugLog') {
+      return EnumLoggerType.debug;
+    } else if (type == 'WarningLog') {
+      return EnumLoggerType.warning;
+    } else if (type == 'InfoLog') {
+      return EnumLoggerType.info;
+    } else {
+      return EnumLoggerType.values.byName(type);
+    }
+  }
 }

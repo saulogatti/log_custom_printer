@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.2.0
+
+- Fix: removed the `fileType` parameter from the `LoggerCache` class and the `FileManagerType` interface.
+- Feature: added the `mode` parameter to `writeFile`, allowing write mode selection such as `FileMode.write` or `FileMode.append`.
+- Refactor: updated documentation to reflect structural changes and usage guidance.
+- Fix: small bug fixes and stability improvements.
+
 ## 3.1.3
 
 - Fix: corrected log path behavior in test environments to ensure proper file writes.

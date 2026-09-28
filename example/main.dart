@@ -15,13 +15,13 @@ void main() async {
   // Registramos uma impressora colorida para o console.
   // O LoggerPersistenceService retornado permite gerenciar o cache de logs.
   print('1. Configuração inicial:');
-  persistenceService = registerLogPrinterColor(
+  persistenceService = registerLogPrinterSimple(
     config: const ConfigLog(
       enableLog: true, // Habilita o processamento de logs
       onlyClasses: {DebugLog, InfoLog, WarningLog, ErrorLog},
     ),
     cacheFilePath: 'cache_logs',
-    maxLogsInCache: 50, // Limite de logs no cache por tipo
+    maxLogsInCache: 5, // Limite de logs no cache por tipo
   );
   // await persistenceService.getAllLogs();
   print('Configuração inicial concluída');
@@ -51,8 +51,7 @@ class MinhaApp with LoggerClassMixin {
     logInfo('Dados validados com sucesso.');
 
     logWarning('O processamento demorou mais que o esperado.');
-    print('--- Iniciando Exemplo log_custom_printer ---\n');
-    logDebug('Esta é uma mensagem de debug ${StackTrace.current}');
+    List.generate(100, (index) => logDebug('Esta é uma mensagem de debug $index'));
 
     // 2. Emissão de logs manual
     print('2. Emitindo logs manualmente:');
@@ -64,7 +63,8 @@ class MinhaApp with LoggerClassMixin {
       throw Exception('Falha crítica na operação');
     } catch (e, stack) {
       logError('Erro detectado: $e', stack);
+    } finally {
+      logDebug('Fim do processamento de dados');
     }
-    print('');
   }
 }

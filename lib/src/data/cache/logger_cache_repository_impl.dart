@@ -3,7 +3,7 @@ import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
-import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
 /// Default [ILoggerCacheRepository] implementation with in-memory and optional file storage.
@@ -20,7 +20,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   LoggerCache? _loggerCache;
 
   /// In-memory map of logs by type.
-  Map<EnumLoggerType, LoggerJsonList?> _loggerJsonList = {};
+  Map<EnumLoggerType, LoggerJsonListType?> _loggerJsonList = {};
 
   /// Tracks persistent cache initialization.
   Future<void>? _futureInitialization;
@@ -39,7 +39,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
     await _futureInitialization;
     var loggerList = _loggerJsonList[log.enumLoggerType];
     if (loggerList == null) {
-      loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
+      loggerList = LoggerJsonListType(type: log.enumLoggerType);
       _loggerJsonList[log.enumLoggerType] = loggerList;
     }
     loggerList.addLogger(log);
