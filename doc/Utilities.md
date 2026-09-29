@@ -21,9 +21,9 @@ mixin LoggerClassMixin {
 
 Enum for available log severity types: `error`, `debug`, `warning`, `info`.
 
-## LoggerJsonList
+## LoggerJsonListType
 
-Serializable container for logs of a single type with configurable capacity.
+Serializable container for logs of a single `EnumLoggerType` with configurable capacity.
 
 - New logs are inserted at index 0 (newest first)
 - When capacity is reached, the oldest log is dropped

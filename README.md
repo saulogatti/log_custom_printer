@@ -167,7 +167,7 @@ Generated API docs are output to `doc/api` by default. Do not use a `docs/` outp
 1. Extend `LoggerObjectBase`
 2. Add `@JsonSerializable()` and generated `part`
 3. Implement `getColor()`, `fromJson`, `toJson`
-4. Register in `logger_json_list.dart` when applicable
+4. Add an `EnumLoggerType` value, map it in `logger_enum.dart`, and register it in `logger_json_list_type.dart`
 5. Export in the public API and run `build_runner`
 
 ## Documentation

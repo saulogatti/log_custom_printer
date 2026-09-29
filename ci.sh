@@ -11,7 +11,7 @@ upgrade_dependencies() {
   echo "Arquivos pubspec.yaml encontrados:"
   echo "$pubspec_files"
   echo "Atualizando dependências para a versão major mais recente..."
-  flutter pub upgrade --major-versions
+  dart pub upgrade --major-versions
 }
 
 # Função para executar build_runner nos caminhos encontrados
