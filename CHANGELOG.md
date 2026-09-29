@@ -3,7 +3,7 @@
 ## 3.2.0
 
 - Fix: removed the `fileType` parameter from the `LoggerCache` class and the `FileManagerType` interface.
-- Feature: added the `mode` parameter to `writeFile`, allowing write mode selection such as `FileMode.write` or `FileMode.append`.
+- Feature: added `tag` parameter to in find logs by `LogQuery` class.
 - Refactor: updated documentation to reflect structural changes and usage guidance.
 - Docs: synchronized README, API guides, examples, and AI instructions with the current pure-Dart API.
 - Fix: small bug fixes and stability improvements.
