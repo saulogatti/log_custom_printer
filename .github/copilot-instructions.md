@@ -39,7 +39,7 @@
   1) extend `LoggerObjectBase`
   2) add `@JsonSerializable` + generated `part`
   3) implement `getColor()`, `fromJson()`, `toJson()`
-  4) register deserialization in `logger_json_list.dart` (`_typeConstructors`)
+  4) add an `EnumLoggerType` value, map it in `logger_enum.dart`, and register deserialization in `logger_json_list_type.dart` (`_typeConstructors` + `fromString`)
   5) export in `lib/log_custom_printer.dart`
   6) run `build_runner`
 - Avoid loose `print` outside printer strategies.

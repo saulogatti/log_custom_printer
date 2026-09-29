@@ -42,7 +42,7 @@ LoggerObjectBase.sendLog()
 - **Printers:** `LogSimplePrint` and `LogWithColorPrint`
 - **Configuration:** `ConfigLog(enableLog, onlyClasses)`
 - **Utilities:** `LoggerClassMixin`, `DateTimeLogHelper`, `StackTraceSdk`
-- **Cache layer:** `ILoggerCacheRepository`, `LoggerCacheRepositoryImpl`, `LoggerJsonList`, `LoggerCache`, `LoggerPersistenceService`
+- **Cache layer:** `ILoggerCacheRepository`, `LoggerCacheRepositoryImpl`, `LoggerJsonListType`, `LoggerCache`, `LoggerPersistenceService`
 
 ## Filtering rules
 
