@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
-import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/extensions/string_extension.dart';
 import 'package:meta/meta.dart';
@@ -71,7 +71,7 @@ final class LoggerCache {
   }
 
   /// Reads all log files and groups them by type.
-  Future<Map<EnumLoggerType, LoggerJsonList?>?> readAllLogs() async {
+  Future<Map<EnumLoggerType, LoggerJsonListType?>?> readAllLogs() async {
     try {
       await futureInitialization.future;
       final directory = Directory(_directoryPath);
@@ -81,16 +81,19 @@ final class LoggerCache {
             .where((entity) => entity is File)
             .cast<File>()
             .toList();
-        final allLogs = <EnumLoggerType, LoggerJsonList?>{};
+        final allLogs = <EnumLoggerType, LoggerJsonListType?>{};
         for (final file in files) {
           if (file.path.endsWith(_extension)) {
             try {
               final data = await _fileManagerType.readFile(file.path);
               final mapJ = jsonDecode(data);
               if (mapJ is Map) {
-                final loggerList = LoggerJsonList.fromJson(Map.from(mapJ));
-                final typeLog = loggerList.enumLoggerType;
-                if (typeLog != null) {
+                final loggerList = LoggerJsonListType.fromJson(Map.from(mapJ));
+                final typeLog = loggerList.type;
+                final haveList = allLogs[typeLog] != null;
+                if (haveList) {
+                  allLogs[typeLog]!.addLoggerList(loggerList.loggerEntries);
+                } else {
                   allLogs[typeLog] = loggerList;
                 }
               }

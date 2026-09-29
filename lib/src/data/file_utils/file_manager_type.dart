@@ -111,20 +111,6 @@ class FileManager implements IFileManagerType {
   }
 }
 
-/// Supported file types.
-///
-/// {@category Utilities}
-enum FileType {
-  /// Plain text file (`.txt`).
-  txt,
-
-  /// JSON file (`.json`).
-  json,
-
-  /// Log file (`.log`).
-  log,
-}
-
 /// Contract for file read/write/delete operations.
 ///
 /// {@category Utilities}

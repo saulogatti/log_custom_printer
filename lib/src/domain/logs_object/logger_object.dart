@@ -5,6 +5,8 @@ import 'package:log_custom_printer/src/log_printer_locator.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:meta/meta.dart';
 
+part 'logger_object.g.dart';
+
 /// Base marker for log objects.
 ///
 /// {@category Core}
@@ -13,7 +15,8 @@ sealed class LoggerObject {}
 /// Base contract for log objects that can be printed and serialized.
 ///
 /// {@category Core}
-abstract class LoggerObjectBase extends LoggerObject {
+@JsonSerializable()
+class LoggerObjectBase extends LoggerObject {
   /// Class/source that emitted the log.
   late String className;
 
@@ -31,7 +34,7 @@ abstract class LoggerObjectBase extends LoggerObject {
 
   /// Creates a log object.
   LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
-    : tag = tag ?? '',
+    : tag = tag ?? typeClass?.toString() ?? '',
       assert(
         message.isNotEmpty && message.trim().isNotEmpty,
         'Message cannot be empty or whitespace only',
@@ -39,6 +42,8 @@ abstract class LoggerObjectBase extends LoggerObject {
     logCreationDate = createdAt ?? DateTime.now();
     className = typeClass?.toString() ?? runtimeType.toString();
   }
+
+  factory LoggerObjectBase.fromJson(Map<String, dynamic> json) => _$LoggerObjectBaseFromJson(json);
 
   /// When `true`, this log is processed even if [ConfigLog.enableLog] is `false`.
   bool get alwaysPrint => false;
@@ -49,7 +54,8 @@ abstract class LoggerObjectBase extends LoggerObject {
       (className.isNotEmpty ? ' - $className'.toUpperCase() : '');
 
   /// ANSI color/style for this log type.
-  LoggerAnsiColor getColor();
+  @mustBeOverridden
+  LoggerAnsiColor getColor() => const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.white);
 
   /// Returns formatted message with optional ANSI color.
   String getMessage({bool withColor = true}) {
@@ -76,7 +82,7 @@ abstract class LoggerObjectBase extends LoggerObject {
   }
 
   /// Serializes the log object into JSON.
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson() => _$LoggerObjectBaseToJson(this);
 
   @override
   String toString() {

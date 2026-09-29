@@ -3,14 +3,11 @@ import 'package:log_custom_printer/log_custom_printer.dart' show LoggerObjectBas
 import 'package:log_custom_printer/src/config_log.dart';
 import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
-import 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' show FileType;
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_simple_print.dart';
 import 'package:log_custom_printer/src/domain/log_printers/log_with_color_print.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart' show LoggerObjectBase;
 import 'package:log_custom_printer/src/log_printer_service.dart';
-
-export 'package:log_custom_printer/src/data/file_utils/file_manager_type.dart' show FileType;
 
 /// Resolves the registered [LogPrinterService] from get_it.
 ///
@@ -57,10 +54,6 @@ LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  @Deprecated(
-    'The fileType parameter has no effect and will be removed in future versions. File type is managed internally by LoggerCache.',
-  )
-  FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
     const LogWithColorPrint(),
@@ -81,10 +74,6 @@ LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  @Deprecated(
-    'The fileType parameter has no effect and will be removed in future versions. File type is managed internally by LoggerCache.',
-  )
-  FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
     const LogSimplePrint(),
