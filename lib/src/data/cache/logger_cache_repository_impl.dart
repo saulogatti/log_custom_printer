@@ -32,7 +32,7 @@ final class LoggerCacheRepositoryImpl({
       _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
       _futureInitialization = _initialize();
     }
-    print('maxLogEntries: $maxLogEntries');
+   
     valueMaxNumberOfEntries = maxLogEntries;
   }
 

@@ -56,8 +56,6 @@ class LoggerJsonListType({
 
   /// Adds a new log entry at the beginning of the list.
   void addLogger(LoggerObjectBase logger) {
-    print('addLogger: $logger');
-    print('maxNumberOfEntries: $valueMaxNumberOfEntries');
     if (_loggerEntries.length >= valueMaxNumberOfEntries) {
       _loggerEntries.removeAt(valueMaxNumberOfEntries - 1);
     }
@@ -66,8 +64,6 @@ class LoggerJsonListType({
 
   /// Adds a list of log entries at the beginning of the list.
   void addLoggerList(List<LoggerObjectBase> logger) {
-    print('addLoggerList: $logger');
-    print('maxNumberOfEntries: $valueMaxNumberOfEntries');
     for (final element in logger) {
       addLogger(element);
     }
