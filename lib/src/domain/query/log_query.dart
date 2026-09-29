@@ -3,6 +3,17 @@ import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart'
 /// Query parameters for log filtering and sorting.
 ///
 /// {@category Query}
+
+/// Constructor for LogQuery.
+///
+/// {@category Query}
+/// [types] is the set of log types to include.
+/// [start] is the inclusive start date filter.
+/// [end] is the exclusive end date filter.
+/// [sortField] is the optional sort field.
+/// [sortDirection] is the optional sort direction.
+///
+/// New constructor Dart 3.13
 class const LogQuery({
   /// Optional set of log types to include.
   final Set<EnumLoggerType>? types,

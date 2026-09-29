@@ -12,7 +12,6 @@ part of 'logger_json_list_type.dart';
 Map<String, dynamic> _$LoggerJsonListTypeToJson(LoggerJsonListType instance) =>
     <String, dynamic>{
       'type': _$EnumLoggerTypeEnumMap[instance.type]!,
-      'maxLogEntries': instance.maxLogEntries,
       'loggerJson': instance.loggerEntries.map((e) => e.toJson()).toList(),
     };
 

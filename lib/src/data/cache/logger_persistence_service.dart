@@ -1,4 +1,3 @@
-import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
@@ -10,7 +9,7 @@ import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 ///
 /// {@category Utilities}
 final class LoggerPersistenceService({
-  ILoggerCacheRepository? cacheRepository,
+  required final ILoggerCacheRepository loggerPersistenceService,
 
   /// Log filtering engine.
   final LogFilterEngine _filterEngine = const LogFilterEngine(),
@@ -18,16 +17,15 @@ final class LoggerPersistenceService({
   /// Log sorting engine.
   final LogSortEngine _sortEngine = const LogSortEngine(),
 }) {
-  final ILoggerCacheRepository _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
-
   /// Optional callback notified after cache mutations.
+  // FIXME: #80 Migrar para um stream de logs.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
 
   /// Adds a log entry.
   Future<void> addLog(LoggerObjectBase log) async {
-    await _cacheRepository.addLog(log);
+    await loggerPersistenceService.addLog(log);
     if (logOutputHandler != null) {
-      final logs = await _cacheRepository.getAllLogs();
+      final logs = await loggerPersistenceService.getAllLogs();
       logOutputHandler?.call(logs);
     }
   }
@@ -35,27 +33,27 @@ final class LoggerPersistenceService({
   /// Clears all log entries.
   Future<void> clearLogs() async {
     logOutputHandler?.call([]);
-    await _cacheRepository.clearLogs();
+    await loggerPersistenceService.clearLogs();
   }
 
   /// Clears log entries by [type].
   Future<void> clearLogsByType(EnumLoggerType type) async {
-    await _cacheRepository.clearLogsByType(type);
+    await loggerPersistenceService.clearLogsByType(type);
     if (logOutputHandler != null) {
-      final logs = await _cacheRepository.getAllLogs();
+      final logs = await loggerPersistenceService.getAllLogs();
       logOutputHandler?.call(logs);
     }
   }
 
   /// Returns all stored logs.
   Future<List<LoggerObjectBase>> getAllLogs() async {
-    final logs = await _cacheRepository.getAllLogs();
+    final logs = await loggerPersistenceService.getAllLogs();
     return logs;
   }
 
   /// Returns logs filtered by [type].
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type) async {
-    final logs = await _cacheRepository.getLogsByType(type);
+    final logs = await loggerPersistenceService.getLogsByType(type);
     return logs;
   }
 
@@ -71,7 +69,7 @@ final class LoggerPersistenceService({
     required DateTime start,
     required DateTime end,
   }) async {
-    final allLogs = await _cacheRepository.getAllLogs();
+    final allLogs = await loggerPersistenceService.getAllLogs();
     return allLogs
         .where((log) => !log.logCreationDate.isBefore(start) && log.logCreationDate.isBefore(end))
         .toList();
@@ -79,13 +77,15 @@ final class LoggerPersistenceService({
 
   /// Searches logs by source runtime type.
   Future<List<LoggerObjectBase>> searchLogByRuntimeType(String runtimeType) async {
-    final allLogs = await _cacheRepository.getAllLogs();
+    final allLogs = await loggerPersistenceService.getAllLogs();
     return allLogs.where((log) => log.className == runtimeType).toList();
   }
 
   /// Searches logs by tag.
+  /// [tag] is the tag to search for.
+  /// Returns a list of logs that match the tag.
   Future<List<LoggerObjectBase>> searchLogByTag(String tag) async {
-    final allLogs = await _cacheRepository.getAllLogs();
+    final allLogs = await loggerPersistenceService.getAllLogs();
     final tagRegex = RegExp(r'\b' + RegExp.escape(tag) + r'\b');
     return allLogs.where((log) => tagRegex.hasMatch(log.tag)).toList();
   }

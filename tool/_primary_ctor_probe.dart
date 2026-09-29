@@ -1,14 +1,11 @@
 class Base(final String message, {DateTime? createdAt, Type? typeClass, String? tag}) {
   late String className;
 
-  final String tag;
+  final String tag = tag ?? typeClass?.toString() ?? '';
 
-  DateTime logCreationDate;
+  DateTime logCreationDate = createdAt ?? DateTime.now();
 
-  this
-    : tag = tag ?? typeClass?.toString() ?? '',
-      logCreationDate = createdAt ?? DateTime.now(),
-      assert(message.isNotEmpty, 'Message cannot be empty or whitespace only') {
+  this : assert(message.isNotEmpty, 'Message cannot be empty or whitespace only') {
     className = typeClass?.toString() ?? runtimeType.toString();
   }
 }
@@ -24,7 +21,7 @@ class DeprecatedCtor {
   new({required this.type});
 }
 
-class Err(super.message, final StackTrace stackTrace, {super.createdAt}) extends Base {}
+class Err(super.message, final StackTrace stackTrace, {super.createdAt}) extends Base;
 
 final class Persist({
   Object? cacheRepository,

@@ -21,7 +21,7 @@ void main() async {
       onlyClasses: {DebugLog, InfoLog, WarningLog, ErrorLog},
     ),
     cacheFilePath: 'cache_logs',
-    maxLogsInCache: 5, // Limite de logs no cache por tipo
+    maxLogsInCache: 50, // Limite de logs no cache por tipo
   );
   // await persistenceService.getAllLogs();
   print('Configuração inicial concluída');
@@ -36,7 +36,11 @@ void main() async {
   print('3. Consultando o cache de logs:');
   final allLogs = await persistenceService.getAllLogs();
   print('Total de logs capturados: ${allLogs.length}');
-
+  print('Consultando logs com query:');
+  final queryLogs = await persistenceService.queryLogs(
+    const LogQuery(types: {EnumLoggerType.debug}),
+  );
+  print('Logs encontrados: ${queryLogs.length}');
   print('Exemplo concluído');
 }
 

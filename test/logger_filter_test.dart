@@ -24,7 +24,11 @@ void main() {
     });
 
     test('delegates to LogSortEngine when types is empty and sortDirection is asc', () {
-      const query = LogQuery(types: {}, sortField: LogSortField.date, sortDirection: SortDirection.asc);
+      const query = LogQuery(
+        types: {},
+        sortField: LogSortField.date,
+        sortDirection: SortDirection.asc,
+      );
       final filter = LoggerFilter(query: query);
 
       final result = filter.apply(allLogs);
@@ -61,10 +65,7 @@ void main() {
     });
 
     test('delegates to LogSortEngine when types is null and sortDirection is asc', () {
-      const query = LogQuery(
-        sortField: LogSortField.date,
-        sortDirection: SortDirection.asc,
-      );
+      const query = LogQuery(sortField: LogSortField.date, sortDirection: SortDirection.asc);
       final filter = LoggerFilter(query: query);
 
       final result = filter.apply(allLogs);

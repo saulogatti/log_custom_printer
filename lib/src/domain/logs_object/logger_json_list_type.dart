@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
 
 part 'logger_json_list_type.g.dart';
@@ -18,9 +19,6 @@ class LoggerJsonListType({
     EnumLoggerType.info: InfoLog.fromJson,
   };
 
-  /// Max number of stored entries.
-  int maxLogEntries = 100;
-
   /// Internal entries list.
   final List<LoggerObjectBase> _loggerEntries = [];
 
@@ -29,6 +27,7 @@ class LoggerJsonListType({
     if (json['type'] == null || json['type'] is! String) {
       throw LogException('Logger type not found');
     }
+
     final type = EnumLoggerTypeExtension.fromString(json['type'] as String);
     final loggerJsonList = LoggerJsonListType(type: type);
     final list = json['loggerJson'] as List? ?? [];
@@ -57,15 +56,21 @@ class LoggerJsonListType({
 
   /// Adds a new log entry at the beginning of the list.
   void addLogger(LoggerObjectBase logger) {
-    if (_loggerEntries.length >= maxLogEntries) {
-      _loggerEntries.removeLast();
+    print('addLogger: $logger');
+    print('maxNumberOfEntries: $valueMaxNumberOfEntries');
+    if (_loggerEntries.length >= valueMaxNumberOfEntries) {
+      _loggerEntries.removeAt(valueMaxNumberOfEntries - 1);
     }
     _loggerEntries.insert(0, logger);
   }
 
   /// Adds a list of log entries at the beginning of the list.
   void addLoggerList(List<LoggerObjectBase> logger) {
-    _loggerEntries.addAll(logger);
+    print('addLoggerList: $logger');
+    print('maxNumberOfEntries: $valueMaxNumberOfEntries');
+    for (final element in logger) {
+      addLogger(element);
+    }
   }
 
   /// Converts the instance to JSON map.

@@ -14,29 +14,32 @@ sealed class LoggerObject;
 
 /// Base contract for log objects that can be printed and serialized.
 ///
+/// @{param message} is the log message.
+/// @{param createdAt} is the creation time of the log.
+/// @{param typeClass} is the class that emitted the log.
+/// @{param tag} is the tag attached to the log.
 /// {@category Core}
 @JsonSerializable()
-class LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
-    extends LoggerObject {
+class LoggerObjectBase(
+  /// Main log message.
+  @JsonKey(name: 'message') final String message, {
+  DateTime? createdAt,
+  Type? typeClass,
+  String? tag,
+}) extends LoggerObject {
   /// Class/source that emitted the log.
   late String className;
 
   /// Tags attached to the log.
   @JsonKey(name: 'tagLog')
-  final String tag;
-
-  /// Main log message.
-  @JsonKey(name: 'message')
-  final String message;
+  final String tag = tag ?? '$typeClass $tag \n $message';
 
   /// Creation time of this log.
   @JsonKey(name: 'logCreationDate')
-  DateTime logCreationDate;
+  DateTime logCreationDate = createdAt ?? DateTime.now();
 
   this
-    : tag = tag ?? typeClass?.toString() ?? '',
-      logCreationDate = createdAt ?? DateTime.now(),
-      assert(
+    : assert(
         message.isNotEmpty && message.trim().isNotEmpty,
         'Message cannot be empty or whitespace only',
       ) {

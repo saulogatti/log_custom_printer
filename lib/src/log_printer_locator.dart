@@ -34,13 +34,18 @@ LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
   required ConfigLog config,
   ILoggerCacheRepository? cacheRepository,
+  int maxLogsInCache = 100,
 }) {
   final locator = GetIt.instance;
   if (locator.isRegistered<LogPrinterService>()) {
     locator.unregister<LogPrinterService>();
   }
   locator.registerSingleton<LogPrinterService>(
-    LogPrinterService(printer, cacheRepository: cacheRepository, configLog: config),
+    LogPrinterService(
+      printer,
+      cacheRepository: cacheRepository ?? LoggerCacheRepositoryImpl(maxLogEntries: maxLogsInCache),
+      configLog: config,
+    ),
   );
   return locator<LogPrinterService>().cacheRepository;
 }

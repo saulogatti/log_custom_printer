@@ -17,18 +17,18 @@ class const LogSortEngine() {
   /// Returns a sorted copy based on [query].
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {
     if (query.sortField == null) return logs;
-
+    final sortField = query.sortField!;
     final sorted = List<LoggerObjectBase>.from(logs);
     sorted.sort((a, b) {
       final int primary;
-
-      if (query.sortField == LogSortField.date) {
-        primary = a.logCreationDate.compareTo(b.logCreationDate);
-      } else {
-        final aSeverity = _severityIndex[a.enumLoggerType] ?? 0;
-        final bSeverity = _severityIndex[b.enumLoggerType] ?? 0;
-        final typeCmp = aSeverity.compareTo(bSeverity);
-        primary = typeCmp != 0 ? typeCmp : a.logCreationDate.compareTo(b.logCreationDate);
+      switch (sortField) {
+        case LogSortField.date:
+          primary = a.logCreationDate.compareTo(b.logCreationDate);
+        case LogSortField.type:
+          final aSeverity = _severityIndex[a.enumLoggerType] ?? 0;
+          final bSeverity = _severityIndex[b.enumLoggerType] ?? 0;
+          final typeCmp = aSeverity.compareTo(bSeverity);
+          primary = typeCmp != 0 ? typeCmp : a.logCreationDate.compareTo(b.logCreationDate);
       }
 
       return query.sortDirection == SortDirection.asc ? primary : -primary;

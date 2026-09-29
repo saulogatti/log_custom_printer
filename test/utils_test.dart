@@ -16,9 +16,7 @@ void main() {
 
   group('LoggerAnsiColor', () {
     test('wraps messages with ANSI codes', () {
-      const ansiColor = LoggerAnsiColor(
-        enumAnsiColors: EnumAnsiColors.green,
-      );
+      const ansiColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.green);
 
       final formatted = ansiColor('message');
       final expected =
@@ -38,19 +36,13 @@ void main() {
       final stackTrace = StackTrace.fromString(stackTraceString);
 
       final map = stackTrace.stackInMap(3);
-      expect(
-        map,
-        equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}),
-      );
+      expect(map, equals({'#0': 'MyClass.method (package:my_app/src/file.dart:10:3)'}));
 
       final formatted = stackTrace.formatStackTrace(
         const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
         3,
       );
-      expect(
-        formatted,
-        contains('MyClass.method (package:my_app/src/file.dart:10:3)'),
-      );
+      expect(formatted, contains('MyClass.method (package:my_app/src/file.dart:10:3)'));
       expect(formatted, isNot(contains('flutter/src/widgets/framework.dart')));
       expect(formatted, contains(LoggerAnsiColor.ansiEsc));
     });
@@ -90,10 +82,7 @@ void main() {
 
     test('sanitizedFileName replaces invalid characters', () {
       expect('file<name>.log'.sanitizedFileName, equals('file_name_.log'));
-      expect(
-        r'a/b\c:d*e?f"g|h>i<j.k'.sanitizedFileName,
-        equals('a_b_c_d_e_f_g_h_i_j.k'),
-      );
+      expect(r'a/b\c:d*e?f"g|h>i<j.k'.sanitizedFileName, equals('a_b_c_d_e_f_g_h_i_j.k'));
 
       expect('clean_name.txt'.sanitizedFileName, equals('clean_name.txt'));
       expect(''.sanitizedFileName, equals(''));

@@ -31,6 +31,9 @@ abstract interface class ILoggerCacheRepository {
   /// Returns logs filtered by severity type.
   Future<List<LoggerObjectBase>> getLogsByType(EnumLoggerType type);
 
+  /// Maximum number of entries per log type.
+  int getMaxLogEntries();
+
   /// Imports log entries from raw [content] and [format].
   Future<void> importLogs(String content, ExportFormat format);
 }

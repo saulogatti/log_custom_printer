@@ -25,8 +25,8 @@ LoggerObjectBase _$LoggerObjectBaseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$LoggerObjectBaseToJson(LoggerObjectBase instance) =>
     <String, dynamic>{
+      'message': instance.message,
       'className': instance.className,
       'tagLog': instance.tag,
-      'message': instance.message,
       'logCreationDate': instance.logCreationDate.toIso8601String(),
     };
