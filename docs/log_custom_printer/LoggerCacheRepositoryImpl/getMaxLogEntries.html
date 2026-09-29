@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
-  <meta name="description" content="API docs for the twoDigits method from the DateTimeLoggingExtensions extension, for the Dart programming language.">
-  <title>twoDigits method - DateTimeLoggingExtensions extension - log_custom_printer library - Dart API</title>
+  <meta name="description" content="API docs for the getMaxLogEntries method from the LoggerCacheRepositoryImpl class, for the Dart programming language.">
+  <title>getMaxLogEntries method - LoggerCacheRepositoryImpl class - log_custom_printer library - Dart API</title>
 
 
   
@@ -26,10 +26,10 @@
   <ol class="breadcrumbs gt-separated dark hidden-xs">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer.dart</a></li>
-    <li><a href="../../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></li>
-    <li class="self-crumb">twoDigits method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">getMaxLogEntries method</li>
   </ol>
-  <div class="self-name">twoDigits</div>
+  <div class="self-name">getMaxLogEntries</div>
   <form class="search navbar-right" role="search">
     <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
   </form>
@@ -46,34 +46,37 @@
 <div
     id="dartdoc-main-content"
     class="main-content"
-    data-above-sidebar="log_custom_printer&#47;DateTimeLoggingExtensions-extension-sidebar.html"
+    data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/extensions/date_time_log_helper.dart#L45"><span class="material-symbols-outlined">description</span></a></div>
-<h1><span class="kind-method">twoDigits</span> method 
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L98"><span class="material-symbols-outlined">description</span></a></div>
+<h1><span class="kind-method">getMaxLogEntries</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
-<span class="name ">twoDigits</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="twoDigits-param-n"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">n</span></span></li>
-</ol>)
+  <div>
+    <ol class="annotation-list">
+        <li>@<a href="https://api.dart.dev/stable/3.13.4/dart-core/override-constant.html">override</a></li>
+    </ol>
+  </div>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span>
+<span class="name ">getMaxLogEntries</span>(<wbr>)
 
-      
+      <div class="features"><span class="feature">override</span></div>
 
     </section>
     
 <section class="desc markdown">
-  <p>Formats a number to 2 digits with left zero padding.</p>
+  <p>Maximum number of entries per log type.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">String twoDigits(int n) {
-  return n.toString().padLeft(2, &#39;0&#39;);
-}</code></pre>
+  <pre class="language-dart"><code class="language-dart">@override
+int getMaxLogEntries() =&gt; maxLogEntries;</code></pre>
 </section>
 
 
@@ -88,11 +91,11 @@
 <ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
     <li><a href="../../index.html">log_custom_printer</a></li>
     <li><a href="../../log_custom_printer/">log_custom_printer</a></li>
-    <li><a href="../../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></li>
-    <li class="self-crumb">twoDigits method</li>
+    <li><a href="../../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></li>
+    <li class="self-crumb">getMaxLogEntries method</li>
 </ol>
 
-    <h5>DateTimeLoggingExtensions extension on <a href="https://api.dart.dev/stable/3.13.4/dart-core/DateTime-class.html">DateTime</a></h5>
+    <h5>LoggerCacheRepositoryImpl class</h5>
     <div id="dartdoc-sidebar-left-content"></div>
   </div><!--/.sidebar-offcanvas-->
   <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">

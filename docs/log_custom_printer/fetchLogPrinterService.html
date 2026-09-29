@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L22"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L20"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">fetchLogPrinterService</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -64,11 +64,10 @@
     </section>
     
 <section class="desc markdown">
-  <p>Resolve o <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> registrado no get_it.</p>
-<p>Usado internamente por <a href="../log_custom_printer/LoggerObjectBase/sendLog.html">LoggerObjectBase.sendLog</a> para obter o
-serviço de impressão de logs configurado via injeção de dependência.</p>
-<p>Se <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> não estiver registrado, registra uma impressora simples.
-Chame <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> no startup da aplicação.</p>
+  <p>Resolves the registered <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> from get_it.</p>
+<p>Used internally by <a href="../log_custom_printer/LoggerObjectBase/sendLog.html">LoggerObjectBase.sendLog</a> to obtain the configured log service.</p>
+<p>If <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> is not registered yet, a default simple printer is registered.
+You should still call <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> at app startup to keep behavior explicit and predictable.</p>
 </section>
 
 
@@ -108,7 +107,7 @@ Chame <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

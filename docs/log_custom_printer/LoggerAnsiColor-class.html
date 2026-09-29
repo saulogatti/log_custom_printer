@@ -48,21 +48,15 @@
     data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
     data-below-sidebar="log_custom_printer&#47;LoggerAnsiColor-class-sidebar.html">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/utils/logger_ansi_color.dart#L93"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/utils/logger_ansi_color.dart#L67"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-class">LoggerAnsiColor</span> class 
  
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 </h1></div>
 
     
 <section class="desc markdown">
-  <p>Classe para manipulação de cores ANSI em logs.</p>
-<p>Esta classe permite formatar mensagens com cores ANSI para exibição em terminais.</p>
-<p>Exemplo de uso:</p>
-<pre class="language-dart"><code class="language-dart">final loggerColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
-print(loggerColor('Mensagem em vermelho'));
-</code></pre>
-<p>Para serialização/deserialização, utilize os métodos <code>toJson</code> e <code>fromJson</code>.</p>
+  <p>ANSI color helper for log messages.</p>
 </section>
 
 
@@ -95,14 +89,14 @@ print(loggerColor('Mensagem em vermelho'));
           <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/LoggerAnsiColor.html">LoggerAnsiColor</a></span><span class="signature">({<span class="parameter" id="param-enumAnsiColors"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/EnumAnsiColors.html">EnumAnsiColors</a></span> <span class="parameter-name">enumAnsiColors</span></span>})</span>
         </dt>
         <dd>
-          Construtor da classe.
+          
             <div class="constructor-modifier features">const</div>
         </dd>
         <dt id="LoggerAnsiColor.fromJson" class="callable">
-          <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/LoggerAnsiColor.fromJson.html">LoggerAnsiColor.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
+          <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/LoggerAnsiColor.fromJson.html">LoggerAnsiColor.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
         </dt>
         <dd>
-          Cria uma instância a partir de um JSON.
+          Creates an instance from JSON.
             <div class="constructor-modifier features">factory</div>
         </dd>
     </dl>
@@ -120,14 +114,14 @@ print(loggerColor('Mensagem em vermelho'));
 
 </dt>
 <dd>
-  Cor ANSI associada.
+  Selected ANSI color.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="hashCode" class="property inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/hashCode.html">hashCode</a></span>
-  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span>
   
 
 </dt>
@@ -138,8 +132,8 @@ print(loggerColor('Mensagem em vermelho'));
 </dd>
 
         <dt id="runtimeType" class="property inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/runtimeType.html">runtimeType</a></span>
-  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/Type-class.html">Type</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/Type-class.html">Type</a></span>
   
 
 </dt>
@@ -159,20 +153,20 @@ print(loggerColor('Mensagem em vermelho'));
     <h2>Methods</h2>
     <dl class="callables">
         <dt id="call" class="callable">
-  <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/call.html">call</a></span><span class="signature">(<wbr><span class="parameter" id="call-param-msg"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span> <span class="parameter-name">msg</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
+  <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/call.html">call</a></span><span class="signature">(<wbr><span class="parameter" id="call-param-msg"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span> <span class="parameter-name">msg</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
   </span>
   
 
 </dt>
 <dd>
-  Aplica a cor ANSI à mensagem fornecida.
+  Applies ANSI color to <code>msg</code>.
   
 
 </dd>
 
         <dt id="noSuchMethod" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
   </span>
   
@@ -186,26 +180,26 @@ print(loggerColor('Mensagem em vermelho'));
 
         <dt id="toJson" class="callable">
   <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/toJson.html">toJson</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
   </span>
   
 
 </dt>
 <dd>
-  Converte a instância para JSON.
+  Converts the instance to JSON.
   
 
 </dd>
 
         <dt id="toString" class="callable">
   <span class="name"><a href="../log_custom_printer/LoggerAnsiColor/toString.html">toString</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
   </span>
   
 
 </dt>
 <dd>
-  Retorna a sequência ANSI para a cor de texto configurada.
+  Returns ANSI text color sequence.
   <div class="features"><span class="feature">override</span></div>
 
 </dd>
@@ -219,8 +213,8 @@ print(loggerColor('Mensagem em vermelho'));
     <h2>Operators</h2>
     <dl class="callables">
         <dt id="operator ==" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/bool-class.html">bool</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
@@ -242,24 +236,24 @@ print(loggerColor('Mensagem em vermelho'));
     <dl class="properties">
         <dt id="ansiDefault" class="constant">
     <span class="name "><a href="../log_custom_printer/LoggerAnsiColor/ansiDefault-constant.html">ansiDefault</a></span>
-  <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
+  <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
   
 
 </dt>
 <dd>
-  Código ANSI para resetar todas as configurações de cor no terminal.
+  ANSI reset sequence.
   
 
 </dd>
 
         <dt id="ansiEsc" class="constant">
     <span class="name "><a href="../log_custom_printer/LoggerAnsiColor/ansiEsc-constant.html">ansiEsc</a></span>
-  <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
+  <span class="signature">&#8594; const <a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
   
 
 </dt>
 <dd>
-  Sequência de controle ANSI para iniciar configurações no terminal.
+  ANSI escape sequence prefix.
   
 
 </dd>
@@ -289,7 +283,7 @@ print(loggerColor('Mensagem em vermelho'));
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

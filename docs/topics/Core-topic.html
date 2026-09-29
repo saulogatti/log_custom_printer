@@ -45,139 +45,119 @@
   <h1><span class="kind-category">Core - Sistema de Logging</span> topic</h1>
   
 <section class="desc markdown">
-  <h1 id="core--sistema-de-logging">Core — Sistema de Logging</h1>
-<p>Este módulo define os tipos fundamentais e a infraestrutura de injeção de dependência da biblioteca.</p>
-<hr>
+  <h1 id="core--logging-system">Core — Logging System</h1>
+<p>This module defines the fundamental types and dependency-injection infrastructure of the library.</p>
 <h2 id="loggerobject">LoggerObject</h2>
-<p>Classe selada (<em>sealed</em>) que serve como marcador base da hierarquia de tipos de log.</p>
+<p>Sealed marker base class for the log type hierarchy.</p>
 <pre class="language-dart"><code class="language-dart">sealed class LoggerObject {}
 </code></pre>
-<p>Não possui membros próprios. Sua existência garante que apenas os tipos definidos nesta biblioteca
-(<code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code>) possam estender a hierarquia, permitindo
-<em>pattern matching</em> exhaustivo em <em>switch</em> expressions.</p>
-<hr>
+<p>It has no members. It ensures only library-defined types (<code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code>) can extend the hierarchy, enabling exhaustive <code>switch</code> pattern matching.</p>
 <h2 id="loggerobjectbase">LoggerObjectBase</h2>
-<p>Classe abstrata que define o contrato completo para objetos de log.</p>
-<pre class="language-dart"><code class="language-dart">abstract class LoggerObjectBase extends LoggerObject {
-  final String message;
-  final String tag;
-  DateTime logCreationDate;
-  late String className;
-}
+<p>Abstract class that defines the full contract for log objects.</p>
+<pre class="language-dart"><code class="language-dart">class LoggerObjectBase(
+  String message, {
+  DateTime? createdAt,
+  Type? typeClass,
+  String? tag,
+}) extends LoggerObject;
 </code></pre>
-<h3 id="campos-principais">Campos principais</h3>
+<h3 id="main-fields">Main fields</h3>
 <table>
 <thead>
 <tr>
-<th>Campo</th>
-<th>Tipo</th>
-<th>Descrição</th>
+<th>Field</th>
+<th>Type</th>
+<th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td><code>message</code></td>
 <td><code>String</code></td>
-<td>Mensagem principal do log</td>
+<td>Main log message</td>
 </tr>
 <tr>
 <td><code>tag</code></td>
 <td><code>String</code></td>
-<td>Tag opcional para categorização</td>
+<td>Tag for categorization (generated when omitted)</td>
 </tr>
 <tr>
 <td><code>logCreationDate</code></td>
 <td><code>DateTime</code></td>
-<td>Timestamp de criação (padrão: <code>DateTime.now()</code>)</td>
+<td>Creation timestamp (default: <code>DateTime.now()</code>)</td>
 </tr>
 <tr>
 <td><code>className</code></td>
 <td><code>String</code></td>
-<td>Nome da classe/origem que emitiu o log</td>
+<td>Class/source name that emitted the log</td>
 </tr>
 </tbody>
 </table>
-<h3 id="mtodos">Métodos</h3>
+<h3 id="methods">Methods</h3>
 <ul>
-<li><strong><code>getColor()</code></strong> — Retorna a cor ANSI do tipo de log. Implementado por cada subclasse.</li>
-<li><strong><code>getMessage([bool withColor])</code></strong> — Retorna a mensagem formatada com timestamp, com ou sem cor ANSI.</li>
-<li><strong><code>getStartLog([bool withColor])</code></strong> — Retorna o cabeçalho do log (tipo + origem) formatado.</li>
-<li><strong><code>sendLog()</code></strong> — Envia o log ao <code>LogPrinterService</code> registrado via <code>get_it</code>.</li>
-<li><strong><code>toJson()</code></strong> — Serializa o objeto para JSON.</li>
-<li><strong><code>alwaysPrint</code></strong> — Propriedade <code>bool</code> que, quando <code>true</code>, faz o log ser processado mesmo com <code>ConfigLog.enableLog = false</code>. Padrão: <code>false</code>. <code>ErrorLog</code> sobrescreve para <code>true</code>.</li>
+<li><strong><code>getColor()</code></strong> — Returns ANSI color for the log type (implemented by each subtype)</li>
+<li><strong><code>getMessage({bool withColor = true})</code></strong> — Returns formatted message with timestamp, with or without ANSI color</li>
+<li><strong><code>getStartLog({bool withColor = true})</code></strong> — Returns formatted log header (type + source)</li>
+<li><strong><code>sendLog()</code></strong> — Sends the log to <code>LogPrinterService</code> resolved via <code>get_it</code></li>
+<li><strong><code>toJson()</code></strong> — Serializes object to JSON</li>
+<li><strong><code>alwaysPrint</code></strong> — When <code>true</code>, the log is processed even with <code>ConfigLog.enableLog = false</code> (default: <code>false</code>; <code>ErrorLog</code> overrides to <code>true</code>)</li>
 </ul>
-<h3 id="validaes">Validações</h3>
-<p>O construtor valida em modo de desenvolvimento via <code>assert</code> que a mensagem não está vazia nem contém apenas espaços em branco.</p>
-<hr>
+<h3 id="validation">Validation</h3>
+<p>In debug mode, the constructor asserts that message is not empty and not whitespace-only.</p>
 <h2 id="logprinterservice">LogPrinterService</h2>
-<p>Serviço central que coordena a impressão e o armazenamento de logs.</p>
-<pre class="language-dart"><code class="language-dart">final class LogPrinterService {
-  final LogPrinterBase logPrinter;
-  LoggerPersistenceService get cacheRepository;
-
-  void executePrint(LoggerObjectBase log);
-}
+<p>Central service that coordinates log output and storage.</p>
+<pre class="language-dart"><code class="language-dart">final class LogPrinterService(
+  LogPrinterBase logPrinter, {
+  required ConfigLog configLog,
+  ILoggerCacheRepository? cacheRepository,
+});
 </code></pre>
-<p>Este serviço é registrado como <em>singleton</em> no <code>get_it</code> por <code>registerLogPrinter</code>. Ele aplica as regras de <code>ConfigLog</code>
-e, quando um log deve ser processado, delega para <code>logPrinter.printLog()</code> e <code>cacheRepository.addLog()</code>.</p>
-<p><strong>Regras de processamento em <code>executePrint</code>:</strong></p>
+<p>Registered as a singleton in <code>get_it</code> by <code>registerLogPrinter</code>. It applies <code>ConfigLog</code> rules, then delegates to <code>logPrinter.printLog()</code> and <code>cacheRepository.addLog()</code> when the log should be processed.</p>
+<p>Processing rules in <code>executePrint</code>:</p>
 <ol>
-<li>Se <code>enableLog</code> é <code>true</code> <strong>e</strong> o tipo do log está em <code>onlyClasses</code> (ou <code>onlyClasses</code> está vazio) → imprime e salva no cache.</li>
-<li>Se <code>log.alwaysPrint</code> é <code>true</code> → imprime e salva no cache independentemente das regras acima.</li>
-<li>Caso contrário → o log é descartado silenciosamente.</li>
+<li>If <code>enableLog</code> is <code>true</code> and log type is in <code>onlyClasses</code> (or <code>onlyClasses</code> is empty) → print and store.</li>
+<li>If <code>log.alwaysPrint</code> is <code>true</code> → print and store regardless of config.</li>
+<li>Otherwise → silently drop.</li>
 </ol>
-<hr>
 <h2 id="fetchlogprinterservice">fetchLogPrinterService</h2>
-<p>Função interna que resolve o <code>LogPrinterService</code> registrado no <code>get_it</code>.</p>
+<p>Internal function that resolves the registered <code>LogPrinterService</code> from <code>get_it</code>.</p>
 <pre class="language-dart"><code class="language-dart">LogPrinterService fetchLogPrinterService();
 </code></pre>
-<p>Lança <code>StateError</code> se <code>registerLogPrinter</code> não tiver sido chamado antes do primeiro uso.</p>
-<hr>
+<p>If no service is registered yet, it automatically registers a default <code>LogSimplePrint</code>
+with <code>ConfigLog(enableLog: true)</code> as a safety fallback and returns it. Explicit startup
+registration is still recommended for predictable configuration.</p>
 <h2 id="registerlogprinter">registerLogPrinter</h2>
-<p>Registra a impressora principal no <code>get_it</code>. Deve ser chamada no <em>startup</em> da aplicação,
-antes de qualquer uso de logs.</p>
+<p>Registers the main printer in <code>get_it</code>. Must be called at app startup before emitting logs.</p>
 <pre class="language-dart"><code class="language-dart">LoggerPersistenceService registerLogPrinter(
   LogPrinterBase printer, {
   ILoggerCacheRepository? cacheRepository,
   required ConfigLog config,
 });
 </code></pre>
-<p>Retorna o <code>LoggerPersistenceService</code> associado ao serviço registrado, para que o chamador
-possa consultar e gerenciar os logs em cache/persistência.</p>
-<p><strong>Atalhos de registro:</strong></p>
-<pre class="language-dart"><code class="language-dart">// Com formatação ANSI colorida (recomendado para desenvolvimento)
-LoggerPersistenceService registerLogPrinterColor({
+<p>Returns the <code>LoggerPersistenceService</code> linked to the registered service so callers can query and manage cached/persisted logs.</p>
+<p>Registration shortcuts:</p>
+<pre class="language-dart"><code class="language-dart">LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  FileType fileType = FileType.json,
 });
 
-// Sem cores, usando debugPrint (útil em CI/CD ou consoles sem ANSI)
 LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  FileType fileType = FileType.json,
 });
 </code></pre>
-<h3 id="exemplo-de-configurao-no-startup">Exemplo de configuração no startup</h3>
+<h3 id="startup-example">Startup example</h3>
 <pre class="language-dart"><code class="language-dart">void main() {
-  // Desenvolvimento — logs coloridos, cache em memória
   final cache = registerLogPrinterColor(
     config: ConfigLog(enableLog: true),
   );
 
-  // Produção — sem cores, apenas erros, cache com persistência em arquivo
-  // final cache = registerLogPrinterSimple(
-  //   config: ConfigLog(enableLog: false),
-  //   cacheFilePath: '/caminho/para/logs',
-  // );
-
-  // Em Flutter: runApp(const MyApp());
+  // Flutter apps: runApp(const MyApp());
 }
 </code></pre>
-<h3 id="exemplo-em-testes">Exemplo em testes</h3>
+<h3 id="test-setup-example">Test setup example</h3>
 <pre class="language-dart"><code class="language-dart">setUp(() {
   registerLogPrinter(
     const LogSimplePrint(),
@@ -187,6 +167,9 @@ LoggerPersistenceService registerLogPrinterSimple({
 
 tearDown(() async =&gt; await GetIt.instance.reset());
 </code></pre>
+<p><code>registerLogPrinterColor</code> and <code>registerLogPrinterSimple</code> default to <code>ConfigLog()</code>.
+Pass <code>ConfigLog(enableLog: true)</code> when regular logs should be emitted. <code>cacheFilePath</code>
+enables JSON persistence; omitting it keeps logs in memory only.</p>
 </section>
 
 
@@ -198,7 +181,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
 
 </dt>
-<dd>Biblioteca de logging para projetos Dart (CLI, servidor, scripts).
+<dd>Logging library for Dart projects (CLI, server, scripts).
 </dd>
 
     </dl>
@@ -213,7 +196,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Contrato para persistência e consulta de logs.
+  Contract for log persistence and query operations.
 </dd>
 
       <dt id="LoggerObject">
@@ -222,7 +205,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Marca base para objetos de log.
+  Base marker for log objects.
 </dd>
 
       <dt id="LoggerObjectBase">
@@ -231,7 +214,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Contrato base para objetos de log que podem ser impressos/serializados.
+  Base contract for log objects that can be printed and serialized.
 </dd>
 
       <dt id="LogPrinterService">
@@ -240,7 +223,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Serviço central que coordena o processo de impressão e armazenamento de logs.
+  Central service responsible for log output and storage flow.
 </dd>
 
     </dl>
@@ -262,13 +245,13 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Resolve o <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> registrado no get_it.
+  Resolves the registered <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> from get_it.
   
 
 </dd>
 
       <dt id="registerLogPrinter" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span>, </span><span class="parameter" id="registerLogPrinter-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -276,13 +259,13 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Registra o <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a> no get_it para injeção de dependência.
+  Registers a <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a> in get_it for dependency injection.
   
 
 </dd>
 
       <dt id="registerLogPrinterColor" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -290,13 +273,13 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Registra uma impressora com formatação colorida.
+  Registers a color printer.
   
 
 </dd>
 
       <dt id="registerLogPrinterSimple" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -304,7 +287,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Registra uma impressora simples (sem cores).
+  Registers a simple non-colored printer.
   
 
 </dd>
@@ -321,7 +304,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 
 </dt>
 <dd>
-  Formato de exportação de logs.
+  Log export format.
 </dd>
 
     </dl>
@@ -390,7 +373,7 @@ tearDown(() async =&gt; await GetIt.instance.reset());
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

@@ -2,22 +2,22 @@ dartdoc:
   # Define categories for organized API documentation
   categories:
     "Core":
-      markdown: doc/Core.md
+      markdown: docs/Core.md
       displayName: "Core - Sistema de Logging"
     "Log Types":
-      markdown: doc/LogTypes.md
+      markdown: docs/LogTypes.md
       displayName: "Tipos de Log"
     "Printers":
-      markdown: doc/Printers.md
+      markdown: docs/Printers.md
       displayName: "Impressoras de Log"
     "Utilities":
-      markdown: doc/Utilities.md
+      markdown: docs/Utilities.md
       displayName: "Utilitários"
     "Configuration":
-      markdown: doc/Configuration.md
+      markdown: docs/Configuration.md
       displayName: "Configuração"
     "Console View":
-      markdown: doc/ConsoleView.md
+      markdown: docs/ConsoleView.md
       displayName: "Console Visual de Logs"
 
   # Category display order
@@ -53,5 +53,5 @@ dartdoc:
     - "**/*.freezed.dart"
 
   # Project metadata
-  nodoc:
-    - "package:log_custom_printer/src/data/cache/**"
+  # nodoc:
+  #   - "package:log_custom_printer/src/data/cache/**"

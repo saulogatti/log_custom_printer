@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;LogPrinterService-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_service.dart#L57"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_service.dart#L34"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">executePrint</span> method 
 </h1></div>
 
@@ -64,17 +64,9 @@
     </section>
     
 <section class="desc markdown">
-  <p>Executa o processo de log para um <a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>.</p>
-<p>Verifica se o log deve ser impresso com base na configuração global
-em <a href="../../log_custom_printer/LogPrinterService/configLog.html">configLog</a>. Se habilitado ou se o log possuir
-<code>alwaysPrint = true</code>, ele será:</p>
-<ol>
-<li>Adicionado ao cache via <code>_loggerPersistenceService</code>.</li>
-<li>Impresso via <a href="../../log_custom_printer/LogPrinterService/logPrinter.html">logPrinter</a>.</li>
-</ol>
-<p>Observação: a persistência é assíncrona e não é aguardada neste método.
-Assim, <code>executePrint</code> mantém fluxo síncrono para o chamador, enquanto
-o armazenamento ocorre em segundo plano.</p>
+  <p>Executes log processing.</p>
+<p>If config allows it, the log is cached and printed.
+Logs with <code>alwaysPrint</code> bypass normal filtering.</p>
 </section>
 
 
@@ -83,14 +75,11 @@ o armazenamento ocorre em segundo plano.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">void executePrint(LoggerObjectBase log) {
   if (configLog.enableLog &amp;&amp;
-      (configLog.onlyClasses.isEmpty ||
-          configLog.onlyClasses.contains(log.runtimeType))) {
-    &#47;&#47; O log pode ser impresso, então adicionamos ao cache e imprimimos
-    _loggerPersistenceService.addLog(log);
+      (configLog.onlyClasses.isEmpty || configLog.onlyClasses.contains(log.runtimeType))) {
+    cacheRepository.addLog(log);
     logPrinter.printLog(log);
   } else if (log.alwaysPrint) {
-    &#47;&#47; O log não pode ser impresso normalmente, mas tem alwaysPrint, então imprimimos mesmo assim
-    _loggerPersistenceService.addLog(log);
+    cacheRepository.addLog(log);
     logPrinter.printLog(log);
   }
 }</code></pre>
@@ -121,7 +110,7 @@ o armazenamento ocorre em segundo plano.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

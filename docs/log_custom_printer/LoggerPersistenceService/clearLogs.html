@@ -49,13 +49,13 @@
     data-above-sidebar="log_custom_printer&#47;LoggerPersistenceService-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_persistence_service.dart#L61"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_persistence_service.dart#L34"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">clearLogs</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">clearLogs</span>(<wbr>)
 
       
@@ -63,9 +63,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Remove todas as entradas de log do repositório.</p>
-<p>Notifica imediatamente <a href="../../log_custom_printer/LoggerPersistenceService/logOutputHandler.html">logOutputHandler</a> com lista vazia e, em seguida,
-executa a limpeza no repositório.</p>
+  <p>Clears all log entries.</p>
 </section>
 
 
@@ -74,7 +72,7 @@ executa a limpeza no repositório.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">Future&lt;void&gt; clearLogs() async {
   logOutputHandler?.call([]);
-  await _cacheRepository.clearLogs();
+  await loggerPersistenceService.clearLogs();
 }</code></pre>
 </section>
 
@@ -103,7 +101,7 @@ executa a limpeza no repositório.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

@@ -49,14 +49,14 @@
     data-above-sidebar="log_custom_printer&#47;LogFilterEngine-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_filter_engine.dart#L22"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_filter_engine.dart#L10"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">apply</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span>
-<span class="name ">apply</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="apply-param-logs"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span> <span class="parameter-name">logs</span>, </span></li>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span>
+<span class="name ">apply</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="apply-param-logs"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span> <span class="parameter-name">logs</span>, </span></li>
 <li><span class="parameter" id="apply-param-query"><span class="type-annotation"><a href="../../log_custom_printer/LogQuery-class.html">LogQuery</a></span> <span class="parameter-name">query</span></span></li>
 </ol>)
 
@@ -65,17 +65,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Retorna uma nova lista contendo apenas os logs que satisfazem os
-critérios definidos em <code>query</code>.</p>
-<ul>
-<li>Filtro de tipo: mantém apenas logs cujo <a href="../../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a> esteja
-em <a href="../../log_custom_printer/LogQuery/types.html">LogQuery.types</a>. Quando <code>types</code> é <code>null</code> ou vazio, nenhum log
-é descartado por tipo.</li>
-<li>Filtro de data: intervalo <code>[start, end)</code> aplicado a
-<a href="../../log_custom_printer/LoggerObjectBase/logCreationDate.html">LoggerObjectBase.logCreationDate</a>.</li>
-</ul>
-<p>Todos os predicados são avaliados em uma única passagem para evitar
-alocações intermediárias desnecessárias.</p>
+  <p>Returns logs matching <code>query</code> criteria.</p>
 </section>
 
 
@@ -83,14 +73,15 @@ alocações intermediárias desnecessárias.</p>
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">List&lt;LoggerObjectBase&gt; apply(List&lt;LoggerObjectBase&gt; logs, LogQuery query) {
-  final filterTypes = query.types != null &amp;&amp; query.types!.isNotEmpty
-      ? query.types
-      : null;
+  final filterTypes = query.types != null &amp;&amp; query.types!.isNotEmpty ? query.types : null;
   final start = query.start;
   final end = query.end;
 
   if (filterTypes == null &amp;&amp; start == null &amp;&amp; end == null) return logs;
-
+  assert(
+    start == null || end == null || start.difference(end).isNegative,
+    &#39;Start date must be before end date&#39;,
+  );
   return logs.where((log) {
     if (filterTypes != null &amp;&amp; !filterTypes.contains(log.enumLoggerType)) {
       return false;
@@ -127,7 +118,7 @@ alocações intermediárias desnecessárias.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

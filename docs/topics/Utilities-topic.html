@@ -45,13 +45,10 @@
   <h1><span class="kind-category">Utilitários</span> topic</h1>
   
 <section class="desc markdown">
-  <h1 id="utilitrios">Utilitários</h1>
-<p>Este módulo reúne as ferramentas auxiliares da biblioteca: mixin de integração, enums,
-helpers de formatação, extensões e o sistema de cache de logs.</p>
-<hr>
+  <h1 id="utilities">Utilities</h1>
+<p>This module groups support tools from the library: integration mixin, enums, formatting helpers, extensions, and cache services.</p>
 <h2 id="loggerclassmixin">LoggerClassMixin</h2>
-<p>Mixin que fornece métodos de log prontos para uso em qualquer classe Dart (incluindo apps Flutter).
-Preenche automaticamente <code>className</code> com o <code>runtimeType</code> da classe hospedeira.</p>
+<p>Provides ready-to-use logging methods for any Dart class. It automatically fills <code>className</code> with host class <code>runtimeType</code>.</p>
 <pre class="language-dart"><code class="language-dart">mixin LoggerClassMixin {
   Type get logClassType =&gt; runtimeType;
 
@@ -61,216 +58,81 @@ Preenche automaticamente <code>className</code> com o <code>runtimeType</code> d
   void logError(String message, StackTrace stackTrace);
 }
 </code></pre>
-<p><strong>Exemplo de uso:</strong></p>
-<pre class="language-dart"><code class="language-dart">class MinhaClasse with LoggerClassMixin {
-  void processarDados() {
-    logDebug('Iniciando processamento');
-
-    try {
-      // lógica de processamento
-      logInfo('Processamento concluído com sucesso');
-    } catch (error, stackTrace) {
-      logError('Falha no processamento: $error', stackTrace);
-    }
-  }
-}
-</code></pre>
-<p>Cada método cria o objeto de log correspondente e chama <code>sendLog()</code> internamente.
-Não é necessário criar os objetos de log manualmente.</p>
-<hr>
 <h2 id="enumloggertype">EnumLoggerType</h2>
-<p>Enum que representa os tipos de severidade de log disponíveis.</p>
-<pre class="language-dart"><code class="language-dart">enum EnumLoggerType {
-  error,
-  debug,
-  warning,
-  info,
-}
-</code></pre>
-<p>Usado principalmente pelo sistema de cache para organizar logs por tipo:</p>
-<pre class="language-dart"><code class="language-dart">// Recuperar apenas logs de erro
-final erros = await cacheRepository.getLogsByType(EnumLoggerType.error);
-
-// Limpar apenas logs de debug
-await cacheRepository.clearLogsByType(EnumLoggerType.debug);
-</code></pre>
-<hr>
-<h2 id="loggerjsonlist">LoggerJsonList</h2>
-<p>Container serializável que armazena uma lista de objetos de log de um único tipo,
-mantendo um limite configurável de entradas.</p>
-<pre class="language-dart"><code class="language-dart">@JsonSerializable(createFactory: false)
-class LoggerJsonList {
-  String type;
-  int maxLogEntries; // padrão: 100
-  List&lt;LoggerObjectBase&gt; get loggerEntries;
-
-  void addLogger(LoggerObjectBase logger);
-  factory LoggerJsonList.fromJson(Map&lt;String, dynamic&gt; json);
-  Map&lt;String, dynamic&gt; toJson();
-}
-</code></pre>
-<p><strong>Comportamento de inserção:</strong></p>
+<p>Enum for available log severity types: <code>error</code>, <code>debug</code>, <code>warning</code>, <code>info</code>.</p>
+<h2 id="loggerjsonlisttype">LoggerJsonListType</h2>
+<p>Serializable container for logs of a single <code>EnumLoggerType</code> with configurable capacity.</p>
 <ul>
-<li>Novos logs são inseridos no início da lista (<code>índice 0</code>), mantendo ordem <strong>mais recente → mais antigo</strong>.</li>
-<li>Ao atingir <code>maxLogEntries</code>, o log mais antigo (último) é descartado automaticamente.</li>
+<li>New logs are inserted at index 0 (newest first)</li>
+<li>When capacity is reached, the oldest log is dropped</li>
+<li>Supports <code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code> deserialization</li>
 </ul>
-<p><strong>Tipos suportados para desserialização:</strong> <code>DebugLog</code>, <code>InfoLog</code>, <code>WarningLog</code>, <code>ErrorLog</code>.</p>
-<hr>
-<h2 id="enumansicolors-e-loggeransicolor">EnumAnsiColors e LoggerAnsiColor</h2>
-<p>Utilitários para aplicação de cores ANSI em mensagens de texto no terminal.</p>
-<h3 id="enumansicolors">EnumAnsiColors</h3>
-<pre class="language-dart"><code class="language-dart">enum EnumAnsiColors {
-  black, red, green, yellow,
-  blue, magenta, cyan, white;
-
-  int getBgColor(); // Código ANSI de fundo
-  int getFgColor(); // Código ANSI de texto
-}
-</code></pre>
-<h3 id="loggeransicolor">LoggerAnsiColor</h3>
-<pre class="language-dart"><code class="language-dart">@JsonSerializable()
-class LoggerAnsiColor {
-  final EnumAnsiColors enumAnsiColors;
-
-  const LoggerAnsiColor({required this.enumAnsiColors});
-
-  // Aplica a cor à mensagem: retorna '\x1B[CODIGOm mensagem \x1B[0m'
-  String call(String msg);
-
-  factory LoggerAnsiColor.fromJson(Map&lt;String, dynamic&gt; json);
-  Map&lt;String, dynamic&gt; toJson();
-}
-</code></pre>
-<p><strong>Exemplo de uso:</strong></p>
-<pre class="language-dart"><code class="language-dart">final cor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
-print(cor('Mensagem em vermelho'));
-</code></pre>
-<p>Usado internamente pelos tipos de log em <code>getColor()</code> e pelas impressoras para formatação visual.</p>
-<hr>
-<h2 id="datetimeloghelper">DateTimeLogHelper</h2>
-<p>Extension em <code>DateTime</code> para formatação de timestamps nos logs.</p>
-<pre class="language-dart"><code class="language-dart">extension DateTimeLogHelper on DateTime {
-  String get logFullDateTime; // "dd/MM/yyyy HH:mm:ss.SSS"
-  String onlyDate();          // "dd/MM/yyyy"
-  String onlyTime();          // "HH:mm:ss.SSS"
-}
-</code></pre>
-<p><strong>Exemplo:</strong></p>
-<pre class="language-dart"><code class="language-dart">final agora = DateTime.now();
-print(agora.logFullDateTime); // "23/02/2026 11:02:32.399"
-print(agora.onlyDate());      // "23/02/2026"
-print(agora.onlyTime());      // "11:02:32.399"
-</code></pre>
-<p>Usado por <code>LoggerObjectBase.getMessage()</code> para formatar o timestamp da mensagem.</p>
-<hr>
-<h2 id="stacktracesdk">StackTraceSdk</h2>
-<p>Extension em <code>StackTrace</code> para formatação e filtragem de stack traces.
-Remove automaticamente linhas de framework interno (Flutter, Dart SDK) para exibir
-apenas o código da aplicação.</p>
-<pre class="language-dart"><code class="language-dart">extension StackTraceSdk on StackTrace {
-  // Formata com cor opcional, limitando o número de linhas
-  String formatStackTrace(LoggerAnsiColor? color, int linesCount);
-
-  // Converte para Map&lt;String, String&gt; com chaves '#0', '#1', etc.
-  Map&lt;String, dynamic&gt; stackInMap([int linesCount = 8]);
-}
-</code></pre>
-<p><strong>Exemplo:</strong></p>
-<pre class="language-dart"><code class="language-dart">try {
-  // código que pode falhar
-} catch (error, stackTrace) {
-  final mapa = stackTrace.stackInMap(5);
-  // {'#0': 'MinhaClasse.meuMetodo (...:42:5)', '#1': ..., ...}
-}
-</code></pre>
-<p>Usado por <code>ErrorLog.getMessage()</code> para incluir o stack trace formatado na saída.</p>
-<hr>
-<h2 id="iloggercacherepository">ILoggerCacheRepository</h2>
-<p>Interface que define as operações de cache de logs. Implemente esta interface para
-customizar o armazenamento (ex: banco de dados local, <code>SharedPreferences</code>, servidor remoto).</p>
-<pre class="language-dart"><code class="language-dart">abstract interface class ILoggerCacheRepository {
-  Future&lt;void&gt; addLog(LoggerObjectBase log);
-  Future&lt;void&gt; clearLogs();
-  Future&lt;void&gt; clearLogsByType(EnumLoggerType type);
-  Future&lt;List&lt;LoggerObjectBase&gt;&gt; getAllLogs();
-  Future&lt;List&lt;LoggerObjectBase&gt;&gt; getLogsByType(EnumLoggerType type);
-}
-</code></pre>
-<p>Essa interface é usada para customizar o armazenamento quando você chama
-<code>registerLogPrinter(..., cacheRepository: seuRepositorio, config: ...)</code>.</p>
-<p>As funções <code>registerLogPrinterColor</code> e <code>registerLogPrinterSimple</code> retornam
-um <code>LoggerPersistenceService</code>, que expõe os métodos de consulta e limpeza.</p>
-<p><strong>Exemplo de uso do repositório:</strong></p>
-<pre class="language-dart"><code class="language-dart">final cache = registerLogPrinterColor(config: ConfigLog(enableLog: true));
-
-// Recuperar todos os logs
-final todos = await cache.getAllLogs();
-
-// Recuperar apenas erros
-final erros = await cache.getLogsByType(EnumLoggerType.error);
-
-// Limpar todos os logs
-await cache.clearLogs();
-</code></pre>
-<hr>
-<h2 id="loggercacherepositoryimpl">LoggerCacheRepositoryImpl</h2>
-<p>Implementação padrão de <code>ILoggerCacheRepository</code>. Armazena logs em memória usando
-<code>LoggerJsonList</code> e, opcionalmente, persiste em disco via <code>LoggerCache</code>.</p>
-<pre class="language-dart"><code class="language-dart">final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
-  final int maxLogEntries;    // padrão: 1000
-  final String? saveLogFilePath; // se fornecido, persiste em disco
-}
-</code></pre>
+<h2 id="ansi-helpers">ANSI helpers</h2>
 <ul>
-<li>Logs em memória são organizados por <code>EnumLoggerType</code>.</li>
-<li>Se <code>saveLogFilePath</code> for fornecido, os logs são gravados em arquivos JSON em
-<code>&lt;saveLogFilePath&gt;/loggerApp/logs/&lt;tipo&gt;.json</code>.</li>
-<li>Na inicialização com caminho de arquivo, carrega os logs previamente persistidos.</li>
+<li><code>EnumAnsiColors</code>: foreground/background ANSI code mapping</li>
+<li><code>LoggerAnsiColor</code>: callable formatter for colored strings</li>
+</ul>
+<h2 id="datetimeloghelper">DateTimeLogHelper</h2>
+<p>Date formatting extension used by log rendering:</p>
+<ul>
+<li><code>logFullDateTime</code> → <code>dd/MM/yyyy HH:mm:ss.SSS</code></li>
+<li><code>onlyDate()</code></li>
+<li><code>onlyTime()</code></li>
+</ul>
+<h2 id="stacktracesdk">StackTraceSdk</h2>
+<p>Stack trace formatting/filtering extension.</p>
+<ul>
+<li><code>formatStackTrace(LoggerAnsiColor? color, int linesCount)</code></li>
+<li><code>stackInMap([int linesCount = 8])</code></li>
+</ul>
+<h2 id="iloggercacherepository">ILoggerCacheRepository</h2>
+<p>Cache abstraction contract for custom storage implementations.</p>
+<h2 id="loggercacherepositoryimpl">LoggerCacheRepositoryImpl</h2>
+<p>Default <code>ILoggerCacheRepository</code> implementation:</p>
+<ul>
+<li>In-memory lists grouped by <code>EnumLoggerType</code></li>
+<li>Optional disk persistence under <code>&lt;saveLogFilePath&gt;/loggerApp/logs/&lt;type&gt;.json</code></li>
+<li>Loads persisted logs during initialization when path is provided</li>
 </ul>
 <h2 id="loggerpersistenceservice">LoggerPersistenceService</h2>
-<p>Serviço de alto nível retornado pelos <code>registerLogPrinter*</code>. Encapsula o
-<code>ILoggerCacheRepository</code> e fornece API simples para uso na aplicação.</p>
-<pre class="language-dart"><code class="language-dart">final class LoggerPersistenceService {
-  Future&lt;void&gt; addLog(LoggerObjectBase log);
-  Future&lt;void&gt; clearLogs();
-  Future&lt;void&gt; clearLogsByType(EnumLoggerType type);
-  Future&lt;List&lt;LoggerObjectBase&gt;&gt; getAllLogs();
-  Future&lt;List&lt;LoggerObjectBase&gt;&gt; getLogsByType(EnumLoggerType type);
-}
-</code></pre>
-<hr>
-<h2 id="loggercache">LoggerCache</h2>
-<p>Gerenciador de baixo nível para persistência de arquivos de log em disco.</p>
-<pre class="language-dart"><code class="language-dart">class LoggerCache {
-  LoggerCache(String directory);
-
-  Future&lt;void&gt; get futureInitialization;
-
-  Future&lt;void&gt; writeLogToFile(String fileName, Object loggerList);
-  Future&lt;Map&lt;EnumLoggerType, LoggerJsonList?&gt;?&gt; readAllLogs();
-  Future&lt;void&gt; clearAll();
-  Future&lt;void&gt; clearLogByType(String name);
-}
-</code></pre>
-<p>Os arquivos são criados em <code>&lt;directory&gt;/loggerApp/logs/&lt;tipo&gt;.json</code>.
-Usado internamente por <code>LoggerCacheRepositoryImpl</code>; normalmente não é necessário interagir
-diretamente com esta classe.</p>
-<hr>
-<h2 id="filemanager-e-filetype">FileManager e FileType</h2>
-<p><code>FileManager</code> é o utilitário interno responsável pelas operações de I/O em arquivo
-(<code>createDirectory</code>, <code>deleteDirectory</code>, <code>readFile</code>, <code>writeFile</code>, <code>deleteFile</code>),
-respeitando a extensão esperada pelo <code>FileType</code>.</p>
-<p><code>FileType</code> define as extensões suportadas:</p>
-<pre class="language-dart"><code class="language-dart">enum FileType { txt, json, log }
-</code></pre>
-<h3 id="segurana-de-concorrncia">Segurança de concorrência</h3>
-<p>As operações do <code>FileManager</code> são serializadas por caminho (path lock assíncrono):</p>
+<p>High-level service returned by <code>registerLogPrinter*</code> exposing:</p>
 <ul>
-<li>operações no <strong>mesmo caminho</strong> executam em sequência;</li>
-<li>operações em <strong>caminhos diferentes</strong> podem ocorrer em paralelo.</li>
+<li><code>addLog</code></li>
+<li><code>getAllLogs</code></li>
+<li><code>getLogsByType</code></li>
+<li><code>clearLogs</code></li>
+<li><code>clearLogsByType</code></li>
+<li><code>queryLogs</code></li>
+<li><code>searchLogByCreated</code></li>
+<li><code>searchLogByRuntimeType</code></li>
+<li><code>searchLogByTag</code></li>
 </ul>
-<p>Isso evita condições de corrida em leitura/escrita/remoção quando múltiplos
-futuros atuam sobre o mesmo arquivo ou diretório.</p>
+<h3 id="querying-logs">Querying logs</h3>
+<p><code>LogQuery</code> combines optional type and date filters with optional sorting. The start
+date is inclusive and the end date is exclusive.</p>
+<pre class="language-dart"><code class="language-dart">final recentErrors = await persistenceService.queryLogs(
+  LogQuery(
+    types: {EnumLoggerType.error},
+    start: DateTime.now().subtract(const Duration(hours: 1)),
+    sortField: LogSortField.date,
+    sortDirection: SortDirection.desc,
+  ),
+);
+</code></pre>
+<p><code>LoggerFilter</code> is a lower-level facade for applying a query to an existing list.</p>
+<h2 id="loggercache">LoggerCache</h2>
+<p>Low-level disk persistence manager used by <code>LoggerCacheRepositoryImpl</code>.</p>
+<h2 id="filemanager-and-file-operations">FileManager and file operations</h2>
+<p><code>FileManager</code> provides asynchronous file and directory operations. <code>writeFile</code>
+accepts an optional <code>FileMode</code> (<code>FileMode.write</code> by default) and serializes
+operations for the same path.</p>
+<pre class="language-dart"><code class="language-dart">await FileManager().writeFile('logs.json', content, FileMode.append);
+</code></pre>
+<p>Concurrency guarantees:</p>
+<ul>
+<li>Same path operations are serialized</li>
+<li>Different path operations may run in parallel</li>
+</ul>
 </section>
 
 
@@ -280,57 +142,56 @@ futuros atuam sobre o mesmo arquivo ou diretório.</p>
     <dl>
       <dt id="FileManager">
   <span class="name "><a href="../log_custom_printer/FileManager-class.html">FileManager</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Implementação de gerenciamento de arquivos.
+  File manager implementation.
 </dd>
 
       <dt id="IFileManagerType">
   <span class="name "><a href="../log_custom_printer/IFileManagerType-class.html">IFileManagerType</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Contrato para operações de leitura, escrita e remoção de arquivos.
+  Contract for file read/write/delete operations.
 </dd>
 
       <dt id="LoggerAnsiColor">
   <span class="name "><a href="../log_custom_printer/LoggerAnsiColor-class.html">LoggerAnsiColor</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Classe para manipulação de cores ANSI em logs.
+  ANSI color helper for log messages.
 </dd>
 
       <dt id="LoggerCacheRepositoryImpl">
   <span class="name "><a href="../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Implementação concreta de <a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a> usando armazenamento em memória
-e opcionalmente em arquivo.
+  Default <a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a> implementation with in-memory and optional file storage.
 </dd>
 
       <dt id="LoggerPersistenceService">
   <span class="name "><a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Serviço de persistência e consulta de logs.
+  Service for log persistence and query operations.
 </dd>
 
       <dt id="StackTraceConverter">
   <span class="name "><a href="../log_custom_printer/StackTraceConverter-class.html">StackTraceConverter</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.13.2/dart-core/StackTrace-class.html">StackTrace</a>.
+  JSON converter for <a href="https://api.dart.dev/stable/3.13.4/dart-core/StackTrace-class.html">StackTrace</a> values.
 </dd>
 
     </dl>
@@ -341,11 +202,11 @@ e opcionalmente em arquivo.
     <dl>
       <dt id="LoggerClassMixin">
   <span class="name "><a href="../log_custom_printer/LoggerClassMixin-mixin.html">LoggerClassMixin</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Mixin que fornece métodos utilitários de log para uma classe.
+  Mixin that provides convenience logging methods for classes.
 </dd>
 
     </dl>
@@ -356,24 +217,24 @@ e opcionalmente em arquivo.
     <dl>
       <dt id="DateTimeLoggingExtensions">
   <span class="name "><a href="../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></span>
-  on <a href="https://api.dart.dev/stable/3.13.2/dart-core/DateTime-class.html">DateTime</a>
+  on <a href="https://api.dart.dev/stable/3.13.4/dart-core/DateTime-class.html">DateTime</a>
   
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Extension para formatação de data/hora em logs.
+  Date/time formatting extension for log timestamps.
 </dd>
 
       <dt id="LoggerEnum">
   <span class="name "><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></span>
   on <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>
   
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Extensão para mapear objetos de log para o enum <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>.
+  Maps log objects to <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>.
 </dd>
 
     </dl>
@@ -387,20 +248,11 @@ e opcionalmente em arquivo.
     <dl>
       <dt id="EnumLoggerType">
   <span class="name "><a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Define os tipos de mensagens de log que podem ser manipulados.
-</dd>
-
-      <dt id="FileType">
-  <span class="name "><a href="../log_custom_printer/FileType.html">FileType</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
-
-</dt>
-<dd>
-  Tipos de arquivo suportados pelo <a href="../log_custom_printer/FileManager-class.html">FileManager</a>.
+  Supported log message types.
 </dd>
 
     </dl>
@@ -448,7 +300,6 @@ e opcionalmente em arquivo.
 
     <li class="section-title"><a href="../topics/Utilities-topic.html#enums">Enums</a></li>
       <li><a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></li>
-      <li><a href="../log_custom_printer/FileType.html">FileType</a></li>
 
     <li class="section-title"><a href="../topics/Utilities-topic.html#mixins">Mixins</a></li>
       <li><a href="../log_custom_printer/LoggerClassMixin-mixin.html">LoggerClassMixin</a></li>
@@ -470,7 +321,7 @@ e opcionalmente em arquivo.
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

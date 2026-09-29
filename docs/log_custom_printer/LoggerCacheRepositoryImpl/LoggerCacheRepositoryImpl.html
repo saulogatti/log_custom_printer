@@ -49,34 +49,20 @@
       data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L38"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L14"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-constructor">LoggerCacheRepositoryImpl</span> constructor 
 </h1></div>
 
     <section class="multi-line-signature">
       
-      <span class="name ">LoggerCacheRepositoryImpl</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="param-maxLogEntries"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogEntries</span> = <span class="default-value">1000</span>, </span></li>
-<li><span class="parameter" id="param-directoryToSave"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">directoryToSave</span>, </span></li>
+      <span class="name ">LoggerCacheRepositoryImpl</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="param-maxLogEntries"><span>required</span> <span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogEntries</span>, </span></li>
+<li><span class="parameter" id="param-directoryToSave"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">directoryToSave</span>, </span></li>
 </ol>})
     </section>
     
-<section class="desc markdown">
-  <p>Cria uma nova instância da implementação de cache.</p>
-<p><a href="../../log_custom_printer/LoggerCacheRepositoryImpl/maxLogEntries.html">maxLogEntries</a>: limite de logs mantidos em memória por tipo (padrão: 1000).
-<a href="../../log_custom_printer/LoggerCacheRepositoryImpl/directoryToSave.html">directoryToSave</a>: diretório base para persistência (se omitido, não salva em disco).</p>
-</section>
 
 
     
-<section class="summary source-code" id="source">
-  <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">LoggerCacheRepositoryImpl({this.maxLogEntries = 1000, this.directoryToSave}) {
-  if (directoryToSave != null) {
-    _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
-    _futureInitialization = _initialize();
-  }
-}</code></pre>
-</section>
 
 
   </div> <!-- /.main-content -->
@@ -103,7 +89,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;LoggerObjectBase-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/logger_object.dart#L51"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/logger_object.dart#L39"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-property">logCreationDate</span> property 
 </h1></div>
 
@@ -58,26 +58,24 @@
         
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://pub.dev/documentation/json_annotation/4.12.0/json_annotation/JsonKey/JsonKey.html">JsonKey</a>(name: &quot;logCreationDate&quot;)</li>
+        <li>@<a href="https://pub.dev/documentation/json_annotation/4.12.0/json_annotation/JsonKey/JsonKey.html">JsonKey</a>(name: &#39;logCreationDate&#39;)</li>
     </ol>
   </div>
-        <a href="https://api.dart.dev/stable/3.13.2/dart-core/DateTime-class.html">DateTime</a>
+        <a href="https://api.dart.dev/stable/3.13.4/dart-core/DateTime-class.html">DateTime</a>
         <span class="name ">logCreationDate</span>
         <div class="features"><span class="feature">getter/setter pair</span></div>
 
       </section>
       
 <section class="desc markdown">
-  <p>Data/hora em que o log foi criado.</p>
-<p>Quando não é informado via <code>createdAt</code>, o construtor define para
-<code>DateTime.now()</code>; caso contrário usa o valor fornecido.</p>
+  <p>Creation time of this log.</p>
 </section>
 
       
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">@JsonKey(name: &quot;logCreationDate&quot;)
-DateTime logCreationDate = DateTime.now();</code></pre>
+  <pre class="language-dart"><code class="language-dart">@JsonKey(name: &#39;logCreationDate&#39;)
+DateTime logCreationDate = createdAt ?? DateTime.now();</code></pre>
 </section>
 
 
@@ -106,7 +104,7 @@ DateTime logCreationDate = DateTime.now();</code></pre>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

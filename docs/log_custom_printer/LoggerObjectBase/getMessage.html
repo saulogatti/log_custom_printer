@@ -49,33 +49,31 @@
     data-above-sidebar="log_custom_printer&#47;LoggerObjectBase-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/logger_object.dart#L87"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/logger_object.dart#L64"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">getMessage</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
-<span class="name ">getMessage</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span></span></li>
-</ol>])
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
+<span class="name ">getMessage</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span>, </span></li>
+</ol>})
 
       
 
     </section>
     
 <section class="desc markdown">
-  <p>Formata a mensagem incluindo timestamp e aplicando cor opcional.</p>
-<p><code>withColor</code>: quando <code>true</code> aplica a transformação de cor retornada
-por <a href="../../log_custom_printer/LoggerObjectBase/getColor.html">getColor</a>; quando <code>false</code> retorna texto sem códigos ANSI.</p>
+  <p>Returns formatted message with optional ANSI color.</p>
 </section>
 
 
     
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
-  <pre class="language-dart"><code class="language-dart">String getMessage([bool withColor = true]) {
-  final messageFormated = &quot;${logCreationDate.logFullDateTime} $message&quot;;
-  final String formattedLine = withColor ? getColor().call(messageFormated) : messageFormated;
+  <pre class="language-dart"><code class="language-dart">String getMessage({bool withColor = true}) {
+  final messageFormated = &#39;${logCreationDate.logFullDateTime} $message&#39;;
+  final formattedLine = withColor ? getColor().call(messageFormated) : messageFormated;
 
   return formattedLine;
 }</code></pre>
@@ -106,7 +104,7 @@ por <a href="../../log_custom_printer/LoggerObjectBase/getColor.html">getColor</
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

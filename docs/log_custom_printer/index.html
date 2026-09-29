@@ -62,62 +62,60 @@
 
     
 <section class="desc markdown">
-  <p>Biblioteca de logging para projetos Dart (CLI, servidor, scripts).</p>
-<p>Pode ser usada também em apps Flutter; registe a impressora no <code>main</code>
-antes de emitir logs.</p>
-<p>Fornece um sistema completo de logging com:</p>
+  <p>Logging library for Dart projects (CLI, server, scripts).</p>
+<p>It can also be used in Flutter apps; register a printer in <code>main</code>
+before emitting logs.</p>
+<p>Provides a complete logging system with:</p>
 <ul>
-<li>Hierarquia tipada de logs (Debug, Info, Warning, Error)</li>
-<li>Formatação colorida com códigos ANSI</li>
-<li>Serialização JSON automática</li>
-<li>Injeção de dependência via get_it</li>
-<li>Mixins utilitários para integração fácil</li>
+<li>Typed log hierarchy (Debug, Info, Warning, Error)</li>
+<li>ANSI color formatting</li>
+<li>Automatic JSON serialization</li>
+<li>Dependency injection via get_it</li>
+<li>Utility mixins for easy integration</li>
 </ul>
-<h2 id="uso-rpido">Uso Rápido</h2>
+<h2 id="quick-start">Quick start</h2>
 <pre class="language-dart"><code class="language-dart">import 'package:log_custom_printer/log_custom_printer.dart';
 
-// Configuração inicial (obrigatório no startup)
 void main() {
   registerLogPrinter(
     const LogWithColorPrint(),
     config: const ConfigLog(enableLog: true),
   );
-  // Em Flutter: runApp(const MyApp());
+  // Flutter apps: runApp(const MyApp());
 }
 
-// Usando o mixin (recomendado)
-class MinhaClasse with LoggerClassMixin {
-  void executar() {
-    logDebug('Iniciando processo');
-    logInfo('Processo em andamento');
+class MyClass with LoggerClassMixin {
+  void execute() {
+    logDebug('Starting process');
+    logInfo('Process running');
 
     try {
-      // código da aplicação
+      // app code
     } catch (error, stackTrace) {
-      logError('Erro: $error', stackTrace);
+      logError('Error: $error', stackTrace);
     }
   }
 }
 </code></pre>
-<h2 id="tipos-de-log">Tipos de Log</h2>
+<h2 id="log-types">Log types</h2>
 <ul>
-<li><a href="../log_custom_printer/DebugLog-class.html">DebugLog</a>: Mensagens de depuração (amarelo)</li>
-<li><a href="../log_custom_printer/InfoLog-class.html">InfoLog</a>: Informações gerais (branco)</li>
-<li><a href="../log_custom_printer/WarningLog-class.html">WarningLog</a>: Avisos e alertas (verde)</li>
-<li><a href="../log_custom_printer/ErrorLog-class.html">ErrorLog</a>: Erros e exceções (vermelho)</li>
+<li><a href="../log_custom_printer/DebugLog-class.html">DebugLog</a>: Debug messages (yellow)</li>
+<li><a href="../log_custom_printer/InfoLog-class.html">InfoLog</a>: General information (white)</li>
+<li><a href="../log_custom_printer/WarningLog-class.html">WarningLog</a>: Warnings and alerts (green)</li>
+<li><a href="../log_custom_printer/ErrorLog-class.html">ErrorLog</a>: Errors and exceptions (red)</li>
 </ul>
-<h2 id="configurao">Configuração</h2>
-<p>Configure o comportamento dos logs através de <a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>:</p>
+<h2 id="configuration">Configuration</h2>
+<p>Configure logging behavior with <a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>:</p>
 <pre class="language-dart"><code class="language-dart">final config = ConfigLog(
   enableLog: true,
   onlyClasses: {DebugLog, ErrorLog},
 );
 </code></pre>
-<h2 id="impressoras">Impressoras</h2>
-<p>Escolha entre diferentes estratégias de impressão:</p>
+<h2 id="printers">Printers</h2>
+<p>Choose output strategy:</p>
 <ul>
-<li><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a>: Saída simples sem cores</li>
-<li><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a>: Saída com formatação colorida ANSI</li>
+<li><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a>: Simple output without colors</li>
+<li><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a>: ANSI color output</li>
 </ul>
 </section>
 
@@ -131,7 +129,7 @@ class MinhaClasse with LoggerClassMixin {
 
 </dt>
 <dd>
-  Configuração para controle de logs na biblioteca.
+  Configuration object for controlling logging behavior.
 </dd>
 
           <dt id="DebugLog">
@@ -140,7 +138,7 @@ class MinhaClasse with LoggerClassMixin {
 
 </dt>
 <dd>
-  Log de depuração (debug) com formatação amarela.
+  Debug log message with yellow formatting.
 </dd>
 
           <dt id="ErrorLog">
@@ -149,25 +147,25 @@ class MinhaClasse with LoggerClassMixin {
 
 </dt>
 <dd>
-  Log de erro com formatação vermelha e stack trace.
+  Error log with red formatting and stack trace support.
 </dd>
 
           <dt id="FileManager">
   <span class="name "><a href="../log_custom_printer/FileManager-class.html">FileManager</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Implementação de gerenciamento de arquivos.
+  File manager implementation.
 </dd>
 
           <dt id="IFileManagerType">
   <span class="name "><a href="../log_custom_printer/IFileManagerType-class.html">IFileManagerType</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Contrato para operações de leitura, escrita e remoção de arquivos.
+  Contract for file read/write/delete operations.
 </dd>
 
           <dt id="ILoggerCacheRepository">
@@ -176,7 +174,7 @@ class MinhaClasse with LoggerClassMixin {
 
 </dt>
 <dd>
-  Contrato para persistência e consulta de logs.
+  Contract for log persistence and query operations.
 </dd>
 
           <dt id="InfoLog">
@@ -185,35 +183,34 @@ class MinhaClasse with LoggerClassMixin {
 
 </dt>
 <dd>
-  Log de informação geral com formatação branca.
+  Informational log message with white formatting.
 </dd>
 
           <dt id="LogFilterEngine">
   <span class="name "><a href="../log_custom_printer/LogFilterEngine-class.html">LogFilterEngine</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-4" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
-  Aplica filtros de tipo e intervalo de data a uma lista de logs.
+  Applies type/date filters to log collections.
 </dd>
 
           <dt id="LoggerAnsiColor">
   <span class="name "><a href="../log_custom_printer/LoggerAnsiColor-class.html">LoggerAnsiColor</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Classe para manipulação de cores ANSI em logs.
+  ANSI color helper for log messages.
 </dd>
 
           <dt id="LoggerCacheRepositoryImpl">
   <span class="name "><a href="../log_custom_printer/LoggerCacheRepositoryImpl-class.html">LoggerCacheRepositoryImpl</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Implementação concreta de <a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a> usando armazenamento em memória
-e opcionalmente em arquivo.
+  Default <a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a> implementation with in-memory and optional file storage.
 </dd>
 
           <dt id="LoggerObject">
@@ -222,7 +219,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Marca base para objetos de log.
+  Base marker for log objects.
 </dd>
 
           <dt id="LoggerObjectBase">
@@ -231,16 +228,16 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Contrato base para objetos de log que podem ser impressos/serializados.
+  Base contract for log objects that can be printed and serialized.
 </dd>
 
           <dt id="LoggerPersistenceService">
   <span class="name "><a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Serviço de persistência e consulta de logs.
+  Service for log persistence and query operations.
 </dd>
 
           <dt id="LogPrinterBase">
@@ -249,7 +246,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Classe base abstrata para impressoras de logs.
+  Base abstract class for log printers.
 </dd>
 
           <dt id="LogPrinterService">
@@ -258,16 +255,16 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Serviço central que coordena o processo de impressão e armazenamento de logs.
+  Central service responsible for log output and storage flow.
 </dd>
 
           <dt id="LogQuery">
   <span class="name "><a href="../log_custom_printer/LogQuery-class.html">LogQuery</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-4" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
-  Parâmetros de consulta para filtro, ordenação e exportação de logs.
+  Query parameters for log filtering and sorting.
 </dd>
 
           <dt id="LogSimplePrint">
@@ -276,16 +273,16 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Impressora simples de logs.
+  Simple log printer.
 </dd>
 
           <dt id="LogSortEngine">
   <span class="name "><a href="../log_custom_printer/LogSortEngine-class.html">LogSortEngine</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-4" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
-  Ordena uma lista de logs com base nos parâmetros de <a href="../log_custom_printer/LogQuery-class.html">LogQuery</a>.
+  Sorts logs using <a href="../log_custom_printer/LogQuery-class.html">LogQuery</a> parameters.
 </dd>
 
           <dt id="LogWithColorPrint">
@@ -294,16 +291,16 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Impressora de logs que preserva cor/estilo ANSI.
+  ANSI color-aware printer implementation.
 </dd>
 
           <dt id="StackTraceConverter">
   <span class="name "><a href="../log_custom_printer/StackTraceConverter-class.html">StackTraceConverter</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Conversor JSON para serialização de <a href="https://api.dart.dev/stable/3.13.2/dart-core/StackTrace-class.html">StackTrace</a>.
+  JSON converter for <a href="https://api.dart.dev/stable/3.13.4/dart-core/StackTrace-class.html">StackTrace</a> values.
 </dd>
 
           <dt id="WarningLog">
@@ -312,7 +309,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Log de aviso (warning) com formatação verde.
+  Warning log message with green formatting.
 </dd>
 
       </dl>
@@ -326,16 +323,16 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Enumeração de cores ANSI disponíveis para formatação de texto em terminais.
+  ANSI color enum for terminal text formatting.
 </dd>
 
           <dt id="EnumLoggerType">
   <span class="name "><a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Define os tipos de mensagens de log que podem ser manipulados.
+  Supported log message types.
 </dd>
 
           <dt id="ExportFormat">
@@ -344,34 +341,25 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Formato de exportação de logs.
-</dd>
-
-          <dt id="FileType">
-  <span class="name "><a href="../log_custom_printer/FileType.html">FileType</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
-
-</dt>
-<dd>
-  Tipos de arquivo suportados pelo <a href="../log_custom_printer/FileManager-class.html">FileManager</a>.
+  Log export format.
 </dd>
 
           <dt id="LogSortField">
   <span class="name "><a href="../log_custom_printer/LogSortField.html">LogSortField</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-4" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
-  Campo de ordenação de logs.
+  Sort field options.
 </dd>
 
           <dt id="SortDirection">
   <span class="name "><a href="../log_custom_printer/SortDirection.html">SortDirection</a></span> 
-    <span class="category query cp-5" title="This is part of the Query topic.">Query</span>
+    <span class="category query cp-4" title="This is part of the Query topic.">Query</span>
 
 </dt>
 <dd>
-  Direção de ordenação.
+  Sort direction.
 </dd>
 
       </dl>
@@ -382,11 +370,11 @@ e opcionalmente em arquivo.
       <dl>
           <dt id="LoggerClassMixin">
   <span class="name "><a href="../log_custom_printer/LoggerClassMixin-mixin.html">LoggerClassMixin</a></span> 
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Mixin que fornece métodos utilitários de log para uma classe.
+  Mixin that provides convenience logging methods for classes.
 </dd>
 
       </dl>
@@ -398,24 +386,24 @@ e opcionalmente em arquivo.
       <dl>
           <dt id="DateTimeLoggingExtensions">
   <span class="name "><a href="../log_custom_printer/DateTimeLoggingExtensions.html">DateTimeLoggingExtensions</a></span>
-  on <a href="https://api.dart.dev/stable/3.13.2/dart-core/DateTime-class.html">DateTime</a>
+  on <a href="https://api.dart.dev/stable/3.13.4/dart-core/DateTime-class.html">DateTime</a>
   
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Extension para formatação de data/hora em logs.
+  Date/time formatting extension for log timestamps.
 </dd>
 
           <dt id="LoggerEnum">
   <span class="name "><a href="../log_custom_printer/LoggerEnum.html">LoggerEnum</a></span>
   on <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>
   
-    <span class="category utilitários cp-4 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
+    <span class="category utilitários cp-5 linked" title="This is part of the Utilitários topic."><a href="../topics/Utilities-topic.html">Utilitários</a></span>
 
 </dt>
 <dd>
-  Extensão para mapear objetos de log para o enum <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>.
+  Maps log objects to <a href="../log_custom_printer/EnumLoggerType.html">EnumLoggerType</a>.
 </dd>
 
       </dl>
@@ -435,13 +423,13 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Resolve o <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> registrado no get_it.
+  Resolves the registered <a href="../log_custom_printer/LogPrinterService-class.html">LogPrinterService</a> from get_it.
   
 
 </dd>
 
           <dt id="registerLogPrinter" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a></span><span class="signature">(<wbr><span class="parameter" id="registerLogPrinter-param-printer"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">printer</span>, {</span><span class="parameter" id="registerLogPrinter-param-config"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinter-param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span>, </span><span class="parameter" id="registerLogPrinter-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -449,13 +437,13 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Registra o <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a> no get_it para injeção de dependência.
+  Registers a <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a> in get_it for dependency injection.
   
 
 </dd>
 
           <dt id="registerLogPrinterColor" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterColor-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterColor.html">registerLogPrinterColor</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterColor-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterColor-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterColor-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -463,13 +451,13 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Registra uma impressora com formatação colorida.
+  Registers a color printer.
   
 
 </dd>
 
           <dt id="registerLogPrinterSimple" class="callable">
-  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span></span>})
+  <span class="name"><a href="../log_custom_printer/registerLogPrinterSimple.html">registerLogPrinterSimple</a></span><span class="signature">(<wbr>{<span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span></span>})
     <span class="returntype parameter">&#8594; <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
   </span>
   
@@ -477,7 +465,7 @@ e opcionalmente em arquivo.
 
 </dt>
 <dd>
-  Registra uma impressora simples (sem cores).
+  Registers a simple non-colored printer.
   
 
 </dd>
@@ -520,7 +508,7 @@ e opcionalmente em arquivo.
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

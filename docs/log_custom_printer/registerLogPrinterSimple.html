@@ -48,7 +48,7 @@
       data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
       data-below-sidebar="">
       <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L123"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_locator.dart#L78"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-function">registerLogPrinterSimple</span> function 
  
     <span class="category core---sistema-de-logging cp-0 linked" title="This is part of the Core - Sistema de Logging topic."><a href="../topics/Core-topic.html">Core&nbsp;-&nbsp;Sistema&nbsp;de&nbsp;Logging</a></span>
@@ -58,9 +58,8 @@
         
 <span class="returntype"><a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a></span>
 <span class="name ">registerLogPrinterSimple</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="registerLogPrinterSimple-param-config"><span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a>?</span> <span class="parameter-name">config</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span></li>
-<li><span class="parameter" id="registerLogPrinterSimple-param-fileType"><span>@<a href="https://api.dart.dev/stable/3.13.2/dart-core/Deprecated/Deprecated.html">Deprecated</a>(&#39;O parâmetro fileType não tem efeito e será removido em futuras versões. O tipo de arquivo é determinado internamente pelo LoggerCache.&#39;)</span> <span class="type-annotation"><a href="../log_custom_printer/FileType.html">FileType</a></span> <span class="parameter-name">fileType</span> = <span class="default-value">FileType.json</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterSimple-param-maxLogsInCache"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span> <span class="parameter-name">maxLogsInCache</span> = <span class="default-value">100</span>, </span></li>
+<li><span class="parameter" id="registerLogPrinterSimple-param-cacheFilePath"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">cacheFilePath</span>, </span></li>
 </ol>})
 
         
@@ -68,18 +67,8 @@
     </section>
     
 <section class="desc markdown">
-  <p>Registra uma impressora simples (sem cores).</p>
-<p>Atalho para <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> com <a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a>.</p>
-<p><code>config</code>: Configuração de filtragem e habilitação.
-<code>maxLogsInCache</code>: Número máximo de logs mantidos em cache.
-<code>cacheFilePath</code>: Caminho opcional para persistência em arquivo.
-<code>fileType</code>: tipo de arquivo usado quando <code>cacheFilePath</code> estiver definido.</p>
-<p>Exemplo:</p>
-<pre class="language-dart"><code class="language-dart">registerLogPrinterSimple(
-  config: const ConfigLog(enableLog: false),
-  maxLogsInCache: 100,
-);
-</code></pre>
+  <p>Registers a simple non-colored printer.</p>
+<p>Convenience wrapper around <a href="../log_custom_printer/registerLogPrinter.html">registerLogPrinter</a> with <a href="../log_custom_printer/LogSimplePrint-class.html">LogSimplePrint</a>.</p>
 </section>
 
 
@@ -90,10 +79,6 @@
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  @Deprecated(
-    &#39;O parâmetro fileType não tem efeito e será removido em futuras versões. O tipo de arquivo é determinado internamente pelo LoggerCache.&#39;,
-  )
-  FileType fileType = FileType.json,
 }) {
   return registerLogPrinter(
     const LogSimplePrint(),
@@ -130,7 +115,7 @@
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

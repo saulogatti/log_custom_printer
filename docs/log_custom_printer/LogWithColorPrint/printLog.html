@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;LogWithColorPrint-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/log_printers/log_with_color_print.dart#L38"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/log_printers/log_with_color_print.dart#L12"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">printLog</span> method 
 </h1></div>
 
@@ -57,7 +57,7 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.13.2/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.13.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
 <span class="returntype">void</span>
@@ -69,17 +69,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Imprime o log usando códigos ANSI e <code>dart:developer.log</code>.</p>
-<p>Forma a saída como um bloco:</p>
-<ul>
-<li>uma linha separadora colorida</li>
-<li>a mensagem (formatada por <a href="../../log_custom_printer/LoggerObjectBase/getMessage.html">LoggerObjectBase.getMessage</a>, que já
-inclui timestamp)</li>
-<li>a mesma linha separadora</li>
-</ul>
-<p>O <code>name</code> do log enviado para <code>dev.log</code> é a <code>className</code> estilizada e
-em maiúsculas, para facilitar filtragem por origem nos visualizadores
-de logs que suportam esse campo.</p>
+  <p>Prints formatted log block using <code>dart:developer.log</code>.</p>
 </section>
 
 
@@ -88,14 +78,14 @@ de logs que suportam esse campo.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
 void printLog(LoggerObjectBase log) {
-  final separator = log.getColor().call(&quot;=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-&quot;);
+  final separator = log.getColor().call(&#39;=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-&#39;);
 
   final start = log.getStartLog();
-  final List&lt;String&gt; messageLog = [&quot; &quot;, separator];
+  final messageLog = &lt;String&gt;[&#39; &#39;, separator];
   messageLog.add(log.getMessage());
   messageLog.add(separator);
 
-  final String logFormated = messageLog.join(&quot;\n&quot;);
+  final logFormated = messageLog.join(&#39;\n&#39;);
 
   dev.log(logFormated, name: start);
 }</code></pre>
@@ -126,7 +116,7 @@ void printLog(LoggerObjectBase log) {
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

@@ -45,117 +45,52 @@
   <h1><span class="kind-category">Impressoras de Log</span> topic</h1>
   
 <section class="desc markdown">
-  <h1 id="impressoras-de-log">Impressoras de Log</h1>
-<p>Este módulo implementa o padrão <em>Strategy</em> para a saída de logs. Cada impressora define
-como os logs serão formatados e enviados para o destino final (console, terminal, etc.).</p>
-<hr>
+  <h1 id="log-printers">Log Printers</h1>
+<p>This module uses the <em>Strategy</em> pattern for log output. Each printer defines how logs are formatted and sent to the final destination (console, terminal, etc.).</p>
 <h2 id="logprinterbase">LogPrinterBase</h2>
-<p>Classe abstrata que define o contrato para todas as impressoras de log.</p>
-<pre class="language-dart"><code class="language-dart">abstract class LogPrinterBase {
-  const LogPrinterBase();
+<p>Abstract contract for all log printers.</p>
+<pre class="language-dart"><code class="language-dart">abstract class const LogPrinterBase() {
 
   void printLog(LoggerObjectBase log);
 }
 </code></pre>
-<p>Para criar uma impressora customizada, estenda <code>LogPrinterBase</code> e implemente <code>printLog</code>:</p>
-<pre class="language-dart"><code class="language-dart">class MinhaImpressora extends LogPrinterBase {
-  const MinhaImpressora();
-
-  @override
-  void printLog(LoggerObjectBase log) {
-    // Enviar para um serviço remoto, banco de dados, etc.
-    myRemoteService.send(log.toJson());
-  }
-}
-</code></pre>
-<p>Registre-a no startup:</p>
-<pre class="language-dart"><code class="language-dart">void main() {
-  registerLogPrinter(
-    const MinhaImpressora(),
-    config: const ConfigLog(enableLog: true),
-  );
-  // Em Flutter: runApp(const MyApp());
-}
-</code></pre>
-<hr>
+<p>To create a custom printer, extend <code>LogPrinterBase</code> and implement <code>printLog</code>.</p>
 <h2 id="logsimpleprint">LogSimplePrint</h2>
-<p>Impressora simples sem formatação colorida. Usa <code>print()</code> para escrever a saída.</p>
-<pre class="language-dart"><code class="language-dart">class LogSimplePrint extends LogPrinterBase {
-  const LogSimplePrint();
-
-  @override
-  void printLog(LoggerObjectBase log);
-}
+<p>Simple printer without color formatting. Uses <code>print()</code>.</p>
+<p>Typical output:</p>
+<pre class="language-dart"><code>[ClassName] dd/MM/yyyy HH:mm:ss.SSS Log message
 </code></pre>
-<p><strong>Formato de saída:</strong></p>
-<pre class="language-dart"><code>[NomeDaClasse] dd/MM/yyyy HH:mm:ss.SSS Mensagem do log
-</code></pre>
-<p><strong>Quando usar:</strong></p>
+<p>Recommended for:</p>
 <ul>
-<li>Ambientes sem suporte a ANSI (terminais básicos, CI/CD, serviços de log externos)</li>
-<li>Testes automatizados onde a leitura precisa ser limpa</li>
-<li>Produção com logs em arquivo</li>
+<li>Environments without ANSI support (basic terminals, CI/CD, external log pipelines)</li>
+<li>Automated tests requiring clean output</li>
+<li>Production file-oriented logging</li>
 </ul>
-<p><strong>Exemplo:</strong></p>
-<pre class="language-dart"><code class="language-dart">registerLogPrinter(
-  const LogSimplePrint(),
-  config: const ConfigLog(
-    enableLog: true,
-    onlyClasses: {DebugLog, ErrorLog},
-  ),
-);
+<p>Shortcut:</p>
+<pre class="language-dart"><code class="language-dart">registerLogPrinterSimple(config: ConfigLog(enableLog: true));
 </code></pre>
-<p>Atalho equivalente:</p>
-<pre class="language-dart"><code class="language-dart">registerLogPrinterSimple(
-  config: ConfigLog(enableLog: true),
-);
-</code></pre>
-<hr>
 <h2 id="logwithcolorprint">LogWithColorPrint</h2>
-<p>Impressora avançada com formatação colorida usando códigos ANSI. Usa <code>dart:developer.log()</code>
-para enviar blocos formatados.</p>
-<pre class="language-dart"><code class="language-dart">class LogWithColorPrint extends LogPrinterBase {
-  const LogWithColorPrint();
-
-  @override
-  void printLog(LoggerObjectBase log);
-}
-</code></pre>
-<p><strong>Formato de saída:</strong></p>
-<pre class="language-dart"><code> 
-=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-   ← separador colorido
-dd/MM/yyyy HH:mm:ss.SSS Mensagem do log               ← mensagem com cor
-=-=-=-=-=-=-=-=-=-=-=--==-=-=-=-=-=-=-=-=-=-=-=-=-=-   ← separador colorido
-</code></pre>
-<p>O <code>name</code> do log enviado ao <code>dart:developer.log</code> é a <code>className</code> em maiúsculas com a cor
-do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de log.</p>
-<p><strong>Quando usar:</strong></p>
+<p>ANSI color printer using <code>dart:developer.log()</code>.</p>
+<p>Recommended for:</p>
 <ul>
-<li>Desenvolvimento local (IDEs como VS Code e Android Studio preservam ANSI)</li>
-<li>Depuração visual com diferenciação por cores</li>
-<li>Ambientes que suportam <code>dart:developer</code></li>
+<li>Local development</li>
+<li>Visual debugging with log color differentiation</li>
+<li>Environments with ANSI and <code>dart:developer</code> support</li>
 </ul>
-<p><strong>Exemplo:</strong></p>
-<pre class="language-dart"><code class="language-dart">registerLogPrinter(
-  const LogWithColorPrint(),
-  config: const ConfigLog(enableLog: true),
-);
-</code></pre>
-<p>Atalho equivalente:</p>
+<p>Shortcut:</p>
 <pre class="language-dart"><code class="language-dart">registerLogPrinterColor(
   config: ConfigLog(enableLog: true),
   maxLogsInCache: 200,
 );
 </code></pre>
-<hr>
-<h2 id="comparativo">Comparativo</h2>
+<h2 id="comparison">Comparison</h2>
 <table>
 <thead>
 <tr>
-<th>Impressora</th>
-<th>Saída</th>
+<th>Printer</th>
+<th>Output</th>
 <th>ANSI</th>
-<th>Uso recomendado</th>
+<th>Recommended use</th>
 </tr>
 </thead>
 <tbody>
@@ -163,13 +98,13 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 <td><code>LogSimplePrint</code></td>
 <td><code>print()</code></td>
 <td>❌</td>
-<td>Testes, CI/CD, produção</td>
+<td>Tests, CI/CD, production</td>
 </tr>
 <tr>
 <td><code>LogWithColorPrint</code></td>
 <td><code>dart:developer.log()</code></td>
 <td>✅</td>
-<td>Desenvolvimento local</td>
+<td>Local development</td>
 </tr>
 </tbody>
 </table>
@@ -186,7 +121,7 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 
 </dt>
 <dd>
-  Classe base abstrata para impressoras de logs.
+  Base abstract class for log printers.
 </dd>
 
       <dt id="LogSimplePrint">
@@ -195,7 +130,7 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 
 </dt>
 <dd>
-  Impressora simples de logs.
+  Simple log printer.
 </dd>
 
       <dt id="LogWithColorPrint">
@@ -204,7 +139,7 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 
 </dt>
 <dd>
-  Impressora de logs que preserva cor/estilo ANSI.
+  ANSI color-aware printer implementation.
 </dd>
 
     </dl>
@@ -269,7 +204,7 @@ do tipo de log, facilitando a filtragem por origem em IDEs e visualizadores de l
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

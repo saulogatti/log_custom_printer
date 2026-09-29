@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;ErrorLog-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/error_log.dart#L68"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/logs_object/error_log.dart#L36"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">getMessage</span> method 
 </h1></div>
 
@@ -57,21 +57,19 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.13.2/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.13.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
-<span class="name ">getMessage</span>(<wbr>[<ol class="parameter-list single-line"> <li><span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span></span></li>
-</ol>])
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
+<span class="name ">getMessage</span>(<wbr>{<ol class="parameter-list"> <li><span class="parameter" id="getMessage-param-withColor"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">withColor</span> = <span class="default-value">true</span>, </span></li>
+</ol>})
 
       <div class="features"><span class="feature">override</span></div>
 
     </section>
     
 <section class="desc markdown">
-  <p>Formata a mensagem incluindo timestamp e aplicando cor opcional.</p>
-<p><code>withColor</code>: quando <code>true</code> aplica a transformação de cor retornada
-por <a href="../../log_custom_printer/ErrorLog/getColor.html">getColor</a>; quando <code>false</code> retorna texto sem códigos ANSI.</p>
+  <p>Returns formatted message with optional ANSI color.</p>
 </section>
 
 
@@ -79,24 +77,24 @@ por <a href="../../log_custom_printer/ErrorLog/getColor.html">getColor</a>; quan
 <section class="summary source-code" id="source">
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">@override
-String getMessage([bool withColor = true]) {
+String getMessage({bool withColor = true}) {
   final str = stackTrace.stackInMap(100);
   final color = getColor();
   final strMessage = super
-      .getMessage(withColor)
-      .split(&quot;\n&quot;)
+      .getMessage(withColor: withColor)
+      .split(&#39;\n&#39;)
       .map((e) =&gt; withColor ? color.call(e) : e)
       .toList();
 
   for (final entry in str.entries) {
     if (withColor) {
-      strMessage.add(color.call(&quot;${entry.key} = ${entry.value}&quot;));
+      strMessage.add(color.call(&#39;${entry.key} = ${entry.value}&#39;));
     } else {
-      strMessage.add(&quot;${entry.key} = ${entry.value}&quot;);
+      strMessage.add(&#39;${entry.key} = ${entry.value}&#39;);
     }
   }
 
-  return strMessage.join(&quot;\n\t&quot;);
+  return strMessage.join(&#39;\n\t&#39;);
 }</code></pre>
 </section>
 
@@ -125,7 +123,7 @@ String getMessage([bool withColor = true]) {
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

@@ -49,14 +49,14 @@
     data-above-sidebar="log_custom_printer&#47;LogSortEngine-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_sort_engine.dart#L29"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/domain/query/log_sort_engine.dart#L18"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">apply</span> method 
 </h1></div>
 
     <section class="multi-line-signature">
       
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span>
-<span class="name ">apply</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="apply-param-logs"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span> <span class="parameter-name">logs</span>, </span></li>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span>
+<span class="name ">apply</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="apply-param-logs"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span>&gt;</span></span> <span class="parameter-name">logs</span>, </span></li>
 <li><span class="parameter" id="apply-param-query"><span class="type-annotation"><a href="../../log_custom_printer/LogQuery-class.html">LogQuery</a></span> <span class="parameter-name">query</span></span></li>
 </ol>)
 
@@ -65,9 +65,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Retorna uma nova lista ordenada de acordo com <code>query</code>.</p>
-<p>Quando <a href="../../log_custom_printer/LogQuery/sortField.html">LogQuery.sortField</a> é <code>null</code>, a lista original é retornada
-sem modificação.</p>
+  <p>Returns a sorted copy based on <code>query</code>.</p>
 </section>
 
 
@@ -76,21 +74,18 @@ sem modificação.</p>
   <h2><span>Implementation</span></h2>
   <pre class="language-dart"><code class="language-dart">List&lt;LoggerObjectBase&gt; apply(List&lt;LoggerObjectBase&gt; logs, LogQuery query) {
   if (query.sortField == null) return logs;
-
+  final sortField = query.sortField!;
   final sorted = List&lt;LoggerObjectBase&gt;.from(logs);
   sorted.sort((a, b) {
     final int primary;
-
-    if (query.sortField == LogSortField.date) {
-      primary = a.logCreationDate.compareTo(b.logCreationDate);
-    } else {
-      final aSeverity = _severityIndex[a.enumLoggerType] ?? 0;
-      final bSeverity = _severityIndex[b.enumLoggerType] ?? 0;
-      final typeCmp = aSeverity.compareTo(bSeverity);
-      &#47;&#47; Stable tiebreaker by date (asc) when severity is equal.
-      primary = typeCmp != 0
-          ? typeCmp
-          : a.logCreationDate.compareTo(b.logCreationDate);
+    switch (sortField) {
+      case LogSortField.date:
+        primary = a.logCreationDate.compareTo(b.logCreationDate);
+      case LogSortField.type:
+        final aSeverity = _severityIndex[a.enumLoggerType] ?? 0;
+        final bSeverity = _severityIndex[b.enumLoggerType] ?? 0;
+        final typeCmp = aSeverity.compareTo(bSeverity);
+        primary = typeCmp != 0 ? typeCmp : a.logCreationDate.compareTo(b.logCreationDate);
     }
 
     return query.sortDirection == SortDirection.asc ? primary : -primary;
@@ -125,7 +120,7 @@ sem modificação.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

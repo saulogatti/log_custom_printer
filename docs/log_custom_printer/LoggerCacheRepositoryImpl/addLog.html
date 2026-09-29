@@ -49,7 +49,7 @@
     data-above-sidebar="log_custom_printer&#47;LoggerCacheRepositoryImpl-class-sidebar.html"
     data-below-sidebar="">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L51"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/data/cache/logger_cache_repository_impl.dart#L41"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-method">addLog</span> method 
 </h1></div>
 
@@ -57,10 +57,10 @@
       
   <div>
     <ol class="annotation-list">
-        <li>@<a href="https://api.dart.dev/stable/3.13.2/dart-core/override-constant.html">override</a></li>
+        <li>@<a href="https://api.dart.dev/stable/3.13.4/dart-core/override-constant.html">override</a></li>
     </ol>
   </div>
-<span class="returntype"><a href="https://api.dart.dev/stable/3.13.2/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
+<span class="returntype"><a href="https://api.dart.dev/stable/3.13.4/dart-async/Future-class.html">Future</a><span class="signature">&lt;<wbr><span class="type-parameter">void</span>&gt;</span></span>
 <span class="name ">addLog</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="addLog-param-log"><span class="type-annotation"><a href="../../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a></span> <span class="parameter-name">log</span></span></li>
 </ol>)
 
@@ -69,10 +69,7 @@
     </section>
     
 <section class="desc markdown">
-  <p>Adiciona <code>log</code> ao cache em memória e, quando configurado,
-persiste o estado atualizado em arquivo.</p>
-<p>Aguarda a inicialização do cache em disco antes de escrever,
-garantindo que o diretório de destino exista.</p>
+  <p>Adds <code>log</code> to memory cache and optionally persists to disk.</p>
 </section>
 
 
@@ -82,14 +79,13 @@ garantindo que o diretório de destino exista.</p>
   <pre class="language-dart"><code class="language-dart">@override
 Future&lt;void&gt; addLog(LoggerObjectBase log) async {
   await _futureInitialization;
-  LoggerJsonList? loggerList = _loggerJsonList[log.enumLoggerType];
+  var loggerList = _loggerJsonList[log.enumLoggerType];
   if (loggerList == null) {
-    loggerList = LoggerJsonList(type: log.runtimeType.toString(), maxLogEntries: maxLogEntries);
+    loggerList = LoggerJsonListType(type: log.enumLoggerType);
     _loggerJsonList[log.enumLoggerType] = loggerList;
   }
   loggerList.addLogger(log);
   if (_loggerCache != null) {
-    &#47;&#47; Garante que a inicialização do cache foi concluída antes de tentar escrever
     await _futureInitialization;
     await _loggerCache!.writeLogToFile(log.enumLoggerType.name, loggerList);
   }
@@ -121,7 +117,7 @@ Future&lt;void&gt; addLog(LoggerObjectBase log) async {
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>

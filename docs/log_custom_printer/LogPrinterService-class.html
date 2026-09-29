@@ -48,7 +48,7 @@
     data-above-sidebar="log_custom_printer&#47;log_custom_printer-library-sidebar.html"
     data-below-sidebar="log_custom_printer&#47;LogPrinterService-class-sidebar.html">
     <div>
-  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_service.dart#L17"><span class="material-symbols-outlined">description</span></a></div>
+  <div id="external-links" class="btn-group"><a title="View source code" class="source-link" href="https://github.com/saulogatti/log_custom_printer/blob/main/lib/src/log_printer_service.dart#L14"><span class="material-symbols-outlined">description</span></a></div>
 <h1><span class="kind-class">LogPrinterService</span> class 
     <a href="https://dart.dev/language/class-modifiers#final" class="feature feature-final" title="This class can neither be extended, implemented, nor mixed in.">final</a>
  
@@ -57,12 +57,9 @@
 
     
 <section class="desc markdown">
-  <p>Serviço central que coordena o processo de impressão e armazenamento de logs.</p>
-<p>Este serviço atua como uma fachada que centraliza a lógica de verificação
-de configurações antes de delegar a impressão real para um <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a>
-e o armazenamento para um <a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a>.</p>
-<p>Centralizar esse processo evita redundância nos objetos de log e facilita
-a manutenção das regras de filtragem.</p>
+  <p>Central service responsible for log output and storage flow.</p>
+<p>Applies configuration rules and delegates to <a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a> and
+<a href="../log_custom_printer/LoggerPersistenceService-class.html">LoggerPersistenceService</a>.</p>
 </section>
 
 
@@ -75,7 +72,7 @@ a manutenção das regras de filtragem.</p>
           <span class="name"><a href="../log_custom_printer/LogPrinterService/LogPrinterService.html">LogPrinterService</a></span><span class="signature">(<span class="parameter" id="param-logPrinter"><span class="type-annotation"><a href="../log_custom_printer/LogPrinterBase-class.html">LogPrinterBase</a></span> <span class="parameter-name">logPrinter</span>, {</span><span class="parameter" id="param-configLog"><span>required</span> <span class="type-annotation"><a href="../log_custom_printer/ConfigLog-class.html">ConfigLog</a></span> <span class="parameter-name">configLog</span>, </span><span class="parameter" id="param-cacheRepository"><span class="type-annotation"><a href="../log_custom_printer/ILoggerCacheRepository-class.html">ILoggerCacheRepository</a>?</span> <span class="parameter-name">cacheRepository</span></span>})</span>
         </dt>
         <dd>
-          Cria uma nova instância do serviço de impressão.
+          
         </dd>
     </dl>
   </section>
@@ -92,7 +89,7 @@ a manutenção das regras de filtragem.</p>
 
 </dt>
 <dd>
-  Retorna o serviço de persistência associado a esta instância.
+  Exposes the persistence service linked to this instance.
   <div class="features"><span class="feature">no setter</span></div>
 
 </dd>
@@ -104,14 +101,14 @@ a manutenção das regras de filtragem.</p>
 
 </dt>
 <dd>
-  Configuração global de habilitação e filtros de tipos de log.
+  Global enable/filter configuration.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="hashCode" class="property inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/hashCode.html">hashCode</a></span>
-  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/int-class.html">int</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/int-class.html">int</a></span>
   
 
 </dt>
@@ -128,14 +125,14 @@ a manutenção das regras de filtragem.</p>
 
 </dt>
 <dd>
-  A impressora configurada para formatar e exibir os logs.
+  Configured printer strategy.
   <div class="features"><span class="feature">final</span></div>
 
 </dd>
 
         <dt id="runtimeType" class="property inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/runtimeType.html">runtimeType</a></span>
-  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/Type-class.html">Type</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/Type-class.html">Type</a></span>
   
 
 </dt>
@@ -162,13 +159,13 @@ a manutenção das regras de filtragem.</p>
 
 </dt>
 <dd>
-  Executa o processo de log para um <a href="../log_custom_printer/LoggerObjectBase-class.html">LoggerObjectBase</a>.
+  Executes log processing.
   
 
 </dd>
 
         <dt id="noSuchMethod" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
     <span class="returntype parameter">&#8594; dynamic</span>
   </span>
   
@@ -181,8 +178,8 @@ a manutenção das regras de filtragem.</p>
 </dd>
 
         <dt id="toString" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/String-class.html">String</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/String-class.html">String</a></span>
   </span>
   
 
@@ -202,8 +199,8 @@ a manutenção das regras de filtragem.</p>
     <h2>Operators</h2>
     <dl class="callables">
         <dt id="operator ==" class="callable inherited">
-  <span class="name"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.2/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
-    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.2/dart-core/bool-class.html">bool</a></span>
+  <span class="name"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.dart.dev/stable/3.13.4/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.dart.dev/stable/3.13.4/dart-core/bool-class.html">bool</a></span>
   </span>
   
 
@@ -243,7 +240,7 @@ a manutenção das regras de filtragem.</p>
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.1.1
+      3.2.0
   </span>
   
 </footer>
