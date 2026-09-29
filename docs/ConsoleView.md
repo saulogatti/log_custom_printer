@@ -1,39 +1,36 @@
-# Consola visual Flutter (v3) — *breaking change* e integração
+# Flutter Visual Console (v3) — breaking change and integration
 
-A partir da **3.0.0** do `log_custom_printer`, a interface de consola (overlay, widgets, BLoC, repositórios de mensagens) **não faz parte** deste pacote. A biblioteca passou a ser **Dart pura**; a consola gráfica deverá ser consumida por um **pacote Flutter separado** (publicado no pub.dev ou via `git` / `path`).
+Starting in **3.0.0**, the console UI (overlay, widgets, BLoC, message repositories) is **not part** of `log_custom_printer` anymore.
+The package is now **pure Dart**. Visual console support must come from a **separate Flutter package**.
 
-Este documento descreve o que mudou e como integrar de forma geral, sem acoplar a nomes concretos de API do pacote extraído — atualize os imports e classes conforme o README desse pacote quando estiver disponível.
+## What was removed from `log_custom_printer`
 
-## O que deixou de existir no `log_custom_printer`
+- `console_view` module and files under `lib/.../console_view/...`
+- `ConsoleOverlayManager`, `ConsoleView`, `ConsoleProvider`, related BLoCs/repositories
+- `initAppInjection` and `application_injection` from this repository
+- Imports such as `package:log_custom_printer/src/console_view/...`
 
-- Módulo `console_view` e ficheiros sob `lib/.../console_view/...`
-- `ConsoleOverlayManager`, `ConsoleView`, `ConsoleProvider`, BLoCs e repositórios de consola
-- `initAppInjection` e `application_injection` deste repositório
-- Imports do tipo:
-  - `package:log_custom_printer/src/console_view/...`
+## What remains in `log_custom_printer`
 
-Se o teu app ainda referencia estes símbolos, o build falha até migrares.
+- Printer registration: `registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`
+- `LoggerPersistenceService` and `ILoggerCacheRepository`
+- Public log domain models (`DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog`)
 
-## O que permanece no `log_custom_printer`
+## Migration steps (summary)
 
-- Registo de impressão: `registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`
-- `LoggerPersistenceService` e `ILoggerCacheRepository` — a consola Flutter (no pacote novo) continua a basear-se nos **mesmos** tipos de log e, em geral, no **mesmo** serviço de cache exposto após o registo
-- Modelos de domínio de **log** (`DebugLog`, `InfoLog`, etc.) inalterados na API pública
+1. Add the visual console package to your Flutter app dependencies.
+2. Remove old `log_custom_printer` imports pointing to `src/console_view`.
+3. Replace old APIs (`ConsoleOverlayManager`, `initAppInjection`, etc.) with the new package APIs.
+4. Keep calling `registerLogPrinter*` before opening the console or emitting logs.
+5. Pass required cache/service instances to the visual package as documented by that package.
 
-## Passos de migração (resumo)
+## "Console View" category in `dart doc`
 
-1. **Adiciona** o pacote da consola às `dependencies` do teu app Flutter (nome e versão indicados na documentação desse pacote).
-2. **Remove** imports antigos de `log_custom_printer` que apontavam para `src/console_view`.
-3. **Substitui** as chamadas de API (`ConsoleOverlayManager`, `initAppInjection`, etc.) pelas expostas pelo **novo** pacote.
-4. Garante que, no `main`, **`registerLogPrinter*`** do `log_custom_printer` continua a ser chamado **antes** de abrir a consola ou de emitir logs, tal como na v2.
-5. Passa ao pacote da consola as instâncias que ele exige (em geral o **repositório de cache** / `ILoggerCacheRepository` retornado ou injetado após o registo) — o contrato exato fica no README do pacote extraído.
+[dartdoc_options.yaml](../dartdoc_options.yaml) includes a **Console View** category that points to this guide.
+It does not document exported classes from `log_custom_printer.dart`; it exists only to guide optional integration.
 
-## Categoria "Console View" no `dart doc`
+## References
 
-O ficheiro [dartdoc_options.yaml](../dartdoc_options.yaml) inclui a categoria **Console View** com referência a este guia. Essa categoria **não** documenta classes exportadas por `log_custom_printer.dart`; serve para orientar a integração opcional com a consola noutro pacote.
-
-## Referências
-
-- [README.md](../README.md) — visão geral da v3
-- [CHANGELOG.md](../CHANGELOG.md) — notas de versão
-- [DOCUMENTATION.md](DOCUMENTATION.md) — arquitetura do núcleo de logging
+- [README.md](../README.md)
+- [CHANGELOG.md](../CHANGELOG.md)
+- [DOCUMENTATION.md](DOCUMENTATION.md)

@@ -1,33 +1,22 @@
-import '../log_helpers/logger_enum.dart';
-import '../logs_object/logger_object.dart';
-import 'log_query.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
+import 'package:log_custom_printer/src/domain/query/log_query.dart';
 
-/// Aplica filtros de tipo e intervalo de data a uma lista de logs.
+/// Applies type/date filters to log collections.
 ///
 /// {@category Query}
-class LogFilterEngine {
-  const LogFilterEngine();
-
-  /// Retorna uma nova lista contendo apenas os logs que satisfazem os
-  /// critérios definidos em [query].
-  ///
-  /// - Filtro de tipo: mantém apenas logs cujo [EnumLoggerType] esteja
-  ///   em [LogQuery.types]. Quando `types` é `null` ou vazio, nenhum log
-  ///   é descartado por tipo.
-  /// - Filtro de data: intervalo `[start, end)` aplicado a
-  ///   [LoggerObjectBase.logCreationDate].
-  ///
-  /// Todos os predicados são avaliados em uma única passagem para evitar
-  /// alocações intermediárias desnecessárias.
+class const LogFilterEngine() {
+  /// Returns logs matching [query] criteria.
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {
-    final filterTypes = query.types != null && query.types!.isNotEmpty
-        ? query.types
-        : null;
+    final filterTypes = query.types != null && query.types!.isNotEmpty ? query.types : null;
     final start = query.start;
     final end = query.end;
 
     if (filterTypes == null && start == null && end == null) return logs;
-
+    assert(
+      start == null || end == null || start.difference(end).isNegative,
+      'Start date must be before end date',
+    );
     return logs.where((log) {
       if (filterTypes != null && !filterTypes.contains(log.enumLoggerType)) {
         return false;

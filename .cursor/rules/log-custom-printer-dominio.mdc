@@ -1,42 +1,44 @@
 ---
-description: Domínio e convenções da biblioteca log_custom_printer
+description: Domain conventions for the log_custom_printer library
 alwaysApply: true
 ---
 
-# `log_custom_printer` — domínio e convenções
+# `log_custom_printer` — domain and conventions
 
-Fonte canónica detalhada: [`.github/copilot-instructions.md`](.github/copilot-instructions.md) e guias em `docs/` (`Core.md`, `LogTypes.md`, `DOCUMENTATION.md`, etc.), além do [`README.md`](README.md) na raiz do repositório.
+Primary references: [`.github/copilot-instructions.md`](.github/copilot-instructions.md), `doc/Core.md`, `doc/LogTypes.md`, `doc/DOCUMENTATION.md`, and [`README.md`](README.md).
 
-## Estilo e API
+## Style and API
 
-- `analysis_options.yaml` e Effective Dart.
-- **API pública estável:** exports em [`lib/log_custom_printer.dart`](lib/log_custom_printer.dart) são contrato; não editar `*.g.dart` manualmente.
+- Follow `analysis_options.yaml` and Effective Dart.
+- **Stable public API:** exports in [`lib/log_custom_printer.dart`](lib/log_custom_printer.dart) are contract; do not edit `*.g.dart` manually.
 
-## Arquitetura da biblioteca
+## Library architecture
 
-- Hierarquia selada `LoggerObject` → `LoggerObjectBase` em `lib/src/domain/logs_object/`.
-- DI com `get_it` em `log_printer_locator.dart`.
-- Estratégia de saída: `LogPrinterBase`, `LogSimplePrint`, `LogWithColorPrint`.
-- Cache: `ILoggerCacheRepository` + `LoggerPersistenceService`.
+- Sealed hierarchy `LoggerObject` → `LoggerObjectBase` in `lib/src/domain/logs_object/`
+- DI via `get_it` in `log_printer_locator.dart`
+- Output strategy: `LogPrinterBase`, `LogSimplePrint`, `LogWithColorPrint`
+- Cache: `ILoggerCacheRepository` + `LoggerPersistenceService`
 
-## Regras de domínio
+## Domain rules
 
-- Chamar `registerLogPrinter*` no startup **antes** de enviar logs.
-- `ErrorLog` processa sempre (`alwaysPrint`), mesmo com `ConfigLog(enableLog: false)`.
-- Integração recomendada: `LoggerClassMixin` nas classes de uso.
+- Call `registerLogPrinter*` at startup **before** emitting logs.
+- `ErrorLog` always processes (`alwaysPrint`), even with `ConfigLog(enableLog: false)`.
+- Recommended integration: `LoggerClassMixin`.
 
-## Build, análise e testes
+## Build, analysis, tests
 
-- `dart pub get` / `flutter pub get`; `dart analyze`; `dart test` / `flutter test` conforme o pacote.
-- Após mudanças em `@JsonSerializable`: `dart run build_runner build ` ou `./ci.sh -build`; upgrades: `./ci.sh -upgrade`.
+- Use `dart pub get`, `dart analyze`, `dart test`.
+- The SDK constraint is `>=3.13.0 <4.0.0`; use Dart commands only (not Flutter commands).
+- After `@JsonSerializable` changes: `dart run build_runner build` or `./ci.sh -build`.
+- Dependency upgrades: `./ci.sh -upgrade`.
 
-## Novo tipo de log
+## New log type
 
-1. Estender `LoggerObjectBase`.
-2. `@JsonSerializable` + `part` gerado.
-3. Implementar `getColor()`, `fromJson()`, `toJson()`.
-4. Registar desserialização em `logger_json_list.dart` (`_typeConstructors`).
-5. Exportar em `lib/log_custom_printer.dart`.
-6. Correr `build_runner`.
+1. Extend `LoggerObjectBase`
+2. Add `@JsonSerializable` + generated `part`
+3. Implement `getColor()`, `fromJson()`, `toJson()`
+4. Add an `EnumLoggerType` value, map it in `logger_enum.dart`, and register the constructor in `logger_json_list_type.dart` (`_typeConstructors` + `fromString`)
+5. Export in `lib/log_custom_printer.dart`
+6. Run `build_runner`
 
-Evitar `print` fora das estratégias de impressão. Em testes com DI/logging: registar impressora no `setUp` e `GetIt.instance.reset()` no `tearDown`.
+Avoid `print` outside printer strategies. For DI/logging tests: register printer in `setUp` and reset `GetIt.instance` in `tearDown`.

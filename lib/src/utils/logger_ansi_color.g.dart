@@ -1,5 +1,8 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
+// coverage:ignore-file
+// ignore_for_file: cast_nullable_to_non_nullable, unnecessary_null_checks,     unnecessary_lambdas, inference_failure_on_collection_literal
+
 part of 'logger_ansi_color.dart';
 
 // **************************************************************************
@@ -7,12 +10,15 @@ part of 'logger_ansi_color.dart';
 // **************************************************************************
 
 LoggerAnsiColor _$LoggerAnsiColorFromJson(Map<String, dynamic> json) =>
-    LoggerAnsiColor(
-      enumAnsiColors: $enumDecode(
-        _$EnumAnsiColorsEnumMap,
-        json['enumAnsiColors'],
-      ),
-    );
+    $checkedCreate('LoggerAnsiColor', json, ($checkedConvert) {
+      final val = LoggerAnsiColor(
+        enumAnsiColors: $checkedConvert(
+          'enumAnsiColors',
+          (v) => $enumDecode(_$EnumAnsiColorsEnumMap, v),
+        ),
+      );
+      return val;
+    });
 
 Map<String, dynamic> _$LoggerAnsiColorToJson(LoggerAnsiColor instance) =>
     <String, dynamic>{

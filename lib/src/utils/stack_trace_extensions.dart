@@ -1,49 +1,24 @@
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 
-/// Regex para detectar linhas de stack trace do browser.
+/// Regex for browser stack trace lines.
 final _browserStackTraceRegex = RegExp(r'^(?:package:)?(dart:\S+|\S+)');
 
-/// Regex para detectar linhas de stack trace de dispositivo.
+/// Regex for device stack trace lines.
 final _deviceStackTraceRegex = RegExp(r'#[0-9]+\s+(.+) \((\S+)\)');
 
-/// Regex para extrair o índice e o espaçamento inicial de uma linha de stack trace.
+/// Regex for stack trace line prefixes.
 final _stackTraceLineRegex = RegExp(r'#\d+\s+');
 
-/// Extension para formatação e manipulação de stack traces.
-///
-/// Fornece métodos para formatar stack traces de forma legível, filtrar
-/// linhas irrelevantes (framework interno, Dart SDK) e converter para
-/// estruturas de dados convenientes.
+/// Stack trace formatting and transformation extension.
 ///
 /// {@category Utilities}
-///
-/// Exemplo de uso:
-/// ```dart
-/// try {
-///   // código que pode falhar
-/// } catch (error, stackTrace) {
-///   // Formatar stack trace com cor
-///   final formatted = stackTrace.formatStackTrace(
-///     LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red),
-///     10, // máximo de linhas
-///   );
-///
-///   // Ou converter para Map
-///   final map = stackTrace.stackInMap(8);
-/// }
-/// ```
 extension StackTraceSdk on StackTrace {
-  /// Formata o stack trace removendo linhas irrelevantes e aplicando cor opcional.
-  ///
-  /// [sdkLevel] é a cor ANSI a ser aplicada (opcional).
-  /// [linesCount] é o número máximo de linhas a incluir.
-  ///
-  /// Retorna uma string formatada com o stack trace limpo e numerado.
+  /// Formats stack trace lines with optional color and max line count.
   String formatStackTrace(LoggerAnsiColor? sdkLevel, int linesCount) {
-    final List<String> lines = _getCleanedLines(linesCount);
-    final List<String> formatted = [];
+    final lines = _getCleanedLines(linesCount);
+    final formatted = <String>[];
 
-    for (int count = 0; count < lines.length; count++) {
+    for (var count = 0; count < lines.length; count++) {
       final line = lines[count];
       if (sdkLevel != null) {
         formatted.add(sdkLevel.call('#$count $line'));
@@ -59,26 +34,12 @@ extension StackTraceSdk on StackTrace {
     }
   }
 
-  /// Converte o stack trace em um Map para fácil serialização.
-  ///
-  /// [linesCount] é o número máximo de linhas a incluir (padrão: 8).
-  ///
-  /// Retorna um Map onde as chaves são os números de linha (#0, #1, etc)
-  /// e os valores são as descrições das linhas do stack trace.
-  ///
-  /// Exemplo de retorno:
-  /// ```dart
-  /// {
-  ///   '#0': 'MinhaClasse.meuMetodo (package:meu_app/arquivo.dart:42:5)',
-  ///   '#1': 'OutraClasse.outro (package:meu_app/outro.dart:10:12)',
-  ///   // ...
-  /// }
-  /// ```
+  /// Converts stack trace to a map (`#0`, `#1`, ...).
   Map<String, dynamic> stackInMap([int linesCount = 8]) {
-    final Map<String, String> map = {};
-    final List<String> lines = _getCleanedLines(linesCount);
+    final map = <String, String>{};
+    final lines = _getCleanedLines(linesCount);
 
-    for (int count = 0; count < lines.length; count++) {
+    for (var count = 0; count < lines.length; count++) {
       final line = lines[count];
       map['#$count'] = line;
     }
@@ -91,7 +52,9 @@ extension StackTraceSdk on StackTrace {
       return false;
     }
     final segment = match.group(1)!;
-    if (segment.startsWith('package:logger') || segment.startsWith('dart:') || !segment.startsWith("#")) {
+    if (segment.startsWith('package:logger') ||
+        segment.startsWith('dart:') ||
+        !segment.startsWith('#')) {
       return true;
     }
     return false;
@@ -113,14 +76,14 @@ extension StackTraceSdk on StackTrace {
   }
 
   List<String> _getCleanedLines(int linesCount) {
-    final List<String> lines = _getLines();
-    int stackTraceLength = lines.length;
+    final lines = _getLines();
+    var stackTraceLength = lines.length;
     if (stackTraceLength > linesCount) {
       stackTraceLength = linesCount;
     }
 
-    final List<String> cleanedLines = [];
-    for (int count = 0; count < stackTraceLength; count++) {
+    final cleanedLines = <String>[];
+    for (var count = 0; count < stackTraceLength; count++) {
       cleanedLines.add(lines[count].replaceFirst(_stackTraceLineRegex, ''));
     }
     return cleanedLines;
@@ -128,7 +91,9 @@ extension StackTraceSdk on StackTrace {
 
   List<String> _getLines() {
     return toString().split('\n').where((line) {
-      return line.isNotEmpty && !_discardDeviceStacktraceLine(line) && !_discardBrowserStacktraceLine(line);
+      return line.isNotEmpty &&
+          !_discardDeviceStacktraceLine(line) &&
+          !_discardBrowserStacktraceLine(line);
     }).toList();
   }
 }

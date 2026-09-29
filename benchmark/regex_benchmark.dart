@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
+import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';
 
 void main() {
   const stackTraceString = '''
@@ -15,19 +15,19 @@ void main() {
 #7   main (package:my_app/main.dart:5:1)
 ''';
   final stackTrace = StackTrace.fromString(stackTraceString);
-  final ansiColor = const LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
+  const ansiColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
 
   const iterations = 1000;
 
   // Warm up
   for (var i = 0; i < 50; i++) {
-    stackTrace.stackInMap(8);
+    stackTrace.stackInMap();
     stackTrace.formatStackTrace(ansiColor, 8);
   }
 
   final stopwatch = Stopwatch()..start();
   for (var i = 0; i < iterations; i++) {
-    stackTrace.stackInMap(8);
+    stackTrace.stackInMap();
   }
   stopwatch.stop();
   print('stackInMap: ${stopwatch.elapsedMicroseconds / iterations} us per iteration');

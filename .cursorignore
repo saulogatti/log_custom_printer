@@ -1,0 +1,12 @@
+# Add directories or file patterns to ignore during indexing (e.g. foo/ or *.csv)
+build/
+coverage/
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+.pub-lock.json
+.pub-lock.yaml
+.pub-lock.json.lock
+.pub-lock.yaml.lock
+.pub-lock.json.lock

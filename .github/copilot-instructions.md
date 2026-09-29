@@ -1,52 +1,66 @@
 # Project Guidelines — `log_custom_printer`
 
 ## Code Style
-- Siga `analysis_options.yaml` e `Effective Dart`.
-- Preserve API pública estável em `lib/log_custom_printer.dart`; qualquer mudança nos `export`s é mudança de contrato.
-- Só adicione um novo `export` em `lib/log_custom_printer.dart` quando o tipo realmente fizer parte da API pública; caso contrário, mantenha-o interno em `lib/src/`.
-- Não editar arquivos gerados (`*.g.dart`).
+
+- Follow `analysis_options.yaml` and Effective Dart.
+- Keep the public API in `lib/log_custom_printer.dart` stable; export changes are contract changes.
+- Add exports in `lib/log_custom_printer.dart` only when a type is truly public; otherwise keep it internal in `lib/src/`.
+- Do not edit generated files (`*.g.dart`).
 
 ## Architecture
-- Biblioteca de logging com:
-  - hierarquia selada `LoggerObject` → `LoggerObjectBase` (`lib/src/domain/logs_object/`);
-  - DI via `get_it` no `log_printer_locator.dart`;
-  - Strategy para saída (`LogPrinterBase`, `LogSimplePrint`, `LogWithColorPrint`);
-  - cache via `ILoggerCacheRepository` + `LoggerPersistenceService`.
-- Regras críticas de domínio:
-  - `registerLogPrinter*` deve ser chamado no startup antes de enviar logs;
-  - `ErrorLog` sempre processa (`alwaysPrint`) mesmo com `ConfigLog(enableLog: false)`;
-  - integração recomendada em classes de uso via `LoggerClassMixin`.
+
+- Logging library with:
+  - sealed hierarchy `LoggerObject` → `LoggerObjectBase` (`lib/src/domain/logs_object/`)
+  - DI via `get_it` in `log_printer_locator.dart`
+  - output Strategy (`LogPrinterBase`, `LogSimplePrint`, `LogWithColorPrint`)
+  - cache via `ILoggerCacheRepository` + `LoggerPersistenceService`
+- Critical domain rules:
+  - call `registerLogPrinter*` at startup before sending logs
+  - `ErrorLog` always processes (`alwaysPrint`) even with `ConfigLog(enableLog: false)`
+  - recommended integration in app classes via `LoggerClassMixin`
 
 ## Build and Test
-- Este pacote é **Dart puro**; use `dart pub get`, `dart analyze` e `dart test` por padrão.
-- Não use comandos Flutter neste repositório, exceto ao documentar integração em apps consumidores.
-- Testes:
-  - suíte completa: `dart test`
-  - ficheiro único: `dart test test/logger_json_list_test.dart`\n  - teste único por nome: `dart test test/logger_json_list_test.dart -n "keeps the newest entries first and trims when capacity is exceeded"`
-- Análise estática: `dart analyze`.
-- Geração de código (obrigatória após mudanças em `@JsonSerializable`):
-  - `dart run build_runner build `
-  - ou `./ci.sh -build`.
-- Upgrade de dependências: `./ci.sh -upgrade`.
+
+- This package is **pure Dart**; use `dart pub get`, `dart analyze`, and `dart test` by default.
+- Do not use Flutter commands in this repository, except when documenting consumer integration.
+- Tests:
+  - full suite: `dart test`
+  - single file: `dart test test/logger_json_list_test.dart`
+  - single test by name: `dart test test/logger_json_list_test.dart -n "keeps the newest entries first and trims when capacity is exceeded"`
+- Static analysis: `dart analyze`.
+- Code generation (required after `@JsonSerializable` changes):
+  - `dart run build_runner build`
+  - or `./ci.sh -build`
+- Dependency upgrade: `./ci.sh -upgrade`.
 
 ## Conventions
-- Ao criar novo tipo de log:
-  1) estender `LoggerObjectBase`,
-  2) adicionar `@JsonSerializable` + `part` gerado,
-  3) implementar `getColor()`, `fromJson()`, `toJson()`,
-  4) registrar desserialização em `logger_json_list.dart` (`_typeConstructors`),
-  5) exportar em `lib/log_custom_printer.dart`,
-  6) rodar `build_runner`.
-- Evite `print` solto fora das estratégias de impressão da biblioteca.
-- Em testes que tocam DI/logging, registre impressora no `setUp` e faça `GetIt.instance.reset()` no `tearDown`.
-- Em testes que tocam cache/ficheiros, prefira `Directory.systemTemp.createTemp(...)` ou diretórios temporários dedicados e remova-os no `tearDown`/`tearDownAll`.
+
+- When adding a new log type:
+  1) extend `LoggerObjectBase`
+  2) add `@JsonSerializable` + generated `part`
+  3) implement `getColor()`, `fromJson()`, `toJson()`
+  4) add an `EnumLoggerType` value, map it in `logger_enum.dart`, and register deserialization in `logger_json_list_type.dart` (`_typeConstructors` + `fromString`)
+  5) export in `lib/log_custom_printer.dart`
+  6) run `build_runner`
+- Avoid loose `print` outside printer strategies.
+- In tests involving DI/logging, register printer in `setUp` and call `GetIt.instance.reset()` in `tearDown`.
+- In cache/file tests, prefer `Directory.systemTemp.createTemp(...)` or dedicated temp dirs and remove them in `tearDown`/`tearDownAll`.
+- `registerLogPrinterColor` and `registerLogPrinterSimple` accept `config`, `maxLogsInCache`, and optional `cacheFilePath`; they do not accept a file-type parameter.
+- `LoggerPersistenceService.queryLogs` applies `LogQuery` filters and sorting; date ranges use an inclusive start and exclusive end.
+- `FileManager.writeFile` accepts an optional `FileMode` and serializes operations per path.
+- Keep documentation and examples synchronized with the public exports and SDK constraint in `pubspec.yaml` (`>=3.13.0 <4.0.0`).
+
+## Documentation language
+
+- Write and update all project documentation in **English** (README, docs, API docs, and AI instructions).
 
 ## Reference Docs (link, don’t embed)
-- Visão geral e setup: `README.md`, histórico: `CHANGELOG.md`
-- Núcleo e DI: `doc/Core.md`
-- Tipos de log: `doc/LogTypes.md`
-- Estratégias de impressão: `doc/Printers.md`
-- Configuração/filtros: `doc/Configuration.md`
-- Utilitários e cache: `doc/Utilities.md`
-- Documentação expandida: `doc/DOCUMENTATION.md`
-- Migração consola Flutter (pacote à parte): `doc/ConsoleView.md`
+
+- Overview/setup: `README.md`, history: `CHANGELOG.md`
+- Core and DI: `doc/Core.md`
+- Log types: `doc/LogTypes.md`
+- Printer strategies: `doc/Printers.md`
+- Configuration/filters: `doc/Configuration.md`
+- Utilities/cache: `doc/Utilities.md`
+- Expanded docs: `doc/DOCUMENTATION.md`
+- Flutter console migration (separate package): `doc/ConsoleView.md`

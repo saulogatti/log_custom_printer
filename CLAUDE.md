@@ -14,13 +14,22 @@ dart analyze                                              # Static analysis
 dart test                                                 # Full test suite
 dart test test/<file>_test.dart                           # Single test file
 dart test test/<file>_test.dart -n "test name here"       # Single test by name
-dart run build_runner build   # Regenerate *.g.dart files
+dart run build_runner build                               # Regenerate *.g.dart files
 ./ci.sh -build                                            # Same as build_runner (shortcut)
 ./ci.sh -upgrade                                          # Upgrade deps to latest major versions
 dart doc                                                  # Generate API docs → doc/api/
 ```
 
 **Never use `flutter` commands** in this repository. The package is pure Dart.
+
+CI (`.github/workflows/dart.yml`) runs `dart pub get`, `dart analyze`, `dart test` on pushes/PRs to `main`.
+
+### Language features
+
+The SDK constraint is `>=3.13.0 <4.0.0`, and the code uses **primary constructors**
+(e.g. `class const ConfigLog({final bool enableLog = false, ...});`,
+`class LoggerJsonListType({required var EnumLoggerType type}) { ... }`). Follow this style when adding
+classes; `tool/_primary_ctor_probe.dart` is a scratch probe of the syntax.
 
 ## Architecture
 
@@ -45,8 +54,9 @@ LoggerObjectBase.sendLog()
 | `lib/src/config_log.dart` | `ConfigLog` — `enableLog` flag + `onlyClasses` filter set |
 | `lib/src/data/cache/logger_persistence_service.dart` | `LoggerPersistenceService` — query/clear API returned by `registerLogPrinter*` |
 | `lib/src/data/cache/logger_cache.dart` | `LoggerCache` — file I/O; stores logs under `<dir>/loggerApp/logs/` as JSON |
-| `lib/src/data/cache/logger_cache_repository_impl.dart` | `LoggerCacheRepositoryImpl` — implements `ILoggerCacheRepository`, bridges in-memory lists and `LoggerCache` |
-| `lib/src/domain/logs_object/logger_json_list.dart` | `LoggerJsonList` — per-type serializable list; holds `_typeConstructors` map for deserialization |
+| `lib/src/data/cache/logger_cache_repository_impl.dart` | `LoggerCacheRepositoryImpl` — implements `ILoggerCacheRepository`, keeps a `Map<EnumLoggerType, LoggerJsonListType?>` and syncs it with `LoggerCache` |
+| `lib/src/domain/logs_object/logger_json_list_type.dart` | `LoggerJsonListType` — per-`EnumLoggerType` serializable list used by the cache; its `_typeConstructors` map and `EnumLoggerTypeExtension.fromString` drive deserialization |
+| `lib/src/domain/log_helpers/` | `EnumLoggerType`, `LoggerEnum` extension (`log.enumLoggerType`), `LoggerClassMixin` (recommended integration for app classes), `LogException` |
 | `lib/src/domain/query/` | `LogQuery`, `LogFilterEngine`, `LogSortEngine` — composable query pipeline |
 | `lib/log_custom_printer.dart` | Public API — everything exported here is the stable public contract |
 
@@ -76,9 +86,16 @@ All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
 1. Extend `LoggerObjectBase` in `lib/src/domain/logs_object/`.
 2. Annotate with `@JsonSerializable()` and add `part '<name>.g.dart';`.
 3. Implement `getColor()`, `fromJson()`, `toJson()`.
-4. Register the constructor in `LoggerJsonList._typeConstructors` (`logger_json_list.dart`).
-5. Export the new type in `lib/log_custom_printer.dart`.
-6. Run `dart run build_runner build `.
+4. Add a value to `EnumLoggerType` and map it in the `LoggerEnum.enumLoggerType` extension
+   (`logger_enum.dart`) — otherwise the new type silently falls through to `EnumLoggerType.debug`.
+5. Register the constructor in `LoggerJsonListType._typeConstructors` and `EnumLoggerTypeExtension.fromString`
+   (`logger_json_list_type.dart`).
+6. Export the new type in `lib/log_custom_printer.dart`.
+7. Run `dart run build_runner build`.
+
+`build.yaml` configures `json_serializable` with `explicit_to_json: true` and `checked: true`.
+
+Avoid `print` outside printer strategies (`avoid_print` is enabled).
 
 ### Generated files
 
@@ -98,7 +115,16 @@ Use `Directory.systemTemp.createTemp(...)` for temporary directories and clean t
 
 ### Linter
 
-Line width is 110 characters (set in `analysis_options.yaml`). Strict casts, inference, and raw types are enforced. Deprecated API usage within the same package is treated as an error.
+Formatter page width is 100 characters (`formatter.page_width` in `analysis_options.yaml`). The config
+enables a very large rule set on top of `package:lints/recommended.yaml`; notable ones promoted to **errors**
+include `avoid_dynamic_calls`, `inference_failure_on_function_invocation`, `parameter_assignments`,
+`avoid_void_async`, and `await_only_futures`. Also enforced: `always_use_package_imports`,
+`prefer_single_quotes`, `require_trailing_commas`, `unawaited_futures`. `deprecated_member_use_from_same_package`
+is a warning. Run `dart analyze` and keep it clean.
+
+### Documentation language
+
+Write all project documentation (README, `doc/`, API docs, AI instructions) in **English**.
 
 ## Reference docs
 
