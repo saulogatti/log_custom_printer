@@ -16,12 +16,15 @@ dartdoc:
     "Configuration":
       markdown: doc/Configuration.md
       displayName: "Configuration"
+    "Query":
+      markdown: doc/Utilities.md
+      displayName: "Query"
     "Console View":
       markdown: doc/ConsoleView.md
       displayName: "Visual Log Console"
 
   # Category display order
-  categoryOrder: ["Core", "Log Types", "Printers", "Configuration", "Utilities", "Console View"]
+  categoryOrder: ["Core", "Log Types", "Printers", "Configuration", "Query", "Utilities", "Console View"]
 
   # Show categories that are not documented explicitly
   showUndocumentedCategories: true
@@ -40,7 +43,7 @@ dartdoc:
     - unresolved-export
 
   # Output settings
-  output: docs
+  output: doc/api
 
   # Include source code links
   linkToSource:
@@ -54,4 +57,4 @@ dartdoc:
 
   # Project metadata
   nodoc:
-    - "package:log_custom_printer/src/cache/**"
+    - "package:log_custom_printer/src/data/cache/**"

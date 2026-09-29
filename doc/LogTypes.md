@@ -12,6 +12,8 @@ LoggerObject (sealed)
 ```
 
 Each type defines its own `getColor()`, supports JSON serialization via `@JsonSerializable()`, and can be instantiated directly or through `LoggerClassMixin`.
+The concrete classes use Dart primary constructors and inherit `createdAt`, `typeClass`,
+and `tag` parameters from `LoggerObjectBase`.
 
 ## DebugLog
 

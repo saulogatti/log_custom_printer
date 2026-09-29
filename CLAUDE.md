@@ -26,7 +26,7 @@ CI (`.github/workflows/dart.yml`) runs `dart pub get`, `dart analyze`, `dart tes
 
 ### Language features
 
-The SDK constraint is `>=3.13.0`, and the code uses **primary constructors**
+The SDK constraint is `>=3.13.0 <4.0.0`, and the code uses **primary constructors**
 (e.g. `class const ConfigLog({final bool enableLog = false, ...});`,
 `class LoggerJsonListType({required var EnumLoggerType type}) { ... }`). Follow this style when adding
 classes; `tool/_primary_ctor_probe.dart` is a scratch probe of the syntax.

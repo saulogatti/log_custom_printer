@@ -4,6 +4,8 @@ A Dart logging library with typed log objects, ANSI color formatting, JSON seria
 It is suitable for CLI apps, servers, and scripts, and can also be used in Flutter apps after registering the printer at startup.
 
 > **v3.0.0** — The package is now **pure Dart** (no Flutter dependency). Registration APIs (`registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`) still return `LoggerPersistenceService` with integrated cache support. The Flutter visual console was moved to a separate package. See [doc/ConsoleView.md](doc/ConsoleView.md).
+>
+> **v3.2.0** — File persistence no longer uses a `FileType` registration parameter; cache files are JSON.
 
 ## Features
 
@@ -161,7 +163,7 @@ dart test
 dart doc
 ```
 
-Generated API docs are output to `doc/api` by default. Do not use a `docs/` output folder for `dart doc`; this repository keeps project guides under `doc/`.
+Generated API docs are output to `doc/api`; project guides are kept alongside them under `doc/`.
 
 ### New log types
 

@@ -17,12 +17,12 @@ It has no members. It ensures only library-defined types (`DebugLog`, `InfoLog`,
 Abstract class that defines the full contract for log objects.
 
 ```dart
-abstract class LoggerObjectBase extends LoggerObject {
-  final String message;
-  final String tag;
-  DateTime logCreationDate;
-  late String className;
-}
+class LoggerObjectBase(
+  String message, {
+  DateTime? createdAt,
+  Type? typeClass,
+  String? tag,
+}) extends LoggerObject;
 ```
 
 ### Main fields
@@ -30,15 +30,15 @@ abstract class LoggerObjectBase extends LoggerObject {
 | Field | Type | Description |
 |-------|------|-------------|
 | `message` | `String` | Main log message |
-| `tag` | `String` | Optional tag for categorization |
+| `tag` | `String` | Tag for categorization (generated when omitted) |
 | `logCreationDate` | `DateTime` | Creation timestamp (default: `DateTime.now()`) |
 | `className` | `String` | Class/source name that emitted the log |
 
 ### Methods
 
 - **`getColor()`** — Returns ANSI color for the log type (implemented by each subtype)
-- **`getMessage([bool withColor])`** — Returns formatted message with timestamp, with or without ANSI color
-- **`getStartLog([bool withColor])`** — Returns formatted log header (type + source)
+- **`getMessage({bool withColor = true})`** — Returns formatted message with timestamp, with or without ANSI color
+- **`getStartLog({bool withColor = true})`** — Returns formatted log header (type + source)
 - **`sendLog()`** — Sends the log to `LogPrinterService` resolved via `get_it`
 - **`toJson()`** — Serializes object to JSON
 - **`alwaysPrint`** — When `true`, the log is processed even with `ConfigLog.enableLog = false` (default: `false`; `ErrorLog` overrides to `true`)
@@ -52,12 +52,11 @@ In debug mode, the constructor asserts that message is not empty and not whitesp
 Central service that coordinates log output and storage.
 
 ```dart
-final class LogPrinterService {
-  final LogPrinterBase logPrinter;
-  LoggerPersistenceService get cacheRepository;
-
-  void executePrint(LoggerObjectBase log);
-}
+final class LogPrinterService(
+  LogPrinterBase logPrinter, {
+  required ConfigLog configLog,
+  ILoggerCacheRepository? cacheRepository,
+});
 ```
 
 Registered as a singleton in `get_it` by `registerLogPrinter`. It applies `ConfigLog` rules, then delegates to `logPrinter.printLog()` and `cacheRepository.addLog()` when the log should be processed.
@@ -75,7 +74,9 @@ Internal function that resolves the registered `LogPrinterService` from `get_it`
 LogPrinterService fetchLogPrinterService();
 ```
 
-If no service is registered yet, it automatically registers a default `LogSimplePrint` with `ConfigLog(enableLog: true)` and returns it.
+If no service is registered yet, it automatically registers a default `LogSimplePrint`
+with `ConfigLog(enableLog: true)` as a safety fallback and returns it. Explicit startup
+registration is still recommended for predictable configuration.
 
 ## registerLogPrinter
 
