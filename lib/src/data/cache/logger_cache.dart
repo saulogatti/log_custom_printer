@@ -15,10 +15,11 @@ import 'package:path/path.dart' as path;
 /// Cache manager for log file persistence on disk.
 ///
 /// {@category Utilities}
-final class LoggerCache {
+final class LoggerCache(String directory, {IFileManagerType? fileManagerType}) {
   /// Path to logs directory.
   String _directoryPath = 'logger';
-  final IFileManagerType _fileManagerType;
+
+  final IFileManagerType _fileManagerType = fileManagerType ?? FileManager();
 
   /// Tracks initialization completion.
   late Completer<void> _future;
@@ -28,9 +29,7 @@ final class LoggerCache {
 
   final String _extension = '.json';
 
-  /// Creates a cache manager.
-  LoggerCache(String directory, {IFileManagerType? fileManagerType})
-    : _fileManagerType = fileManagerType ?? FileManager() {
+  this {
     _future = Completer<void>();
     _init(directory);
   }

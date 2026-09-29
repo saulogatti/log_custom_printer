@@ -10,22 +10,18 @@ import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 /// [LoggerPersistenceService].
 ///
 /// {@category Core}
-final class LogPrinterService {
+final class LogPrinterService(
   /// Configured printer strategy.
-  final LogPrinterBase logPrinter;
+  final LogPrinterBase logPrinter, {
 
   /// Global enable/filter configuration.
-  final ConfigLog configLog;
-
+  required final ConfigLog configLog,
+  ILoggerCacheRepository? cacheRepository,
+}) {
   /// Internal cache/persistence service.
-  final LoggerPersistenceService _loggerPersistenceService;
-
-  /// Creates a service instance.
-  LogPrinterService(
-    this.logPrinter, {
-    required this.configLog,
-    ILoggerCacheRepository? cacheRepository,
-  }) : _loggerPersistenceService = LoggerPersistenceService(cacheRepository: cacheRepository);
+  final LoggerPersistenceService _loggerPersistenceService = LoggerPersistenceService(
+    cacheRepository: cacheRepository,
+  );
 
   /// Exposes the persistence service linked to this instance.
   LoggerPersistenceService get cacheRepository => _loggerPersistenceService;

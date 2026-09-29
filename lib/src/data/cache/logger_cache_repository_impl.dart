@@ -9,13 +9,13 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 /// Default [ILoggerCacheRepository] implementation with in-memory and optional file storage.
 ///
 /// {@category Utilities}
-final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
+final class LoggerCacheRepositoryImpl({
   /// Maximum number of entries per log type.
-  final int maxLogEntries;
+  final int maxLogEntries = 1000,
 
   /// Optional base directory for file persistence.
-  final String? directoryToSave;
-
+  final String? directoryToSave,
+}) implements ILoggerCacheRepository {
   /// File cache manager.
   LoggerCache? _loggerCache;
 
@@ -25,8 +25,7 @@ final class LoggerCacheRepositoryImpl implements ILoggerCacheRepository {
   /// Tracks persistent cache initialization.
   Future<void>? _futureInitialization;
 
-  /// Creates a cache repository instance.
-  LoggerCacheRepositoryImpl({this.maxLogEntries = 1000, this.directoryToSave}) {
+  this {
     if (directoryToSave != null) {
       _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
       _futureInitialization = _initialize();

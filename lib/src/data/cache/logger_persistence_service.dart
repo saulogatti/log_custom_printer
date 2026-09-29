@@ -9,24 +9,19 @@ import 'package:log_custom_printer/src/domain/query/log_sort_engine.dart';
 /// Service for log persistence and query operations.
 ///
 /// {@category Utilities}
-final class LoggerPersistenceService {
-  final ILoggerCacheRepository _cacheRepository;
+final class LoggerPersistenceService({
+  ILoggerCacheRepository? cacheRepository,
+
+  /// Log filtering engine.
+  final LogFilterEngine _filterEngine = const LogFilterEngine(),
+
+  /// Log sorting engine.
+  final LogSortEngine _sortEngine = const LogSortEngine(),
+}) {
+  final ILoggerCacheRepository _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
 
   /// Optional callback notified after cache mutations.
   void Function(List<LoggerObjectBase>)? logOutputHandler;
-
-  /// Log filtering engine.
-  final LogFilterEngine _filterEngine;
-
-  /// Log sorting engine.
-  final LogSortEngine _sortEngine;
-
-  /// Creates the service with an optional custom [cacheRepository].
-  LoggerPersistenceService({
-    ILoggerCacheRepository? cacheRepository,
-    this._filterEngine = const LogFilterEngine(),
-    this._sortEngine = const LogSortEngine(),
-  }) : _cacheRepository = cacheRepository ?? LoggerCacheRepositoryImpl();
 
   /// Adds a log entry.
   Future<void> addLog(LoggerObjectBase log) async {

@@ -6,10 +6,7 @@ import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 /// ANSI color-aware printer implementation.
 ///
 /// {@category Printers}
-class LogWithColorPrint extends LogPrinterBase {
-  /// Const constructor.
-  const LogWithColorPrint();
-
+class const LogWithColorPrint() extends LogPrinterBase {
   /// Prints formatted log block using `dart:developer.log`.
   @override
   void printLog(LoggerObjectBase log) {

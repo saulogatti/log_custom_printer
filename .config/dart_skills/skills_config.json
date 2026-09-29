@@ -1,0 +1,114 @@
+{
+  "version": 2,
+  "installations": {
+    "cursor": {
+      "https://github.com/dart-lang/skills.git": {
+        "skills": [
+          {
+            "name": "dart-add-unit-test",
+            "installedAt": "2026-09-29T02:01:34.475470Z",
+            "contentHash": "XHNozO7SJFfNpQ1cae9fCQ==",
+            "path": "skills/dart-add-unit-test"
+          },
+          {
+            "name": "dart-build-cli-app",
+            "installedAt": "2026-09-29T02:01:34.481474Z",
+            "contentHash": "EMBH7wYEz+eWR4vh4ruw7A==",
+            "path": "skills/dart-build-cli-app"
+          },
+          {
+            "name": "dart-collect-coverage",
+            "installedAt": "2026-09-29T02:01:34.484176Z",
+            "contentHash": "VMGcWlDBsBWj+q6Ih6NJQQ==",
+            "path": "skills/dart-collect-coverage"
+          },
+          {
+            "name": "dart-fix-runtime-errors",
+            "installedAt": "2026-09-29T02:01:34.486175Z",
+            "contentHash": "0IJ+tQjd9/XXGwrw3m2J6w==",
+            "path": "skills/dart-fix-runtime-errors"
+          },
+          {
+            "name": "dart-generate-test-mocks",
+            "installedAt": "2026-09-29T02:01:34.488177Z",
+            "contentHash": "S+m9MdUQEcBA40SbOTpadg==",
+            "path": "skills/dart-generate-test-mocks"
+          },
+          {
+            "name": "dart-migrate-to-checks-package",
+            "installedAt": "2026-09-29T02:01:34.489177Z",
+            "contentHash": "nXQ04hohNc8SzNKtHuv3uA==",
+            "path": "skills/dart-migrate-to-checks-package"
+          },
+          {
+            "name": "dart-resolve-package-conflicts",
+            "installedAt": "2026-09-29T02:01:34.489177Z",
+            "isInstalled": false,
+            "path": "skills/dart-resolve-package-conflicts"
+          },
+          {
+            "name": "dart-run-static-analysis",
+            "installedAt": "2026-09-29T02:01:34.491176Z",
+            "contentHash": "Jzq+zgkBoFTPomEmXcg1UA==",
+            "path": "skills/dart-run-static-analysis"
+          },
+          {
+            "name": "dart-setup-ffi-assets",
+            "installedAt": "2026-09-29T02:01:34.491176Z",
+            "isInstalled": false,
+            "path": "skills/dart-setup-ffi-assets"
+          },
+          {
+            "name": "dart-use-doc-examples",
+            "installedAt": "2026-09-29T02:01:34.493266Z",
+            "contentHash": "2HVt31+EM4SLl4n3LK0tFQ==",
+            "path": "skills/dart-use-doc-examples"
+          },
+          {
+            "name": "dart-use-ffigen",
+            "installedAt": "2026-09-29T02:01:34.493266Z",
+            "isInstalled": false,
+            "path": "skills/dart-use-ffigen"
+          },
+          {
+            "name": "dart-use-path-package",
+            "installedAt": "2026-09-29T02:01:34.497267Z",
+            "contentHash": "dr7GaGR4ET4FIwsQTPLEeQ==",
+            "path": "skills/dart-use-path-package"
+          },
+          {
+            "name": "dart-use-pattern-matching",
+            "installedAt": "2026-09-29T02:01:34.499448Z",
+            "contentHash": "uVBSkPkKpDqQe3ScQbx5Xg==",
+            "path": "skills/dart-use-pattern-matching"
+          },
+          {
+            "name": "dart-use-primary-constructors",
+            "installedAt": "2026-09-29T02:01:34.501448Z",
+            "contentHash": "8C6ICoQfqtLsXY5QVaIigg==",
+            "path": "skills/dart-use-primary-constructors"
+          },
+          {
+            "name": "dart-write-documentation",
+            "installedAt": "2026-09-29T02:01:34.503762Z",
+            "contentHash": "MZrDcWJ34YJ4jhZGFDMcuQ==",
+            "path": "skills/dart-write-documentation"
+          }
+        ]
+      },
+      "package:get_it": {
+        "skills": [
+          {
+            "name": "get-it-expert",
+            "installedAt": "2026-09-29T02:01:34.473470Z",
+            "contentHash": "tqKIqqAbxkjtppdclaqEqA==",
+            "path": "skills/get-it-expert"
+          }
+        ]
+      }
+    }
+  },
+  "suggestedRepos": [
+    "https://github.com/dart-lang/skills.git"
+  ]
+}

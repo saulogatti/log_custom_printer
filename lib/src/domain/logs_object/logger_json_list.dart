@@ -35,7 +35,7 @@ class LoggerJsonList {
 
   /// Creates a list for [type].
   @Deprecated('Use LoggerJsonListType instead')
-  LoggerJsonList({required this.type, this.maxLogEntries = 100});
+  new({required this.type, this.maxLogEntries = 100});
 
   /// Creates an instance from JSON data.
   factory LoggerJsonList.fromJson(Map<String, dynamic> json) {

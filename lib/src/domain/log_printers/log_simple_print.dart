@@ -8,10 +8,7 @@ export 'package:log_custom_printer/src/log_custom_printer_base.dart';
 /// Prints logs without ANSI color codes.
 ///
 /// {@category Printers}
-class LogSimplePrint extends LogPrinterBase {
-  /// Const constructor.
-  const LogSimplePrint();
-
+class const LogSimplePrint() extends LogPrinterBase {
   /// Prints the log as `[ClassName] <timestamp> <message>`.
   @override
   void printLog(LoggerObjectBase log) {

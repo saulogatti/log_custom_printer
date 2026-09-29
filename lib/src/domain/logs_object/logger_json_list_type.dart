@@ -5,7 +5,10 @@ import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
 part 'logger_json_list_type.g.dart';
 
 @JsonSerializable(createFactory: false)
-class LoggerJsonListType {
+class LoggerJsonListType({
+  /// Stored log type name.
+  required var EnumLoggerType type,
+}) {
   /// Constructor map for type-name-based deserialization.
   static final Map<EnumLoggerType, LoggerObjectBase Function(Map<String, dynamic>)>
   _typeConstructors = {
@@ -15,17 +18,11 @@ class LoggerJsonListType {
     EnumLoggerType.info: InfoLog.fromJson,
   };
 
-  /// Stored log type name.
-  EnumLoggerType type;
-
   /// Max number of stored entries.
-
   int maxLogEntries = 100;
 
   /// Internal entries list.
   final List<LoggerObjectBase> _loggerEntries = [];
-
-  LoggerJsonListType({required this.type});
 
   /// Creates an instance from JSON data.
   factory LoggerJsonListType.fromJson(Map<String, dynamic> json) {

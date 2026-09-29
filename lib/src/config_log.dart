@@ -11,24 +11,17 @@ import 'package:log_custom_printer/src/log_printer_service.dart' show LogPrinter
 /// includes [DebugLog], [WarningLog], and [InfoLog].
 ///
 /// {@category Configuration}
-class ConfigLog {
+class const ConfigLog({
   /// Whether logs should be emitted to output.
   ///
   /// When `false`, logs are ignored except types with `alwaysPrint` (for example `ErrorLog`).
-  final bool enableLog;
+  /// Defaults to `false`.
+  final bool enableLog = false,
 
   /// Set of allowed log runtime types.
   ///
   /// When this set is not empty, only listed types are processed.
   /// `ErrorLog` can still be processed via `alwaysPrint` in [LogPrinterService].
-  final Set<Type> onlyClasses;
-
-  /// Creates a log configuration.
-  ///
-  /// [enableLog]: controls whether logs are processed (default: `false`).
-  /// [onlyClasses]: allowed log types (default: [DebugLog], [WarningLog], [InfoLog]).
-  const ConfigLog({
-    this.enableLog = false,
-    this.onlyClasses = const {DebugLog, WarningLog, InfoLog},
-  });
-}
+  /// Defaults to [DebugLog], [WarningLog], and [InfoLog].
+  final Set<Type> onlyClasses = const {DebugLog, WarningLog, InfoLog},
+});

@@ -13,7 +13,7 @@ class FileManager implements IFileManagerType {
   final Map<String, Future<void>> _pathLocks = {};
 
   /// Creates a file manager.
-  FileManager();
+  new();
 
   @override
   Future<bool> createDirectory(String path) {

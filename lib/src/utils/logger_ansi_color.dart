@@ -64,18 +64,15 @@ enum EnumAnsiColors {
 ///
 /// {@category Utilities}
 @JsonSerializable()
-class LoggerAnsiColor {
+class const LoggerAnsiColor({
+  /// Selected ANSI color.
+  required final EnumAnsiColors enumAnsiColors,
+}) {
   /// ANSI escape sequence prefix.
   static const ansiEsc = '\x1B[';
 
   /// ANSI reset sequence.
   static const ansiDefault = '${ansiEsc}0m';
-
-  /// Selected ANSI color.
-  final EnumAnsiColors enumAnsiColors;
-
-  /// Class constructor.
-  const LoggerAnsiColor({required this.enumAnsiColors});
 
   /// Creates an instance from JSON.
   factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) => _$LoggerAnsiColorFromJson(json);

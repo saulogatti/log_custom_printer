@@ -13,14 +13,14 @@ part 'error_log.g.dart';
 ///
 /// {@category Log Types}
 @JsonSerializable()
-class ErrorLog extends LoggerObjectBase {
+class ErrorLog(
+  super.message,
+
   /// Stack trace associated with the error.
-  @StackTraceConverter()
-  final StackTrace stackTrace;
-
-  /// Creates an error log.
-  ErrorLog(super.message, this.stackTrace, {super.createdAt, super.typeClass});
-
+  @StackTraceConverter() final StackTrace stackTrace, {
+  super.createdAt,
+  super.typeClass,
+}) extends LoggerObjectBase {
   /// Creates an instance from JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) => _$ErrorLogFromJson(json);
 
@@ -60,10 +60,7 @@ class ErrorLog extends LoggerObjectBase {
 /// JSON converter for [StackTrace] values.
 ///
 /// {@category Utilities}
-class StackTraceConverter implements JsonConverter<StackTrace, String> {
-  /// Creates a const converter instance.
-  const StackTraceConverter();
-
+class const StackTraceConverter() implements JsonConverter<StackTrace, String> {
   @override
   /// Rebuilds a [StackTrace] from [json] text.
   StackTrace fromJson(String json) {

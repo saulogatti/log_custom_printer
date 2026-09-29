@@ -8,12 +8,9 @@ part 'debug_log.g.dart';
 ///
 /// {@category Log Types}
 @JsonSerializable()
-class DebugLog extends LoggerObjectBase {
-  /// Creates a debug log.
-  DebugLog(super.message, {super.createdAt, super.typeClass});
-
+class DebugLog(super.message, {super.createdAt, super.typeClass}) extends LoggerObjectBase {
   /// Creates an instance from JSON.
-  factory DebugLog.fromJson(Map<String, dynamic> json) => _$DebugLogFromJson(json);
+  factory fromJson(Map<String, dynamic> json) => _$DebugLogFromJson(json);
 
   @override
   LoggerAnsiColor getColor() {

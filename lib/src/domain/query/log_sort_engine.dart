@@ -6,15 +6,13 @@ import 'package:log_custom_printer/src/domain/query/log_query.dart';
 /// Sorts logs using [LogQuery] parameters.
 ///
 /// {@category Query}
-class LogSortEngine {
+class const LogSortEngine() {
   static const Map<EnumLoggerType, int> _severityIndex = {
     EnumLoggerType.debug: 0,
     EnumLoggerType.info: 1,
     EnumLoggerType.warning: 2,
     EnumLoggerType.error: 3,
   };
-
-  const LogSortEngine();
 
   /// Returns a sorted copy based on [query].
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {

@@ -5,9 +5,7 @@ import 'package:log_custom_printer/src/domain/query/log_query.dart';
 /// Applies type/date filters to log collections.
 ///
 /// {@category Query}
-class LogFilterEngine {
-  const LogFilterEngine();
-
+class const LogFilterEngine() {
   /// Returns logs matching [query] criteria.
   List<LoggerObjectBase> apply(List<LoggerObjectBase> logs, LogQuery query) {
     final filterTypes = query.types != null && query.types!.isNotEmpty ? query.types : null;

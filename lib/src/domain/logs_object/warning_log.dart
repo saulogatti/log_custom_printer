@@ -8,10 +8,7 @@ part 'warning_log.g.dart';
 ///
 /// {@category Log Types}
 @JsonSerializable()
-class WarningLog extends LoggerObjectBase {
-  /// Creates a warning log.
-  WarningLog(super.message, {super.createdAt, super.typeClass});
-
+class WarningLog(super.message, {super.createdAt, super.typeClass}) extends LoggerObjectBase {
   /// Creates an instance from JSON.
   factory WarningLog.fromJson(Map<String, dynamic> json) => _$WarningLogFromJson(json);
 

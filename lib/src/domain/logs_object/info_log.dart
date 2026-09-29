@@ -8,10 +8,7 @@ part 'info_log.g.dart';
 ///
 /// {@category Log Types}
 @JsonSerializable()
-class InfoLog extends LoggerObjectBase {
-  /// Creates an info log.
-  InfoLog(super.message, {super.createdAt, super.typeClass});
-
+class InfoLog(super.message, {super.createdAt, super.typeClass}) extends LoggerObjectBase {
   /// Creates an instance from JSON.
   factory InfoLog.fromJson(Map<String, dynamic> json) => _$InfoLogFromJson(json);
 

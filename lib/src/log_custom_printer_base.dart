@@ -11,10 +11,7 @@ import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 /// Available implementations:
 /// - [LogSimplePrint]: simple non-colored output
 /// - [LogWithColorPrint]: ANSI-colored output
-abstract class LogPrinterBase {
-  /// Const constructor for immutable printer instances.
-  const LogPrinterBase();
-
+abstract class const LogPrinterBase() {
   /// Prints/processes a log entry.
   ///
   /// Implementations define how log data is formatted and emitted.

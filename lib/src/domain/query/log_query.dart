@@ -3,25 +3,22 @@ import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart'
 /// Query parameters for log filtering and sorting.
 ///
 /// {@category Query}
-class LogQuery {
+class const LogQuery({
   /// Optional set of log types to include.
-  final Set<EnumLoggerType>? types;
+  final Set<EnumLoggerType>? types,
 
   /// Inclusive start date filter.
-  final DateTime? start;
+  final DateTime? start,
 
   /// Exclusive end date filter.
-  final DateTime? end;
+  final DateTime? end,
 
   /// Optional sort field.
-  final LogSortField? sortField;
+  final LogSortField? sortField,
 
   /// Optional sort direction.
-  final SortDirection? sortDirection;
-
-  /// Creates a query with optional filter/sort criteria.
-  const LogQuery({this.types, this.start, this.end, this.sortField, this.sortDirection});
-}
+  final SortDirection? sortDirection,
+});
 
 /// Sort field options.
 ///

@@ -10,13 +10,14 @@ part 'logger_object.g.dart';
 /// Base marker for log objects.
 ///
 /// {@category Core}
-sealed class LoggerObject {}
+sealed class LoggerObject;
 
 /// Base contract for log objects that can be printed and serialized.
 ///
 /// {@category Core}
 @JsonSerializable()
-class LoggerObjectBase extends LoggerObject {
+class LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
+    extends LoggerObject {
   /// Class/source that emitted the log.
   late String className;
 
@@ -30,16 +31,15 @@ class LoggerObjectBase extends LoggerObject {
 
   /// Creation time of this log.
   @JsonKey(name: 'logCreationDate')
-  DateTime logCreationDate = DateTime.now();
+  DateTime logCreationDate;
 
-  /// Creates a log object.
-  LoggerObjectBase(this.message, {DateTime? createdAt, Type? typeClass, String? tag})
+  this
     : tag = tag ?? typeClass?.toString() ?? '',
+      logCreationDate = createdAt ?? DateTime.now(),
       assert(
         message.isNotEmpty && message.trim().isNotEmpty,
         'Message cannot be empty or whitespace only',
       ) {
-    logCreationDate = createdAt ?? DateTime.now();
     className = typeClass?.toString() ?? runtimeType.toString();
   }
 
