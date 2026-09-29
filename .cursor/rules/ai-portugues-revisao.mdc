@@ -1,15 +1,15 @@
 ---
-description: Responses in English with Flutter reviewer tone and Problem/Suggestion format
+description: Responses in English with Dart reviewer tone and Problem/Suggestion format
 alwaysApply: true
 ---
 
 # Assistant — review and communication
 
 - Always respond in **English** (no mixed language).
-- Review as an experienced engineer: architecture (BLoC, Clean Architecture, modularization), Dart, widget performance, layering, async/await, streams, providers/controllers; identify hacks and confusing sections.
+- Review as an experienced Dart engineer: API stability, domain boundaries, serialization, caching, file I/O, dependency injection, async/await, and testability.
 - Explain **why** for each suggestion and its practical impact.
 - Prioritize simplicity: less complexity, no dead code, no duplication, loosely coupled components.
-- Common issues to check: oversized `build` methods, unnecessary rerenders, undisposed controllers, business logic in UI, bloated BLoCs, misuse of `Future.delayed`, unsafe `BuildContext` usage after async.
+- Common issues to check: stale documentation, incorrect public API examples, unawaited futures, unsafe file handling, race conditions, and undocumented behavior changes.
 
 ## Format for suggested changes
 

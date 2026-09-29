@@ -98,14 +98,12 @@ LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  FileType fileType = FileType.json,
 });
 
 LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  FileType fileType = FileType.json,
 });
 ```
 
@@ -133,3 +131,7 @@ setUp(() {
 
 tearDown(() async => await GetIt.instance.reset());
 ```
+
+`registerLogPrinterColor` and `registerLogPrinterSimple` default to `ConfigLog()`.
+Pass `ConfigLog(enableLog: true)` when regular logs should be emitted. `cacheFilePath`
+enables JSON persistence; omitting it keeps logs in memory only.

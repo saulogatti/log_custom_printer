@@ -45,6 +45,10 @@
 - Avoid loose `print` outside printer strategies.
 - In tests involving DI/logging, register printer in `setUp` and call `GetIt.instance.reset()` in `tearDown`.
 - In cache/file tests, prefer `Directory.systemTemp.createTemp(...)` or dedicated temp dirs and remove them in `tearDown`/`tearDownAll`.
+- `registerLogPrinterColor` and `registerLogPrinterSimple` accept `config`, `maxLogsInCache`, and optional `cacheFilePath`; they do not accept a file-type parameter.
+- `LoggerPersistenceService.queryLogs` applies `LogQuery` filters and sorting; date ranges use an inclusive start and exclusive end.
+- `FileManager.writeFile` accepts an optional `FileMode` and serializes operations per path.
+- Keep documentation and examples synchronized with the public exports and SDK constraint in `pubspec.yaml` (`>=3.13.0 <4.0.0`).
 
 ## Documentation language
 

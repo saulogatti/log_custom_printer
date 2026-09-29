@@ -1,57 +1,57 @@
 dartdoc:
-  # Define categorias para melhor organização da documentação
+  # Define categories for organized API documentation
   categories:
     "Core":
       markdown: doc/Core.md
-      displayName: "Core - Sistema de Logging"
+      displayName: "Core - Logging System"
     "Log Types":
       markdown: doc/LogTypes.md
-      displayName: "Tipos de Log"
+      displayName: "Log Types"
     "Printers":
       markdown: doc/Printers.md
-      displayName: "Impressoras de Log"
+      displayName: "Log Printers"
     "Utilities":
       markdown: doc/Utilities.md
-      displayName: "Utilitários"
+      displayName: "Utilities"
     "Configuration":
       markdown: doc/Configuration.md
-      displayName: "Configuração"
+      displayName: "Configuration"
     "Console View":
       markdown: doc/ConsoleView.md
-      displayName: "Console Visual de Logs"
+      displayName: "Visual Log Console"
 
-  # Ordem de exibição das categorias na documentação
+  # Category display order
   categoryOrder: ["Core", "Log Types", "Printers", "Configuration", "Utilities", "Console View"]
 
-  # Mostra categorias não documentadas explicitamente
+  # Show categories that are not documented explicitly
   showUndocumentedCategories: true
 
-  # Avisos e erros a serem ignorados
+  # Warnings and errors to ignore
   ignore:
     - ambiguous-doc-reference
 
-  # Erros a serem reportados
+  # Errors to report
   errors:
     - unresolved-doc-reference
 
-  # Avisos a serem reportados
+  # Warnings to report
   warnings:
     - tool-error
     - unresolved-export
 
-  # Configurações de saída
+  # Output settings
   output: docs
 
-  # Incluir código fonte nos links
+  # Include source code links
   linkToSource:
     root: "."
     uriTemplate: "https://github.com/saulogatti/log_custom_printer/blob/main/%f%#L%l%"
 
-  # Excluir arquivos gerados automaticamente da documentação
+  # Exclude generated files from documentation
   exclude:
     - "**/*.g.dart"
     - "**/*.freezed.dart"
 
-  # Metadados do projeto
+  # Project metadata
   nodoc:
     - "package:log_custom_printer/src/cache/**"

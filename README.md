@@ -34,7 +34,7 @@ dependencies:
 dart pub get
 ```
 
-**Requirement:** Dart SDK ^3.11.0
+**Requirement:** Dart SDK >=3.13.0 <4.0.0
 
 ## Basic usage
 
@@ -125,6 +125,7 @@ void main() {
 - **`ConfigLog`** — filters and `enableLog`
 - **`LoggerPersistenceService`** — cache access after registration
 - **`ILoggerCacheRepository`** — customizable persistence contract
+- **`LogQuery` / `LogFilterEngine` / `LogSortEngine`** — composable filtering and sorting
 
 ### Log types
 
@@ -140,7 +141,7 @@ void main() {
 - **`LogSimplePrint`** — simple output (no ANSI color formatting in default strategy)
 - **`LogWithColorPrint`** — ANSI color output
 
-Shortcuts: `registerLogPrinterColor` / `registerLogPrinterSimple`; custom printer: `registerLogPrinter(LogPrinterBase(), config: ...)`.
+Shortcuts: `registerLogPrinterColor` / `registerLogPrinterSimple`; custom printers can be registered with `registerLogPrinter`.
 
 ### Visual console (Flutter)
 
@@ -166,9 +167,10 @@ Generated API docs are output to `doc/api` by default. Do not use a `docs/` outp
 
 1. Extend `LoggerObjectBase`
 2. Add `@JsonSerializable()` and generated `part`
-3. Implement `getColor()`, `fromJson`, `toJson`
-4. Add an `EnumLoggerType` value, map it in `logger_enum.dart`, and register it in `logger_json_list_type.dart`
-5. Export in the public API and run `build_runner`
+3. Implement `getColor()`, `fromJson`, and `toJson`
+4. Add an `EnumLoggerType` value, map it in `logger_enum.dart`, and register it in `logger_json_list_type.dart` (`_typeConstructors` and `fromString`)
+5. Export the type from `lib/log_custom_printer.dart`
+6. Run `dart run build_runner build`
 
 ## Documentation
 
