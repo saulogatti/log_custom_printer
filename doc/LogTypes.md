@@ -2,13 +2,13 @@
 
 This module defines the concrete log types available in the library. All of them extend `LoggerObjectBase` and belong to the sealed `LoggerObject` hierarchy.
 
-```
+```text
 LoggerObject (sealed)
     └── LoggerObjectBase (abstract)
-            ├── DebugLog    (yellow)
-            ├── InfoLog     (white)
-            ├── WarningLog  (green)
-            └── ErrorLog    (red + stack trace)
+            |── DebugLog    (yellow)
+            |── InfoLog     (white)
+            |── WarningLog  (green)
+            |── ErrorLog    (red + stack trace)
 ```
 
 Each type defines its own `getColor()`, supports JSON serialization via `@JsonSerializable()`, and can be instantiated directly or through `LoggerClassMixin`.
