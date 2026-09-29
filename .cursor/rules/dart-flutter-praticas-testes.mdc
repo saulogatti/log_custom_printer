@@ -1,10 +1,10 @@
 ---
-description: Effective Dart, UI, tests, logging, codegen, and dependencies
+description: Effective Dart, tests, logging, codegen, and dependencies
 globs: "**/*.dart"
 alwaysApply: false
 ---
 
-# Dart/Flutter — practices, tests, and tooling
+# Dart — practices, tests, and tooling
 
 ## Dart
 
@@ -12,15 +12,10 @@ alwaysApply: false
 - Handle errors explicitly; keep strong null safety; avoid unchecked `!`.
 - Document public APIs with `///` when useful.
 
-## Flutter / UI
-
-- Keep widgets cohesive and render-focused; use `const` when possible.
-- For long lists, use `ListView.builder` or `SliverList`; avoid heavy work inside `build()`.
-
 ## Tests
 
-- Use Arrange-Act-Assert; prioritize domain and bloc/cubit tests for critical rules.
-- For UI tests, validate behavior per state; prefer fakes/stubs when practical.
+- Use Arrange-Act-Assert; prioritize domain, serialization, cache, and query tests.
+- Prefer fakes/stubs when practical and isolate `GetIt` registrations in `setUp`/`tearDown`.
 
 ## Logging
 
@@ -36,4 +31,4 @@ alwaysApply: false
 
 ## Final checklist
 
-Compatible with domain instructions in [`.github/copilot-instructions.md`](.github/copilot-instructions.md)? Duplications removed, widget size controlled, UI/business separation, and BLoC usage reviewed?
+Compatible with domain instructions in [`.github/copilot-instructions.md`](.github/copilot-instructions.md)? Duplications removed, public API preserved, async/file behavior reviewed, and tests updated where needed?

@@ -67,17 +67,41 @@ High-level service returned by `registerLogPrinter*` exposing:
 - `getLogsByType`
 - `clearLogs`
 - `clearLogsByType`
+- `queryLogs`
+- `searchLogByCreated`
+- `searchLogByRuntimeType`
+- `searchLogByTag`
+
+### Querying logs
+
+`LogQuery` combines optional type and date filters with optional sorting. The start
+date is inclusive and the end date is exclusive.
+
+```dart
+final recentErrors = await persistenceService.queryLogs(
+  LogQuery(
+    types: {EnumLoggerType.error},
+    start: DateTime.now().subtract(const Duration(hours: 1)),
+    sortField: LogSortField.date,
+    sortDirection: SortDirection.desc,
+  ),
+);
+```
+
+`LoggerFilter` is a lower-level facade for applying a query to an existing list.
 
 ## LoggerCache
 
 Low-level disk persistence manager used by `LoggerCacheRepositoryImpl`.
 
-## FileManager and FileType
+## FileManager and file operations
 
-Internal file I/O utility with extension validation:
+`FileManager` provides asynchronous file and directory operations. `writeFile`
+accepts an optional `FileMode` (`FileMode.write` by default) and serializes
+operations for the same path.
 
 ```dart
-enum FileType { txt, json, log }
+await FileManager().writeFile('logs.json', content, FileMode.append);
 ```
 
 Concurrency guarantees:

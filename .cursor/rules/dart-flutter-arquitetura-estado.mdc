@@ -1,35 +1,34 @@
 ---
-description: Gradual Clean Architecture, layering, and BLoC/Cubit for complex screens
+description: Pure Dart architecture, layering, and state guidance
 globs: "**/*.dart"
 alwaysApply: false
 ---
 
-# Dart/Flutter — architecture and state
+# Dart — architecture and state
 
-This library evolves incrementally toward Clean Architecture. Also follow [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for repository domain rules.
+This repository is a pure Dart logging library. Follow [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for repository domain rules.
 
 ## Required
 
 - **No duplication:** repeated logic must be extracted.
-- **Small widgets:** split oversized widgets and extract private widgets to simplify `build()`.
-- **Reusable components:** move to dedicated files.
+- **Small components:** split oversized classes and extract reusable components to dedicated files.
 - **Gradual evolution:** improve architecture in touched areas (no big-bang rewrite).
-- **Complex screen logic:** use **BLoC/Cubit**; UI should render state and emit intents only.
+- **Complex workflows:** isolate state and orchestration from domain entities and persistence details.
 
 ## Layers (when applicable)
 
-- **Presentation:** widgets/screens + bloc/cubit
+- **Presentation:** consumers, adapters, and output formatting
 - **Domain:** rules, entities, use cases
 - **Data:** repositories, data sources, DTOs
 - **Core:** shared utilities
 
 Maintain clear responsibilities, low coupling, and composition over inheritance.
 
-## State
+## State and async work
 
-- Use **BLoC/Cubit** for loading, multi-state, pagination, filtering, errors, or non-trivial logic.
-- Keep explicit states (`initial`, `loading`, `success`, `error`).
+- Keep cache initialization and file operations explicit and awaitable.
+- Represent recoverable failures with clear error handling and callbacks where the API provides them.
 
 ## Quick checklist
 
-Duplication removed? Large widgets split? Reusable components extracted? Business logic out of UI? Complex flow handled by BLoC/Cubit?
+Duplication removed? Classes have one responsibility? Reusable components extracted? Domain logic separated from I/O? Async work handled safely?

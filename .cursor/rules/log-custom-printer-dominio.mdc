@@ -28,6 +28,7 @@ Primary references: [`.github/copilot-instructions.md`](.github/copilot-instruct
 ## Build, analysis, tests
 
 - Use `dart pub get`, `dart analyze`, `dart test`.
+- The SDK constraint is `>=3.13.0 <4.0.0`; use Dart commands only (not Flutter commands).
 - After `@JsonSerializable` changes: `dart run build_runner build` or `./ci.sh -build`.
 - Dependency upgrades: `./ci.sh -upgrade`.
 

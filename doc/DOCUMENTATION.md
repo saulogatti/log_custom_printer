@@ -43,12 +43,14 @@ LoggerObjectBase.sendLog()
 - **Configuration:** `ConfigLog(enableLog, onlyClasses)`
 - **Utilities:** `LoggerClassMixin`, `DateTimeLogHelper`, `StackTraceSdk`
 - **Cache layer:** `ILoggerCacheRepository`, `LoggerCacheRepositoryImpl`, `LoggerJsonListType`, `LoggerCache`, `LoggerPersistenceService`
+- **Query layer:** `LogQuery`, `LogFilterEngine`, `LogSortEngine`, `LoggerFilter`
 
 ## Filtering rules
 
 - `ConfigLog(enableLog: false)` suppresses all logs except `ErrorLog`.
 - `onlyClasses` filters accepted runtime types.
 - `ErrorLog` is always processed (`alwaysPrint = true`).
+- `ErrorLog` is processed even when its runtime type is absent from `onlyClasses`.
 
 ## JSON serialization
 
@@ -61,6 +63,8 @@ LoggerObjectBase.sendLog()
 - Memory cache grouped by `EnumLoggerType`.
 - Optional file persistence under `<path>/loggerApp/logs/`.
 - `FileManager` serializes writes per path to avoid race conditions.
+- Cache files are JSON and are stored below `<path>/loggerApp/logs/` when a
+  `cacheFilePath` is supplied.
 
 ## Recommended setup
 
@@ -75,6 +79,9 @@ registerLogPrinterColor(config: ConfigLog(enableLog: true));
 ```dart
 registerLogPrinterSimple(config: ConfigLog(enableLog: false));
 ```
+
+Registration shortcuts return `LoggerPersistenceService`, which can query,
+filter, sort, and clear cached logs.
 
 ## Commands
 

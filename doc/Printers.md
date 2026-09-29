@@ -7,8 +7,7 @@ This module uses the *Strategy* pattern for log output. Each printer defines how
 Abstract contract for all log printers.
 
 ```dart
-abstract class LogPrinterBase {
-  const LogPrinterBase();
+abstract class const LogPrinterBase() {
 
   void printLog(LoggerObjectBase log);
 }
