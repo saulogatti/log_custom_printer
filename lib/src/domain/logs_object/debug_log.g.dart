@@ -21,7 +21,7 @@ DebugLog _$DebugLogFromJson(Map<String, dynamic> json) =>
     });
 
 Map<String, dynamic> _$DebugLogToJson(DebugLog instance) => <String, dynamic>{
-  'className': instance.className,
   'message': instance.message,
+  'className': instance.className,
   'logCreationDate': instance.logCreationDate.toIso8601String(),
 };

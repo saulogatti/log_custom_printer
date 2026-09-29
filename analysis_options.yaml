@@ -40,7 +40,7 @@ analyzer:
     matching_super_parameters: ignore
     avoid_futureor_void: ignore
     specify_nonobvious_property_types: ignore
-    parameter_assignments: ignore
+    parameter_assignments: error
     todo: info
     override_on_non_overriding_member: error
     invalid_implementation_override: error
@@ -53,6 +53,11 @@ analyzer:
     deprecated_member_use_from_same_package: warning
 linter:
   rules:
+    - async_return_with_no_await
+    - initialize_in_field_declaration
+    - use_declaring_parameters
+    - empty_container_bodies
+    - unnecessary_const_in_enum_constructor
     - always_declare_return_types
     - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
@@ -178,7 +183,6 @@ linter:
     - prefer_final_in_for_each
     - prefer_final_locals
     - prefer_for_elements_to_map_fromIterable
-    - prefer_foreach
     - prefer_function_declarations_over_variables
     - prefer_generic_function_type_aliases
     - prefer_if_elements_to_conditional_expressions

@@ -6,12 +6,14 @@ import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
+int valueMaxNumberOfEntries = 100;
+
 /// Default [ILoggerCacheRepository] implementation with in-memory and optional file storage.
 ///
 /// {@category Utilities}
 final class LoggerCacheRepositoryImpl({
   /// Maximum number of entries per log type.
-  final int maxLogEntries = 1000,
+  required final int maxLogEntries,
 
   /// Optional base directory for file persistence.
   final String? directoryToSave,
@@ -20,7 +22,7 @@ final class LoggerCacheRepositoryImpl({
   LoggerCache? _loggerCache;
 
   /// In-memory map of logs by type.
-  Map<EnumLoggerType, LoggerJsonListType?> _loggerJsonList = {};
+  final Map<EnumLoggerType, LoggerJsonListType?> _loggerJsonList = {};
 
   /// Tracks persistent cache initialization.
   Future<void>? _futureInitialization;
@@ -30,6 +32,8 @@ final class LoggerCacheRepositoryImpl({
       _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
       _futureInitialization = _initialize();
     }
+   
+    valueMaxNumberOfEntries = maxLogEntries;
   }
 
   /// Adds [log] to memory cache and optionally persists to disk.
@@ -89,6 +93,10 @@ final class LoggerCacheRepositoryImpl({
     return [];
   }
 
+  /// Maximum number of entries per log type.
+  @override
+  int getMaxLogEntries() => maxLogEntries;
+
   /// Imports logs from raw content.
   @override
   Future<void> importLogs(String content, ExportFormat format) {
@@ -101,7 +109,10 @@ final class LoggerCacheRepositoryImpl({
       await _loggerCache!.futureInitialization.future;
       final allLogs = await _loggerCache!.readAllLogs();
       if (allLogs != null) {
-        _loggerJsonList = allLogs;
+        for (final log in allLogs.keys) {
+          _loggerJsonList[log] = LoggerJsonListType(type: log);
+          _loggerJsonList[log]!.addLoggerList(allLogs[log]!.loggerEntries);
+        }
       }
     }
   }

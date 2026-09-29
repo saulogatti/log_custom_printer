@@ -88,10 +88,7 @@ void main() {
     });
 
     test('returns empty list when no logs match', () {
-      final query = LogQuery(
-        types: {EnumLoggerType.debug},
-        start: date4,
-      );
+      final query = LogQuery(types: {EnumLoggerType.debug}, start: date4);
       final result = engine.apply(logs, query);
       expect(result, isEmpty);
     });

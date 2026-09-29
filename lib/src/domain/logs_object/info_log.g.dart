@@ -21,7 +21,7 @@ InfoLog _$InfoLogFromJson(Map<String, dynamic> json) =>
     });
 
 Map<String, dynamic> _$InfoLogToJson(InfoLog instance) => <String, dynamic>{
-  'className': instance.className,
   'message': instance.message,
+  'className': instance.className,
   'logCreationDate': instance.logCreationDate.toIso8601String(),
 };

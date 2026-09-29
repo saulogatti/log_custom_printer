@@ -1,4 +1,5 @@
 import 'package:log_custom_printer/src/config_log.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart';
 import 'package:log_custom_printer/src/data/cache/logger_persistence_service.dart';
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
@@ -20,7 +21,7 @@ final class LogPrinterService(
 }) {
   /// Internal cache/persistence service.
   final LoggerPersistenceService _loggerPersistenceService = LoggerPersistenceService(
-    cacheRepository: cacheRepository,
+    loggerPersistenceService: cacheRepository ?? LoggerCacheRepositoryImpl(maxLogEntries: 100),
   );
 
   /// Exposes the persistence service linked to this instance.
@@ -33,10 +34,10 @@ final class LogPrinterService(
   void executePrint(LoggerObjectBase log) {
     if (configLog.enableLog &&
         (configLog.onlyClasses.isEmpty || configLog.onlyClasses.contains(log.runtimeType))) {
-      _loggerPersistenceService.addLog(log);
+      cacheRepository.addLog(log);
       logPrinter.printLog(log);
     } else if (log.alwaysPrint) {
-      _loggerPersistenceService.addLog(log);
+      cacheRepository.addLog(log);
       logPrinter.printLog(log);
     }
   }

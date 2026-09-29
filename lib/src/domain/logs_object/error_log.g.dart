@@ -27,8 +27,8 @@ ErrorLog _$ErrorLogFromJson(Map<String, dynamic> json) =>
     });
 
 Map<String, dynamic> _$ErrorLogToJson(ErrorLog instance) => <String, dynamic>{
-  'className': instance.className,
   'message': instance.message,
+  'className': instance.className,
   'logCreationDate': instance.logCreationDate.toIso8601String(),
   'stackTrace': const StackTraceConverter().toJson(instance.stackTrace),
 };

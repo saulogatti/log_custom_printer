@@ -36,7 +36,7 @@
 ///   }
 /// }
 /// ```
-/// 
+///
 /// ## Log types
 ///
 /// - [DebugLog]: Debug messages (yellow)

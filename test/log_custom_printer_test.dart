@@ -17,4 +17,4 @@ void main() {
   });
 }
 
-class _TestClass {}
+class _TestClass;

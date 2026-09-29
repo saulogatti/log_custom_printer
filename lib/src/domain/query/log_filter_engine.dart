@@ -13,7 +13,10 @@ class const LogFilterEngine() {
     final end = query.end;
 
     if (filterTypes == null && start == null && end == null) return logs;
-
+    assert(
+      start == null || end == null || start.difference(end).isNegative,
+      'Start date must be before end date',
+    );
     return logs.where((log) {
       if (filterTypes != null && !filterTypes.contains(log.enumLoggerType)) {
         return false;
