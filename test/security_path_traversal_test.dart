@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
-import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
@@ -11,9 +12,7 @@ void main() {
     late Directory tempDir;
 
     setUpAll(() async {
-      tempDir = await Directory.systemTemp.createTemp(
-        'logger_cache_security_test',
-      );
+      tempDir = await Directory.systemTemp.createTemp('logger_cache_security_test');
       loggerCache = LoggerCache(tempDir.path);
       await loggerCache.futureInitialization.future;
     });
@@ -26,15 +25,10 @@ void main() {
       const maliciousName = '../../etc/passwd';
       await loggerCache.writeLogToFile(
         maliciousName,
-        LoggerJsonList(type: 'SecurityTest'),
+        LoggerJsonListType(type: EnumLoggerType.debug),
       );
 
-      final expectedPath = path.join(
-        tempDir.path,
-        'loggerApp',
-        'logs',
-        'passwd.json',
-      );
+      final expectedPath = path.join(tempDir.path, 'loggerApp', 'logs', 'passwd.json');
 
       final file = File(expectedPath);
       expect(
@@ -50,16 +44,15 @@ void main() {
 
     test('should throw ArgumentError for invalid names', () {
       expect(
-        () => loggerCache.writeLogToFile('.', LoggerJsonList(type: 'TestLog')),
+        () => loggerCache.writeLogToFile('.', LoggerJsonListType(type: EnumLoggerType.debug)),
         throwsArgumentError,
       );
       expect(
-        () => loggerCache.writeLogToFile('..', LoggerJsonList(type: 'TestLog')),
+        () => loggerCache.writeLogToFile('..', LoggerJsonListType(type: EnumLoggerType.debug)),
         throwsArgumentError,
       );
       expect(
-        () =>
-            loggerCache.writeLogToFile('   ', LoggerJsonList(type: 'TestLog')),
+        () => loggerCache.writeLogToFile('   ', LoggerJsonListType(type: EnumLoggerType.debug)),
         throwsArgumentError,
       );
     });
@@ -68,15 +61,10 @@ void main() {
       const nameWithNull = 'bad\x00file';
       await loggerCache.writeLogToFile(
         nameWithNull,
-        LoggerJsonList(type: 'SecurityTest'),
+        LoggerJsonListType(type: EnumLoggerType.debug),
       );
 
-      final expectedPath = path.join(
-        tempDir.path,
-        'loggerApp',
-        'logs',
-        'bad_file.json',
-      );
+      final expectedPath = path.join(tempDir.path, 'loggerApp', 'logs', 'bad_file.json');
 
       final file = File(expectedPath);
       expect(await file.exists(), isTrue);

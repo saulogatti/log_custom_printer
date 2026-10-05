@@ -1,99 +1,86 @@
-# Core — Sistema de Logging
+# Core — Logging System
 
-Este módulo define os tipos fundamentais e a infraestrutura de injeção de dependência da biblioteca.
-
----
+This module defines the fundamental types and dependency-injection infrastructure of the library.
 
 ## LoggerObject
 
-Classe selada (*sealed*) que serve como marcador base da hierarquia de tipos de log.
+Sealed marker base class for the log type hierarchy.
 
 ```dart
 sealed class LoggerObject {}
 ```
 
-Não possui membros próprios. Sua existência garante que apenas os tipos definidos nesta biblioteca
-(`DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog`) possam estender a hierarquia, permitindo
-*pattern matching* exhaustivo em *switch* expressions.
-
----
+It has no members. It ensures only library-defined types (`DebugLog`, `InfoLog`, `WarningLog`, `ErrorLog`) can extend the hierarchy, enabling exhaustive `switch` pattern matching.
 
 ## LoggerObjectBase
 
-Classe abstrata que define o contrato completo para objetos de log.
+Abstract class that defines the full contract for log objects.
 
 ```dart
-abstract class LoggerObjectBase extends LoggerObject {
-  final String message;
-  final String tag;
-  DateTime logCreationDate;
-  late String className;
-}
+class LoggerObjectBase(
+  String message, {
+  DateTime? createdAt,
+  Type? typeClass,
+  String? tag,
+}) extends LoggerObject;
 ```
 
-### Campos principais
+### Main fields
 
-| Campo | Tipo | Descrição |
-|-------|------|-----------|
-| `message` | `String` | Mensagem principal do log |
-| `tag` | `String` | Tag opcional para categorização |
-| `logCreationDate` | `DateTime` | Timestamp de criação (padrão: `DateTime.now()`) |
-| `className` | `String` | Nome da classe/origem que emitiu o log |
+| Field | Type | Description |
+|-------|------|-------------|
+| `message` | `String` | Main log message |
+| `tag` | `String` | Tag for categorization (generated when omitted) |
+| `logCreationDate` | `DateTime` | Creation timestamp (default: `DateTime.now()`) |
+| `className` | `String` | Class/source name that emitted the log |
 
-### Métodos
+### Methods
 
-- **`getColor()`** — Retorna a cor ANSI do tipo de log. Implementado por cada subclasse.
-- **`getMessage([bool withColor])`** — Retorna a mensagem formatada com timestamp, com ou sem cor ANSI.
-- **`getStartLog([bool withColor])`** — Retorna o cabeçalho do log (tipo + origem) formatado.
-- **`sendLog()`** — Envia o log ao `LogPrinterService` registrado via `get_it`.
-- **`toJson()`** — Serializa o objeto para JSON.
-- **`alwaysPrint`** — Propriedade `bool` que, quando `true`, faz o log ser processado mesmo com `ConfigLog.enableLog = false`. Padrão: `false`. `ErrorLog` sobrescreve para `true`.
+- **`getColor()`** — Returns ANSI color for the log type (implemented by each subtype)
+- **`getMessage({bool withColor = true})`** — Returns formatted message with timestamp, with or without ANSI color
+- **`getStartLog({bool withColor = true})`** — Returns formatted log header (type + source)
+- **`sendLog()`** — Sends the log to `LogPrinterService` resolved via `get_it`
+- **`toJson()`** — Serializes object to JSON
+- **`alwaysPrint`** — When `true`, the log is processed even with `ConfigLog.enableLog = false` (default: `false`; `ErrorLog` overrides to `true`)
 
-### Validações
+### Validation
 
-O construtor valida em modo de desenvolvimento via `assert` que a mensagem não está vazia nem contém apenas espaços em branco.
-
----
+In debug mode, the constructor asserts that message is not empty and not whitespace-only.
 
 ## LogPrinterService
 
-Serviço central que coordena a impressão e o armazenamento de logs.
+Central service that coordinates log output and storage.
 
 ```dart
-final class LogPrinterService {
-  final LogPrinterBase logPrinter;
-  LoggerPersistenceService get cacheRepository;
-
-  void executePrint(LoggerObjectBase log);
-}
+final class LogPrinterService(
+  LogPrinterBase logPrinter, {
+  required ConfigLog configLog,
+  ILoggerCacheRepository? cacheRepository,
+});
 ```
 
-Este serviço é registrado como *singleton* no `get_it` por `registerLogPrinter`. Ele aplica as regras de `ConfigLog`
-e, quando um log deve ser processado, delega para `logPrinter.printLog()` e `cacheRepository.addLog()`.
+Registered as a singleton in `get_it` by `registerLogPrinter`. It applies `ConfigLog` rules, then delegates to `logPrinter.printLog()` and `cacheRepository.addLog()` when the log should be processed.
 
-**Regras de processamento em `executePrint`:**
-1. Se `enableLog` é `true` **e** o tipo do log está em `onlyClasses` (ou `onlyClasses` está vazio) → imprime e salva no cache.
-2. Se `log.alwaysPrint` é `true` → imprime e salva no cache independentemente das regras acima.
-3. Caso contrário → o log é descartado silenciosamente.
-
----
+Processing rules in `executePrint`:
+1. If `enableLog` is `true` and log type is in `onlyClasses` (or `onlyClasses` is empty) → print and store.
+2. If `log.alwaysPrint` is `true` → print and store regardless of config.
+3. Otherwise → silently drop.
 
 ## fetchLogPrinterService
 
-Função interna que resolve o `LogPrinterService` registrado no `get_it`.
+Internal function that resolves the registered `LogPrinterService` from `get_it`.
 
 ```dart
 LogPrinterService fetchLogPrinterService();
 ```
 
-Lança `StateError` se `registerLogPrinter` não tiver sido chamado antes do primeiro uso.
-
----
+If no service is registered yet, it automatically registers a default `LogSimplePrint`
+with `ConfigLog(enableLog: true)` as a safety fallback and returns it. Explicit startup
+registration is still recommended for predictable configuration.
 
 ## registerLogPrinter
 
-Registra a impressora principal no `get_it`. Deve ser chamada no *startup* da aplicação,
-antes de qualquer uso de logs.
+Registers the main printer in `get_it`. Must be called at app startup before emitting logs.
 
 ```dart
 LoggerPersistenceService registerLogPrinter(
@@ -103,49 +90,37 @@ LoggerPersistenceService registerLogPrinter(
 });
 ```
 
-Retorna o `LoggerPersistenceService` associado ao serviço registrado, para que o chamador
-possa consultar e gerenciar os logs em cache/persistência.
+Returns the `LoggerPersistenceService` linked to the registered service so callers can query and manage cached/persisted logs.
 
-**Atalhos de registro:**
+Registration shortcuts:
 
 ```dart
-// Com formatação ANSI colorida (recomendado para desenvolvimento)
 LoggerPersistenceService registerLogPrinterColor({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  FileType fileType = FileType.json,
 });
 
-// Sem cores, usando debugPrint (útil em CI/CD ou consoles sem ANSI)
 LoggerPersistenceService registerLogPrinterSimple({
   ConfigLog? config,
   int maxLogsInCache = 100,
   String? cacheFilePath,
-  FileType fileType = FileType.json,
 });
 ```
 
-### Exemplo de configuração no startup
+### Startup example
 
 ```dart
 void main() {
-  // Desenvolvimento — logs coloridos, cache em memória
   final cache = registerLogPrinterColor(
     config: ConfigLog(enableLog: true),
   );
 
-  // Produção — sem cores, apenas erros, cache com persistência em arquivo
-  // final cache = registerLogPrinterSimple(
-  //   config: ConfigLog(enableLog: false),
-  //   cacheFilePath: '/caminho/para/logs',
-  // );
-
-  // Em Flutter: runApp(const MyApp());
+  // Flutter apps: runApp(const MyApp());
 }
 ```
 
-### Exemplo em testes
+### Test setup example
 
 ```dart
 setUp(() {
@@ -157,3 +132,7 @@ setUp(() {
 
 tearDown(() async => await GetIt.instance.reset());
 ```
+
+`registerLogPrinterColor` and `registerLogPrinterSimple` default to `ConfigLog()`.
+Pass `ConfigLog(enableLog: true)` when regular logs should be emitted. `cacheFilePath`
+enables JSON persistence; omitting it keeps logs in memory only.

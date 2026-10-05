@@ -4,14 +4,14 @@ import 'package:test/test.dart';
 
 void main() {
   group('LoggerFilter', () {
-    final debug1 = DebugLog('d1')..logCreationDate = DateTime(2024, 1, 1, 10, 0);
-    final info1 = InfoLog('i1')..logCreationDate = DateTime(2024, 1, 1, 9, 0);
-    final error1 = ErrorLog('e1', StackTrace.current)..logCreationDate = DateTime(2024, 1, 1, 11, 0);
+    final debug1 = DebugLog('d1')..logCreationDate = DateTime(2024, 1, 1, 10);
+    final info1 = InfoLog('i1')..logCreationDate = DateTime(2024, 1, 1, 9);
+    final error1 = ErrorLog('e1', StackTrace.current)..logCreationDate = DateTime(2024, 1, 1, 11);
 
     final allLogs = <LoggerObjectBase>[debug1, info1, error1];
 
     test('delegates to LogFilterEngine when types is not empty', () {
-      final query = const LogQuery(
+      const query = LogQuery(
         types: {EnumLoggerType.error},
         sortDirection: SortDirection.asc, // Should be ignored if types is present
       );
@@ -24,7 +24,11 @@ void main() {
     });
 
     test('delegates to LogSortEngine when types is empty and sortDirection is asc', () {
-      final query = const LogQuery(types: {}, sortField: LogSortField.date, sortDirection: SortDirection.asc);
+      const query = LogQuery(
+        types: {},
+        sortField: LogSortField.date,
+        sortDirection: SortDirection.asc,
+      );
       final filter = LoggerFilter(query: query);
 
       final result = filter.apply(allLogs);
@@ -36,7 +40,7 @@ void main() {
     });
 
     test('delegates to LogSortEngine when types is empty and sortDirection is desc', () {
-      final query = const LogQuery(
+      const query = LogQuery(
         types: {},
         sortField: LogSortField.date,
         sortDirection: SortDirection.desc,
@@ -52,7 +56,7 @@ void main() {
     });
 
     test('returns original list when no criteria matches', () {
-      final query = const LogQuery();
+      const query = LogQuery();
       final filter = LoggerFilter(query: query);
 
       final result = filter.apply(allLogs);
@@ -61,11 +65,7 @@ void main() {
     });
 
     test('delegates to LogSortEngine when types is null and sortDirection is asc', () {
-      final query = const LogQuery(
-        types: null,
-        sortField: LogSortField.date,
-        sortDirection: SortDirection.asc,
-      );
+      const query = LogQuery(sortField: LogSortField.date, sortDirection: SortDirection.asc);
       final filter = LoggerFilter(query: query);
 
       final result = filter.apply(allLogs);

@@ -3,23 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'logger_ansi_color.g.dart';
 
 /// {@template enum_colors}
-/// Enumeração de cores ANSI disponíveis para formatação de texto em terminais.
-///
-/// Cores disponíveis:
-/// ```dart
-/// EnumAnsiColors.black;   // Preto
-/// EnumAnsiColors.red;     // Vermelho
-/// EnumAnsiColors.green;   // Verde
-/// EnumAnsiColors.yellow;  // Amarelo
-/// EnumAnsiColors.blue;    // Azul
-/// EnumAnsiColors.magenta; // Magenta
-/// EnumAnsiColors.cyan;    // Ciano
-/// EnumAnsiColors.white;   // Branco
-/// ```
-///
-/// Cada cor possui métodos para obter:
-/// - Código ANSI para cor de fundo (`getBgColor`)
-/// - Código ANSI para cor de texto (`getFgColor`)
+/// ANSI color enum for terminal text formatting.
 /// {@endtemplate}
 enum EnumAnsiColors {
   black,
@@ -31,7 +15,7 @@ enum EnumAnsiColors {
   cyan,
   white;
 
-  /// Retorna o código ANSI para a cor de fundo.
+  /// ANSI background color code.
   int getBgColor() {
     switch (this) {
       case EnumAnsiColors.black:
@@ -53,7 +37,7 @@ enum EnumAnsiColors {
     }
   }
 
-  /// Retorna o código ANSI para a cor de texto.
+  /// ANSI foreground color code.
   int getFgColor() {
     switch (this) {
       case EnumAnsiColors.black:
@@ -76,55 +60,36 @@ enum EnumAnsiColors {
   }
 }
 
-/// Classe para manipulação de cores ANSI em logs.
-///
-/// Esta classe permite formatar mensagens com cores ANSI para exibição em terminais.
+/// ANSI color helper for log messages.
 ///
 /// {@category Utilities}
-///
-/// Exemplo de uso:
-/// ```dart
-/// final loggerColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.red);
-/// print(loggerColor('Mensagem em vermelho'));
-/// ```
-///
-/// Para serialização/deserialização, utilize os métodos `toJson` e `fromJson`.
 @JsonSerializable()
-class LoggerAnsiColor {
-
-  /// Construtor da classe.
-  const LoggerAnsiColor({required this.enumAnsiColors});
-
-  /// Cria uma instância a partir de um JSON.
-  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) => _$LoggerAnsiColorFromJson(json);
-  /// Sequência de controle ANSI para iniciar configurações no terminal.
+class const LoggerAnsiColor({
+  /// Selected ANSI color.
+  required final EnumAnsiColors enumAnsiColors,
+}) {
+  /// ANSI escape sequence prefix.
   static const ansiEsc = '\x1B[';
 
-  /// Código ANSI para resetar todas as configurações de cor no terminal.
+  /// ANSI reset sequence.
   static const ansiDefault = '${ansiEsc}0m';
 
-  /// Cor ANSI associada.
-  final EnumAnsiColors enumAnsiColors;
+  /// Creates an instance from JSON.
+  factory LoggerAnsiColor.fromJson(Map<String, dynamic> json) => _$LoggerAnsiColorFromJson(json);
 
-  /// Aplica a cor ANSI à mensagem fornecida.
-  ///
-  /// Exemplo:
-  /// ```dart
-  /// final loggerColor = LoggerAnsiColor(enumAnsiColors: EnumAnsiColors.green);
-  /// print(loggerColor('Mensagem em verde'));
-  /// ```
+  /// Applies ANSI color to [msg].
   String call(String msg) {
     // ignore: unnecessary_brace_in_string_interps
     return '${this}$msg$ansiDefault';
   }
 
-  /// Converte a instância para JSON.
+  /// Converts the instance to JSON.
   Map<String, dynamic> toJson() => _$LoggerAnsiColorToJson(this);
 
-  /// Retorna a sequência ANSI para a cor de texto configurada.
+  /// Returns ANSI text color sequence.
   @override
   String toString() {
-    final int fg = enumAnsiColors.getFgColor();
+    final fg = enumAnsiColors.getFgColor();
     return '$ansiEsc${fg}m';
   }
 }

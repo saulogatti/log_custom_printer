@@ -1,8 +1,9 @@
 import 'dart:io';
 
 import 'package:log_custom_printer/src/data/cache/logger_cache.dart';
+import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/debug_log.dart';
-import 'package:log_custom_printer/src/domain/logs_object/logger_json_list.dart';
+import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -21,10 +22,10 @@ void main() {
   tearDownAll(() async {
     await tempDir.delete(recursive: true);
   });
-  group("Teste tipo arquivos", () {
+  group('Teste tipo arquivos', () {
     test('readAllLogs should return all persisted logs', () async {
       // 1. Create and write a log list
-      final list = LoggerJsonList(type: 'DebugLog');
+      final list = LoggerJsonListType(type: EnumLoggerType.debug);
       list.addLogger(DebugLog('Test message'));
       await cache.writeLogToFile('debug', list);
 
@@ -35,10 +36,13 @@ void main() {
       expect(allLogs, isNotNull);
       expect(allLogs!.length, equals(1));
       expect(allLogs.values.first!.loggerEntries.length, equals(1));
-      expect((allLogs.values.first!.loggerEntries.first as DebugLog).message, equals('Test message'));
+      expect(
+        (allLogs.values.first!.loggerEntries.first as DebugLog).message,
+        equals('Test message'),
+      );
     });
     test('writeLogToFile should create a file with the correct extension', () async {
-      final list = LoggerJsonList(type: 'DebugLog');
+      final list = LoggerJsonListType(type: EnumLoggerType.debug);
       list.addLogger(DebugLog('Test message'));
       await cache.writeLogToFile('debug', list);
 

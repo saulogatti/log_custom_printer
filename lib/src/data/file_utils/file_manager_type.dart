@@ -2,18 +2,18 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-/// Implementação de gerenciamento de arquivos.
+/// File manager implementation.
 ///
-/// Fornece funcionalidades para criar, ler, escrever e deletar arquivos e diretórios.
-/// Todas as operações são serializadas por caminho para evitar condições de corrida.
+/// Provides create/read/write/delete operations for files and directories.
+/// Operations are serialized per path to avoid race conditions.
 ///
 /// {@category Utilities}
 class FileManager implements IFileManagerType {
-  /// Cadeia de execução por caminho para serializar operações concorrentes.
+  /// Path-based lock chain for concurrent operations.
   final Map<String, Future<void>> _pathLocks = {};
 
-  /// Cria um gerenciador de arquivos.
-  FileManager();
+  /// Creates a file manager.
+  new();
 
   @override
   Future<bool> createDirectory(String path) {
@@ -27,10 +27,7 @@ class FileManager implements IFileManagerType {
     });
   }
 
-  /// Remove o diretório em [path] quando ele existir.
-  ///
-  /// Retorna `true` quando a remoção acontece e `false` quando o diretório não
-  /// existe.
+  /// Deletes directory at [path] if it exists.
   @override
   Future<bool> deleteDirectory(String path) {
     return _runWithPathLock(path, () async {
@@ -43,10 +40,7 @@ class FileManager implements IFileManagerType {
     });
   }
 
-  /// Remove o arquivo em [path] quando ele existir.
-  ///
-  /// Retorna `true` quando a remoção acontece e `false` quando o arquivo não
-  /// existe.
+  /// Deletes file at [path] if it exists.
   @override
   Future<bool> deleteFile(String path) {
     return _runWithPathLock(path, () async {
@@ -60,25 +54,21 @@ class FileManager implements IFileManagerType {
     });
   }
 
-  /// Lê e retorna o conteúdo do arquivo em [path].
-  ///
-  /// Lança [Exception] quando o arquivo não é encontrado.
+  /// Reads and returns file content from [path].
   @override
   Future<String> readFile(String path) {
     return _runWithPathLock(path, () async {
       _extensionIncludePath(path);
       final file = File(path);
       if (await file.exists()) {
-        final res = await file.readAsString(encoding: utf8);
+        final res = await file.readAsString();
         return res;
       }
       throw Exception('File not found: $path');
     });
   }
 
-  /// Escreve [content] no arquivo em [path].
-  ///
-  /// Retorna `true` após concluir a escrita.
+  /// Writes [content] to file at [path].
   @override
   Future<bool> writeFile(String path, String content, [FileMode mode = FileMode.write]) {
     return _runWithPathLock(path, () async {
@@ -92,19 +82,14 @@ class FileManager implements IFileManagerType {
     });
   }
 
-  /// Valida se o [path] é válido.
-  ///
-  /// Lança [Exception] quando o caminho é inválido.
+  /// Validates [path].
   void _extensionIncludePath(String path) {
     if (path.isEmpty) {
       throw Exception('Invalid  path: Path cannot be empty');
     }
   }
 
-  /// Executa [operation] de forma serializada por [path].
-  ///
-  /// Operações em caminhos diferentes podem ocorrer em paralelo, mas no mesmo
-  /// caminho são executadas em sequência para evitar condições de corrida.
+  /// Runs [operation] serialized for [path].
   Future<T> _runWithPathLock<T>(String path, Future<T> Function() operation) async {
     final key = path.trim();
     final previous = _pathLocks[key] ?? Future<void>.value();
@@ -120,57 +105,28 @@ class FileManager implements IFileManagerType {
         completer.complete();
       }
       if (identical(_pathLocks[key], current)) {
-        _pathLocks.remove(key);
+        await _pathLocks.remove(key);
       }
     }
   }
 }
 
-/// Tipos de arquivo suportados pelo [FileManager].
-///
-/// Cada valor representa a extensão esperada no caminho do arquivo.
-///
-/// {@category Utilities}
-enum FileType {
-  /// Arquivo de texto simples (`.txt`).
-  txt,
-
-  /// Arquivo JSON (`.json`).
-  json,
-
-  /// Arquivo de log (`.log`).
-  log,
-}
-
-/// Contrato para operações de leitura, escrita e remoção de arquivos.
+/// Contract for file read/write/delete operations.
 ///
 /// {@category Utilities}
 abstract interface class IFileManagerType {
-  /// Cria um diretório em [path] se ele não existir.
-  ///
-  /// Retorna `true` quando o diretório foi criado e `false`
-  /// quando o diretório já existia.
-
+  /// Creates directory at [path] if it does not exist.
   Future<bool> createDirectory(String path);
 
-  /// Remove o diretório em [path], se existir.
-  ///
-  /// Retorna `true` quando o diretório foi removido e `false`
-  /// quando o diretório não existe.
+  /// Deletes directory at [path] if it exists.
   Future<bool> deleteDirectory(String path);
 
-  /// Remove o arquivo em [path].
-  ///
-  /// Retorna `true` quando o arquivo é removido.
+  /// Deletes file at [path].
   Future<bool> deleteFile(String path);
 
-  /// Lê e retorna o conteúdo do arquivo em [path].
-  ///
-  /// Lança [Exception] quando o arquivo não é encontrado.
+  /// Reads and returns file content from [path].
   Future<String> readFile(String path);
 
-  /// Escreve [content] no arquivo em [path].
-  ///
-  /// Retorna `true` quando a operação é concluída com sucesso.
+  /// Writes [content] to file at [path].
   Future<bool> writeFile(String path, String content, [FileMode mode = FileMode.write]);
 }

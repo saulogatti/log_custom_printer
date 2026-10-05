@@ -2,69 +2,73 @@
 
 import 'package:log_custom_printer/log_custom_printer.dart';
 
-/// Exemplo de uso da biblioteca log_custom_printer em um ambiente Dart puro.
+/// Example usage of log_custom_printer in a pure Dart environment.
 ///
-/// Este exemplo demonstra:
-/// 1. Configuração inicial (registro da impressora)
-/// 2. Emissão de logs de diferentes níveis (Debug, Info, Warning, Error)
-/// 3. Uso do LoggerClassMixin para integração em classes
-/// 4. Consulta e gerenciamento de logs via LoggerPersistenceService
-/// 5. Serialização JSON
+/// This example demonstrates:
+/// 1. Initial configuration (printer registration)
+/// 2. Emitting logs at different levels (Debug, Info, Warning, Error)
+/// 3. Using LoggerClassMixin in application classes
+/// 4. Querying and managing logs through LoggerPersistenceService
+/// 5. JSON serialization
 void main() async {
-  // 1. Configuração inicial
-  // Registramos uma impressora colorida para o console.
-  // O LoggerPersistenceService retornado permite gerenciar o cache de logs.
-  print('1. Configuração inicial:');
-  persistenceService = registerLogPrinterColor(
+  // 1. Initial configuration
+  // Register a simple printer for console output.
+  // The returned LoggerPersistenceService manages the log cache.
+  print('1. Initial configuration:');
+  persistenceService = registerLogPrinterSimple(
     config: const ConfigLog(
-      enableLog: true, // Habilita o processamento de logs
+      enableLog: true, // Enable log processing
       onlyClasses: {DebugLog, InfoLog, WarningLog, ErrorLog},
     ),
     cacheFilePath: 'cache_logs',
-    maxLogsInCache: 50, // Limite de logs no cache por tipo
+    maxLogsInCache: 50, // Cache limit per type
   );
   // await persistenceService.getAllLogs();
-  print('Configuração inicial concluída');
+  print('Initial configuration complete');
 
-  // 2. Uso com Mixin (Recomendado para classes da aplicação)
-  print('2. Usando LoggerClassMixin:');
+  // 2. Use the mixin (recommended for application classes)
+  print('2. Using LoggerClassMixin:');
   final app = MinhaApp();
-  app.processarDados();
-  print('Uso com Mixin concluído');
+  app.processData();
+  print('Mixin usage complete');
 
-  // 4. Consulta ao cache de logs
-  print('3. Consultando o cache de logs:');
+  // 3. Query the log cache
+  print('3. Querying the log cache:');
   final allLogs = await persistenceService.getAllLogs();
-  print('Total de logs capturados: ${allLogs.length}');
-
-  print('Exemplo concluído');
+  print('Total logs captured: ${allLogs.length}');
+  print('Querying logs:');
+  final queryLogs = await persistenceService.queryLogs(
+    const LogQuery(types: {EnumLoggerType.debug}),
+  );
+  print('Logs found: ${queryLogs.length}');
+  print('Example complete');
 }
 
 late LoggerPersistenceService persistenceService;
 
-/// Exemplo de classe utilizando o mixin de logging
+/// Example class using the logging mixin.
 class MinhaApp with LoggerClassMixin {
-  void processarDados() {
-    logDebug('Iniciando processamento de dados...');
+  void processData() {
+    logDebug('Starting data processing...');
 
-    // Simulação de lógica
-    logInfo('Dados validados com sucesso.');
+    // Simulate application logic.
+    logInfo('Data validated successfully.');
 
-    logWarning('O processamento demorou mais que o esperado.');
-    print('--- Iniciando Exemplo log_custom_printer ---\n');
-    logDebug('Esta é uma mensagem de debug ${StackTrace.current.toString()}');
+    logWarning('Processing took longer than expected.');
+    List.generate(100, (index) => logDebug('Debug message $index'));
 
-    // 2. Emissão de logs manual
-    print('2. Emitindo logs manualmente:');
-    logDebug('Esta é uma mensagem de debug');
-    logInfo('Informação importante do sistema');
-    logWarning('Atenção: recurso atingindo limite');
+    // Emit logs manually.
+    print('2. Emitting logs manually:');
+    logDebug('This is a debug message');
+    logInfo('Important system information');
+    logWarning('Warning: resource limit reached');
 
     try {
-      throw Exception('Falha crítica na operação');
+      throw Exception('Critical operation failure');
     } catch (e, stack) {
-      logError('Erro detectado: $e', stack);
+      logError('Error detected: $e', stack);
+    } finally {
+      logDebug('Finished data processing');
     }
-    print('');
   }
 }

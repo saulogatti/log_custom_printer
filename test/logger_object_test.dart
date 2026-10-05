@@ -17,8 +17,7 @@ void main() {
 
   group('LoggerObjectBase.sendLog', () {
     test('respects onlyClasses filter for non-error logs', () {
-      final fakePrinter =
-          GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
+      final fakePrinter = GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
 
       DebugLog('debug skipped').sendLog();
       InfoLog('info allowed').sendLog();
@@ -27,8 +26,7 @@ void main() {
       expect(fakePrinter.printed.single, isA<InfoLog>());
     });
     test('always sends ErrorLog regardless of onlyClasses filter', () {
-      final fakePrinter =
-          GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
+      final fakePrinter = GetIt.instance<LogPrinterService>().logPrinter as _FakeLogPrinter;
 
       ErrorLog('boom', StackTrace.fromString('#0 example')).sendLog();
 
@@ -61,4 +59,4 @@ class _FakeLogPrinter extends LogPrinterBase {
   }
 }
 
-class _FakeService with LoggerClassMixin {}
+class _FakeService with LoggerClassMixin;
