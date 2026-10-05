@@ -10,3 +10,5 @@ coverage/
 .pub-lock.json.lock
 .pub-lock.yaml.lock
 .pub-lock.json.lock
+example/cache_logs/
+doc/

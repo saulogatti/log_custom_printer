@@ -18,31 +18,26 @@ final class LoggerPersistenceService({
   final LogSortEngine _sortEngine = const LogSortEngine(),
 }) {
   /// Optional callback notified after cache mutations.
-  // FIXME: #80 Migrar para um stream de logs.
-  void Function(List<LoggerObjectBase>)? logOutputHandler;
+  // FIXME: #80 Migrar para um stream ou evento de logs.
+  // void Function(List<LoggerObjectBase>)? logOutputHandler;
 
   /// Adds a log entry.
   Future<void> addLog(LoggerObjectBase log) async {
     await loggerPersistenceService.addLog(log);
-    if (logOutputHandler != null) {
-      final logs = await loggerPersistenceService.getAllLogs();
-      logOutputHandler?.call(logs);
-    }
+    // if (logOutputHandler != null) {
+    //   final logs = await loggerPersistenceService.getAllLogs();
+    //   // logOutputHandler?.call(logs);
+    // }
   }
 
   /// Clears all log entries.
   Future<void> clearLogs() async {
-    logOutputHandler?.call([]);
     await loggerPersistenceService.clearLogs();
   }
 
   /// Clears log entries by [type].
   Future<void> clearLogsByType(EnumLoggerType type) async {
     await loggerPersistenceService.clearLogsByType(type);
-    if (logOutputHandler != null) {
-      final logs = await loggerPersistenceService.getAllLogs();
-      logOutputHandler?.call(logs);
-    }
   }
 
   /// Returns all stored logs.
