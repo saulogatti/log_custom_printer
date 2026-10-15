@@ -1,4 +1,6 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
+import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart'
+    show valueMaxNumberOfEntries;
 import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:test/test.dart';
@@ -111,7 +113,23 @@ void main() {
       final restored = LoggerJsonListType.fromJson(list.toJson());
 
       expect(restored.loggerEntries.map((log) => log.message), equals(['second', 'first']));
-    }, skip: 'Known bug: fromJson re-inserts each entry at index 0, reversing the order.');
+    });
+
+    test('fromJson keeps the newest entries when over the limit', () {
+      final previousMax = valueMaxNumberOfEntries;
+      addTearDown(() => valueMaxNumberOfEntries = previousMax);
+      valueMaxNumberOfEntries = 2;
+
+      final restored = LoggerJsonListType.fromJson({
+        'type': 'info',
+        'loggerJson': [
+          for (final message in ['newest', 'middle', 'oldest'])
+            {'message': message, 'className': 'X', 'logCreationDate': '2024-01-01T00:00:00.000'},
+        ],
+      });
+
+      expect(restored.loggerEntries.map((log) => log.message), equals(['newest', 'middle']));
+    });
   });
 
   group('LoggerJsonListType entries', () {
@@ -128,6 +146,20 @@ void main() {
         ..addLoggerList([DebugLog('a'), DebugLog('b'), DebugLog('c')]);
 
       expect(list.loggerEntries.map((log) => log.message), equals(['c', 'b', 'a']));
+    });
+
+    test('mergeLoggerList interleaves by creation date, newest first', () {
+      final list = LoggerJsonListType(type: EnumLoggerType.debug)
+        ..addLoggerList([
+          DebugLog('a1', createdAt: DateTime(2024)),
+          DebugLog('a3', createdAt: DateTime(2024, 1, 3)),
+        ])
+        ..mergeLoggerList([
+          DebugLog('b4', createdAt: DateTime(2024, 1, 4)),
+          DebugLog('b2', createdAt: DateTime(2024, 1, 2)),
+        ]);
+
+      expect(list.loggerEntries.map((log) => log.message), equals(['b4', 'a3', 'b2', 'a1']));
     });
 
     test('enumLoggerType reflects the first entry', () {

@@ -35,8 +35,8 @@ class LoggerJsonListType({
       if (element is Map<String, dynamic>) {
         final constructor = _typeConstructors[type];
         if (constructor != null) {
-          final ob = constructor(element);
-          loggerJsonList.addLogger(ob);
+          // JSON is stored newest first, so append to keep the same order.
+          loggerJsonList._appendOlderLogger(constructor(element));
         } else {
           throw LogException('Unknown logger type: $type');
         }
@@ -66,6 +66,32 @@ class LoggerJsonListType({
   void addLoggerList(List<LoggerObjectBase> logger) {
     for (final element in logger) {
       addLogger(element);
+    }
+  }
+
+  /// Merges [loggers] (newest first) into this list.
+  ///
+  /// Both lists are interleaved by [LoggerObjectBase.logCreationDate] so the result stays newest
+  /// first; on equal dates existing entries come first. Only the newest
+  /// [valueMaxNumberOfEntries] entries are kept.
+  void mergeLoggerList(List<LoggerObjectBase> loggers) {
+    final current = List<LoggerObjectBase>.from(_loggerEntries);
+    _loggerEntries.clear();
+    var i = 0;
+    var j = 0;
+    while (_loggerEntries.length < valueMaxNumberOfEntries &&
+        (i < current.length || j < loggers.length)) {
+      final takeCurrent =
+          j >= loggers.length ||
+          (i < current.length && !current[i].logCreationDate.isBefore(loggers[j].logCreationDate));
+      _loggerEntries.add(takeCurrent ? current[i++] : loggers[j++]);
+    }
+  }
+
+  /// Appends [logger] at the end (oldest position) unless the list is full.
+  void _appendOlderLogger(LoggerObjectBase logger) {
+    if (_loggerEntries.length < valueMaxNumberOfEntries) {
+      _loggerEntries.add(logger);
     }
   }
 
