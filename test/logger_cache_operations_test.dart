@@ -38,6 +38,28 @@ void main() {
       expect(cache.getPathFileForTest('Debug'), equals(path.join(logsDir(), 'debug.json')));
       expect(cache.getPathFileForTest('app.log'), equals(path.join(logsDir(), 'app.json')));
     });
+
+    test('accepts a base directory with a trailing slash instead of hanging', () async {
+      Object? reportedError;
+      final slashCache = LoggerCache('${tempDir.path}/')
+        ..onError = (error, _) => reportedError = error;
+
+      await slashCache.futureInitialization.future;
+
+      expect(reportedError, isNull);
+      expect(slashCache.getPathFileForTest('debug'), equals(path.join(logsDir(), 'debug.json')));
+      await slashCache.writeLogToFile('debug', listOf(EnumLoggerType.debug, [DebugLog('d')]));
+      expect(await File(path.join(logsDir(), 'debug.json')).exists(), isTrue);
+    }, timeout: const Timeout(Duration(seconds: 5)));
+
+    test('reports an empty base directory through onError and still completes', () async {
+      final errors = <Object>[];
+      final emptyCache = LoggerCache('')..onError = (error, _) => errors.add(error);
+
+      await emptyCache.futureInitialization.future;
+
+      expect(errors.single, isA<ArgumentError>());
+    }, timeout: const Timeout(Duration(seconds: 5)));
   });
 
   group('LoggerCache.writeLogToFile', () {
@@ -89,6 +111,30 @@ void main() {
       expect(
         all![EnumLoggerType.info]!.loggerEntries.map((log) => log.message),
         unorderedEquals(['a', 'b']),
+      );
+    });
+
+    test('merges multiple files of the same type newest first', () async {
+      await cache.writeLogToFile(
+        'info_a',
+        listOf(EnumLoggerType.info, [
+          InfoLog('a1', createdAt: DateTime(2024)),
+          InfoLog('a3', createdAt: DateTime(2024, 1, 3)),
+        ]),
+      );
+      await cache.writeLogToFile(
+        'info_b',
+        listOf(EnumLoggerType.info, [
+          InfoLog('b2', createdAt: DateTime(2024, 1, 2)),
+          InfoLog('b4', createdAt: DateTime(2024, 1, 4)),
+        ]),
+      );
+
+      final all = await cache.readAllLogs();
+
+      expect(
+        all![EnumLoggerType.info]!.loggerEntries.map((log) => log.message),
+        equals(['b4', 'a3', 'b2', 'a1']),
       );
     });
 
