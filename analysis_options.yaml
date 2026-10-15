@@ -30,16 +30,16 @@ analyzer:
     flutter_style_todos: ignore
     prefer_constructors_over_static_methods: ignore
     always_put_control_body_on_new_line: ignore
-    unnecessary_null_checks: ignore
+    unnecessary_null_checks: warning
     avoid_slow_async_io: ignore
     avoid_catching_errors: ignore
     discarded_futures: ignore
     unsafe_variance: ignore
     avoid_classes_with_only_static_members: ignore
     document_ignores: ignore
-    matching_super_parameters: ignore
+    matching_super_parameters: warning
     avoid_futureor_void: ignore
-    specify_nonobvious_property_types: ignore
+    specify_nonobvious_property_types: warning
     parameter_assignments: error
     todo: info
     override_on_non_overriding_member: error

@@ -1,4 +1,4 @@
-final jsonTestDebug = {
+final Map<String, Object> jsonTestDebug = {
   'type': 'DebugLog',
   'loggerJson': [
     {
@@ -14,7 +14,7 @@ final jsonTestDebug = {
   ],
 };
 
-final jsonTestError = {
+final Map<String, Object> jsonTestError = {
   'type': 'ErrorLog',
   'loggerJson': [
     {
@@ -32,7 +32,7 @@ final jsonTestError = {
   ],
 };
 
-final jsonTestInfo = {
+final Map<String, Object> jsonTestInfo = {
   'type': 'InfoLog',
   'loggerJson': [
     {
@@ -47,7 +47,7 @@ final jsonTestInfo = {
     },
   ],
 };
-final jsonTestWarning = {
+final Map<String, Object> jsonTestWarning = {
   'type': 'WarningLog',
   'loggerJson': [
     {

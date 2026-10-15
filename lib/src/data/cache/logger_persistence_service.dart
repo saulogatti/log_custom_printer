@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:log_custom_printer/src/domain/i_logger_cache_repository.dart';
 import 'package:log_custom_printer/src/domain/log_helpers/enum_logger_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
@@ -17,17 +19,19 @@ final class LoggerPersistenceService({
   /// Log sorting engine.
   final LogSortEngine _sortEngine = const LogSortEngine(),
 }) {
-  /// Optional callback notified after cache mutations.
-  // FIXME: #80 Migrar para um stream ou evento de logs.
-  // void Function(List<LoggerObjectBase>)? logOutputHandler;
+  /// Stream controller for logs.
+  final StreamController<LoggerObjectBase> _logStreamController =
+      StreamController<LoggerObjectBase>();
+
+  /// Stream of logs.
+  Stream<LoggerObjectBase> get logStream => _logStreamController.stream;
 
   /// Adds a log entry.
   Future<void> addLog(LoggerObjectBase log) async {
     await loggerPersistenceService.addLog(log);
-    // if (logOutputHandler != null) {
-    //   final logs = await loggerPersistenceService.getAllLogs();
-    //   // logOutputHandler?.call(logs);
-    // }
+    if (_logStreamController.hasListener) {
+      _logStreamController.add(log);
+    }
   }
 
   /// Clears all log entries.
@@ -38,6 +42,11 @@ final class LoggerPersistenceService({
   /// Clears log entries by [type].
   Future<void> clearLogsByType(EnumLoggerType type) async {
     await loggerPersistenceService.clearLogsByType(type);
+  }
+
+  /// Close the log stream.
+  void closeLogStream() {
+    _logStreamController.close();
   }
 
   /// Returns all stored logs.

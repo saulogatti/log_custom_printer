@@ -31,7 +31,7 @@ final class LoggerCache(String directory, {IFileManagerType? fileManagerType}) {
 
   this {
     _future = Completer<void>();
-    _init(directory);
+    unawaited(_init(directory));
   }
 
   /// Completes when cache directory initialization finishes.
@@ -156,7 +156,8 @@ final class LoggerCache(String directory, {IFileManagerType? fileManagerType}) {
       throw AssertionError('Base directory for logs must not end with /');
     }
     try {
-      final directoryPath = Directory('$directory/loggerApp/logs');
+      final pathDirectory = path.join(directory, 'loggerApp', 'logs');
+      final directoryPath = Directory(pathDirectory);
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
