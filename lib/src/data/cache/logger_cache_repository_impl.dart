@@ -32,7 +32,7 @@ final class LoggerCacheRepositoryImpl({
       _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
       _futureInitialization = _initialize();
     }
-   
+
     valueMaxNumberOfEntries = maxLogEntries;
   }
 
@@ -109,10 +109,8 @@ final class LoggerCacheRepositoryImpl({
       await _loggerCache!.futureInitialization.future;
       final allLogs = await _loggerCache!.readAllLogs();
       if (allLogs != null) {
-        for (final log in allLogs.keys) {
-          _loggerJsonList[log] = LoggerJsonListType(type: log);
-          _loggerJsonList[log]!.addLoggerList(allLogs[log]!.loggerEntries);
-        }
+        // readAllLogs already returns each list newest first.
+        _loggerJsonList.addAll(allLogs);
       }
     }
   }

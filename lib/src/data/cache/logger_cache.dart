@@ -91,7 +91,7 @@ final class LoggerCache(String directory, {IFileManagerType? fileManagerType}) {
                 final typeLog = loggerList.type;
                 final haveList = allLogs[typeLog] != null;
                 if (haveList) {
-                  allLogs[typeLog]!.addLoggerList(loggerList.loggerEntries);
+                  allLogs[typeLog]!.mergeLoggerList(loggerList.loggerEntries);
                 } else {
                   allLogs[typeLog] = loggerList;
                 }
@@ -151,18 +151,24 @@ final class LoggerCache(String directory, {IFileManagerType? fileManagerType}) {
 
   /// Initializes `loggerApp/logs` directory in the provided base path.
   Future<void> _init(String directory) async {
-    assert(directory.isNotEmpty, 'Base directory for logs cannot be empty');
-    if (directory.endsWith('/')) {
-      throw AssertionError('Base directory for logs must not end with /');
-    }
     try {
-      final pathDirectory = path.join(directory, 'loggerApp', 'logs');
+      // Yield once so an [onError] assigned right after construction sees validation errors.
+      await Future<void>.value();
+      if (directory.trim().isEmpty) {
+        throw ArgumentError.value(
+          directory,
+          'directory',
+          'Base directory for logs cannot be empty',
+        );
+      }
+      // Normalizing drops trailing separators such as in `/tmp/`.
+      final pathDirectory = path.join(path.normalize(directory), 'loggerApp', 'logs');
       final directoryPath = Directory(pathDirectory);
       if (!await directoryPath.exists()) {
         await directoryPath.create(recursive: true);
       }
       _directoryPath = directoryPath.path;
-    } on Exception catch (e, stack) {
+    } on Object catch (e, stack) {
       if (onError != null) {
         onError!(e, stack);
       } else {
