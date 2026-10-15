@@ -1,7 +1,7 @@
 # log_custom_printer
 
 A Dart logging library with typed log objects, ANSI color formatting, JSON serialization, and dependency injection (`get_it`).
-It is suitable for CLI apps, servers, and scripts, and can also be used in Flutter apps after registering the printer at startup.
+It is suitable for CLI apps, servers, and scripts, and for Flutter apps after the printer is registered. A runnable Flutter integration is in [`example/`](example/README.md).
 
 > **v3.0.0** — The package is now **pure Dart** (no Flutter dependency). Registration APIs (`registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`) still return `LoggerPersistenceService` with integrated cache support. The Flutter visual console was moved to a separate package. See [doc/ConsoleView.md](doc/ConsoleView.md).
 >
@@ -47,24 +47,40 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 
 void main() {
   final persistenceService = registerLogPrinterColor(
-    config: ConfigLog(enableLog: true),
+    config: const ConfigLog(enableLog: true),
     maxLogsInCache: 100,
     cacheFilePath: '/path/to/save/logs', // optional
   );
-
-  // Flutter apps: runApp(const MyApp());
 }
+```
+
+`cacheFilePath` is the base directory. JSON files are written under `<cacheFilePath>/loggerApp/logs/`. Omit it to keep the cache in memory only.
+
+In a Flutter app, resolve a writable directory before registration. The [example](example/README.md) does that from `initState` with `path_provider`:
+
+```dart
+final directory = await getApplicationSupportDirectory();
+final persistenceService = registerLogPrinterColor(
+  config: const ConfigLog(enableLog: true),
+  cacheFilePath: directory.path,
+);
 ```
 
 ### Cache system
 
-`registerLogPrinterColor` and `registerLogPrinterSimple` return `LoggerPersistenceService` for querying and cleanup. With `cacheFilePath`, `FileManager` serializes writes per path to avoid race conditions.
+`registerLogPrinterColor` and `registerLogPrinterSimple` return `LoggerPersistenceService` for querying and cleanup. With `cacheFilePath`, `FileManager` serializes writes per path.
+
+`logStream` emits each log after it is stored, when a listener is already attached. The [example](example/lib/main.dart) prints those messages in debug mode.
 
 ```dart
 final allLogs = await persistenceService.getAllLogs();
 final errorLogs = await persistenceService.getLogsByType(EnumLoggerType.error);
 await persistenceService.clearLogs();
 await persistenceService.clearLogsByType(EnumLoggerType.debug);
+
+persistenceService.logStream.listen((log) {
+  // log.getMessage()
+});
 ```
 
 For custom storage, implement `ILoggerCacheRepository` and pass it to `registerLogPrinter(printer, cacheRepository: ..., config: ...)`.
@@ -103,12 +119,11 @@ final restored = DebugLog.fromJson(json);
 ```dart
 void main() {
   registerLogPrinterColor(
-    config: ConfigLog(
+    config: const ConfigLog(
       enableLog: true,
       onlyClasses: {DebugLog, ErrorLog},
     ),
   );
-  // Flutter apps: runApp(const MyApp());
 }
 ```
 
@@ -132,7 +147,7 @@ void main() {
 ### Log types
 
 | Type | ANSI color | Usage |
-|------|------------|-------|
+| ------ | ------------ | ------- |
 | `DebugLog` | Yellow | Debugging |
 | `InfoLog` | White | General information |
 | `WarningLog` | Green | Warnings |
@@ -144,6 +159,18 @@ void main() {
 - **`LogWithColorPrint`** — ANSI color output
 
 Shortcuts: `registerLogPrinterColor` / `registerLogPrinterSimple`; custom printers can be registered with `registerLogPrinter`.
+
+### Flutter example
+
+[`example/`](example/README.md) is a Flutter counter that registers the color printer, emits all four log types through `LoggerClassMixin`, writes the JSON cache, and listens to `logStream`.
+
+```sh
+cd example
+flutter pub get
+flutter run
+```
+
+Run `flutter` only inside `example/`. The library package stays pure Dart (`dart pub get`, `dart analyze`, `dart test`).
 
 ### Visual console (Flutter)
 
@@ -177,8 +204,9 @@ Generated API docs are output to `doc/api`; project guides are kept alongside th
 ## Documentation
 
 | File | Content |
-|------|---------|
+| ------ | --------- |
 | [README.md](README.md) | Overview (this page) |
+| [example/README.md](example/README.md) | Flutter sample (registration, mixin, cache, `logStream`) |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
 | [doc/Core.md](doc/Core.md) | Core and dependency injection |
 | [doc/LogTypes.md](doc/LogTypes.md) | Log types |
