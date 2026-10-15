@@ -16,12 +16,9 @@ dartdoc:
     "Configuration":
       markdown: docs/Configuration.md
       displayName: "Configuração"
-    "Console View":
-      markdown: docs/ConsoleView.md
-      displayName: "Console Visual de Logs"
 
   # Category display order
-  categoryOrder: ["Core", "Log Types", "Printers", "Configuration", "Query", "Utilities", "Console View"]
+  categoryOrder: ["Core", "Log Types", "Printers", "Configuration", "Query", "Utilities",]
 
   # Show categories that are not documented explicitly
   showUndocumentedCategories: true

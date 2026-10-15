@@ -45,7 +45,7 @@
 <section class="desc markdown">
   <h1 id="log_custom_printer">log_custom_printer</h1>
 <p>A Dart logging library with typed log objects, ANSI color formatting, JSON serialization, and dependency injection (<code>get_it</code>).
-It is suitable for CLI apps, servers, and scripts, and can also be used in Flutter apps after registering the printer at startup.</p>
+It is suitable for CLI apps, servers, and scripts, and for Flutter apps after the printer is registered. A runnable Flutter integration is in <a href="example/README.md"><code>example/</code></a>.</p>
 <blockquote>
 <p><strong>v3.0.0</strong> — The package is now <strong>pure Dart</strong> (no Flutter dependency). Registration APIs (<code>registerLogPrinter</code>, <code>registerLogPrinterColor</code>, <code>registerLogPrinterSimple</code>) still return <code>LoggerPersistenceService</code> with integrated cache support. The Flutter visual console was moved to a separate package. See <a href="doc/ConsoleView.md">doc/ConsoleView.md</a>.</p>
 <p><strong>v3.2.0</strong> — File persistence no longer uses a <code>FileType</code> registration parameter; cache files are JSON.</p>
@@ -80,20 +80,31 @@ It is suitable for CLI apps, servers, and scripts, and can also be used in Flutt
 
 void main() {
   final persistenceService = registerLogPrinterColor(
-    config: ConfigLog(enableLog: true),
+    config: const ConfigLog(enableLog: true),
     maxLogsInCache: 100,
     cacheFilePath: '/path/to/save/logs', // optional
   );
-
-  // Flutter apps: runApp(const MyApp());
 }
 </code></pre>
+<p><code>cacheFilePath</code> is the base directory. JSON files are written under <code>&lt;cacheFilePath&gt;/loggerApp/logs/</code>. Omit it to keep the cache in memory only.</p>
+<p>In a Flutter app, resolve a writable directory before registration. The <a href="example/README.md">example</a> does that from <code>initState</code> with <code>path_provider</code>:</p>
+<pre class="language-dart"><code class="language-dart">final directory = await getApplicationSupportDirectory();
+final persistenceService = registerLogPrinterColor(
+  config: const ConfigLog(enableLog: true),
+  cacheFilePath: directory.path,
+);
+</code></pre>
 <h3 id="cache-system">Cache system</h3>
-<p><code>registerLogPrinterColor</code> and <code>registerLogPrinterSimple</code> return <code>LoggerPersistenceService</code> for querying and cleanup. With <code>cacheFilePath</code>, <code>FileManager</code> serializes writes per path to avoid race conditions.</p>
+<p><code>registerLogPrinterColor</code> and <code>registerLogPrinterSimple</code> return <code>LoggerPersistenceService</code> for querying and cleanup. With <code>cacheFilePath</code>, <code>FileManager</code> serializes writes per path.</p>
+<p><code>logStream</code> emits each log after it is stored, when a listener is already attached. The <a href="example/lib/main.dart">example</a> prints those messages in debug mode.</p>
 <pre class="language-dart"><code class="language-dart">final allLogs = await persistenceService.getAllLogs();
 final errorLogs = await persistenceService.getLogsByType(EnumLoggerType.error);
 await persistenceService.clearLogs();
 await persistenceService.clearLogsByType(EnumLoggerType.debug);
+
+persistenceService.logStream.listen((log) {
+  // log.getMessage()
+});
 </code></pre>
 <p>For custom storage, implement <code>ILoggerCacheRepository</code> and pass it to <code>registerLogPrinter(printer, cacheRepository: ..., config: ...)</code>.</p>
 <h3 id="mixin-recommended">Mixin (recommended)</h3>
@@ -122,12 +133,11 @@ final restored = DebugLog.fromJson(json);
 <h3 id="advanced-configuration">Advanced configuration</h3>
 <pre class="language-dart"><code class="language-dart">void main() {
   registerLogPrinterColor(
-    config: ConfigLog(
+    config: const ConfigLog(
       enableLog: true,
       onlyClasses: {DebugLog, ErrorLog},
     ),
   );
-  // Flutter apps: runApp(const MyApp());
 }
 </code></pre>
 <h3 id="delivery-rules">Delivery rules</h3>
@@ -185,6 +195,13 @@ final restored = DebugLog.fromJson(json);
 <li><strong><code>LogWithColorPrint</code></strong> — ANSI color output</li>
 </ul>
 <p>Shortcuts: <code>registerLogPrinterColor</code> / <code>registerLogPrinterSimple</code>; custom printers can be registered with <code>registerLogPrinter</code>.</p>
+<h3 id="flutter-example">Flutter example</h3>
+<p><a href="example/README.md"><code>example/</code></a> is a Flutter counter that registers the color printer, emits all four log types through <code>LoggerClassMixin</code>, writes the JSON cache, and listens to <code>logStream</code>.</p>
+<pre class="language-sh"><code class="language-sh">cd example
+flutter pub get
+flutter run
+</code></pre>
+<p>Run <code>flutter</code> only inside <code>example/</code>. The library package stays pure Dart (<code>dart pub get</code>, <code>dart analyze</code>, <code>dart test</code>).</p>
 <h3 id="visual-console-flutter">Visual console (Flutter)</h3>
 <p>The real-time Flutter console UI is <strong>not part of this repository</strong> in v3. To migrate from v2 or integrate the separate package, see <a href="doc/ConsoleView.md">doc/ConsoleView.md</a>.</p>
 <h2 id="development">Development</h2>
@@ -218,6 +235,10 @@ dart doc
 <tr>
 <td><a href="README.md">README.md</a></td>
 <td>Overview (this page)</td>
+</tr>
+<tr>
+<td><a href="example/README.md">example/README.md</a></td>
+<td>Flutter sample (registration, mixin, cache, <code>logStream</code>)</td>
 </tr>
 <tr>
 <td><a href="CHANGELOG.md">CHANGELOG.md</a></td>
@@ -312,7 +333,7 @@ dart doc
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.2.0
+      3.3.0
   </span>
   
 </footer>
