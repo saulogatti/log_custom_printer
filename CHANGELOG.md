@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.3.0
+
+- Feature: added `cacheFilePath` parameter to `registerLogPrinterColor` and `registerLogPrinterSimple` to specify the base directory for the cache files.
+- Feature: added `logStream` to `LoggerPersistenceService` to emit each log after it is stored, when a listener is already attached.
+- Refactor: updated documentation to reflect the new features.
+- Refactor: updated the example to reflect the new features.
+- Fix: small bug fixes and stability improvements.
+
 ## 3.2.0
 
 - Fix: removed the `fileType` parameter from the `LoggerCache` class and the `FileManagerType` interface.
