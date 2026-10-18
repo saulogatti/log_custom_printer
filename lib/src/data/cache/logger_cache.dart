@@ -111,15 +111,17 @@ final class LoggerCache(String directory, {IFileManagerType? fileManagerType}) {
   }
 
   /// Writes [loggerList] to [fileName] as formatted JSON.
+  ///
+  /// Throws [ArgumentError] for an invalid [fileName]. Encoding and I/O failures
+  /// (including [JsonUnsupportedObjectError]) are reported through [onError].
   Future<void> writeLogToFile(String fileName, Object loggerList) async {
+    await futureInitialization.future;
+    final path = _getPathFile(fileName);
     try {
-      await futureInitialization.future;
-      final path = _getPathFile(fileName);
-
       final objEncode = const JsonEncoder.withIndent('  ').convert(loggerList);
 
       await _fileManagerType.writeFile(path, objEncode);
-    } on Exception catch (e, stack) {
+    } on Object catch (e, stack) {
       onError?.call(e, stack);
       dev.log('Failed to write log file: $e', stackTrace: stack);
     }

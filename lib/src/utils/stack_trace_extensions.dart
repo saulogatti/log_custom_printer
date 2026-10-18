@@ -51,13 +51,18 @@ extension StackTraceSdk on StackTrace {
     if (match == null) {
       return false;
     }
+    // The regex strips a leading `package:`, so `package:flutter/...` arrives as `flutter/...`.
     final segment = match.group(1)!;
-    if (segment.startsWith('package:logger') ||
-        segment.startsWith('dart:') ||
-        !segment.startsWith('#')) {
-      return true;
+    if (segment.startsWith('#')) {
+      // Device frames (`#0 ...`) are handled by [_discardDeviceStacktraceLine].
+      return false;
     }
-    return false;
+    return segment.startsWith('dart:') ||
+        segment.startsWith('dart-sdk/') ||
+        segment.startsWith('logger/') ||
+        segment.startsWith('packages/logger/') ||
+        segment.startsWith('flutter/') ||
+        segment.startsWith('packages/flutter/');
   }
 
   bool _discardDeviceStacktraceLine(String line) {
