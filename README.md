@@ -5,7 +5,7 @@
 A Dart logging library with typed log objects, ANSI color formatting, JSON serialization, and dependency injection (`get_it`).
 It is suitable for CLI apps, servers, and scripts, and for Flutter apps after the printer is registered. A runnable Flutter integration is in [`example/`](example/README.md).
 
-> **v3.0.0** — The package is now **pure Dart** (no Flutter dependency). Registration APIs (`registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`) still return `LoggerPersistenceService` with integrated cache support. The Flutter visual console was moved to a separate package. See [doc/ConsoleView.md](doc/ConsoleView.md).
+> **v3.0.0** — The package is now **pure Dart** (no Flutter dependency). Registration APIs (`registerLogPrinter`, `registerLogPrinterColor`, `registerLogPrinterSimple`) still return `LoggerPersistenceService` with integrated cache support. The Flutter visual console was moved to a separate package.
 >
 > **v3.2.0** — File persistence no longer uses a `FileType` registration parameter; cache files are JSON.
 
@@ -176,7 +176,7 @@ Run `flutter` only inside `example/`. The library package stays pure Dart (`dart
 
 ### Visual console (Flutter)
 
-The real-time Flutter console UI is **not part of this repository** in v3. To migrate from v2 or integrate the separate package, see [doc/ConsoleView.md](doc/ConsoleView.md).
+The real-time Flutter console UI is **not part of this repository** in v3. It ships as a separate Flutter package; keep calling `registerLogPrinter*` before opening it or emitting logs.
 
 ## Development
 
@@ -215,7 +215,6 @@ Generated API docs are output to `doc/api`; project guides are kept alongside th
 | [doc/Printers.md](doc/Printers.md) | Printing strategies |
 | [doc/Configuration.md](doc/Configuration.md) | Configuration and filters |
 | [doc/Utilities.md](doc/Utilities.md) | Utilities and cache |
-| [doc/ConsoleView.md](doc/ConsoleView.md) | Flutter console migration |
 | [doc/DOCUMENTATION.md](doc/DOCUMENTATION.md) | Extended architecture |
 
 ## Contributing

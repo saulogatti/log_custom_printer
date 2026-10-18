@@ -53,7 +53,7 @@ LoggerObjectBase.sendLog()
 
 | File | Role |
 |------|------|
-| `lib/src/domain/logs_object/logger_object.dart` | `LoggerObject` (sealed) + `LoggerObjectBase` (abstract) — base of all log types |
+| `lib/src/domain/logs_object/logger_object.dart` | `LoggerObject` (sealed) + `LoggerObjectBase` (concrete; `message`, `tag`, `className`, `logCreationDate`) — base of all log types |
 | `lib/src/log_custom_printer_base.dart` | `LogPrinterBase` — strategy interface for output |
 | `lib/src/log_printer_service.dart` | `LogPrinterService` — central service; applies `ConfigLog` filters before printing/caching |
 | `lib/src/log_printer_locator.dart` | `registerLogPrinter` / `registerLogPrinterColor` / `registerLogPrinterSimple` — startup registration via `get_it` |
@@ -68,7 +68,9 @@ LoggerObjectBase.sendLog()
 
 ### Log type hierarchy
 
-All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
+All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`). `LoggerObjectBase` itself
+is instantiable: it uses white, maps to `EnumLoggerType.debug`, and builds a default `tag` from the
+message and emitting class when none is given.
 - `DebugLog` — yellow ANSI
 - `InfoLog` — white ANSI
 - `WarningLog` — green ANSI
@@ -96,8 +98,12 @@ All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
    (`logger_enum.dart`) — otherwise the new type silently falls through to `EnumLoggerType.debug`.
 5. Register the constructor in `LoggerJsonListType._typeConstructors` and `EnumLoggerTypeExtension.fromString`
    (`logger_json_list_type.dart`).
-6. Export the new type in `lib/log_custom_printer.dart`.
-7. Run `dart run build_runner build`.
+6. Add it to `LogSortEngine._severityIndex` (`log_sort_engine.dart`) — otherwise it sorts as `debug`.
+7. Decide whether it belongs in the default `ConfigLog.onlyClasses`; if not, the default config never prints it.
+8. Export the new type in `lib/log_custom_printer.dart`.
+9. Run `dart run build_runner build`.
+
+The `new-log-type` skill (`.claude/skills/new-log-type/`) walks through these steps plus tests and docs.
 
 `build.yaml` configures `json_serializable` with `explicit_to_json: true` and `checked: true`.
 
@@ -131,6 +137,15 @@ is a warning. Run `dart analyze` and keep it clean.
 ### Documentation language
 
 Write all project documentation (README, `doc/`, API docs, AI instructions) in **English**.
+
+### Project skills
+
+`.claude/skills/` holds Claude Code skills for this repo: `new-log-type`, `release` (version bump,
+CHANGELOG, `dart pub publish --dry-run`, tag `v_<version>`), `dart-use-primary-constructors`,
+`get-it-expert`, and `dart-write-documentation`. `.cursor/skills/` has the Cursor copies.
+
+`.claude/settings.json` registers a PostToolUse hook that runs `tool/claude_format_hook.dart` after
+every Edit/Write: it runs `dart format` on the edited `.dart` file and skips generated files.
 
 ## Reference docs
 

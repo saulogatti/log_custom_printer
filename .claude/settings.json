@@ -1,0 +1,17 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "dart \"$CLAUDE_PROJECT_DIR/tool/claude_format_hook.dart\"",
+            "timeout": 60,
+            "statusMessage": "dart format"
+          }
+        ]
+      }
+    ]
+  }
+}

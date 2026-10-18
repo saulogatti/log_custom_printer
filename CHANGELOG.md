@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+- Fix: `LoggerCache.writeLogToFile` now reports encoding errors such as `JsonUnsupportedObjectError` through `onError` instead of throwing. Invalid file names still throw `ArgumentError`.
+- Fix: stack trace formatting keeps app frames in browser format (dart2js/DDC); only SDK and framework frames are filtered. `ErrorLog` output on the web now shows the app frames instead of the raw stack trace.
+- CI: run on the Dart SDK (`dart analyze` + tests) and report coverage to Codecov.
+- Docs: removed links to the deleted `doc/ConsoleView.md`.
+
 ## 3.3.0
 
 - Feature: added `cacheFilePath` parameter to `registerLogPrinterColor` and `registerLogPrinterSimple` to specify the base directory for the cache files.
