@@ -1,5 +1,7 @@
 # log_custom_printer
 
+[![codecov](https://codecov.io/gh/saulogatti/log_custom_printer/graph/badge.svg)](https://codecov.io/gh/saulogatti/log_custom_printer)
+
 A Dart logging library with typed log objects, ANSI color formatting, JSON serialization, and dependency injection (`get_it`).
 It is suitable for CLI apps, servers, and scripts, and for Flutter apps after the printer is registered. A runnable Flutter integration is in [`example/`](example/README.md).
 

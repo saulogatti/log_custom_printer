@@ -22,7 +22,13 @@ dart doc                                                  # Generate API docs �
 
 **Never use `flutter` commands** in this repository. The package is pure Dart.
 
-CI (`.github/workflows/dart.yml`) runs `dart pub get`, `dart analyze`, `dart test` on pushes/PRs to `main`.
+`ci.sh` is a bash script; on Windows run it from Git Bash or call `dart run build_runner build` directly.
+
+CI (`.github/workflows/dart.yml`) uses `dart-lang/setup-dart` (stable) and runs `dart pub get`,
+`dart analyze`, then the tests via `dart pub global run coverage:test_with_coverage` on pushes/PRs to
+`main`, uploading `coverage/lcov.info` to Codecov (`CODECOV_TOKEN` repo secret). Generated files are
+excluded from coverage by the `// coverage:ignore-file` preamble in `build.yaml`. `claude.yml` and `claude-code-review.yml` run
+Claude Code on issues/PRs.
 
 ### Language features
 
@@ -57,7 +63,7 @@ LoggerObjectBase.sendLog()
 | `lib/src/data/cache/logger_cache_repository_impl.dart` | `LoggerCacheRepositoryImpl` — implements `ILoggerCacheRepository`, keeps a `Map<EnumLoggerType, LoggerJsonListType?>` and syncs it with `LoggerCache` |
 | `lib/src/domain/logs_object/logger_json_list_type.dart` | `LoggerJsonListType` — per-`EnumLoggerType` serializable list used by the cache; its `_typeConstructors` map and `EnumLoggerTypeExtension.fromString` drive deserialization |
 | `lib/src/domain/log_helpers/` | `EnumLoggerType`, `LoggerEnum` extension (`log.enumLoggerType`), `LoggerClassMixin` (recommended integration for app classes), `LogException` |
-| `lib/src/domain/query/` | `LogQuery`, `LogFilterEngine`, `LogSortEngine` — composable query pipeline |
+| `lib/src/domain/query/` | `LogQuery`, `LogFilterEngine`, `LogSortEngine` — composable query pipeline; `LoggerFilter` (internal, unexported) is a facade over them |
 | `lib/log_custom_printer.dart` | Public API — everything exported here is the stable public contract |
 
 ### Log type hierarchy
@@ -134,4 +140,6 @@ Write all project documentation (README, `doc/`, API docs, AI instructions) in *
 - `doc/Configuration.md` — `ConfigLog` and filtering
 - `doc/Utilities.md` — cache, `LoggerPersistenceService`, query pipeline
 - `doc/DOCUMENTATION.md` — expanded architecture overview
-- `doc/ConsoleView.md` — Flutter visual console migration guide (separate package)
+
+These files back the dartdoc categories in `dartdoc_options.yaml` (the "Query" category reuses
+`doc/Utilities.md`). `dart doc` writes to `doc/api/`, which is gitignored.
