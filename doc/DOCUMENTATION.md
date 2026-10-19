@@ -96,7 +96,6 @@ dart run build_runner build
 ## Flutter visual console note
 
 The Flutter visual console was extracted in v3. Use a separate Flutter package for UI integration.
-See [ConsoleView.md](ConsoleView.md).
 
 ## References
 

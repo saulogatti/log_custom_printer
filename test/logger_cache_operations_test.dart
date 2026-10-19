@@ -214,4 +214,62 @@ void main() {
       expect((decoded.first as Map<String, dynamic>)['message'], equals('one'));
     });
   });
+
+  group('LoggerCache error handling', () {
+    test('logs an empty base directory when no onError is set and still completes', () async {
+      final emptyCache = LoggerCache('');
+
+      await expectLater(emptyCache.futureInitialization.future, completes);
+    }, timeout: const Timeout(Duration(seconds: 5)));
+
+    test('clearAll swallows file manager failures', () async {
+      final failingCache = LoggerCache(tempDir.path, fileManagerType: _FailingFileManager());
+
+      await expectLater(failingCache.clearAll(), completes);
+    });
+
+    test('writeLogToFile reports file manager failures through onError', () async {
+      final errors = <Object>[];
+      final failingCache = LoggerCache(tempDir.path, fileManagerType: _FailingFileManager())
+        ..onError = (error, _) => errors.add(error);
+
+      await failingCache.writeLogToFile('info', listOf(EnumLoggerType.info, [InfoLog('lost')]));
+
+      expect(errors.single, isA<FileSystemException>());
+      expect(await File(path.join(logsDir(), 'info.json')).exists(), isFalse);
+    });
+
+    test(
+      'writeLogToFile reports non-encodable payloads through onError instead of throwing',
+      () async {
+        final errors = <Object>[];
+        cache.onError = (error, _) => errors.add(error);
+
+        await expectLater(cache.writeLogToFile('info', Object()), completes);
+
+        expect(errors.single, isA<JsonUnsupportedObjectError>());
+        expect(await File(path.join(logsDir(), 'info.json')).exists(), isFalse);
+      },
+    );
+  });
+}
+
+class _FailingFileManager implements IFileManagerType {
+  Never _fail(String path) => throw FileSystemException('Simulated failure', path);
+
+  @override
+  Future<bool> createDirectory(String path) async => _fail(path);
+
+  @override
+  Future<bool> deleteDirectory(String path) async => _fail(path);
+
+  @override
+  Future<bool> deleteFile(String path) async => _fail(path);
+
+  @override
+  Future<String> readFile(String path) async => _fail(path);
+
+  @override
+  Future<bool> writeFile(String path, String content, [FileMode mode = FileMode.write]) async =>
+      _fail(path);
 }

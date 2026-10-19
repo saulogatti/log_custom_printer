@@ -56,6 +56,26 @@ void main() {
       expect(LoggerObjectBase('m', tag: 'network').tag, equals('network'));
     });
 
+    test('base class falls back to white', () {
+      expect(LoggerObjectBase('m').getColor().enumAnsiColors, equals(EnumAnsiColors.white));
+    });
+
+    test('base class JSON round-trip keeps every field', () {
+      final log = LoggerObjectBase(
+        'saved',
+        tag: 'storage',
+        typeClass: _Emitter,
+        createdAt: fixedDate,
+      );
+
+      final restored = LoggerObjectBase.fromJson(log.toJson());
+
+      expect(restored.message, equals('saved'));
+      expect(restored.tag, equals('storage'));
+      expect(restored.className, equals('_Emitter'));
+      expect(restored.logCreationDate, equals(fixedDate));
+    });
+
     test('builds a default tag that contains the message', () {
       final log = LoggerObjectBase('payment failed', typeClass: _Emitter);
 
