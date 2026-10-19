@@ -199,6 +199,18 @@ void main() {
 
       expect(message, endsWith('failure'));
     });
+
+    test('appends a non-null object in red', () {
+      final message = ErrorLog(
+        'failure',
+        StackTrace.empty,
+        createdAt: fixedDate,
+        object: 'payload',
+      ).getMessage(withColor: false);
+
+      expect(message, startsWith('03/02/2024 04:05:06.007 failure'));
+      expect(message, endsWith('${_ansiEscape}31mObject: payload${LoggerAnsiColor.ansiDefault}'));
+    });
   });
 }
 

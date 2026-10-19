@@ -49,8 +49,6 @@ class LoggerJsonListType({
           if (constructor != null) {
             // JSON is stored newest first, so append to keep the same order.
             loggerJsonList._appendOlderLogger(constructor(element));
-          } else {
-            throw LogException('Unknown logger type: $type');
           }
         }
       }
