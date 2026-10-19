@@ -6,8 +6,6 @@ import 'package:log_custom_printer/src/domain/log_helpers/logger_enum.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 
-int valueMaxNumberOfEntries = 100;
-
 /// Default [ILoggerCacheRepository] implementation with in-memory and optional file storage.
 ///
 /// {@category Utilities}
@@ -32,8 +30,6 @@ final class LoggerCacheRepositoryImpl({
       _loggerCache = LoggerCache(directoryToSave!, fileManagerType: FileManager());
       _futureInitialization = _initialize();
     }
-
-    valueMaxNumberOfEntries = maxLogEntries;
   }
 
   /// Adds [log] to memory cache and optionally persists to disk.
@@ -42,7 +38,10 @@ final class LoggerCacheRepositoryImpl({
     await _futureInitialization;
     var loggerList = _loggerJsonList[log.enumLoggerType];
     if (loggerList == null) {
-      loggerList = LoggerJsonListType(type: log.enumLoggerType);
+      loggerList = LoggerJsonListType(
+        type: log.enumLoggerType,
+        valueMaxNumberOfEntries: maxLogEntries,
+      );
       _loggerJsonList[log.enumLoggerType] = loggerList;
     }
     loggerList.addLogger(log);
@@ -71,6 +70,14 @@ final class LoggerCacheRepositoryImpl({
   }
 
   @override
+  Future<void> deleteLogById(int id) async {
+    await _futureInitialization;
+    for (final loggerList in _loggerJsonList.values) {
+      loggerList?.removeById(id);
+    }
+  }
+
+  @override
   Future<List<LoggerObjectBase>> getAllLogs() async {
     await _futureInitialization;
     final allLogs = <LoggerObjectBase>[];
@@ -80,6 +87,20 @@ final class LoggerCacheRepositoryImpl({
       }
     }
     return allLogs;
+  }
+
+  @override
+  Future<LoggerObjectBase?> getLogById(int id) async {
+    await _futureInitialization;
+    try {
+      for (final loggerList in _loggerJsonList.values) {
+        final logger = loggerList?.loggerEntries.firstWhere((logger) => logger.idLog == id);
+        if (logger != null) {
+          return logger;
+        }
+      }
+    } on StateError catch (_) {}
+    return null;
   }
 
   /// Returns logs only for [type].

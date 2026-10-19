@@ -10,7 +10,9 @@ part 'logger_object.g.dart';
 /// Base marker for log objects.
 ///
 /// {@category Core}
-sealed class LoggerObject;
+sealed class LoggerObject {
+  const LoggerObject();
+}
 
 /// Base contract for log objects that can be printed and serialized.
 ///
@@ -38,6 +40,8 @@ class LoggerObjectBase(
   @JsonKey(name: 'logCreationDate')
   DateTime logCreationDate = createdAt ?? DateTime.now();
 
+  int? _idLog;
+
   this
     : assert(
         message.isNotEmpty && message.trim().isNotEmpty,
@@ -50,6 +54,12 @@ class LoggerObjectBase(
 
   /// When `true`, this log is processed even if [ConfigLog.enableLog] is `false`.
   bool get alwaysPrint => false;
+
+  @JsonKey(name: 'idLog')
+  int get idLog {
+    _idLog ??= DateTime.now().millisecondsSinceEpoch;
+    return _idLog!;
+  }
 
   /// Formatted log header (runtime type + source class).
   String get _logHeader =>
@@ -86,7 +96,6 @@ class LoggerObjectBase(
 
   /// Serializes the log object into JSON.
   Map<String, dynamic> toJson() => _$LoggerObjectBaseToJson(this);
-
   @override
   String toString() {
     return getMessage();
