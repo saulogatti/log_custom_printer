@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: document_ignores, avoid_print
 
 import 'package:log_custom_printer/src/utils/logger_ansi_color.dart';
 import 'package:log_custom_printer/src/utils/stack_trace_extensions.dart';

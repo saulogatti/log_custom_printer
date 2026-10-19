@@ -5,7 +5,7 @@ alwaysApply: true
 
 # `log_custom_printer` — domain and conventions
 
-Primary references: [`.github/copilot-instructions.md`](.github/copilot-instructions.md), `doc/Core.md`, `doc/LogTypes.md`, `doc/DOCUMENTATION.md`, and [`README.md`](README.md).
+Primary references: [`CLAUDE.md`](CLAUDE.md) (source of truth; follow it when this rule disagrees), `doc/Core.md`, `doc/LogTypes.md`, `doc/DOCUMENTATION.md`, and [`README.md`](README.md).
 
 ## Style and API
 

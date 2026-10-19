@@ -44,10 +44,11 @@
       
 <section class="desc markdown">
   <h1 id="log_custom_printer">log_custom_printer</h1>
+<p><a href="https://codecov.io/gh/saulogatti/log_custom_printer"><img src="https://codecov.io/gh/saulogatti/log_custom_printer/graph/badge.svg" alt="codecov"></a></p>
 <p>A Dart logging library with typed log objects, ANSI color formatting, JSON serialization, and dependency injection (<code>get_it</code>).
 It is suitable for CLI apps, servers, and scripts, and for Flutter apps after the printer is registered. A runnable Flutter integration is in <a href="example/README.md"><code>example/</code></a>.</p>
 <blockquote>
-<p><strong>v3.0.0</strong> — The package is now <strong>pure Dart</strong> (no Flutter dependency). Registration APIs (<code>registerLogPrinter</code>, <code>registerLogPrinterColor</code>, <code>registerLogPrinterSimple</code>) still return <code>LoggerPersistenceService</code> with integrated cache support. The Flutter visual console was moved to a separate package. See <a href="doc/ConsoleView.md">doc/ConsoleView.md</a>.</p>
+<p><strong>v3.0.0</strong> — The package is now <strong>pure Dart</strong> (no Flutter dependency). Registration APIs (<code>registerLogPrinter</code>, <code>registerLogPrinterColor</code>, <code>registerLogPrinterSimple</code>) still return <code>LoggerPersistenceService</code> with integrated cache support. The Flutter visual console was moved to a separate package.</p>
 <p><strong>v3.2.0</strong> — File persistence no longer uses a <code>FileType</code> registration parameter; cache files are JSON.</p>
 </blockquote>
 <h2 id="features">Features</h2>
@@ -203,7 +204,7 @@ flutter run
 </code></pre>
 <p>Run <code>flutter</code> only inside <code>example/</code>. The library package stays pure Dart (<code>dart pub get</code>, <code>dart analyze</code>, <code>dart test</code>).</p>
 <h3 id="visual-console-flutter">Visual console (Flutter)</h3>
-<p>The real-time Flutter console UI is <strong>not part of this repository</strong> in v3. To migrate from v2 or integrate the separate package, see <a href="doc/ConsoleView.md">doc/ConsoleView.md</a>.</p>
+<p>The real-time Flutter console UI is <strong>not part of this repository</strong> in v3. It ships as a separate Flutter package; keep calling <code>registerLogPrinter*</code> before opening it or emitting logs.</p>
 <h2 id="development">Development</h2>
 <pre class="language-bash"><code class="language-bash">dart pub get
 dart run build_runner build
@@ -263,10 +264,6 @@ dart doc
 <tr>
 <td><a href="doc/Utilities.md">doc/Utilities.md</a></td>
 <td>Utilities and cache</td>
-</tr>
-<tr>
-<td><a href="doc/ConsoleView.md">doc/ConsoleView.md</a></td>
-<td>Flutter console migration</td>
 </tr>
 <tr>
 <td><a href="doc/DOCUMENTATION.md">doc/DOCUMENTATION.md</a></td>
@@ -333,7 +330,7 @@ dart doc
 <footer>
   <span class="no-break">
     log_custom_printer
-      3.3.0
+      3.4.0
   </span>
   
 </footer>

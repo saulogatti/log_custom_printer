@@ -1,3 +1,5 @@
+// ignore_for_file: document_ignores
+
 import 'package:log_custom_printer/src/domain/logs_object/logger_object.dart';
 import 'package:log_custom_printer/src/log_custom_printer_base.dart';
 

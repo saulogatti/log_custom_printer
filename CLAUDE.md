@@ -22,7 +22,13 @@ dart doc                                                  # Generate API docs �
 
 **Never use `flutter` commands** in this repository. The package is pure Dart.
 
-CI (`.github/workflows/dart.yml`) runs `dart pub get`, `dart analyze`, `dart test` on pushes/PRs to `main`.
+`ci.sh` is a bash script; on Windows run it from Git Bash or call `dart run build_runner build` directly.
+
+CI (`.github/workflows/dart.yml`) uses `dart-lang/setup-dart` (stable) and runs `dart pub get`,
+`dart analyze`, then the tests via `dart pub global run coverage:test_with_coverage` on pushes/PRs to
+`main`, uploading `coverage/lcov.info` to Codecov (`CODECOV_TOKEN` repo secret). Generated files are
+excluded from coverage by the `// coverage:ignore-file` preamble in `build.yaml`. `claude.yml` and `claude-code-review.yml` run
+Claude Code on issues/PRs.
 
 ### Language features
 
@@ -47,7 +53,7 @@ LoggerObjectBase.sendLog()
 
 | File | Role |
 |------|------|
-| `lib/src/domain/logs_object/logger_object.dart` | `LoggerObject` (sealed) + `LoggerObjectBase` (abstract) — base of all log types |
+| `lib/src/domain/logs_object/logger_object.dart` | `LoggerObject` (sealed) + `LoggerObjectBase` (concrete; `message`, `tag`, `className`, `logCreationDate`) — base of all log types |
 | `lib/src/log_custom_printer_base.dart` | `LogPrinterBase` — strategy interface for output |
 | `lib/src/log_printer_service.dart` | `LogPrinterService` — central service; applies `ConfigLog` filters before printing/caching |
 | `lib/src/log_printer_locator.dart` | `registerLogPrinter` / `registerLogPrinterColor` / `registerLogPrinterSimple` — startup registration via `get_it` |
@@ -57,12 +63,14 @@ LoggerObjectBase.sendLog()
 | `lib/src/data/cache/logger_cache_repository_impl.dart` | `LoggerCacheRepositoryImpl` — implements `ILoggerCacheRepository`, keeps a `Map<EnumLoggerType, LoggerJsonListType?>` and syncs it with `LoggerCache` |
 | `lib/src/domain/logs_object/logger_json_list_type.dart` | `LoggerJsonListType` — per-`EnumLoggerType` serializable list used by the cache; its `_typeConstructors` map and `EnumLoggerTypeExtension.fromString` drive deserialization |
 | `lib/src/domain/log_helpers/` | `EnumLoggerType`, `LoggerEnum` extension (`log.enumLoggerType`), `LoggerClassMixin` (recommended integration for app classes), `LogException` |
-| `lib/src/domain/query/` | `LogQuery`, `LogFilterEngine`, `LogSortEngine` — composable query pipeline |
+| `lib/src/domain/query/` | `LogQuery`, `LogFilterEngine`, `LogSortEngine` — composable query pipeline; `LoggerFilter` (internal, unexported) is a facade over them |
 | `lib/log_custom_printer.dart` | Public API — everything exported here is the stable public contract |
 
 ### Log type hierarchy
 
-All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
+All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`). `LoggerObjectBase` itself
+is instantiable: it uses white, maps to `EnumLoggerType.debug`, and builds a default `tag` from the
+message and emitting class when none is given.
 - `DebugLog` — yellow ANSI
 - `InfoLog` — white ANSI
 - `WarningLog` — green ANSI
@@ -90,8 +98,12 @@ All log types extend `LoggerObjectBase` (which extends sealed `LoggerObject`):
    (`logger_enum.dart`) — otherwise the new type silently falls through to `EnumLoggerType.debug`.
 5. Register the constructor in `LoggerJsonListType._typeConstructors` and `EnumLoggerTypeExtension.fromString`
    (`logger_json_list_type.dart`).
-6. Export the new type in `lib/log_custom_printer.dart`.
-7. Run `dart run build_runner build`.
+6. Add it to `LogSortEngine._severityIndex` (`log_sort_engine.dart`) — otherwise it sorts as `debug`.
+7. Decide whether it belongs in the default `ConfigLog.onlyClasses`; if not, the default config never prints it.
+8. Export the new type in `lib/log_custom_printer.dart`.
+9. Run `dart run build_runner build`.
+
+The `new-log-type` skill (`.claude/skills/new-log-type/`) walks through these steps plus tests and docs.
 
 `build.yaml` configures `json_serializable` with `explicit_to_json: true` and `checked: true`.
 
@@ -126,6 +138,15 @@ is a warning. Run `dart analyze` and keep it clean.
 
 Write all project documentation (README, `doc/`, API docs, AI instructions) in **English**.
 
+### Project skills
+
+`.claude/skills/` holds Claude Code skills for this repo: `new-log-type`, `release` (version bump,
+CHANGELOG, `dart pub publish --dry-run`, tag `v_<version>`), `dart-use-primary-constructors`,
+`get-it-expert`, and `dart-write-documentation`. `.cursor/skills/` has the Cursor copies.
+
+`.claude/settings.json` registers a PostToolUse hook that runs `tool/claude_format_hook.dart` after
+every Edit/Write: it runs `dart format` on the edited `.dart` file and skips generated files.
+
 ## Reference docs
 
 - `doc/Core.md` — DI and registration internals
@@ -134,4 +155,6 @@ Write all project documentation (README, `doc/`, API docs, AI instructions) in *
 - `doc/Configuration.md` — `ConfigLog` and filtering
 - `doc/Utilities.md` — cache, `LoggerPersistenceService`, query pipeline
 - `doc/DOCUMENTATION.md` — expanded architecture overview
-- `doc/ConsoleView.md` — Flutter visual console migration guide (separate package)
+
+These files back the dartdoc categories in `dartdoc_options.yaml` (the "Query" category reuses
+`doc/Utilities.md`). `dart doc` writes to `doc/api/`, which is gitignored.

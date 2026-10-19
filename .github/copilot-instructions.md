@@ -1,5 +1,8 @@
 # Project Guidelines — `log_custom_printer`
 
+> `CLAUDE.md` is the source of truth for commands, architecture, and conventions. This file is a
+> summary for Copilot; when they disagree, follow `CLAUDE.md` and update this file.
+
 ## Code Style
 
 - Follow `analysis_options.yaml` and Effective Dart.
@@ -63,4 +66,3 @@
 - Configuration/filters: `doc/Configuration.md`
 - Utilities/cache: `doc/Utilities.md`
 - Expanded docs: `doc/DOCUMENTATION.md`
-- Flutter console migration (separate package): `doc/ConsoleView.md`

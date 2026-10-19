@@ -112,6 +112,37 @@ void main() {
       expect(stackTrace.formatStackTrace(null, 5), equals(stackTrace.toString()));
       expect(stackTrace.stackInMap(), isEmpty);
     });
+
+    test('keeps app frames in browser format and drops SDK and framework frames', () {
+      const stackTraceString = '''
+package:my_app/src/file.dart 10:3        MyClass.method
+dart:sdk_internal 1428:13                _rootRun
+dart-sdk/lib/async/zone.dart 1428:13     _rootRun
+packages/flutter/src/widgets/framework.dart 123:45  Widget.build
+package:flutter/src/widgets/framework.dart 123:45   Widget.build
+packages/logger/src/logger.dart 1:1      Logger.log
+main.dart.js 2:3                         main
+''';
+      final stackTrace = StackTrace.fromString(stackTraceString);
+
+      final map = stackTrace.stackInMap();
+
+      expect(map.values, hasLength(2));
+      expect(map['#0'], startsWith('package:my_app/src/file.dart 10:3'));
+      expect(map['#1'], startsWith('main.dart.js 2:3'));
+      expect(stackTrace.formatStackTrace(null, 8), isNot(equals(stackTrace.toString())));
+    });
+
+    test('keeps indented lines that match neither frame format', () {
+      final stackTrace = StackTrace.fromString(
+        '#0      main (package:app/main.dart:1:1)\n    at helper (app.js:2:3)',
+      );
+
+      expect(
+        stackTrace.stackInMap(),
+        equals({'#0': 'main (package:app/main.dart:1:1)', '#1': '    at helper (app.js:2:3)'}),
+      );
+    });
   });
 
   group('EnumAnsiColors', () {

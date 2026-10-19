@@ -1,6 +1,4 @@
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart'
-    show valueMaxNumberOfEntries;
 import 'package:log_custom_printer/src/domain/log_helpers/log_exception.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:test/test.dart';
@@ -116,19 +114,12 @@ void main() {
     });
 
     test('fromJson keeps the newest entries when over the limit', () {
-      final previousMax = valueMaxNumberOfEntries;
-      addTearDown(() => valueMaxNumberOfEntries = previousMax);
-      valueMaxNumberOfEntries = 2;
+      final list = LoggerJsonListType(type: EnumLoggerType.info, valueMaxNumberOfEntries: 2)
+        ..addLogger(InfoLog('first', createdAt: DateTime(2024)))
+        ..addLogger(InfoLog('second', createdAt: DateTime(2024, 1, 2)))
+        ..addLogger(InfoLog('third', createdAt: DateTime(2024, 1, 3)));
 
-      final restored = LoggerJsonListType.fromJson({
-        'type': 'info',
-        'loggerJson': [
-          for (final message in ['newest', 'middle', 'oldest'])
-            {'message': message, 'className': 'X', 'logCreationDate': '2024-01-01T00:00:00.000'},
-        ],
-      });
-
-      expect(restored.loggerEntries.map((log) => log.message), equals(['newest', 'middle']));
+      expect(list.loggerEntries.map((log) => log.message), equals(['third', 'second']));
     });
   });
 

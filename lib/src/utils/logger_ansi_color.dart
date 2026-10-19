@@ -79,8 +79,7 @@ class const LoggerAnsiColor({
 
   /// Applies ANSI color to [msg].
   String call(String msg) {
-    // ignore: unnecessary_brace_in_string_interps
-    return '${this}$msg$ansiDefault';
+    return '${toString()}$msg$ansiDefault';
   }
 
   /// Converts the instance to JSON.

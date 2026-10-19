@@ -25,7 +25,7 @@ build/unit_test_assets/NOTICES.Z
 .svn/
 .swiftpm/
 migrate_working_dir/
-
+logs.json/
 # IntelliJ related
 *.iml
 *.ipr
