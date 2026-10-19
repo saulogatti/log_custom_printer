@@ -20,6 +20,7 @@ class ErrorLog(
   @StackTraceConverter() final StackTrace stackTrace, {
   super.createdAt,
   super.typeClass,
+  final Object? object,
 }) extends LoggerObjectBase {
   /// Creates an instance from JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) => _$ErrorLogFromJson(json);
@@ -49,7 +50,9 @@ class ErrorLog(
         strMessage.add('${entry.key} = ${entry.value}');
       }
     }
-
+    if (object != null) {
+      strMessage.add(color.call('Object: $object'));
+    }
     return strMessage.join('\n\t');
   }
 
