@@ -2,8 +2,6 @@ import 'package:json_annotation/json_annotation.dart' show CheckedFromJsonExcept
 import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:test/test.dart';
 
-const _ansiEscape = '\x1B[';
-
 void main() {
   final fixedDate = DateTime(2024, 2, 3, 4, 5, 6, 7);
 
@@ -201,7 +199,21 @@ void main() {
 
       expect(message, endsWith('failure'));
     });
+
+    test('appends a non-null object in red', () {
+      final message = ErrorLog(
+        'failure',
+        StackTrace.empty,
+        createdAt: fixedDate,
+        object: 'payload',
+      ).getMessage(withColor: false);
+
+      expect(message, startsWith('03/02/2024 04:05:06.007 failure'));
+      expect(message, endsWith('${_ansiEscape}31mObject: payload${LoggerAnsiColor.ansiDefault}'));
+    });
   });
 }
+
+const _ansiEscape = '\x1B[';
 
 class _Emitter;

@@ -49,10 +49,20 @@ final class LoggerPersistenceService({
     _logStreamController.close();
   }
 
+  /// Deletes a log entry by ID.
+  Future<void> deleteLogById(int id) async {
+    await loggerPersistenceService.deleteLogById(id);
+  }
+
   /// Returns all stored logs.
   Future<List<LoggerObjectBase>> getAllLogs() async {
     final logs = await loggerPersistenceService.getAllLogs();
     return logs;
+  }
+
+  /// Returns a log entry by ID.
+  Future<LoggerObjectBase?> getLogById(int id) async {
+    return await loggerPersistenceService.getLogById(id);
   }
 
   /// Returns logs filtered by [type].

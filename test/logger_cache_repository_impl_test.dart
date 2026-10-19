@@ -1,17 +1,10 @@
 import 'dart:io';
 
 import 'package:log_custom_printer/log_custom_printer.dart';
-import 'package:log_custom_printer/src/data/cache/logger_cache_repository_impl.dart'
-    show valueMaxNumberOfEntries;
 import 'package:path/path.dart' as path;
 import 'package:test/test.dart';
 
 void main() {
-  tearDown(() {
-    // The constructor mutates this global; restore the default for other tests.
-    valueMaxNumberOfEntries = 100;
-  });
-
   group('LoggerCacheRepositoryImpl in memory', () {
     late LoggerCacheRepositoryImpl repository;
 

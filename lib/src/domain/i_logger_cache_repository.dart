@@ -36,4 +36,10 @@ abstract interface class ILoggerCacheRepository {
 
   /// Imports log entries from raw [content] and [format].
   Future<void> importLogs(String content, ExportFormat format);
+
+  /// Deletes a log entry by ID.
+  Future<void> deleteLogById(int id);
+
+  /// Returns a log entry by ID.
+  Future<LoggerObjectBase?> getLogById(int id);
 }

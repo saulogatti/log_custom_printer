@@ -18,8 +18,8 @@ mixin LoggerClassMixin {
   }
 
   /// Emits an error log with stack trace.
-  void logError(String message, StackTrace stackTrace) {
-    final log = ErrorLog(message, stackTrace, typeClass: logClassType);
+  void logError(String message, StackTrace stackTrace, {Object? object}) {
+    final log = ErrorLog(message, stackTrace, object: object, typeClass: logClassType);
     _sendLog(log);
   }
 

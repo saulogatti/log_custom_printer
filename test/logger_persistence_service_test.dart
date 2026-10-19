@@ -205,6 +205,41 @@ void main() {
       expect(result.single.message, equals('payment approved'));
     });
   });
+  group('LoggerPersistenceService.deleteLogById', () {
+    test('deletes a log by id', () async {
+      await seed();
+      final logs = await service.getAllLogs();
+      final logId = logs.first.idLog;
+
+      await service.deleteLogById(logId);
+
+      expect(await service.getLogById(logId), isNull);
+    });
+    test('returns a log by id', () async {
+      await seed();
+      final logs = await service.getAllLogs();
+      final logId = logs.first.idLog;
+
+      expect(await service.getLogById(logId), isNotNull);
+    });
+  });
+
+  group('LoggerPersistenceService.getLogsByType', () {
+    test('returns logs by type', () async {
+      await seed();
+
+      expect(await service.getLogsByType(EnumLoggerType.debug), isNotEmpty);
+    });
+  });
+  group('LoggerPersistenceService.clearLogsByType', () {
+    test('clears logs by type', () async {
+      await seed();
+
+      await service.clearLogsByType(EnumLoggerType.debug);
+
+      expect(await service.getLogsByType(EnumLoggerType.debug), isEmpty);
+    });
+  });
 }
 
 class _Alpha;
