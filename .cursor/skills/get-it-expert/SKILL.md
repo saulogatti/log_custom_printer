@@ -234,7 +234,6 @@ class MyService {
 ## Production Patterns
 
 **Two-phase DI** (base + throwable scope):
-
 ```dart
 void setupBaseServices() {
   di.registerSingleton<ApiClient>(createApiClient());
@@ -256,7 +255,6 @@ await setupThrowableScope();
 ```
 
 **Logout / scope cleanup** — use `popScopesTill` to pop multiple scopes at once instead of manually checking and popping each one:
-
 ```dart
 // ❌ Manual scope-by-scope popping
 void onLogout() {
