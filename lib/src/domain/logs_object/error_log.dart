@@ -20,7 +20,7 @@ class ErrorLog(
   @StackTraceConverter() final StackTrace stackTrace, {
   super.createdAt,
   super.typeClass,
-  final Object? object,
+  @ObjectConverter() final Object? object,
 }) extends LoggerObjectBase {
   /// Creates an instance from JSON.
   factory ErrorLog.fromJson(Map<String, dynamic> json) => _$ErrorLogFromJson(json);
@@ -58,6 +58,20 @@ class ErrorLog(
 
   @override
   Map<String, dynamic> toJson() => _$ErrorLogToJson(this);
+}
+
+class ObjectConverter implements JsonConverter<Object?, String> {
+  const new();
+
+  @override
+  Object? fromJson(Object? json) {
+    return json;
+  }
+
+  @override
+  String toJson(Object? object) {
+    return object.toString();
+  }
 }
 
 /// JSON converter for [StackTrace] values.

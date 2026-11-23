@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.4.1
+
+- Fix: corrected the problem of serializing the `ErrorLog` with `object` parameter in the json file.
+- Fix: small bug fixes and stability improvements.
+- Added test for the `ErrorLog` with `object` parameter in the json file.
+
 ## 3.4.0
 
 - Fix: `LoggerCache.writeLogToFile` now reports encoding errors such as `JsonUnsupportedObjectError` through `onError` instead of throwing. Invalid file names still throw `ArgumentError`.
