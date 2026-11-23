@@ -1,7 +1,7 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // coverage:ignore-file
-// ignore_for_file: cast_nullable_to_non_nullable, unnecessary_null_checks,     unnecessary_lambdas, inference_failure_on_collection_literal, specify_nonobvious_property_types
+// ignore_for_file: document_ignores, unnecessary_null_checks, specify_nonobvious_property_types, cast_nullable_to_non_nullable
 
 part of 'error_log.dart';
 
@@ -17,6 +17,13 @@ ErrorLog _$ErrorLogFromJson(Map<String, dynamic> json) =>
           'stackTrace',
           (v) => const StackTraceConverter().fromJson(v as String),
         ),
+        object: $checkedConvert(
+          'object',
+          (v) => _$JsonConverterFromJson<String, Object>(
+            v,
+            const ObjectConverter().fromJson,
+          ),
+        ),
       );
       $checkedConvert('className', (v) => val.className = v as String);
       $checkedConvert(
@@ -31,4 +38,10 @@ Map<String, dynamic> _$ErrorLogToJson(ErrorLog instance) => <String, dynamic>{
   'className': instance.className,
   'logCreationDate': instance.logCreationDate.toIso8601String(),
   'stackTrace': const StackTraceConverter().toJson(instance.stackTrace),
+  'object': const ObjectConverter().toJson(instance.object),
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) => json == null ? null : fromJson(json as Json);

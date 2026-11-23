@@ -8,9 +8,31 @@ import 'package:log_custom_printer/log_custom_printer.dart';
 import 'package:log_custom_printer/src/domain/logs_object/logger_json_list_type.dart';
 import 'package:test/test.dart';
 
+import 'data_logs/jsons_mocks.dart';
+
 void main() {
-  setUp(() {
+  setUpAll(() {
+    final fileWarning = File('test/data_logs/warning.json');
+    final fileDebug = File('test/data_logs/debug.json');
+    final fileInfo = File('test/data_logs/info.json');
+    final fileError = File('test/data_logs/error.json');
+    fileWarning.writeAsStringSync(jsonEncode(jsonTestWarning));
+    fileDebug.writeAsStringSync(jsonEncode(jsonTestDebug));
+    fileInfo.writeAsStringSync(jsonEncode(jsonTestInfo));
+    fileError.writeAsStringSync(jsonEncode(jsonTestError));
+ 
     // Setup code if needed before each test test\data_logs\debug.json
+  });
+  tearDownAll(() {
+    final fileWarning = File('test/data_logs/warning.json');
+    final fileDebug = File('test/data_logs/debug.json');
+    final fileInfo = File('test/data_logs/info.json');
+    final fileError = File('test/data_logs/error.json');
+    fileWarning.deleteSync();
+    fileDebug.deleteSync();
+    fileInfo.deleteSync();
+    fileError.deleteSync();
+   
   });
   group('LoggerJsonListType', () {
     test('decodes JSON WarningLog', () {
